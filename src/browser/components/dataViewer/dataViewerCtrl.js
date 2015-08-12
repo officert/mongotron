@@ -88,7 +88,11 @@ angular.module('app').controller('dataViewerCtrl', [
               return alertService.error(err);
             }
 
-            database.collections = collections;
+            database.collections = collections.map(function(collection) {
+              collection.host = database.host;
+              collection.port = database.port;
+              return collection;
+            });
           }, 500);
         });
       }
