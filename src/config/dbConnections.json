@@ -2,5 +2,14 @@
   "local": {
     "host": "localhost",
     "port": 27017
+  },
+  "remote db": {
+    "databasename": "foobar-db",
+    "host": "foobar-host",
+    "port": 65400,
+    "auth": {
+      "username": "foobar-user",
+      "password": "foobar-password"
+    }
   }
 }
