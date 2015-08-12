@@ -1,0 +1,42 @@
+// docs for jshint : http://www.jshint.com/docs/
+// options for jshint : http://www.jshint.com/docs/options/
+
+{
+  "undef": true,
+  "unused": true,
+  "node" : true,
+  "esnext" : true,
+  "predef": [
+    "angular",
+    "$",
+    "_",
+    "moment",
+    "ga",
+    "console",
+    "twemoji",
+    "confirm",
+    "document",
+    "window",
+    "navigator",
+    "Rollbar",
+    "SC",
+    "describe",
+    "beforeEach",
+    "module",
+    "inject",
+    "it",
+    "spyOn",
+    "expect",
+    "afterEach",
+    "controller",
+    "process",
+    "require",
+    "__dirname",
+    "child_process",
+    "next",
+    "alert"
+  ],
+  "camelcase": true,
+  "bitwise": true,
+  "eqeqeq": true
+}

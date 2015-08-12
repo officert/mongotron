@@ -1,0 +1,114 @@
+/*
+* Class-specific vars
+*/
+@header-height: 40px;
+@sidebar-width: 300px;
+@sidebar-bg: white;
+
+/*
+ * Class
+ */
+#data-viewer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: @header-height;
+    width: 100%;
+    background: @gray-lighter;
+    z-index: 999;
+    .logo {
+      display: block;
+      float: left;
+      padding: 10px;
+      text-transform: uppercase;
+      color: @brand-primary;
+    }
+    .header-links {
+      margin: 0;
+      padding: 0 0 0 40px;
+      list-style: none;
+      li {
+        float: left;
+        a {
+          display: block;
+          padding: 10px;
+          color: @text-color;
+        }
+      }
+    }
+  }
+  .data-viewer-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    .sidebar {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: @sidebar-width;
+      height: 100%;
+      background: @sidebar-bg;
+      overflow-y: auto;
+      padding-top: @header-height;
+      .server-list {
+        li {
+          > span {
+            &.active {
+              background: @brand-primary;
+              &:hover {
+                background: @brand-primary;
+              }
+            }
+          }
+          span {
+            display: block;
+            padding: 10px 12px;
+            color: @text-color;
+            border-bottom: 1px solid @gray-lighter;
+            position: relative;
+            i {
+              margin-right: 8px;
+            }
+            &:hover {
+              background: @gray-lighter;
+            }
+            .loader {
+              position: absolute;
+              right: 0;
+              top: 0;
+              background: @gray-lighter;
+              padding: 10px 0 10px 10px;
+            }
+          }
+          ul {
+            padding-left: 20px;
+          }
+        }
+        .database-list {
+          .collection-list {
+            .collection {
+
+            }
+          }
+        }
+      }
+    }
+    .content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: @header-height;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+//vendor
+@import "../vendor/bootstrap/less/bootstrap.less";
+@import "../vendor/font-awesome/less/font-awesome.less";
+
+//
+//app
+@import 'appVariables';
+@import 'appComponents.less';
+@import 'appAnimations.less';
+
+//components
+@import 'components/connect.less';
+@import 'components/dataViewer.less';
+
+//global
+body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background: @gray-light;
+  font-weight: 200;
+  min-width: 600px;
+  min-height: 600px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  font-weight: 200;
+}
+a {
+  cursor: default;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#app {
+  position: absolute;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}

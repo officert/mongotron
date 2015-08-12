@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="fragment" content="!">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <!-- CSS -->
+  <!-- injectSrcCss:css -->
+  <!-- endinjectSrcCss -->
+  <!-- injectVendorCss:css -->
+  <!-- endinjectVendorCss -->
+  <!-- JAVASCRIPT -->
+  <script>
+    //load jquery using require because it thinks it's loading for node and
+    //doesn't register the global $ or jquery
+    window.$ = window.jQuery = require('./vendor/jquery/dist/jquery.js');
+  </script>
+  <!-- injectVendorJs:js -->
+  <!-- endinjectVendorJs -->
+  <!-- injectSrcJs:js -->
+  <!-- endinjectSrcJs -->
+</head>
+
+<body>
+  <!-- need for ngAnimate -->
+  <base href="/" />
+  <!-- APP -->
+  <div id="app" class="view-container view-frame view-fade" ui-view>
+  </div>
+</body>
+
+</html>

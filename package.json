@@ -1,0 +1,58 @@
+{
+  "name": "mongotron",
+  "version": "0.1.0",
+  "description": "mongotron",
+  "main": "main.js",
+  "dependencies": {
+    "async": "1.4.0",
+    "jsonfile": "^2.2.1",
+    "mongodb": "^2.0.40",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "bower": "1.3.12",
+    "chromedriver": "2.13.0",
+    "fontcustom": "0.0.3",
+    "gulp": "3.8.11",
+    "gulp-concat": "2.5.2",
+    "gulp-if": "1.2.4",
+    "gulp-inject": "1.2.0",
+    "gulp-jscs": "1.6.0",
+    "gulp-jshint": "1.8.4",
+    "gulp-less": "1.3.6",
+    "gulp-minify-html": "1.0.2",
+    "gulp-protractor": "1.0.0",
+    "gulp-rename": "1.2.2",
+    "gulp-replace": "0.5.2",
+    "gulp-task-list": "0.0.1",
+    "gulp-uglifyjs": "0.6.0",
+    "gulp-watch": "1.2.0",
+    "gulp-wrap": "0.11.0",
+    "jasmine": "2.2.1",
+    "jshint-stylish": "0.4.0",
+    "karma": "0.12.24",
+    "karma-jasmine": "0.3.5",
+    "karma-phantomjs-launcher": "0.1.4",
+    "karma-sinon": "1.0.4",
+    "karma-spec-reporter": "0.0.13",
+    "node-uuid": "1.4.3",
+    "phantomjs": "1.9.15",
+    "protractor": "2.1.0",
+    "selenium": "2.20.0",
+    "shelljs": "0.3.0",
+    "sinon": "1.14.1"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "postinstall": "make postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "htts://github.com/mongotron"
+  },
+  "keywords": [
+    "mongo"
+  ],
+  "author": "Tim Officer",
+  "license": "MIT"
+}

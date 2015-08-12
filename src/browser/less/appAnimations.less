@@ -1,0 +1,40 @@
+// angular animation styles
+// http://www.technofattie.com/2014/07/27/easy-loading-indicator-when-switching-views-in-angular.html
+// ---------------------------------------------- //
+.view-fade {
+  &.ng-enter {
+    .transition(1.2s ease);
+    position: relative;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    &.ng-enter-active {
+      opacity: 1;
+    }
+  }
+  &.ng-leave {
+    opacity: 1;
+    &.ng-leave-active {
+      opacity: 0;
+    }
+  }
+}
+
+// ---------------------------------------------- //
+.view-slide {
+  &.ng-enter {
+    .transition(1.2s ease);
+    position: relative;
+    top: 0;
+    left: 100%;
+    &.ng-enter-active {
+      left: 0;
+    }
+  }
+  &.ng-leave {
+    left: 0;
+    &.ng-leave-active {
+      left: -100%;
+    }
+  }
+}
