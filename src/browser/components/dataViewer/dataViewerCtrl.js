@@ -8,7 +8,7 @@ angular.module('app').controller('dataViewerCtrl', [
   function($scope, $rootScope, $log, $state, $timeout, alertService) {
     $scope.setTitle('Mongotron Data Viewer');
 
-    $scope.collections = []; //collections stored while user is querying
+    $scope.currentCollections = []; //collections stored while user is querying
 
     if (!$scope.currentConnections || !$scope.currentConnections.length) {
       $state.go('connect');
@@ -103,14 +103,19 @@ angular.module('app').controller('dataViewerCtrl', [
       $scope.collections.push(collection);
     };
 
-    $scope.activateItem = function activateItem(item) {
+    $scope.activateItem = function activateItem(item, type) {
       if ($scope.currentActiveItem) {
         $scope.currentActiveItem.active = false;
       }
-
       $scope.currentActiveItem = item;
+      $scope.currentActiveItem.active = true;
 
-      item.active = true;
+      switch (type) {
+        case 'collection':
+          $scope.currentCollections.push(item);
+          $state.go('data-viewer.collections');
+          break;
+      }
     };
   }
 ]);

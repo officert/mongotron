@@ -37,7 +37,7 @@
                   </span>
                   <ul class="collection-list" ng-show="database.showCollections && !database.loadingCollections">
                     <li ng-repeat="collection in database.collections | orderBy : 'collectionName'">
-                      <span class="collection" ng-click="activateItem(collection)" ng-class="{ active : collection.active }">
+                      <span class="collection" ng-click="activateItem(collection, 'collection')" ng-class="{ active : collection.active }">
                         <i class="fa fa-files-o"></i> {{ collection.collectionName }}
                       </span>
                     </li>
@@ -60,9 +60,8 @@
       </ul>
     </div>
     <div class="content">
-      <collection-tabs collections="collections">
-
-      </collection-tabs>
+      <div class="view-container view-frame view-fade" ui-view>
+      </div>
     </div>
   </div>
 </div>

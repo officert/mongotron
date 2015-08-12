@@ -17,6 +17,11 @@ angular.module('app').config([
         templateUrl: __dirname + '/components/dataViewer/dataViewer.html',
         controller: 'dataViewerCtrl'
       })
+      .state('data-viewer.collections', {
+        url: '/collections',
+        templateUrl: __dirname + '/components/dataViewer/collections/collections.html',
+        controller: 'collectionsCtrl'
+      })
       .state('home', {
         url: '/home',
         templateUrl: __dirname + '/components/home/home.html',
