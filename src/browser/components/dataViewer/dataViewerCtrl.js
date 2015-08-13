@@ -127,7 +127,7 @@ angular.module('app').controller('dataViewerCtrl', [
 
       var existingCollection = _.findWhere($scope.currentCollections, {
         databaseName: collection.databaseName,
-        collectionName: collection.collectionName
+        name: collection.name
       });
 
       if (!existingCollection) $scope.currentCollections.push(collection);

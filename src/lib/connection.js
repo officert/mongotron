@@ -61,8 +61,6 @@ Connection.prototype._addDatabase = function _addDatabase(config) {
     name: config.name
   });
 
-  config.name = config.name;
-
   if (existingDatabase) return;
 
   var database = new Database(config);

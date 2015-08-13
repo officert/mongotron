@@ -5,6 +5,7 @@ const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
+const Collection = require('./collection');
 const errors = require('./errors');
 
 /* ------------------------------------------------
@@ -59,10 +60,30 @@ Database.prototype.listCollections = function listCollections(next) {
   _this._dbConnection.collections(function(err, collections) {
     if (err) return next(new errors.DatabaseError(err));
 
-    _this.collections = collections;
+    _.each(collections, function(collection) {
+      _this._addCollection(collection);
+    });
 
     return next(null, _this.collections);
   });
+};
+
+Database.prototype._addCollection = function _addCollection(config) {
+  config = config || {};
+
+  var _this = this;
+
+  var existingCollection = _.findWhere(_this.collections, {
+    name: config.name
+  });
+
+  if (existingCollection) return;
+
+  var collection = new Collection(config);
+
+  _this.collections.push(collection);
+
+  return collection;
 };
 
 /*
