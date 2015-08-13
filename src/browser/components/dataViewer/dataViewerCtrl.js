@@ -89,8 +89,9 @@ angular.module('app').controller('dataViewerCtrl', [
             }
 
             database.collections = collections.map(function(collection) {
-              collection.host = database.host;
-              collection.port = database.port;
+              collection.databaseName = database.name;
+              collection.databaseHost = database.host;
+              collection.databasePort = database.port;
               return collection;
             });
           }, 500);
@@ -116,10 +117,22 @@ angular.module('app').controller('dataViewerCtrl', [
 
       switch (type) {
         case 'collection':
-          $scope.currentCollections.push(item);
-          $state.go('data-viewer.collections');
+          _addCollection(item);
           break;
       }
     };
+
+    function _addCollection(collection) {
+      if (!collection) return;
+
+      var existingCollection = _.findWhere($scope.currentCollections, {
+        databaseName: collection.databaseName,
+        collectionName: collection.collectionName
+      });
+
+      if (!existingCollection) $scope.currentCollections.push(collection);
+
+      $state.go('data-viewer.collections');
+    }
   }
 ]);
