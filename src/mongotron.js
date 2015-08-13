@@ -1,7 +1,7 @@
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
-var ConnectionService = require('modules/connection');
+var ConnectionService = require('lib/connectionService');
 
 /* ------------------------------------------------
  * Constructor

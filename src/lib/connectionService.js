@@ -6,9 +6,9 @@ const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const async = require('async');
 
-var Connection = require('modules/connection/connection');
+var Connection = require('./connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../../config/dbConnections.json');
+const DB_CONNECTIONS = path.join(__dirname, '../config/dbConnections.json');
 
 /* ------------------------------------------------
  * Constructor

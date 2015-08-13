@@ -41,7 +41,7 @@ app.on('ready', function() {
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.setTitle('Mongotron');
   });
-  
+
   mainWindow.on('closed', function() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time

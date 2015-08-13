@@ -1,5 +1,3 @@
-const error = require('modules/error');
-
 angular.module('app').factory('alertService', [
   function() {
 

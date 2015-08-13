@@ -1,4 +1,4 @@
-const connectionService = require('modules/connection');
+const connectionService = require('lib/connectionService');
 
 angular.module('app').service('connectionService', [
   '$q',

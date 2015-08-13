@@ -21,16 +21,6 @@ angular.module('app').config([
         url: '/collections',
         templateUrl: __dirname + '/components/dataViewer/collections/collections.html',
         controller: 'collectionsCtrl'
-      })
-      .state('home', {
-        url: '/home',
-        templateUrl: __dirname + '/components/home/home.html',
-        controller: 'homeCtrl'
-      })
-      .state('settings', {
-        url: '/settings',
-        templateUrl: __dirname + '/components/settings/settings.html',
-        controller: 'settingsCtrl'
       });
   }
 ]);

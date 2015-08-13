@@ -1,12 +1,12 @@
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
-const Database = require('modules/database/database');
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
-const error = require('modules/error');
+const Database = require('./database');
+const errors = require('./errors');
 
 /* ------------------------------------------------
  * Constructor
@@ -80,14 +80,14 @@ Connection.prototype._getDbsForLocalhostConnection = function _getDbsForLocalhos
   var localDb = new MongoDb('local', new MongoServer(_this.host, _this.port));
 
   localDb.open(function(err, db) {
-    if (err) return next(new error.ConnectionError(util.format('An error occured when trying to connect to %s', _this.host)));
+    if (err) return next(new errors.ConnectionError(util.format('An errors occured when trying to connect to %s', _this.host)));
 
     // Use the admin database for the operation
     var adminDb = db.admin();
 
     // List all the available databases
     adminDb.listDatabases(function(err, result) {
-      if (err) return next(new error.DatabaseError(err));
+      if (err) return next(new errors.DatabaseError(err));
 
       db.close();
 

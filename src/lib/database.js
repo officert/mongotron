@@ -5,7 +5,7 @@ const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
-const error = require('modules/error');
+const errors = require('./errors');
 
 /* ------------------------------------------------
  * Constructor
@@ -32,11 +32,11 @@ Database.prototype.open = function open(next) {
   var _this = this;
 
   _this._dbConnection.open(function(err) {
-    if (err) return next(new error.DatabaseError(err));
+    if (err) return next(new errors.DatabaseError(err));
 
     if (_this.auth) {
       _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
-        if (err) return next(new error.DatabaseError(err));
+        if (err) return next(new errors.DatabaseError(err));
 
         return next(null);
       });
@@ -57,7 +57,7 @@ Database.prototype.listCollections = function listCollections(next) {
   }
 
   _this._dbConnection.collections(function(err, collections) {
-    if (err) return next(new error.DatabaseError(err));
+    if (err) return next(new errors.DatabaseError(err));
 
     _this.collections = collections;
 
