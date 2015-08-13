@@ -39,9 +39,22 @@
  */
 .collection-query {
   .query-input {
+    background: none;
+    .code-editor {
+      .CodeMirror {
+        height: auto;
+        min-height: 34px;
+        border: 1px solid @input-group-addon-border-color;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        padding: 2px;
+      }
+    }
     .input-group-addon {
+      background: none;
       padding: 0;
       border: 0;
+      vertical-align: top;
       .btn {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;

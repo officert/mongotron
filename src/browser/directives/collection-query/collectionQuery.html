@@ -1,7 +1,7 @@
 <div class="collection-query">
   <form name="query-form" novalidate>
     <div class="input-group query-input">
-      <input type="text" class="form-control" placeholder="Enter your search query" ng-model="form.searchQuery">
+      <ui-codemirror class="code-editor" ng-model="form.searchQuery" ui-codemirror-opts="codeEditorOptions"></ui-codemirror>
       <span class="input-group-addon">
         <button class="btn btn-default" ng-click="search()">Search</button>
       </span>

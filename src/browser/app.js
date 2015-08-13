@@ -7,7 +7,8 @@ angular.module('app', [
   'ui.router',
   'ngAnimate',
   'ngSanitize',
-  'duScroll'
+  'duScroll',
+  'ui.codemirror'
 ]);
 
 angular.module('app').constant('appConfig', {

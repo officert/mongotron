@@ -66,7 +66,10 @@ var VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/angular-scroll/angular-scroll.js',
   BUILD_DIR + '/browser/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
   BUILD_DIR + '/browser/vendor-custom/toastr/toastr.js',
-  BUILD_DIR + '/browser/vendor/moment/moment.js'
+  BUILD_DIR + '/browser/vendor/moment/moment.js',
+  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
+  BUILD_DIR + '/browser/vendor/angular/angular.js',
+  BUILD_DIR + '/browser/vendor/angular-ui-codemirror/ui-codemirror.js'
 ];
 
 //css
@@ -81,6 +84,7 @@ var VENDOR_CSS = [
   // BUILD_DIR + '/fonts/fonts.css'
   BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
   BUILD_DIR + '/browser/vendor-custom/toastr/toastr.css',
+  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css'
 ];
 
 /* =========================================================================
