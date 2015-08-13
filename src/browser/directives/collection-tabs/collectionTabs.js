@@ -1,6 +1,5 @@
 angular.module('app').directive('collectionTabs', [
-  '$rootScope',
-  function($rootScope) {
+  function() {
     return {
       restrict: 'E',
       templateUrl: __dirname + '/directives/collection-tabs/collectionTabs.html',
