@@ -1,7 +1,7 @@
 <div id="connect">
   <div class="server-block">
     <div class="inner">
-      <h2><i class="fa fa-star"></i>&nbsp;Connect</h2>
+      <h3><i class="fa fa-server"></i>&nbsp;Select a MongoDb Connection</h3>
       <ul class="server-list">
         <li ng-repeat="connection in connections | orderBy : 'name'">
           <a href="#" ng-click="connect(connection, $event)">{{ connection.name }}</a>
