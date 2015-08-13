@@ -45,14 +45,14 @@ Connection.prototype.connect = function connect(next) {
         name: config.name
       });
 
-      if (!existingDatabase) _this.addDatabase(config);
+      if (!existingDatabase) _this._addDatabase(config);
     });
 
     return next(null);
   }
 };
 
-Connection.prototype.addDatabase = function addDatabase(config) {
+Connection.prototype._addDatabase = function _addDatabase(config) {
   config = config || {};
 
   var _this = this;
@@ -92,7 +92,7 @@ Connection.prototype._getDbsForLocalhostConnection = function _getDbsForLocalhos
       db.close();
 
       _.each(result.databases, function(db) {
-        _this.addDatabase({
+        _this._addDatabase({
           name: db.name,
           host: _this.host,
           port: _this.port
