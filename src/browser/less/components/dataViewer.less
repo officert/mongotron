@@ -23,22 +23,23 @@
     width: 100%;
     background: @gray-lighter;
     z-index: 999;
+    text-align: center;
     .logo {
       display: block;
-      float: left;
       padding: 10px;
       text-transform: uppercase;
       color: @brand-primary;
     }
     .header-links {
       margin: 0;
-      padding: 0 0 0 40px;
+      padding: 0 0 0 10px;
       list-style: none;
+      float: left;
       li {
         float: left;
         a {
           display: block;
-          padding: 10px;
+          padding: 10px 0;
           color: @text-color;
         }
       }
@@ -62,6 +63,7 @@
       z-index: 100;
       .server-list {
         li {
+          cursor: default;
           > span {
             &.active {
               background: @brand-primary;
@@ -71,6 +73,7 @@
             }
           }
           span {
+            cursor: default;
             display: block;
             padding: 10px 12px;
             color: @text-color;

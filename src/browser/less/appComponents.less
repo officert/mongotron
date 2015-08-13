@@ -12,19 +12,41 @@
  */
 .collection-tabs {
   .collection-tab {
+    a {
+      background: darken(@gray-lighter, 10%);
+    }
     .collection-tab-header {
       .close {
         border-radius: 50%;
-        padding: 3px 4px 4px 6px;
-        marign-left: 10px;
-        background: @gray-light
+        padding: 3px 4px 4px 5px;
+        margin-left: 10px;
+        font-size: 10px;
+        background: @gray-light;
       }
     }
-    .collection-tab-content {
-      background: red;
-      position: relative;
-      height: 100%;
-      width: 100%;
+  }
+  .tab-pane {
+    background: white;
+    padding: 15px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/*
+ * Collection Query
+ */
+.collection-query {
+  .query-input {
+    .input-group-addon {
+      padding: 0;
+      border: 0;
+      .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: 0;
+      }
     }
   }
 }
