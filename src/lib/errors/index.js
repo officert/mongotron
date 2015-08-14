@@ -5,6 +5,7 @@
 var AbstractError = require('./abstractError');
 var ConnectionError = require('./connectionError');
 var DatabaseError = require('./databaseError');
+var InvalidArugmentError = require('./invalidArgumentError');
 
 /*
  * @exports
@@ -13,5 +14,6 @@ var DatabaseError = require('./databaseError');
 module.exports = {
   AbstractError: AbstractError,
   ConnectionError: ConnectionError,
-  DatabaseError: DatabaseError
+  DatabaseError: DatabaseError,
+  InvalidArugmentError: InvalidArugmentError
 };
