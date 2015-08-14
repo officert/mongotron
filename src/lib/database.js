@@ -73,13 +73,15 @@ Database.prototype._addCollection = function _addCollection(config) {
 
   var _this = this;
 
+  config.name = config.collectionName;
+
   var existingCollection = _.findWhere(_this.collections, {
     name: config.name
   });
 
   if (existingCollection) return;
 
-  var collection = new Collection(config);
+  var collection = new Collection(_this._dbConnection, config);
 
   _this.collections.push(collection);
 
