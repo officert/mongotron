@@ -2,7 +2,7 @@
   <tabset ng-show="collections.length">
     <tab class="collection-tab" ng-repeat="collection in collections" active="collection.active" disable="collection.disabled">
       <tab-heading class="collection-tab-header">
-        {{ collection.name }} <i class="close fa fa-times" ng-click="removeCollection(collection, $event)"></i>
+        <i class="fa fa-files-o"></i> {{ collection.name }} <i class="close fa fa-times" ng-click="removeCollection(collection, $event)"></i>
       </tab-heading>
       <collection-query collection="collection"></collection-query>
     </tab>

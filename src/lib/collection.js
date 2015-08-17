@@ -16,15 +16,17 @@ function Collection(database, options) {
 
   var _this = this;
   _this.name = options.name || 'test';
+  _this.serverName = options.serverName;
+  _this.databaseName = options.databaseName;
   _this._dbCollection = database.collection(_this.name);
 }
 
 Collection.prototype.find = function find(query, options, next) {
-  if (!query) return next(new errors.InvalidArugmentError('query is required'));
   if (arguments.length === 2) {
     next = options;
     options = {};
   }
+  if (!query) return next(new errors.InvalidArugmentError('query is required'));
 
   var _this = this;
 

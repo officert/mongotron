@@ -17,25 +17,25 @@
       <ul class="server-list">
         <li ng-repeat="connection in currentConnections | orderBy : 'name'">
           <span ng-click="openConnection(connection)">
-            <i class="fa fa-server"></i> {{ connection.name }}
+            <i class="fa fa-server"></i> {{ connection.name }}<i class="open-icon">+</i>
           </span>
-          <ul class="database-list" ng-show="connection.isOpen">
+           <ul class="database-list slide" ng-show="connection.isOpen">
             <li ng-repeat="database in connection.databases | orderBy : 'name'">
               <span ng-click="openDatabase(database)">
-                <i class="fa fa-database"></i> {{ database.name }}
+                <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon">+</i>
                 <span class="loader" ng-show="database.opening">
                   <i class="fa fa-cog fa-spin"></i>
                 </span>
               </span>
-              <ul class="collection-list" ng-show="database.isOpen">
+              <ul class="collection-list slide" ng-show="database.isOpen">
                 <li>
                   <span ng-click="listDatabaseCollections(database)">
-                    <i class="fa fa-folder-o"></i> Collections
+                    <i class="fa fa-folder-o"></i> Collections<i class="open-icon">+</i>
                     <span class="loader" ng-show="database.loadingCollections">
                       <i class="fa fa-cog fa-spin"></i>
                     </span>
                   </span>
-                  <ul class="collection-list" ng-show="database.showCollections && !database.loadingCollections">
+                  <ul class="collection-list slide" ng-show="database.showCollections && !database.loadingCollections">
                     <li ng-repeat="collection in database.collections | orderBy : 'name'">
                       <span class="collection" ng-click="activateItem(collection, 'collection')" ng-class="{ active : collection.active }">
                         <i class="fa fa-files-o"></i> {{ collection.name }}

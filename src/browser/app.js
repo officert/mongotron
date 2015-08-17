@@ -8,7 +8,8 @@ angular.module('app', [
   'ngAnimate',
   'ngSanitize',
   'duScroll',
-  'ui.codemirror'
+  'ui.codemirror',
+  'ngPrettyJson'
 ]);
 
 angular.module('app').constant('appConfig', {

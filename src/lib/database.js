@@ -74,6 +74,8 @@ Database.prototype._addCollection = function _addCollection(config) {
   var _this = this;
 
   config.name = config.collectionName;
+  config.serverName = _this.host + ':' + _this.port;
+  config.databaseName = _this.name;
 
   var existingCollection = _.findWhere(_this.collections, {
     name: config.name

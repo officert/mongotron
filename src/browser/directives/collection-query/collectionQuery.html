@@ -1,5 +1,13 @@
 <div class="collection-query">
-  <form name="query-form" novalidate>
+  <div class="collection-info clearfix">
+    <p>
+      <i class="fa fa-server"></i> {{ collection.serverName }}
+    </p>
+    <p>
+      <i class="fa fa-database"></i> {{ collection.databaseName }}
+    </p>
+  </div>
+  <form class="query-form" name="query-form" novalidate>
     <div class="input-group query-input">
       <ui-codemirror class="code-editor" ng-model="form.searchQuery" ui-codemirror-opts="codeEditorOptions"></ui-codemirror>
       <span class="input-group-addon">
@@ -7,9 +15,18 @@
       </span>
     </div>
   </form>
-  <div class="results">
-    <div ng-repeat="result in results">
-      {{ result._id }}
+  <loading></loading>
+  <div class="query-results">
+    <div ng-show="!loading" ng-repeat="result in results">
+      <accordion>
+        <accordion-group is-open="status.open">
+          <accordion-heading>
+            <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ result._id }}
+          </accordion-heading>
+          <pre pretty-json="result">
+          </pre>
+        </accordion-group>
+      </accordion>
     </div>
   </div>
 </div>

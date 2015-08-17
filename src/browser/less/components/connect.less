@@ -10,9 +10,9 @@
 #connect {
   padding-top: @server-block-height/2;
   .server-block {
+
     // transition-delay: .5s;
     .transition(.5s ease);
-    min-height: @server-block-height;
     height: auto;
     width: @server-block-width;
     color: white;
@@ -23,13 +23,12 @@
     top: 0;
     margin: 0 auto;
     .inner {
+
       // transition-delay: 1s;
       .transition(.5s ease);
-    }
-    > h2 {
-      font-weight: 200;
-      margin-top: 25px;
-      margin-bottom: 35px;
+      > h3 {
+        font-size: 16px;
+      }
     }
     .server-list {
       list-style: none;

@@ -1,3 +1,13 @@
+.center {
+  text-align: center;
+}
+.loading {
+  padding: 20px 0;
+  i {
+    font-size: 20px;
+  }
+}
+
 /*
  * jQuery Splitter
  */
@@ -11,10 +21,16 @@
  * Collection Tabs
  */
 .collection-tabs {
+  height: 100%;
   .collection-tab {
     a {
-      background: darken(@gray-lighter, 10%);
-      border: none !important;
+      color: @text-color;
+      background: darken(@gray-lighter, 5%);
+    }
+    &.active {
+      a {
+        background: white;
+      }
     }
     .collection-tab-header {
       .close {
@@ -39,27 +55,68 @@
  * Collection Query
  */
 .collection-query {
-  .query-input {
-    background: none;
-    .code-editor {
-      .CodeMirror {
-        height: auto;
-        min-height: 34px;
-        border: 1px solid @input-group-addon-border-color;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-        padding: 2px;
+  .collection-info {
+    margin-bottom: 15px;
+    p {
+      margin: 0;
+      padding: 0;
+      float: left;
+      &:first-child {
+        margin-right: 15px;
       }
     }
-    .input-group-addon {
+  }
+  .query-form {
+    .query-input {
       background: none;
-      padding: 0;
-      border: 0;
-      vertical-align: top;
-      .btn {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-left: 0;
+      .code-editor {
+        .CodeMirror {
+          height: auto;
+          min-height: 34px;
+          border: 1px solid @input-group-addon-border-color;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          padding: 2px;
+        }
+      }
+      .input-group-addon {
+        background: none;
+        padding: 0;
+        border: 0;
+        vertical-align: top;
+        .btn {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left: 0;
+        }
+      }
+    }
+  }
+  .query-results {
+    margin-top: 15px;
+    .panel-group {
+      margin-bottom: 5px;
+      .panel-heading {
+        padding: 0;
+        background: white;
+        .accordion-toggle {
+          padding: 10px 15px;
+          display: block;
+          cursor: default;
+          text-decoration: none;
+        }
+      }
+      .panel-body {
+        padding: 0;
+        pre {
+          outline: none;
+          .key {
+            color: darken(@brand-primary, 10%);
+          }
+          .string {
+            color: @brand-secondary;
+          }
+        }
       }
     }
   }

@@ -69,7 +69,9 @@ var VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/moment/moment.js',
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
   BUILD_DIR + '/browser/vendor/angular/angular.js',
-  BUILD_DIR + '/browser/vendor/angular-ui-codemirror/ui-codemirror.js'
+  BUILD_DIR + '/browser/vendor/angular-ui-codemirror/ui-codemirror.js',
+  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.js',
+  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js'
 ];
 
 //css
@@ -84,7 +86,8 @@ var VENDOR_CSS = [
   // BUILD_DIR + '/fonts/fonts.css'
   BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
   BUILD_DIR + '/browser/vendor-custom/toastr/toastr.css',
-  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css'
+  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
+  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.css'
 ];
 
 /* =========================================================================

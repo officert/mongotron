@@ -8,8 +8,8 @@ const AbstractError = require('./abstractError');
 /*
  * @constructor DatabaseError
  */
-var InvalidArgumentError = function(error) {
-  AbstractError.call(this, error ? error.message : error);
+var InvalidArgumentError = function() {
+  AbstractError.apply(this, arguments);
 };
 util.inherits(InvalidArgumentError, AbstractError);
 InvalidArgumentError.prototype.name = 'Invalid Argument Error';
