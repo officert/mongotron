@@ -6,6 +6,9 @@
     <p>
       <i class="fa fa-database"></i> {{ collection.databaseName }}
     </p>
+    <p ng-show="queryTime">
+      <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
+    </p>
   </div>
   <form class="query-form" name="query-form" novalidate>
     <div class="input-group query-input">
@@ -16,6 +19,9 @@
     </div>
   </form>
   <loading></loading>
+  <div class="query-error alert alert-danger" ng-show="error">
+    {{ error }}
+  </div>
   <div class="query-results">
     <div ng-show="!loading" ng-repeat="result in results">
       <accordion>

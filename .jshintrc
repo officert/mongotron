@@ -34,7 +34,8 @@
     "__dirname",
     "child_process",
     "next",
-    "alert"
+    "alert",
+    "performance"
   ],
   "camelcase": true,
   "bitwise": true,
