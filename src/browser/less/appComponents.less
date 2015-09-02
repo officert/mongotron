@@ -100,25 +100,32 @@
     margin-top: 15px;
     .panel-group {
       margin-bottom: 5px;
-      .panel-heading {
-        padding: 0;
-        background: white;
-        .accordion-toggle {
-          padding: 10px 15px;
-          display: block;
-          cursor: default;
-          text-decoration: none;
-        }
-      }
-      .panel-body {
-        padding: 0;
-        pre {
-          outline: none;
-          .key {
-            color: darken(@brand-primary, 10%);
+      .panel {
+        box-shadow: none;
+        .panel-heading {
+          padding: 0;
+          background: white;
+          border-radius: 4px;
+          .panel-title {
+            font-size: 14px;
+            .accordion-toggle {
+              padding: 10px 15px;
+              display: block;
+              cursor: default;
+              text-decoration: none;
+            }
           }
-          .string {
-            color: @brand-secondary;
+        }
+        .panel-body {
+          padding: 0;
+          pre {
+            outline: none;
+            .key {
+              color: darken(@brand-tertiary, 10%);
+            }
+            .string {
+              color: @brand-secondary;
+            }
           }
         }
       }

@@ -39,27 +39,24 @@ angular.module('app').controller('collectionQueryCtrl', [
 
           $scope.loading = false;
 
-          $scope.results = results.map(function(result) {
-            result.properties = convertToKeyValuPairs(result);
-            return result;
-          });
+          $scope.results = results;
         }, 500);
       });
     };
 
     $scope.search();
 
-    function convertToKeyValuPairs(obj) {
-      var kvp = [];
-
-      for (var key in obj) {
-        kvp.push({
-          key: key,
-          value: obj[key]
-        });
-      }
-
-      return kvp;
-    }
+    // function convertToKeyValuPairs(obj) {
+    //   var kvp = [];
+    //
+    //   for (var key in obj) {
+    //     kvp.push({
+    //       key: key,
+    //       value: obj[key]
+    //     });
+    //   }
+    //
+    //   return kvp;
+    // }
   }
 ]);
