@@ -14,7 +14,7 @@
     "chromedriver": "2.13.0",
     "electron-prebuilt": "^0.33.6",
     "fontcustom": "0.0.3",
-    "gulp": "3.8.11",
+    "gulp": "3.9.0",
     "gulp-concat": "2.5.2",
     "gulp-if": "1.2.4",
     "gulp-inject": "1.2.0",

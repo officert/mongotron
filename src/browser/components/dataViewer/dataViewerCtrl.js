@@ -5,8 +5,19 @@ angular.module('app').controller('dataViewerCtrl', [
   '$state',
   '$timeout',
   'alertService',
-  function($scope, $rootScope, $log, $state, $timeout, alertService) {
+  'keypressService',
+  function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService) {
     $scope.setTitle('Mongotron Data Viewer');
+
+    keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
+      console.log('YEAAAAAAAA');
+      $scope.closeActiveCollectionWindow();
+    });
+
+    // * on scope destroy
+    $scope.$on('$destroy', function() {
+      keypressService.unregisterCombo(keypressService.EVENTS.CLOSE_WINDOW);
+    });
 
     $scope.currentCollections = []; //collections stored while user is querying
 
@@ -119,6 +130,17 @@ angular.module('app').controller('dataViewerCtrl', [
         case 'collection':
           _addCollection(item);
           break;
+      }
+    };
+
+    $scope.closeActiveCollectionWindow = function() {
+      var activeCollection = _.findWhere($scope.currentCollections, {
+        active: true
+      });
+
+      if (activeCollection) {
+        var index = $scope.currentCollections.indexOf(activeCollection);
+        $scope.currentCollections.splice(index, 1);
       }
     };
 

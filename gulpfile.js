@@ -70,7 +70,8 @@ var VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/angular/angular.js',
   BUILD_DIR + '/browser/vendor/angular-ui-codemirror/ui-codemirror.js',
   BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.js',
-  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js'
+  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
+  BUILD_DIR + '/browser/vendor/Keypress/keypress.js'
 ];
 
 //css
