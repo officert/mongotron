@@ -19,10 +19,9 @@ var less = require('gulp-less');
 var uglify = require('gulp-uglifyjs');
 var replace = require('gulp-replace');
 var sh = require('shelljs');
-// var watch = require('gulp-watch');
 var protractor = require('gulp-protractor').protractor;
 var concat = require('gulp-concat');
-var _ = require('underscore');
+// var _ = require('underscore');
 var wrap = require('gulp-wrap');
 var uuid = require('node-uuid');
 var rename = require('gulp-rename');
@@ -113,12 +112,12 @@ gulp.task('clean', function(next) {
 /**
  * Copy src folder to build directory
  */
-gulp.task('copy', ['clean', 'copy-bower'], function(next) {
+gulp.task('copy', ['clean', 'copy-bower'], function() {
   return _init(gulp.src(['package.json', 'src/**/*.*']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-gulp.task('copy-bower', ['clean'], function(next) {
+gulp.task('copy-bower', ['clean'], function() {
   return _init(gulp.src('src/broswer/vendor/**/**/*.js'))
     .pipe(wrap('(function(){<%= contents %>\n})();'))
     .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
@@ -293,8 +292,8 @@ gulp.task('release', ['default'], function(done) {
   sh.exec('electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
 });
 
-gulp.task('run', ['default'], function(done) {
-  sh.exec('electron ' + BUILD_DIR, done);
+gulp.task('run', ['default'], function(next) {
+  sh.exec('./node_modules/.bin/electron ' + BUILD_DIR, next);
 });
 
 /**
