@@ -13,6 +13,7 @@ var replace = require('gulp-replace');
 var sh = require('shelljs');
 var wrap = require('gulp-wrap');
 var electronConnect = require('electron-connect');
+var runSequence = require('run-sequence');
 
 require('gulp-task-list')(gulp);
 
@@ -36,7 +37,7 @@ const VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/angular-sanitize/angular-sanitize.js',
   BUILD_DIR + '/browser/vendor/angular-scroll/angular-scroll.js',
   BUILD_DIR + '/browser/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
-  BUILD_DIR + '/browser/vendor/toastr/toastr.js',
+  // BUILD_DIR + '/browser/vendor/toastr/toastr.js',
   BUILD_DIR + '/browser/vendor/moment/moment.js',
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
   BUILD_DIR + '/browser/vendor/angular/angular.js',
@@ -74,12 +75,12 @@ gulp.task('clean', function(next) {
   next();
 });
 
-gulp.task('copy', ['clean', 'copy-bower'], function() {
+gulp.task('copy', ['clean', 'copy-vendor'], function() {
   return _init(gulp.src(['package.json', 'src/**/*.*']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-gulp.task('copy-bower', ['clean'], function() {
+gulp.task('copy-vendor', ['clean'], function() {
   return _init(gulp.src('src/broswer/vendor/**/**/*.js'))
     .pipe(wrap('(function(){<%= contents %>\n})();'))
     .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
@@ -90,7 +91,7 @@ gulp.task('replace', ['copy'], function() {
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-gulp.task('css', ['js', 'css-vendor'], function() {
+gulp.task('css', function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
   var sources = gulp.src(BUILD_DIR + '/browser/less/main.less')
@@ -108,7 +109,7 @@ gulp.task('css', ['js', 'css-vendor'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
 });
 
-gulp.task('css-vendor', ['js', 'copy', 'replace'], function() {
+gulp.task('css-vendor', function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
   var sources = gulp.src(VENDOR_CSS)
@@ -126,11 +127,10 @@ gulp.task('css-vendor', ['js', 'copy', 'replace'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
 });
 
-gulp.task('js', ['js-vendor', 'copy', 'replace'], function() {
+gulp.task('js', function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
-  var sources = gulp.src([BUILD_DIR + '/browser/**/*.js', '!' + BUILD_DIR + '/browser/vendor/**/*.js'])
-    .pipe(gulp.dest(BUILD_DIR + '/browser'));
+  var sources = gulp.src([BUILD_DIR + '/browser/**/*.js', '!' + BUILD_DIR + '/browser/vendor/**/*.js']);
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectSrcJs:js -->',
@@ -143,11 +143,10 @@ gulp.task('js', ['js-vendor', 'copy', 'replace'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
 });
 
-gulp.task('js-vendor', ['copy', 'replace'], function() {
+gulp.task('js-vendor', function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
-  var sources = gulp.src(VENDOR_JS)
-    .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
+  var sources = gulp.src(VENDOR_JS);
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectVendorJs:js -->',
@@ -158,11 +157,6 @@ gulp.task('js-vendor', ['copy', 'replace'], function() {
       }
     }))
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
-});
-
-gulp.task('html', ['css', 'js'], function() {
-  return gulp.src(BUILD_DIR + '/**/**/*.html')
-    .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('jshint', ['replace'], function() {
@@ -176,7 +170,9 @@ gulp.task('release', ['build'], function(done) {
   sh.exec('electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
 });
 
-gulp.task('build', ['clean', 'copy', 'replace', 'css', 'js', 'html']);
+gulp.task('build', ['clean', 'copy', 'replace'], function(next) {
+  runSequence('css', 'css-vendor', 'js', 'js-vendor', next);
+});
 
 gulp.task('serve', ['build'], function() {
   var electron = electronConnect.server.create({
