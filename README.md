@@ -1,7 +1,7 @@
 # Mongotron
 A Mongo DB GUI that doesn't suck. Built using Electron, and Angular Js.
 
-https://travis-ci.org/officert/mongotron.svg?branch=master
+[![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
 
 ## Development
 
