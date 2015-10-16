@@ -1,8 +1,5 @@
 'use strict';
 
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
@@ -10,9 +7,6 @@ const util = require('util');
 const Database = require('./database');
 const errors = require('./errors');
 
-/* ------------------------------------------------
- * Constructor
- * ------------------------------------------------ */
 /**
  * @class Connection
  */
@@ -38,6 +32,7 @@ class Connection {
 
   /**
    * @method connect
+   * @param {Function} next - callback function
    */
   connect(next) {
     var _this = this;
@@ -66,6 +61,8 @@ class Connection {
   /**
    * @method _addDatabase
    * @private
+   * @param {Object} config - hash of config options
+   * @param {String} config.name
    */
   _addDatabase(config) {
     config = config || {};
@@ -88,6 +85,7 @@ class Connection {
   /**
    * @method _getDbsForLocalhostConnection
    * @private
+   * @param {Function} next - callback function
    */
   _getDbsForLocalhostConnection(next) {
     var _this = this;
@@ -121,10 +119,6 @@ class Connection {
     });
   }
 }
-
-/* ------------------------------------------------
- * Private Helpers
- * ------------------------------------------------ */
 
 /**
  * @exports

@@ -5,7 +5,7 @@ const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const async = require('async');
 
-var Connection = require('./connection');
+const Connection = require('./connection');
 
 const DB_CONNECTIONS = path.join(__dirname, '../config/dbConnections.json');
 
@@ -56,9 +56,6 @@ class ConnectionService {
   }
 }
 
-/* ------------------------------------------------
- * Private Helpers
- * ------------------------------------------------ */
 function _generateConnectionInstancesFromConfig(configData, next) {
   var connections = [];
 

@@ -10,7 +10,6 @@ var inject = require('gulp-inject'); // jshint ignore:line
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var replace = require('gulp-replace');
-var watch = require('gulp-watch');
 var sh = require('shelljs');
 var wrap = require('gulp-wrap');
 var electronConnect = require('electron-connect');
