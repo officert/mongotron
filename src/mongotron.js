@@ -2,7 +2,8 @@
 
 const ConnectionService = require('lib/connectionService');
 
-/* @constructor Mongotron
+/**
+ * @constructor Mongotron
  */
 class Mongotron {
   init(next) {
@@ -10,7 +11,7 @@ class Mongotron {
   }
 }
 
-/*
+/**
  * @exports
  */
 module.exports = new Mongotron();

@@ -1,8 +1,5 @@
 'use strict';
 
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
 const path = require('path');
 const jsonfile = require('jsonfile');
 const _ = require('underscore');
@@ -12,12 +9,13 @@ var Connection = require('./connection');
 
 const DB_CONNECTIONS = path.join(__dirname, '../config/dbConnections.json');
 
-/* ------------------------------------------------
- * Constructor
- * ------------------------------------------------ */
-/* @constructor ConnectionService
+/**
+ * @class ConnectionService
  */
 class ConnectionService {
+  /**
+   * @constructor ConnectionService
+   */
   constructor() {
     this._connections = []; //cache of Connection instances
   }
@@ -100,8 +98,7 @@ function _createConnection(databaseConfigs) {
   return connection;
 }
 
-/*
+/**
  * @exports
- *
  */
 module.exports = new ConnectionService();
