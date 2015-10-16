@@ -4,6 +4,7 @@ const path = require('path');
 const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const async = require('async');
+const Promise = require('bluebird');
 
 const Connection = require('./connection');
 
@@ -34,24 +35,25 @@ class ConnectionService {
   /**
    * @method initializeConnections
    */
-  initializeConnections(next) {
-    next = next || function() {};
-
+  initializeConnections() {
     var _this = this;
 
-    async.waterfall([
-      function getDbConfigsStep(done) {
-        jsonfile.readFile(DB_CONNECTIONS, done);
-      },
-      function createConnectionsStep(fileData, done) {
-        _generateConnectionInstancesFromConfig(fileData, done);
-      }
-    ], function(err, connections) {
-      if (err) return next(err);
+    return new Promise(function(resolve, reject) {
 
-      _this._connections = _this._connections.concat(connections);
+      async.waterfall([
+        function getDbConfigsStep(done) {
+          jsonfile.readFile(DB_CONNECTIONS, done);
+        },
+        function createConnectionsStep(fileData, done) {
+          _generateConnectionInstancesFromConfig(fileData, done);
+        }
+      ], function(err, connections) {
+        if (err) return reject(err);
 
-      return next(null, _this._connections);
+        _this._connections = _this._connections.concat(connections);
+
+        return resolve(null, _this._connections);
+      });
     });
   }
 }

@@ -13,7 +13,11 @@
     "performance": true,
     "describe": true,
     "before": true,
-    "it": true
+    "beforeEach": true,
+    "after": true,
+    "afterEach": true,
+    "it": true,
+    "Promise": true
   },
   "camelcase": true,
   "bitwise": true,

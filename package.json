@@ -6,6 +6,7 @@
   "engine": "node 4.2.0",
   "dependencies": {
     "async": "1.4.0",
+    "bluebird": "^2.10.2",
     "electron-connect": "0.3.3",
     "jquery": "2.1.4",
     "jsonfile": "2.2.1",
