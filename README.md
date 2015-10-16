@@ -1,6 +1,8 @@
 # Mongotron
 A Mongo DB GUI that doesn't suck. Built using Electron, and Angular Js.
 
+[![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
+
 ## Development
 
 ### Getting Started
@@ -11,7 +13,7 @@ A Mongo DB GUI that doesn't suck. Built using Electron, and Angular Js.
 npm install
 ```
 ```shell
-bower instsall
+bower install
 ```
 3. Create symlinks
 ```shell
@@ -19,7 +21,7 @@ make postinstall
 ```
 4. Start the app
 ```shell
-gulp run
+gulp serve
 ```
 
 ###Troubleshooting
