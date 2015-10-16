@@ -3,7 +3,6 @@
  * ------------------------------------------------ */
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
-const util = require('util');
 
 const Collection = require('./collection');
 const errors = require('./errors');

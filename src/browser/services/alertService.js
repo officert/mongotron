@@ -13,8 +13,8 @@ angular.module('app').factory('alertService', [
       toastr.success(message);
     };
 
-    AlertService.prototype.error = function error(error) {
-      toastr.error(error.message);
+    AlertService.prototype.error = function error(err) {
+      toastr.error(err.message);
     };
 
     AlertService.prototype.info = function info(message) {

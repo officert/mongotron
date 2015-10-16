@@ -1,6 +1,5 @@
 angular.module('app').directive('splitter', [
-  '$rootScope',
-  function($rootScope) {
+  function() {
     return {
       restrict: 'A',
       scope: {
@@ -13,6 +12,6 @@ angular.module('app').directive('splitter', [
           position: attrs.position || '50%'
         });
       }
-    }
+    };
   }
 ]);
