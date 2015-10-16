@@ -10,6 +10,7 @@ var inject = require('gulp-inject'); // jshint ignore:line
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var replace = require('gulp-replace');
+var watch = require('gulp-watch');
 var sh = require('shelljs');
 var wrap = require('gulp-wrap');
 var electronConnect = require('electron-connect');
@@ -183,10 +184,12 @@ gulp.task('serve', ['build'], function() {
   electron.start();
 
   // Restart browser process
-  gulp.watch('src/main.js', ['default', electron.restart]);
+  // gulp.watch(['src/main.js', 'src/lib/**.*'], ['default', electron.restart]);
+  // watch(['src/main.js', 'src/lib/**.*'], [gulp.run('default'), electron.restart]);
 
   // Reload renderer process
-  gulp.watch(['src/browser/app.js', 'src/browser/index.html'], ['default', electron.reload]);
+  // gulp.watch(['src/browser/**.*'], ['default', electron.reload]);
+  // watch(['src/browser/**.*'], [gulp.run('default'), electron.reload]);
 });
 
 gulp.task('default', ['serve']);
