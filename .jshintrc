@@ -4,13 +4,16 @@
 {
   "undef": true,
   "unused": true,
-  "node" : true,
-  "esnext" : true,
-  "globals" : {
+  "node": true,
+  "esnext": true,
+  "globals": {
     "_": true,
     "toastr": true,
     "angular": true,
-    "performance": true
+    "performance": true,
+    "describe": true,
+    "before": true,
+    "it": true
   },
   "camelcase": true,
   "bitwise": true,

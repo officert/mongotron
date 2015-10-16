@@ -14,6 +14,7 @@ var sh = require('shelljs');
 var wrap = require('gulp-wrap');
 var electronConnect = require('electron-connect');
 var runSequence = require('run-sequence');
+var mocha = require('gulp-mocha');
 
 require('gulp-task-list')(gulp);
 
@@ -57,6 +58,13 @@ const VENDOR_CSS = [
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
   BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.css'
 ];
+
+const MOCHA_SETTINGS = {
+  reporter: 'spec',
+  growl: true,
+  useColors: true,
+  useInlineDiffs: true
+};
 
 /* =========================================================================
  * Tasks
@@ -193,7 +201,19 @@ gulp.task('serve', ['build'], function() {
 
 gulp.task('default', ['serve']);
 
-gulp.task('test', ['jshint'], function() {});
+gulp.task('test', function(next) {
+  runSequence('jshint', 'test-int', 'test-unit', next);
+});
+
+gulp.task('test-int', function() {
+  return gulp.src('tests/integration/**/**/**-test.js')
+    .pipe(mocha(MOCHA_SETTINGS));
+});
+
+gulp.task('test-unit', function() {
+  return gulp.src('tests/unit/**/**/**-test.js')
+    .pipe(mocha(MOCHA_SETTINGS));
+});
 
 /* =========================================================================
  * Helper Functions
