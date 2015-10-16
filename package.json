@@ -7,8 +7,9 @@
   "dependencies": {
     "async": "1.4.0",
     "electron-connect": "0.3.3",
-    "jsonfile": "^2.2.1",
-    "mongodb": "^2.0.40",
+    "jquery": "2.1.4",
+    "jsonfile": "2.2.1",
+    "mongodb": "2.0.40",
     "underscore": "1.8.3"
   },
   "devDependencies": {
