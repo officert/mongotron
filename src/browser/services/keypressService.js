@@ -17,10 +17,10 @@ angular.module('app').factory('keypressService', [
       if (this.isRegistered(combo)) {
         this.unregisterCombo(combo);
       }
-      this.listener.counting_combo(combo, function() {
+      this.listener.counting_combo(combo, function() { // jshint ignore:line
         callback.call(arguments);
         $rootScope.$apply();
-      }, true); // jshint ignore:line
+      }, true);
     };
 
     KeypressService.prototype.unregisterCombo = function unregisterCombo(combo) {
@@ -29,7 +29,8 @@ angular.module('app').factory('keypressService', [
 
     KeypressService.prototype.EVENTS = {
       CLOSE_WINDOW: 'meta w',
-      NEW_TAB: 'meta t'
+      NEW_TAB: 'meta t',
+      MOVE_LEFT: 'meta shift }'
     };
 
     return new KeypressService();

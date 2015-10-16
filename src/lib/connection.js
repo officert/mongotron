@@ -78,7 +78,7 @@ Connection.prototype._getDbsForLocalhostConnection = function _getDbsForLocalhos
   var localDb = new MongoDb('local', new MongoServer(_this.host, _this.port));
 
   localDb.open(function(err, db) {
-    if (err) return next(new errors.ConnectionError(util.format('An errors occured when trying to connect to %s', _this.host)));
+    if (err) return next(new errors.ConnectionError(util.format('An error occured when trying to connect to %s', _this.host)));
 
     // Use the admin database for the operation
     var adminDb = db.admin();

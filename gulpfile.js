@@ -26,6 +26,7 @@ var wrap = require('gulp-wrap');
 var uuid = require('node-uuid');
 var rename = require('gulp-rename');
 var minifyHTML = require('gulp-minify-html');
+var electronConnect = require('electron-connect');
 
 require('gulp-task-list')(gulp);
 
@@ -231,60 +232,6 @@ gulp.task('jshint', ['replace'], function() {
     .pipe(jshint.reporter('fail'));
 });
 
-// gulp.task('start', ['default'], function() {
-//
-//   // LESS
-//   (function processLess(paths) {
-//     paths.forEach(function(path) {
-//       watch(path, {
-//         emit: 'one',
-//         emitOnGlob: false
-//       }, function(files) {
-//         //copy the changes less files to the build dir
-//         files
-//           .pipe(gulp.dest(BUILD_DIR + '/less'));
-//
-//         //reprocess main.less in the build dir - regenerate css
-//         return gulp.src(BUILD_DIR + '/less/main.less')
-//           .pipe(less(LESSOPTIONS))
-//           .pipe(rename(MINIFIED_SRC_CSS))
-//           .pipe(gulp.dest(BUILD_DIR + '/css'));
-//       });
-//     });
-//   })(['src/less/**/**/*.less']);
-//
-//   (function processJs() {
-//     console.log('watching js files');
-//
-//     watch('src/app/**/**/*.js', {
-//       emit: 'one',
-//       emitOnGlob: false
-//     }, function(files) {
-//       //copy the changed js files to the build dir
-//       return _replace(files)
-//         .pipe(gulp.dest(BUILD_DIR + '/app'));
-//     });
-//   }());
-//
-//   (function processHtml(paths) {
-//     console.log('watching html files');
-//
-//     paths.forEach(function(path) {
-//       var dest = path.split('/').slice(0, -1).join('/').replace('src', BUILD_DIR).replace(/\*/gi, '');
-//       watch(path, {
-//         emit: 'one',
-//         emitOnGlob: false
-//       }, function(files) {
-//         return _replace(files)
-//           .pipe(gulp.dest(dest));
-//       });
-//
-//     });
-//   }(['src/**/**/*.html']));
-//
-//   return require('./server');
-// });
-
 // gulp.task('package', ['default'], function(done) {
 //   sh.exec('asar pack ' + BUILD_DIR + ' ' + RELEASE_DIR + '/' + APP_NAME + '.asar', done);
 // });
@@ -293,8 +240,19 @@ gulp.task('release', ['default'], function(done) {
   sh.exec('electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
 });
 
-gulp.task('run', ['default'], function(next) {
-  sh.exec('./node_modules/.bin/electron ' + BUILD_DIR, next);
+gulp.task('serve', ['default'], function() {
+  var electron = electronConnect.server.create({
+    path: './' + BUILD_DIR
+  });
+
+  // Start browser process
+  electron.start();
+
+  // Restart browser process
+  gulp.watch(BUILD_DIR + '/main.js', electron.restart);
+
+  // Reload renderer process
+  gulp.watch([BUILD_DIR + '/browser/app.js', BUILD_DIR + '/browser/index.html'], electron.reload);
 });
 
 /**

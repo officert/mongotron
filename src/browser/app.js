@@ -18,7 +18,7 @@ angular.module('app').constant('appConfig', {
 });
 
 angular.module('app').run([
-  '$rootScope',
+  '$rootScope', 
   '$state',
   '$stateParams',
   function($rootScope, $state, $stateParams) {

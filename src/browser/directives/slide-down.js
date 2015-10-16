@@ -4,12 +4,12 @@ angular.module('app').animation('.slide', [
     return {
       beforeAddClass: function(element, className, done) {
         if (className === NG_HIDE_CLASS) {
-          element.slideUp(done);
+          element.slideUp(150, done);
         }
       },
       removeClass: function(element, className, done) {
         if (className === NG_HIDE_CLASS) {
-          element.hide().slideDown(done);
+          element.hide().slideDown(150, done);
         }
       }
     };

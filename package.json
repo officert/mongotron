@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "description": "mongotron",
   "main": "main.js",
+  "engine": "node 4.2.0",
   "dependencies": {
     "async": "1.4.0",
+    "electron-connect": "^0.3.3",
+    "electron-prebuilt": "^0.33.8",
     "jsonfile": "^2.2.1",
     "mongodb": "^2.0.40",
     "underscore": "1.8.3"
@@ -27,7 +30,6 @@
     "gulp-replace": "0.5.2",
     "gulp-task-list": "0.0.1",
     "gulp-uglifyjs": "0.6.0",
-    "gulp-watch": "1.2.0",
     "gulp-wrap": "0.11.0",
     "jasmine": "2.2.1",
     "jshint-stylish": "0.4.0",

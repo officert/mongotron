@@ -9,9 +9,17 @@ angular.module('app').controller('dataViewerCtrl', [
   function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService) {
     $scope.setTitle('Mongotron Data Viewer');
 
+    $scope.windowFocus = {
+
+    };
+
     keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
-      console.log('YEAAAAAAAA');
+      console.log(keypressService.EVENTS.CLOSE_WINDOW);
       $scope.closeActiveCollectionWindow();
+    });
+
+    keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
+      console.log(keypressService.EVENTS.MOVE_LEFT);
     });
 
     // * on scope destroy
