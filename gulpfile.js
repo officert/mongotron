@@ -19,14 +19,12 @@ require('gulp-task-list')(gulp);
 /* =========================================================================
  * Constants
  * ========================================================================= */
-var APP_NAME = packageJson.name;
+const APP_NAME = packageJson.name;
 
-var BUILD_DIR = 'build';
-var RELEASE_DIR = 'release';
+const BUILD_DIR = 'build';
+const RELEASE_DIR = 'release';
 
-//js
-
-var VENDOR_JS = [
+const VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/bootstrap/dist/js/bootstrap.js',
   BUILD_DIR + '/browser/vendor/console-polyfill/index.js',
   BUILD_DIR + '/browser/vendor/angular/angular.js',
@@ -48,11 +46,11 @@ var VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/Keypress/keypress.js'
 ];
 
-var LESSOPTIONS = {
+const LESSOPTIONS = {
   compress: false
 };
 
-var VENDOR_CSS = [
+const VENDOR_CSS = [
   BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
   BUILD_DIR + '/browser/vendor-custom/toastr/toastr.css',
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
@@ -70,18 +68,12 @@ gulp.task('?', function(next) {
   next();
 });
 
-/**
- * Clean the build directory
- */
 gulp.task('clean', function(next) {
   sh.rm('-rf', BUILD_DIR);
   sh.rm('-rf', RELEASE_DIR);
   next();
 });
 
-/**
- * Copy src folder to build directory
- */
 gulp.task('copy', ['clean', 'copy-bower'], function() {
   return _init(gulp.src(['package.json', 'src/**/*.*']))
     .pipe(gulp.dest(BUILD_DIR));
@@ -93,17 +85,11 @@ gulp.task('copy-bower', ['clean'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
 });
 
-/**
- * Replace vars in config
- */
 gulp.task('replace', ['copy'], function() {
   return _replace(gulp.src(['build/**/**/*', '!build/browser/vendor/**/*.js']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-/**
- * Compile .less files to .css
- */
 gulp.task('css', ['js', 'css-vendor'], function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
@@ -140,9 +126,6 @@ gulp.task('css-vendor', ['js', 'copy', 'replace'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
 });
 
-/**
- * Minify javascript files
- */
 gulp.task('js', ['js-vendor', 'copy', 'replace'], function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
@@ -177,17 +160,11 @@ gulp.task('js-vendor', ['copy', 'replace'], function() {
     .pipe(gulp.dest(BUILD_DIR + '/browser'));
 });
 
-/**
- * Minify Html Files
- */
 gulp.task('html', ['css', 'js'], function() {
   return gulp.src(BUILD_DIR + '/**/**/*.html')
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-/**
- * Js Hint
- */
 gulp.task('jshint', ['replace'], function() {
   return _init(gulp.src(['src/**/*.js', '!src/browser/vendor/**/*.js']))
     .pipe(jshint())
@@ -195,15 +172,13 @@ gulp.task('jshint', ['replace'], function() {
     .pipe(jshint.reporter('fail'));
 });
 
-// gulp.task('package', ['default'], function(done) {
-//   sh.exec('asar pack ' + BUILD_DIR + ' ' + RELEASE_DIR + '/' + APP_NAME + '.asar', done);
-// });
-
-gulp.task('release', ['default'], function(done) {
+gulp.task('release', ['build'], function(done) {
   sh.exec('electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
 });
 
-gulp.task('serve', ['default'], function() {
+gulp.task('build', ['clean', 'copy', 'replace', 'css', 'js', 'html']);
+
+gulp.task('serve', ['build'], function() {
   var electron = electronConnect.server.create({
     path: './' + BUILD_DIR
   });
@@ -218,11 +193,9 @@ gulp.task('serve', ['default'], function() {
   gulp.watch(['src/browser/app.js', 'src/browser/index.html'], ['default', electron.reload]);
 });
 
-/**
- * Run all steps in order
- */
-// gulp.task('default', ['jshint', 'clean', 'copy', 'replace', 'css', 'js', 'html']);
-gulp.task('default', ['clean', 'copy', 'replace', 'css', 'js', 'html']);
+gulp.task('default', ['serve']);
+
+gulp.task('test', ['jshint'], function() {});
 
 /* =========================================================================
  * Helper Functions
