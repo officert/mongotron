@@ -3,29 +3,15 @@
  * ========================================================================= */
 var appConfig = require('src/config/appConfig');
 
-var ENV = appConfig.ENV;
-var ENV_PROD = ENV === 'production';
-
-var child_process = require('child_process');
-
 var packageJson = require('./package.json');
 
 var gulp = require('gulp');
-var gulpIf = require('gulp-if');
-var inject = require('gulp-inject');
+var inject = require('gulp-inject'); // jshint ignore:line
 var jshint = require('gulp-jshint');
-var karma = require('karma').server;
 var less = require('gulp-less');
-var uglify = require('gulp-uglifyjs');
 var replace = require('gulp-replace');
 var sh = require('shelljs');
-var protractor = require('gulp-protractor').protractor;
-var concat = require('gulp-concat');
-// var _ = require('underscore');
 var wrap = require('gulp-wrap');
-var uuid = require('node-uuid');
-var rename = require('gulp-rename');
-var minifyHTML = require('gulp-minify-html');
 var electronConnect = require('electron-connect');
 
 require('gulp-task-list')(gulp);
@@ -38,22 +24,9 @@ var APP_NAME = packageJson.name;
 var BUILD_DIR = 'build';
 var RELEASE_DIR = 'release';
 
-var BUILD_ID = uuid.v4();
-
 //js
-var MINIFIED_SRC_SCRIPT = 'app-src-' + BUILD_ID + '.min.js';
-var MINIFIED_VENDOR_SCRIPT = 'app-vendor-' + BUILD_ID + '.min.js';
-
-var UGLIFYOPTIONS = {
-  mangle: false,
-  compress: true,
-  output: {
-    comments: false
-  }
-};
 
 var VENDOR_JS = [
-  // BUILD_DIR + '/browser/vendor/jquery/dist/jquery.js',
   BUILD_DIR + '/browser/vendor/bootstrap/dist/js/bootstrap.js',
   BUILD_DIR + '/browser/vendor/console-polyfill/index.js',
   BUILD_DIR + '/browser/vendor/angular/angular.js',
@@ -75,16 +48,11 @@ var VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/Keypress/keypress.js'
 ];
 
-//css
-var MINIFIED_SRC_CSS = 'app-src-' + BUILD_ID + '.css';
-var MINIFIED_VENDOR_CSS = 'app-vendor-' + BUILD_ID + '.css';
-
 var LESSOPTIONS = {
-  compress: ENV_PROD
+  compress: false
 };
 
 var VENDOR_CSS = [
-  // BUILD_DIR + '/fonts/fonts.css'
   BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
   BUILD_DIR + '/browser/vendor-custom/toastr/toastr.css',
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
@@ -141,7 +109,6 @@ gulp.task('css', ['js', 'css-vendor'], function() {
 
   var sources = gulp.src(BUILD_DIR + '/browser/less/main.less')
     .pipe(less(LESSOPTIONS))
-    .pipe(rename(MINIFIED_SRC_CSS))
     .pipe(gulp.dest(BUILD_DIR + '/browser/css'));
 
   return target.pipe(inject(sources, {
@@ -160,7 +127,6 @@ gulp.task('css-vendor', ['js', 'copy', 'replace'], function() {
 
   var sources = gulp.src(VENDOR_CSS)
     .pipe(less(LESSOPTIONS))
-    .pipe(concat(MINIFIED_VENDOR_CSS))
     .pipe(gulp.dest(BUILD_DIR + '/css'));
 
   return target.pipe(inject(sources, {
@@ -180,9 +146,8 @@ gulp.task('css-vendor', ['js', 'copy', 'replace'], function() {
 gulp.task('js', ['js-vendor', 'copy', 'replace'], function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
-  var sources = gulp.src([BUILD_DIR + '/browser/**/*.js', '!' + BUILD_DIR + '/browser/vendor/**/*.js', '!' + BUILD_DIR + '/browser/' + MINIFIED_VENDOR_SCRIPT])
-    .pipe(gulpIf(ENV_PROD, uglify(MINIFIED_SRC_SCRIPT, UGLIFYOPTIONS)))
-    .pipe(gulpIf(ENV_PROD, gulp.dest(BUILD_DIR + '/browser')));
+  var sources = gulp.src([BUILD_DIR + '/browser/**/*.js', '!' + BUILD_DIR + '/browser/vendor/**/*.js'])
+    .pipe(gulp.dest(BUILD_DIR + '/browser'));
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectSrcJs:js -->',
@@ -199,8 +164,7 @@ gulp.task('js-vendor', ['copy', 'replace'], function() {
   var target = gulp.src(BUILD_DIR + '/browser/index.html');
 
   var sources = gulp.src(VENDOR_JS)
-    .pipe(gulpIf(ENV_PROD, uglify(MINIFIED_VENDOR_SCRIPT, UGLIFYOPTIONS)))
-    .pipe(gulpIf(ENV_PROD, gulp.dest(BUILD_DIR + '/browser')));
+    .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectVendorJs:js -->',
@@ -218,7 +182,6 @@ gulp.task('js-vendor', ['copy', 'replace'], function() {
  */
 gulp.task('html', ['css', 'js'], function() {
   return gulp.src(BUILD_DIR + '/**/**/*.html')
-    .pipe(gulpIf(ENV_PROD, minifyHTML()))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
@@ -249,10 +212,10 @@ gulp.task('serve', ['default'], function() {
   electron.start();
 
   // Restart browser process
-  gulp.watch(BUILD_DIR + '/main.js', electron.restart);
+  gulp.watch('src/main.js', ['default', electron.restart]);
 
   // Reload renderer process
-  gulp.watch([BUILD_DIR + '/browser/app.js', BUILD_DIR + '/browser/index.html'], electron.reload);
+  gulp.watch(['src/browser/app.js', 'src/browser/index.html'], ['default', electron.reload]);
 });
 
 /**
@@ -260,48 +223,6 @@ gulp.task('serve', ['default'], function() {
  */
 // gulp.task('default', ['jshint', 'clean', 'copy', 'replace', 'css', 'js', 'html']);
 gulp.task('default', ['clean', 'copy', 'replace', 'css', 'js', 'html']);
-
-/**
- * Run unit and e2e tests - this task is run by Wercker when building our app
- */
-gulp.task('test', ['test-unit', 'default'], function() {});
-
-gulp.task('test-unit', ['default'], function(done) {
-
-  var cdnScripts = [
-    'http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
-    'http://twemoji.maxcdn.com/twemoji.min.js',
-    'http://www.google-analytics.com/analytics.js'
-  ];
-  var vendorScripts = VENDOR_JS.map(function(path) {
-    return '../' + path;
-  });
-
-  var files = cdnScripts.concat(vendorScripts);
-
-  karma.start({
-    configFile: __dirname + '/tests/karma.conf.js',
-    singleRun: true,
-    files: files.concat([
-      '../build/bower_components/angular-mocks/angular-mocks.js',
-      '../build/**/**/**/*.js',
-      'lib/**/*.js',
-      'unit/**/*.spec.js'
-    ])
-  }, done);
-});
-
-gulp.task('test-e2e', ['server'], function() {
-  child_process.exec('webdriver-manager start');
-
-  gulp.src(['tests/e2e/**/**/*.spec.js'])
-    .pipe(protractor({
-      configFile: 'tests/protractor.conf.js'
-    }))
-    .on('end', function() {
-      process.exit(0); //force gulp to exit
-    });
-});
 
 /* =========================================================================
  * Helper Functions
@@ -321,18 +242,4 @@ function _replace(stream) {
   }
 
   return stream;
-}
-
-function setupEnv(env) {
-  // allow passing name as an argument
-  if (env && env.indexOf('-') === 0) env = env.substring(1);
-
-  // production
-  if (env === 'master' || env === 'prod' || env === 'production') return 'production';
-  // development
-  else if (env === 'dev' || env === 'development') return 'development';
-  // local
-  else if (env === 'local') return 'local';
-  // default
-  else return 'development';
 }
