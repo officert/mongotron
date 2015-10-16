@@ -1,3 +1,5 @@
+'use strict';
+
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
@@ -15,38 +17,46 @@ const DB_CONNECTIONS = path.join(__dirname, '../config/dbConnections.json');
  * ------------------------------------------------ */
 /* @constructor ConnectionService
  */
-function ConnectionService() {
-  this._connections = []; //cache of Connection instances
-}
+class ConnectionService {
+  constructor() {
+    this._connections = []; //cache of Connection instances
+  }
 
-ConnectionService.prototype.list = function list(next) {
-  next = next || function() {};
+  /**
+   * @method list
+   */
+  list(next) {
+    next = next || function() {};
 
-  var _this = this;
-
-  return next(null, _this._connections);
-};
-
-ConnectionService.prototype.initializeConnections = function initializeConnections(next) {
-  next = next || function() {};
-
-  var _this = this;
-
-  async.waterfall([
-    function getDbConfigsStep(done) {
-      jsonfile.readFile(DB_CONNECTIONS, done);
-    },
-    function createConnectionsStep(fileData, done) {
-      _generateConnectionInstancesFromConfig(fileData, done);
-    }
-  ], function(err, connections) {
-    if (err) return next(err);
-
-    _this._connections = _this._connections.concat(connections);
+    var _this = this;
 
     return next(null, _this._connections);
-  });
-};
+  }
+
+  /**
+   * @method initializeConnections
+   */
+  initializeConnections(next) {
+    next = next || function() {};
+
+    var _this = this;
+
+    async.waterfall([
+      function getDbConfigsStep(done) {
+        jsonfile.readFile(DB_CONNECTIONS, done);
+      },
+      function createConnectionsStep(fileData, done) {
+        _generateConnectionInstancesFromConfig(fileData, done);
+      }
+    ], function(err, connections) {
+      if (err) return next(err);
+
+      _this._connections = _this._connections.concat(connections);
+
+      return next(null, _this._connections);
+    });
+  }
+}
 
 /* ------------------------------------------------
  * Private Helpers
