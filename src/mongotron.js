@@ -1,21 +1,16 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-var ConnectionService = require('lib/connectionService');
+'use strict';
 
-/* ------------------------------------------------
- * Constructor
- * ------------------------------------------------ */
+const ConnectionService = require('lib/connectionService');
+
 /* @constructor Mongotron
  */
-function Mongotron() {}
-
-Mongotron.prototype.init = function init(next) {
-  ConnectionService.initializeConnections(next);
-};
+class Mongotron {
+  init(next) {
+    ConnectionService.initializeConnections(next);
+  }
+}
 
 /*
  * @exports
- *
  */
 module.exports = new Mongotron();
