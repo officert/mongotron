@@ -3,7 +3,6 @@
 const path = require('path');
 const jsonfile = require('jsonfile');
 const _ = require('underscore');
-const async = require('async');
 const Promise = require('bluebird');
 
 const Connection = require('./connection');
@@ -38,50 +37,52 @@ class ConnectionService {
   initializeConnections() {
     var _this = this;
 
-    return new Promise(function(resolve, reject) {
-
-      async.waterfall([
-        function getDbConfigsStep(done) {
-          jsonfile.readFile(DB_CONNECTIONS, done);
-        },
-        function createConnectionsStep(fileData, done) {
-          _generateConnectionInstancesFromConfig(fileData, done);
-        }
-      ], function(err, connections) {
-        if (err) return reject(err);
-
-        _this._connections = _this._connections.concat(connections);
-
-        return resolve(null, _this._connections);
+    return readConfigFile()
+      .then(_generateConnectionInstancesFromConfig)
+      .then(function(connections) {
+        return new Promise(function(resolve) {
+          _this._connections = _this._connections.concat(connections);
+          return resolve(_this._connections);
+        });
       });
-    });
   }
 }
 
-function _generateConnectionInstancesFromConfig(configData, next) {
-  var connections = [];
-
-  //add the connection name
-  for (var key1 in configData) {
-    var connectionConfig = configData[key1];
-    connectionConfig.name = key1;
-  }
-
-  var serverConfigGroups = _.groupBy(configData, function(c) {
-    return [c.name, c.host, c.port].join('_');
+function readConfigFile() {
+  return new Promise(function(resolve, reject) {
+    jsonfile.readFile(DB_CONNECTIONS, function(err, data) {
+      if (err) return reject(err);
+      return resolve(data);
+    });
   });
+}
 
-  for (var key2 in serverConfigGroups) {
-    var databaseConfigs = serverConfigGroups[key2];
+function _generateConnectionInstancesFromConfig(configData) {
+  return new Promise(function(resolve) {
+    var connections = [];
 
-    if (!databaseConfigs || !databaseConfigs.length) continue;
+    //add the connection name
+    for (var key1 in configData) {
+      var connectionConfig = configData[key1];
+      connectionConfig.name = key1;
+    }
 
-    var connection = _createConnection(databaseConfigs);
+    var serverConfigGroups = _.groupBy(configData, function(c) {
+      return [c.name, c.host, c.port].join('_');
+    });
 
-    connections.push(connection);
-  }
+    for (var key2 in serverConfigGroups) {
+      var databaseConfigs = serverConfigGroups[key2];
 
-  return next(null, connections);
+      if (!databaseConfigs || !databaseConfigs.length) continue;
+
+      var connection = _createConnection(databaseConfigs);
+
+      connections.push(connection);
+    }
+
+    return resolve(connections);
+  });
 }
 
 function _createConnection(databaseConfigs) {
