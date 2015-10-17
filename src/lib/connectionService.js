@@ -27,7 +27,7 @@ class ConnectionService {
   list() {
     var _this = this;
 
-    if (_this.initialized) {
+    if (_this._initialized) {
       return new Promise(function(resolve) {
         return resolve(_this._connections);
       });
