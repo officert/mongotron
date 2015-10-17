@@ -48,7 +48,7 @@ angular.module('app').controller('sidebarCtrl', [
             }
 
             database.isOpen = true;
-          }, 500);
+          });
         });
       } else {
         _collapseDatabase(database);
@@ -57,7 +57,7 @@ angular.module('app').controller('sidebarCtrl', [
       database.showFolders = !database.showFolders;
     };
 
-    $scope.listDatabaseCollections = function listDatabaseCollections(database) {
+    $scope.openCollections = function openCollections(database) {
       if (!database) return;
 
       if (!database.collections || !database.collections.length) {
@@ -76,7 +76,7 @@ angular.module('app').controller('sidebarCtrl', [
               collection.databasePort = database.port;
               return collection;
             });
-          }, 500);
+          });
         });
       }
 
@@ -84,8 +84,6 @@ angular.module('app').controller('sidebarCtrl', [
 
       $scope.activateItem(database);
     };
-
-    $scope.currentCollections = []; //collections stored while user is querying
 
     $scope.activateItem = function activateItem(item, type) {
       if ($scope.currentActiveItem) {

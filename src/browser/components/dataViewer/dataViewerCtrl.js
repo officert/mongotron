@@ -9,6 +9,8 @@ angular.module('app').controller('dataViewerCtrl', [
   function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService) {
     $scope.setTitle('Mongotron Data Viewer');
 
+    $scope.currentCollections = []; //collections stored while user is querying
+
     keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
       console.log(keypressService.EVENTS.CLOSE_WINDOW);
       $scope.closeActiveCollectionWindow();
