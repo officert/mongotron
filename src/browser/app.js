@@ -1,4 +1,4 @@
-const mongotron = require('src/mongotron');
+// const mongotron = require('src/mongotron');
 const ipc = require('ipc');
 
 angular.module('app', [
@@ -36,8 +36,8 @@ angular.module('app').run([
       ipc.send('set-title', title);
     };
 
-    mongotron.init(function(err) {
-      if (err) console.error(err);
-    });
+    // mongotron.init(function(err) {
+    //   if (err) console.error(err);
+    // });
   }
 ]);

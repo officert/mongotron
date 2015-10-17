@@ -18,6 +18,7 @@ class ConnectionService {
    */
   constructor() {
     this._connections = []; //cache of Connection instances
+    this._initialized = false;
   }
 
   /**
@@ -26,25 +27,21 @@ class ConnectionService {
   list() {
     var _this = this;
 
-    return new Promise(function(resolve) {
-      return resolve(_this._connections);
-    });
-  }
-
-  /**
-   * @method initializeConnections
-   */
-  initializeConnections() {
-    var _this = this;
-
-    return readConfigFile()
-      .then(_generateConnectionInstancesFromConfig)
-      .then(function(connections) {
-        return new Promise(function(resolve) {
-          _this._connections = _this._connections.concat(connections);
-          return resolve(_this._connections);
-        });
+    if (_this.initialized) {
+      return new Promise(function(resolve) {
+        return resolve(_this._connections);
       });
+    } else {
+      return readConfigFile()
+        .then(_generateConnectionInstancesFromConfig)
+        .then(function(connections) {
+          return new Promise(function(resolve) {
+            _this._connections = _this._connections.concat(connections);
+            _this._initialized = true;
+            return resolve(_this._connections);
+          });
+        });
+    }
   }
 }
 
