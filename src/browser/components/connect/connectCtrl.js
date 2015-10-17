@@ -7,11 +7,13 @@ angular.module('app').controller('connectCtrl', [
   function($scope, $rootScope, connectionService, $log, $state) {
     $scope.setTitle('MongoDb Connections');
 
-    connectionService.list().then(function success(connections) {
-      $scope.connections = connections;
-    }, function error(response) {
-      $log.error(response);
-    });
+    connectionService.list()
+      .then(function(connections) {
+        $scope.connections = connections;
+      })
+      .catch(function(response) {
+        $log.error(response);
+      });
 
     $scope.connect = function(connection, $event) {
       if (!connection) return;

@@ -23,12 +23,12 @@ class ConnectionService {
   /**
    * @method list
    */
-  list(next) {
-    next = next || function() {};
-
+  list() {
     var _this = this;
 
-    return next(null, _this._connections);
+    return new Promise(function(resolve) {
+      return resolve(_this._connections);
+    });
   }
 
   /**
