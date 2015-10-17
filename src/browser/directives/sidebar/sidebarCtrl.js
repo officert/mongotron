@@ -99,17 +99,6 @@ angular.module('app').controller('sidebarCtrl', [
       }
     };
 
-    $scope.closeActiveCollectionWindow = function() {
-      var activeCollection = _.findWhere($scope.currentCollections, {
-        active: true
-      });
-
-      if (activeCollection) {
-        var index = $scope.currentCollections.indexOf(activeCollection);
-        $scope.currentCollections.splice(index, 1);
-      }
-    };
-
     function _addCollection(collection) {
       if (!collection) return;
 

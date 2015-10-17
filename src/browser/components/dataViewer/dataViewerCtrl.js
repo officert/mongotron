@@ -24,5 +24,17 @@ angular.module('app').controller('dataViewerCtrl', [
     $scope.$on('$destroy', function() {
       keypressService.unregisterCombo(keypressService.EVENTS.CLOSE_WINDOW);
     });
+
+    $scope.closeActiveCollectionWindow = function() {
+      var activeCollection = _.findWhere($scope.currentCollections, {
+        active: true
+      });
+
+      if (activeCollection) {
+        activeCollection.active = false;
+        var index = $scope.currentCollections.indexOf(activeCollection);
+        $scope.currentCollections.splice(index, 1);
+      }
+    };
   }
 ]);
