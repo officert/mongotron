@@ -21,22 +21,24 @@ afterEach(function() {
 
 describe('connectionService', function() {
   describe('initializeConnections', function() {
-    describe('if there is an error reading the config file contain mongo connnections', function() {
-      var error = new Error('Error reading file');
+    describe('dbConnections config file', function() {
+      describe('if there is an error reading the config file contain mongo connnections', function() {
+        var error = new Error('Error reading file');
 
-      before(function() {
-        sandbox.stub(jsonfile, 'readFile', function(dbName, done) {
-          return done(error);
-        });
-      });
-
-      it('should return an error', function(next) {
-        connectionService.initializeConnections()
-          .catch(function(err) {
-            should.exist(err);
-            error.should.equal(err);
-            return next(null);
+        before(function() {
+          sandbox.stub(jsonfile, 'readFile', function(dbName, done) {
+            return done(error);
           });
+        });
+
+        it('should return an error', function(next) {
+          connectionService.initializeConnections()
+            .catch(function(err) {
+              should.exist(err);
+              error.should.equal(err);
+              return next(null);
+            });
+        });
       });
     });
 
