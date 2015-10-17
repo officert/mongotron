@@ -10,7 +10,6 @@
 #connect {
   padding-top: @server-block-height/2;
   .server-block {
-    .transition(.2s ease);
     height: auto;
     width: @server-block-width;
     color: white;
@@ -20,25 +19,32 @@
     position: relative;
     top: 0;
     margin: 0 auto;
-    .inner {
-      .transition(.2s ease);
-      > h3 {
-        font-size: 16px;
+    .server-block-header {
+      padding-top: 3px;
+      padding-bottom: 15px;
+      font-size: 20px;
+      i {
+        font-size: 26px;
+        padding-right: 10px;
+        top: 1px;
+        position: relative;
       }
     }
     .server-list {
+      .transition(.2s ease);
+      top: -100%;
       list-style: none;
       margin: 0;
       padding: 0;
-      li {
-        &:first-child {
-          a {
+      &.active {
+        top: 0;
+      }
+      li {&:first-child {a {
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
           }
         }
-        &:last-child {
-          a {
+        &:last-child {a {
             border-bottom: 1px solid @gray-lighter;
             border-bottom-left-radius: 2px;
             border-bottom-right-radius: 2px;
@@ -64,10 +70,7 @@
 /*
  * Animations
 */
-.view-fade {
-  &.ng-enter {
-    #connect {
-      .server-block {
+.view-fade {&.ng-enter {#connect {.server-block {
         height: 0;
         width: 0;
         .inner {
@@ -76,9 +79,7 @@
       }
     }
   }
-  &.ng-enter-active {
-    #connect {
-      .server-block {
+  &.ng-enter-active {#connect {.server-block {
         height: auto;
         width: @server-block-width;
         .inner {

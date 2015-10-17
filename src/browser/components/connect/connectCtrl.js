@@ -7,6 +7,8 @@ angular.module('app').controller('connectCtrl', [
   function($scope, $rootScope, connectionService, $log, $state) {
     $scope.setTitle('MongoDb Connections');
 
+    $scope.connections = [];
+
     connectionService.list()
       .then(function(connections) {
         $scope.connections = connections;
