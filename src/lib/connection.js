@@ -4,13 +4,14 @@ const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
+const Entity = require('./entity');
 const Database = require('./database');
 const errors = require('./errors');
 
 /**
  * @class Connection
  */
-class Connection {
+class Connection extends Entity {
   /**
    * @constructor Connection
    *
@@ -20,6 +21,8 @@ class Connection {
    * @param {String} options.port
    */
   constructor(options) {
+    super();
+
     options = options || {};
 
     var _this = this;

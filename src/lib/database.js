@@ -3,13 +3,14 @@
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 
+const Entity = require('./entity');
 const Collection = require('./collection');
 const errors = require('./errors');
 
 /**
  * @class Database
  */
-class Database {
+class Database extends Entity {
   /**
    * @constructor Database
    *
@@ -22,6 +23,8 @@ class Database {
    * @param {String} options.auth.password - database auth password
    */
   constructor(options) {
+    super();
+
     options = options || {};
 
     var _this = this;

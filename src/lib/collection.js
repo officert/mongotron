@@ -1,12 +1,15 @@
 'use strict';
 
 const MongoDb = require('mongodb').Db;
+
 const errors = require('./errors');
+
+const Entity = require('./entity');
 
 /**
  * @class Connection
  */
-class Collection {
+class Collection extends Entity {
   /**
    * @constructor Collection
    *
@@ -17,6 +20,8 @@ class Collection {
    * @param {String} options.databaseName - name of the database
    */
   constructor(database, options) {
+    super();
+    
     if (!(database instanceof MongoDb)) console.error('Collection ctor - database is not an instance of MongoDb');
 
     options = options || {};
