@@ -20,7 +20,7 @@ afterEach(function() {
 });
 
 describe('connectionService', function() {
-  describe('initializeConnections', function() {
+  describe('list', function() {
     describe('dbConnections config file', function() {
       describe('if there is an error reading the config file contain mongo connnections', function() {
         var error = new Error('Error reading file');
@@ -32,7 +32,7 @@ describe('connectionService', function() {
         });
 
         it('should return an error', function(next) {
-          connectionService.initializeConnections()
+          connectionService.list()
             .catch(function(err) {
               should.exist(err);
               error.should.equal(err);
@@ -54,7 +54,7 @@ describe('connectionService', function() {
       });
 
       it('should return an array of connections', function(next) {
-        connectionService.initializeConnections()
+        connectionService.list()
           .then(function(connections) {
             should.exist(connections);
             connections.should.equal(connections);
