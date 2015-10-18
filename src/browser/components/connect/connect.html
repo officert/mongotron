@@ -1,11 +1,9 @@
 <div id="connect">
-  <div class="modal-header clearfix">
-    <h3>
-      <i class="fa fa-server"></i> &nbsp;Select a MongoDb Connection
-    </h3>
-    <span class="close" ng-click="close()">
-      <i class="fa fa-times"></i>
-    </span>
+  <div class="modal-header modal-header-w-icon clearfix">
+    <i class="fa fa-server"></i> &nbsp;Add a Connection
+    <button class="btn btn-sm close-btn" ng-click="close()">
+      Done
+    </button>
   </div>
   <div class="modal-body">
     <ul class="server-list" ng-class="{ 'active' : connections.length }">

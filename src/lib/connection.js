@@ -37,8 +37,8 @@ class Connection {
   connect(next) {
     var _this = this;
 
-    //when connect to a connection create all the database instances
-    //if it's a local connection than get all the databases from the actual db
+    //when connecting to a connection create all the database instances
+    //if it's a local connection then get all the databases from the actual db
     //instead of from configs
 
     if (_this.host === 'localhost') {
