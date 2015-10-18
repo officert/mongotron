@@ -30,9 +30,11 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800
+    // width: 1200,
+    // height: 800
   });
+
+  mainWindow.maximize();
 
   mainWindow.loadUrl('file://' + __dirname + '/browser/index.html');
 
