@@ -6,11 +6,11 @@ angular.module('app').service('modalService', [
 
     }
 
-    ModalService.prototype.connections = function() {
+    ModalService.prototype.openConnectionManager = function() {
       return $uibModal.open({
         templateUrl:  __dirname + '/components/connect/connect.html',
         controller: 'connectCtrl'
-      });
+      }).result;
     };
 
     return new ModalService();

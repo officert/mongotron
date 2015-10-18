@@ -33,7 +33,7 @@ angular.module('app').controller('dataViewerCtrl', [
 
     $scope.showConnections = function($event) {
       if ($event) $event.preventDefault();
-      modalService.connections();
+      modalService.openConnectionManager();
     };
 
     function registerKeypressEvents() {

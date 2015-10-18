@@ -20,7 +20,7 @@ angular.module('app').controller('connectCtrl', [
       });
 
     $scope.close = function() {
-      $modalInstance.close();
+      $modalInstance.close(1);
     };
 
     $scope.isConnected = function(connection) {
