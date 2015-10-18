@@ -3,7 +3,6 @@
   }
   .modal-body {
     .server-list {
-      // .transition(.2s ease);
       top: -100%;
       list-style: none;
       margin: 0;
@@ -26,20 +25,31 @@
         }
         &.connected {
           a {
-            background: @gray-lighter;
-            text-decoration: line-through;
+            .icon {
+              top: 13px;
+              font-size: 24px;
+            }
           }
         }
         a {
+          overflow: hidden;
+          position: relative;
           display: block;
           padding: 15px;
           border-top: 1px solid @gray-lighter;
           border-left: 1px solid @gray-lighter;
           border-right: 1px solid @gray-lighter;
           text-decoration: none;
+          color: @gray;
           &:hover {
             background: @brand-tertiary;
-            color: @gray;
+          }
+          .icon {
+            float: right;
+            position: absolute;
+            top: 200px;
+            right: 15px;
+            .transition(.2s ease);
           }
         }
       }

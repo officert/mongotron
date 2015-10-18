@@ -8,7 +8,10 @@
   <div class="modal-body">
     <ul class="server-list" ng-class="{ 'active' : connections.length }">
       <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
-        <a href="#" ng-click="connect(connection, $event)">{{ connection.name }}</a>
+        <a href="#" ng-click="connect(connection, $event)">
+          {{ connection.name }}
+          <i class="icon fa fa-check-circle-o"></i>
+        </a>
       </li>
     </ul>
   </div>

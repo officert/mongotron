@@ -31,12 +31,24 @@ angular.module('app').controller('connectCtrl', [
       return existingConnection ? true : false;
     };
 
+    $scope.disconnect = function(connection) {
+      if (!connection) return false;
+
+      var index = $rootScope.currentConnections.indexOf(connection);
+
+      if (index >= 0) {
+        $rootScope.currentConnections.splice(index, 1);
+      }
+    };
+
     $scope.connect = function(connection, $event) {
       if (!connection) return;
       if ($event) $event.preventDefault();
 
       if (!$scope.isConnected(connection)) {
         $rootScope.currentConnections.push(connection);
+      } else {
+        $scope.disconnect(connection);
       }
     };
   }

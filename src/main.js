@@ -36,6 +36,8 @@ app.on('ready', function() {
 
   mainWindow.maximize();
 
+  mainWindow.setMinimumSize(770, 400);
+
   mainWindow.loadUrl('file://' + __dirname + '/browser/index.html');
 
   if (appConfig.ENV !== 'production') mainWindow.openDevTools();
