@@ -34,6 +34,7 @@ angular.module('app').controller('sidebarCtrl', [
       }
     };
 
+    //databases
     $scope.openDatabase = function openDatabase(database) {
       if (!database) return;
 
@@ -57,6 +58,7 @@ angular.module('app').controller('sidebarCtrl', [
       database.showFolders = !database.showFolders;
     };
 
+    //collections
     $scope.openCollections = function openCollections(database) {
       if (!database) return;
 
