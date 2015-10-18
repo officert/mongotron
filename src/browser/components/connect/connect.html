@@ -6,20 +6,25 @@
     </button>
   </div>
   <div class="modal-body">
-    <ul class="server-list" ng-class="{ 'active' : connections.length }">
+    <!-- Server List -->
+    <ul class="server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen = 'list'">
       <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
         <a class="name" href="#" ng-click="connect(connection, $event)">
           <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
         </a>
         <span class="links">
-          <a class="edit" href="#">
+          <a class="edit" href="#" ng-click="editConnection(connect, $event)" tooltip="Edit Connection" tooltip-popup-delay="600">
             <i class="fa fa-pencil"></i>
           </a>
-          <a class="remove" href="#">
+          <a class="remove" href="#" ng-click="removeConnection(connect, $event)" tooltip="Delete Connection" tooltip-popup-delay="600">
             <i class="fa fa-times"></i>
           </a>
         </span>
       </li>
     </ul>
+    <!-- Server Edit -->
+    <div class="server-edit" ng-show="currentScreen = 'edit'">
+
+    </div>
   </div>
 </div>

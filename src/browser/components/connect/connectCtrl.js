@@ -7,6 +7,8 @@ angular.module('app').controller('connectCtrl', [
   function($scope, $rootScope, $modalInstance, connectionService, $log) {
     $scope.setTitle('MongoDb Connections');
 
+    $scope.currentScreen = 'list';
+
     $scope.connections = [];
 
     connectionService.list()
@@ -50,6 +52,16 @@ angular.module('app').controller('connectCtrl', [
       } else {
         $scope.disconnect(connection);
       }
+    };
+
+    $scope.editConnection = function(connection, $event) {
+      if (!connection) return;
+      if ($event) $event.preventDefault();
+    };
+
+    $scope.removeConnection = function(connection, $event) {
+      if (!connection) return;
+      if ($event) $event.preventDefault();
     };
   }
 ]);
