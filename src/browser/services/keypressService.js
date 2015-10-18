@@ -1,7 +1,8 @@
 angular.module('app').factory('keypressService', [
   '$window',
   '$rootScope',
-  function($window, $rootScope) {
+  '$log',
+  function($window, $rootScope, $log) {
 
     function KeypressService() {
       this.registeredCombos = [];
@@ -15,8 +16,12 @@ angular.module('app').factory('keypressService', [
 
     KeypressService.prototype.registerCombo = function registerCombo(combo, callback) {
       if (this.isRegistered(combo)) {
+        $log.error(combo + ' is already registered, unregistering previous combo');
         this.unregisterCombo(combo);
       }
+
+      $log.debug('Registering keypress combo : ' + combo);
+
       this.listener.counting_combo(combo, function() { // jshint ignore:line
         callback.call(arguments);
         $rootScope.$apply();
@@ -30,7 +35,8 @@ angular.module('app').factory('keypressService', [
     KeypressService.prototype.EVENTS = {
       CLOSE_WINDOW: 'meta w',
       NEW_TAB: 'meta t',
-      MOVE_LEFT: 'meta shift }'
+      MOVE_LEFT: 'meta shift }',
+      OPEN_CONNECTION_MANAGER: 'meta shift n'
     };
 
     return new KeypressService();

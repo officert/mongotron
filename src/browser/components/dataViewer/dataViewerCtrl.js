@@ -12,14 +12,7 @@ angular.module('app').controller('dataViewerCtrl', [
 
     $scope.currentCollections = []; //collections stored while user is querying
 
-    keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
-      console.log(keypressService.EVENTS.CLOSE_WINDOW);
-      $scope.closeActiveCollectionWindow();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
-      console.log(keypressService.EVENTS.MOVE_LEFT);
-    });
+    registerKeypressEvents();
 
     // unregister keypress events on scope destroy
     $scope.$on('$destroy', function() {
@@ -39,8 +32,24 @@ angular.module('app').controller('dataViewerCtrl', [
     };
 
     $scope.showConnections = function($event) {
-      if($event) $event.preventDefault();
+      if ($event) $event.preventDefault();
       modalService.connections();
     };
+
+    function registerKeypressEvents() {
+      keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
+        console.log(keypressService.EVENTS.CLOSE_WINDOW);
+        $scope.closeActiveCollectionWindow();
+      });
+
+      keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
+        console.log(keypressService.EVENTS.MOVE_LEFT);
+      });
+
+      keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
+        console.log(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
+        $scope.showConnections();
+      });
+    }
   }
 ]);
