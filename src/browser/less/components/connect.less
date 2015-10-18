@@ -1,8 +1,7 @@
-#connect {
-  .modal-header {
+#connect {.modal-header {
+
   }
-  .modal-body {
-    .server-list {
+  .modal-body {.server-list {
       top: -100%;
       list-style: none;
       margin: 0;
@@ -11,45 +10,60 @@
         top: 0;
       }
       li {
+        border-top: 1px solid @gray-lighter;
+        border-left: 1px solid @gray-lighter;
+        border-right: 1px solid @gray-lighter;
+        position: relative;
         &:first-child {
-          a {
-            border-top-left-radius: 2px;
-            border-top-right-radius: 2px;
-          }
+          border-top-left-radius: 2px;
+          border-top-right-radius: 2px;
         }
-        &:last-child {a {
-            border-bottom: 1px solid @gray-lighter;
-            border-bottom-left-radius: 2px;
-            border-bottom-right-radius: 2px;
-          }
+        &:last-child {
+          border-bottom: 1px solid @gray-lighter;
+          border-bottom-left-radius: 2px;
+          border-bottom-right-radius: 2px;
         }
         &.connected {
-          a {
-            .icon {
-              top: 13px;
-              font-size: 24px;
+          .name {
+            padding-left: 40px;
+            .icon-connected {
+              left: 10px;
             }
           }
         }
         a {
           overflow: hidden;
           position: relative;
-          display: block;
-          padding: 15px;
-          border-top: 1px solid @gray-lighter;
-          border-left: 1px solid @gray-lighter;
-          border-right: 1px solid @gray-lighter;
           text-decoration: none;
           color: @gray;
+          padding: 15px;
+          .transition(.2s ease);
           &:hover {
-            background: @brand-tertiary;
+            background: @gray-lighter;
           }
-          .icon {
-            float: right;
-            position: absolute;
-            top: 200px;
-            right: 15px;
-            .transition(.2s ease);
+          &.name {
+            display: block;
+            .icon-connected {
+              position: absolute;
+              top: 13px;
+              left: -200px;
+              font-size: 24px;
+              .transition(.2s ease);
+            }
+          }
+        }
+        .links {
+          position: absolute;
+          top:0;
+          right:0;
+          a {
+            display: inline-block;
+            &.edit {
+
+            }
+            &.remove {
+
+            }
           }
         }
       }
@@ -60,20 +74,19 @@
 /*
  * Animations
 */
-.view-fade {
-  &.ng-enter {
-  #connect {
-    // .server-block {
-    //     height: 0;
-    //     width: 0;
-    //     .inner {
-    //       opacity: 0;
-    //     }
-    //   }
+.view-fade {&.ng-enter {#connect {
+
+      // .server-block {
+      //     height: 0;
+      //     width: 0;
+      //     .inner {
+      //       opacity: 0;
+      //     }
+      //   }
     }
   }
-  &.ng-enter-active {
-    #connect {
+  &.ng-enter-active {#connect {
+
       // .server-block {
       //   height: auto;
       //   width: @server-block-width;

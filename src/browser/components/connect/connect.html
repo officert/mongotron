@@ -1,6 +1,6 @@
 <div id="connect">
   <div class="modal-header modal-header-w-icon clearfix">
-    <i class="fa fa-server"></i> &nbsp;Add a Connection
+    <i class="fa fa-server"></i> &nbsp;Manage Your Connections
     <button class="btn btn-sm close-btn" ng-click="close()">
       Done
     </button>
@@ -8,10 +8,17 @@
   <div class="modal-body">
     <ul class="server-list" ng-class="{ 'active' : connections.length }">
       <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
-        <a href="#" ng-click="connect(connection, $event)">
-          {{ connection.name }}
-          <i class="icon fa fa-check-circle-o"></i>
+        <a class="name" href="#" ng-click="connect(connection, $event)">
+          <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
         </a>
+        <span class="links">
+          <a class="edit" href="#">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a class="remove" href="#">
+            <i class="fa fa-times"></i>
+          </a>
+        </span>
       </li>
     </ul>
   </div>
