@@ -6,7 +6,7 @@
     "bootstrap": "3.3.2",
     "angular": "1.3.14",
     "angular-resource": "1.3.14",
-    "angular-bootstrap": "0.12.1",
+    "angular-bootstrap": "0.14.2",
     "angular-ui-router": "0.2.13",
     "angular-sanitize": "1.3.13",
     "angular-scroll": "0.6.2",

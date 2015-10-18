@@ -1,7 +1,6 @@
 /*
 * Class-specific vars
 */
-@header-height: 40px;
 @sidebar-width: 300px;
 @sidebar-bg: white;
 
@@ -15,36 +14,6 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
-  .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: @header-height;
-    width: 100%;
-    background: @gray-lighter;
-    z-index: 999;
-    text-align: center;
-    .logo {
-      display: block;
-      padding: 10px;
-      text-transform: uppercase;
-      color: @brand-primary;
-    }
-    .header-links {
-      margin: 0;
-      padding: 0 0 0 10px;
-      list-style: none;
-      float: left;
-      li {
-        float: left;
-        a {
-          display: block;
-          padding: 10px 0;
-          color: @text-color;
-        }
-      }
-    }
-  }
   .data-viewer-wrap {
     position: absolute;
     left: 0;
@@ -59,13 +28,29 @@
       height: 100%;
       background: @sidebar-bg;
       overflow-y: auto;
-      padding-top: @header-height;
       z-index: 100;
-      .server-list {
-        li {
+      .sidebar-header {
+        .logo-wrap {
+          button {
+            padding: 18px 20px;
+            background: none;
+            border: none;
+            display: block;
+            width: 100%;
+            .logo {
+              font-size: 24px;
+              text-transform: uppercase;
+              color: @brand-secondary;
+              .o {
+                color: @brand-primary;
+              }
+            }
+          }
+        }
+      }
+      .server-list {li {
           cursor: default;
-          > span {
-            &.active {
+          > span {&.active {
               background: @brand-primary;
               &:hover {
                 background: @brand-primary;
@@ -103,9 +88,7 @@
             padding-left: 20px;
           }
         }
-        .database-list {
-          .collection-list {
-            .collection {
+        .database-list {.collection-list {.collection {
 
             }
           }
@@ -118,7 +101,6 @@
       right: 0;
       width: 100%;
       height: 100%;
-      padding-top: @header-height;
       overflow-y: auto;
       padding-left: @sidebar-width;
       background: white;

@@ -6,7 +6,8 @@ angular.module('app').controller('dataViewerCtrl', [
   '$timeout',
   'alertService',
   'keypressService',
-  function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService) {
+  'modalService',
+  function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService, modalService) {
     $scope.setTitle('Mongotron Data Viewer');
 
     $scope.currentCollections = []; //collections stored while user is querying
@@ -35,6 +36,11 @@ angular.module('app').controller('dataViewerCtrl', [
         var index = $scope.currentCollections.indexOf(activeCollection);
         $scope.currentCollections.splice(index, 1);
       }
+    };
+
+    $scope.showConnections = function($event) {
+      if($event) $event.preventDefault();
+      modalService.connections();
     };
   }
 ]);

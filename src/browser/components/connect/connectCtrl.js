@@ -1,10 +1,10 @@
 angular.module('app').controller('connectCtrl', [
   '$scope',
   '$rootScope',
+  '$modalInstance',
   'connectionService',
   '$log',
-  '$state',
-  function($scope, $rootScope, connectionService, $log, $state) {
+  function($scope, $rootScope, $modalInstance, connectionService, $log) {
     $scope.setTitle('MongoDb Connections');
 
     $scope.connections = [];
@@ -17,19 +17,27 @@ angular.module('app').controller('connectCtrl', [
         $log.error(response);
       });
 
-    $scope.connect = function(connection, $event) {
-      if (!connection) return;
-      if ($event) $event.preventDefault();
+    $scope.close = function() {
+      $modalInstance.close();
+    };
+
+    $scope.isConnected = function(connection) {
+      if (!connection) return false;
 
       var existingConnection = _.findWhere($rootScope.currentConnections, {
         name: connection.name
       });
 
-      if (!existingConnection) {
+      return existingConnection ? true : false;
+    };
+
+    $scope.connect = function(connection, $event) {
+      if (!connection) return;
+      if ($event) $event.preventDefault();
+
+      if (!$scope.isConnected(connection)) {
         $rootScope.currentConnections.push(connection);
       }
-
-      $state.go('data-viewer');
     };
   }
 ]);

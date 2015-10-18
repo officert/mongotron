@@ -1,8 +1,15 @@
 <div id="connect">
-  <div class="server-block">
-    <h3 class="server-block-header"><i class="fa fa-server"></i>&nbsp;Select a MongoDb Connection</h3>
+  <div class="modal-header clearfix">
+    <h3>
+      <i class="fa fa-server"></i> &nbsp;Select a MongoDb Connection
+    </h3>
+    <span class="close" ng-click="close()">
+      <i class="fa fa-times"></i>
+    </span>
+  </div>
+  <div class="modal-body">
     <ul class="server-list" ng-class="{ 'active' : connections.length }">
-      <li ng-repeat="connection in connections">
+      <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
         <a href="#" ng-click="connect(connection, $event)">{{ connection.name }}</a>
       </li>
     </ul>

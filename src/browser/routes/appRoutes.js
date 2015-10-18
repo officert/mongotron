@@ -3,15 +3,15 @@ angular.module('app').config([
   '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.when('', '/connect');
-    $urlRouterProvider.otherwise('/connect');
+    $urlRouterProvider.when('', '/dataviewer');
+    $urlRouterProvider.otherwise('/dataviewer');
 
     $stateProvider
-      .state('connect', {
-        url: '/connect',
-        templateUrl: __dirname + '/components/connect/connect.html',
-        controller: 'connectCtrl'
-      })
+      // .state('connect', {
+      //   url: '/connect',
+      //   templateUrl: __dirname + '/components/connect/connect.html',
+      //   controller: 'connectCtrl'
+      // })
       .state('data-viewer', {
         url: '/dataviewer',
         templateUrl: __dirname + '/components/dataViewer/dataViewer.html',

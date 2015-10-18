@@ -11,8 +11,7 @@
 /*
  * jQuery Splitter
  */
-.splitter_panel {
-  .vsplitter {
+.splitter_panel {.vsplitter {
     width: 1px !important;
   }
 }
@@ -22,18 +21,15 @@
  */
 .collection-tabs {
   height: 100%;
-  .collection-tab {
-    a {
+  .collection-tab {a {
       color: @text-color;
       background: darken(@gray-lighter, 5%);
     }
-    &.active {
-      a {
+    &.active {a {
         background: white;
       }
     }
-    .collection-tab-header {
-      .close {
+    .collection-tab-header {.close {
         border-radius: 50%;
         padding: 2.5px 4.5px 4.6px 4.3px;
         margin-left: 10px;
@@ -54,8 +50,7 @@
 /*
  * Collection Query
  */
-.collection-query {
-  .collection-info {
+.collection-query {.collection-info {
     margin-bottom: 15px;
     p {
       margin: 0;
@@ -70,11 +65,9 @@
   .query-error {
     margin-top: 15px;
   }
-  .query-form {
-    .query-input {
+  .query-form {.query-input {
       background: none;
-      .code-editor {
-        .CodeMirror {
+      .code-editor {.CodeMirror {
           height: auto;
           min-height: 34px;
           border: 1px solid @input-group-addon-border-color;
@@ -131,4 +124,11 @@
       }
     }
   }
+}
+
+/*
+ * Modal
+ */
+.modal-backdrop {
+  height: 100%;
 }

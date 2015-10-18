@@ -1,37 +1,20 @@
-/*
-* Class-specific vars
-*/
-@server-block-height: 200px;
-@server-block-width: 400px;
-
-/*
- * Class
- */
 #connect {
-  padding-top: @server-block-height/2;
-  .server-block {
-    height: auto;
-    width: @server-block-width;
-    color: white;
-    border-radius: 4px;
-    padding: 20px;
-    background: @gray;
-    position: relative;
-    top: 0;
-    margin: 0 auto;
-    .server-block-header {
-      padding-top: 3px;
-      padding-bottom: 15px;
-      font-size: 20px;
-      i {
-        font-size: 26px;
-        padding-right: 10px;
-        top: 1px;
-        position: relative;
-      }
+  .modal-header {
+    font-size: 20px;
+    h3 {
+      float: left;
+      margin:0;
     }
+    i {
+      font-size: 26px;
+      padding-right: 10px;
+      top: 1px;
+      position: relative;
+    }
+  }
+  .modal-body {
     .server-list {
-      .transition(.2s ease);
+      // .transition(.2s ease);
       top: -100%;
       list-style: none;
       margin: 0;
@@ -39,7 +22,9 @@
       &.active {
         top: 0;
       }
-      li {&:first-child {a {
+      li {
+        &:first-child {
+          a {
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
           }
@@ -48,6 +33,12 @@
             border-bottom: 1px solid @gray-lighter;
             border-bottom-left-radius: 2px;
             border-bottom-right-radius: 2px;
+          }
+        }
+        &.connected {
+          a {
+            background: @gray-lighter;
+            text-decoration: line-through;
           }
         }
         a {
@@ -70,22 +61,27 @@
 /*
  * Animations
 */
-.view-fade {&.ng-enter {#connect {.server-block {
-        height: 0;
-        width: 0;
-        .inner {
-          opacity: 0;
-        }
-      }
+.view-fade {
+  &.ng-enter {
+  #connect {
+    // .server-block {
+    //     height: 0;
+    //     width: 0;
+    //     .inner {
+    //       opacity: 0;
+    //     }
+    //   }
     }
   }
-  &.ng-enter-active {#connect {.server-block {
-        height: auto;
-        width: @server-block-width;
-        .inner {
-          opacity: 0;
-        }
-      }
+  &.ng-enter-active {
+    #connect {
+      // .server-block {
+      //   height: auto;
+      //   width: @server-block-width;
+      //   .inner {
+      //     opacity: 0;
+      //   }
+      // }
     }
   }
   &.ng-leave {

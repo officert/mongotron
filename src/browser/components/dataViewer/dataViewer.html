@@ -1,18 +1,24 @@
 <div id="data-viewer">
-  <div class="header">
-    <ul class="header-links">
-      <li>
-        <a href="#" ui-sref="connect">
-          <i class="fa fa-chevron-left"></i>
-        </a>
-      </li>
-    </ul>
-    <span class="logo">
-      Mongotron
-    </span>
-  </div>
   <div class="data-viewer-wrap" splitter position="20%" limit="200">
     <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-wrap dropdown">
+          <button type="button" data-toggle="dropdown">
+            <span class="logo">
+              M
+              <span class="o">o</span>ng
+              <span class="o">o</span>tr
+              <span class="o">o</span>n
+            </span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu pull-right">
+            <li>
+              <a href="#" ng-click="showConnections($event)">Connect to a server</a>
+            </li>
+          </ul>
+        </div>
+      </div>
       <sidebar></sidebar>
     </div>
     <div class="content">

@@ -4,15 +4,9 @@ angular.module('app').controller('sidebarCtrl', [
   'alertService',
   '$state',
   function($scope, $timeout, alertService, $state) {
-    if (!$scope.currentConnections || !$scope.currentConnections.length) {
-      $state.go('connect');
-      return;
-    } else {
-      //collapse any accordions levels on view load
-      _.each($scope.currentConnections, function(connection) {
-        _collapseConnection(connection);
-      });
-    }
+    _.each($scope.currentConnections, function(connection) {
+      _collapseConnection(connection);
+    });
 
     //connections
     $scope.openConnection = function openConnection(connection) {
