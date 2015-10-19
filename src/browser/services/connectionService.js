@@ -14,6 +14,15 @@ angular.module('app').service('connectionService', [
           .catch(deferred.reject);
 
         return deferred.promise;
+      },
+      delete: function(id) {
+        var deferred = $q.defer();
+
+        connectionService.delete(id)
+          .then(deferred.resolve)
+          .catch(deferred.reject);
+
+        return deferred.promise;
       }
     };
   }

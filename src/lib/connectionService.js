@@ -33,7 +33,7 @@ class ConnectionService {
       });
     } else {
       return readConfigFile()
-        .then(_generateConnectionInstancesFromConfig)
+        .then(generateConnectionInstancesFromConfig)
         .then(function(connections) {
           return new Promise(function(resolve) {
             _this._connections = _this._connections.concat(connections);
@@ -43,18 +43,39 @@ class ConnectionService {
         });
     }
   }
+
+  /**
+   * @method delete
+   * @param {String} id - id of the connection to delete
+   */
+  delete(id) {
+    var _this = this;
+
+    return removeConnection(id, _this._connections)
+      .then(writeConfigFile);
+  }
 }
 
 function readConfigFile() {
   return new Promise(function(resolve, reject) {
     jsonfile.readFile(DB_CONNECTIONS, function(err, data) {
       if (err) return reject(err);
+      console.log(data);
       return resolve(data);
     });
   });
 }
 
-function _generateConnectionInstancesFromConfig(configData) {
+function writeConfigFile(data) {
+  return new Promise(function(resolve, reject) {
+    jsonfile.writeFile(DB_CONNECTIONS, data, function(err, data) {
+      if (err) return reject(err);
+      return resolve(data);
+    });
+  });
+}
+
+function generateConnectionInstancesFromConfig(configData) {
   return new Promise(function(resolve) {
     var connections = [];
 
@@ -73,7 +94,7 @@ function _generateConnectionInstancesFromConfig(configData) {
 
       if (!databaseConfigs || !databaseConfigs.length) continue;
 
-      var connection = _createConnection(databaseConfigs);
+      var connection = createConnection(databaseConfigs);
 
       connections.push(connection);
     }
@@ -82,7 +103,7 @@ function _generateConnectionInstancesFromConfig(configData) {
   });
 }
 
-function _createConnection(databaseConfigs) {
+function createConnection(databaseConfigs) {
   var firstConfig = databaseConfigs[0];
 
   var connection = new Connection({
@@ -93,6 +114,23 @@ function _createConnection(databaseConfigs) {
   });
 
   return connection;
+}
+
+function removeConnection(connectionId, connections) {
+  return new Promise(function(resolve, reject) {
+    var foundConnection = _.findWhere(connections, {
+      id: connectionId
+    });
+
+    if (foundConnection) {
+      var index = connections.indexOf(foundConnection);
+      connections.splice(index, 1);
+    } else {
+      return reject(new Error('Connection not found'));
+    }
+
+    return resolve(connections);
+  });
 }
 
 /**

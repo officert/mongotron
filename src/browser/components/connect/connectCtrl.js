@@ -4,7 +4,8 @@ angular.module('app').controller('connectCtrl', [
   '$modalInstance',
   'connectionService',
   '$log',
-  function($scope, $rootScope, $modalInstance, connectionService, $log) {
+  'modalService',
+  function($scope, $rootScope, $modalInstance, connectionService, $log, modalService) {
     $scope.setTitle('MongoDb Connections');
 
     $scope.currentScreen = 'list';
@@ -62,6 +63,22 @@ angular.module('app').controller('connectCtrl', [
     $scope.removeConnection = function(connection, $event) {
       if (!connection) return;
       if ($event) $event.preventDefault();
+
+      modalService.confirm({
+        confirmMessage: 'Are you sure you want to remove this connection?',
+        confirmButtonMessage: 'Remove'
+      }).then(function(remove) {
+        if (remove) {
+          connectionService.delete(connection.id)
+            .then(function(connections) {
+              $rootScope.currentConnections = connections;
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+        }
+      });
+
     };
   }
 ]);
