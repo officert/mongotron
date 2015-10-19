@@ -9,6 +9,7 @@
   "globals": {
     "_": true,
     "toastr": true,
+    "CodeMirror": true,
     "angular": true,
     "performance": true,
     "describe": true,

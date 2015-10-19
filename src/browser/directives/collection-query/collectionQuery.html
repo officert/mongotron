@@ -12,7 +12,8 @@
   </div>
   <form class="query-form" name="query-form" novalidate>
     <div class="input-group query-input">
-      <ui-codemirror class="code-editor" ng-model="form.searchQuery" ui-codemirror-opts="codeEditorOptions"></ui-codemirror>
+      <div class="code-editor" codemirror="codeEditorOptions" ng-model="form.searchQuery">
+      </div>
       <span class="input-group-addon">
         <button class="btn btn-default" ng-click="search()">Search</button>
       </span>

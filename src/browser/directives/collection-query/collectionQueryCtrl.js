@@ -10,7 +10,7 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: '{}'
+      searchQuery: ''
     };
 
     $scope.search = function search() {

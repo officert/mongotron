@@ -40,12 +40,14 @@ const VENDOR_JS = [
   BUILD_DIR + '/browser/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
   // BUILD_DIR + '/browser/vendor/toastr/toastr.js',
   BUILD_DIR + '/browser/vendor/moment/moment.js',
-  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
   BUILD_DIR + '/browser/vendor/angular/angular.js',
-  BUILD_DIR + '/browser/vendor/angular-ui-codemirror/ui-codemirror.js',
   BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.js',
   BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
-  BUILD_DIR + '/browser/vendor/Keypress/keypress.js'
+  BUILD_DIR + '/browser/vendor/Keypress/keypress.js',
+  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
+  BUILD_DIR + '/browser/vendor/codemirror/mode/javascript/javascript.js',
+  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/show-hint.js',
+  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/javascript-hint.js'
 ];
 
 const LESSOPTIONS = {
@@ -56,7 +58,9 @@ const VENDOR_CSS = [
   BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
   BUILD_DIR + '/browser/vendor/toastr/toastr.css',
   BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
-  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.css'
+  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.css',
+  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
+  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/show-hint.css'
 ];
 
 const MOCHA_SETTINGS = {

@@ -7,7 +7,6 @@ angular.module('app', [
   'ngAnimate',
   'ngSanitize',
   'duScroll',
-  'ui.codemirror',
   'ngPrettyJson'
 ]);
 
