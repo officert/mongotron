@@ -4,11 +4,18 @@ angular.module('app').controller('connectCtrl', [
   '$modalInstance',
   'connectionService',
   '$log',
-  'modalService',
-  function($scope, $rootScope, $modalInstance, connectionService, $log, modalService) {
+  'alertService',
+  function($scope, $rootScope, $modalInstance, connectionService, $log, alertService) {
     $scope.setTitle('MongoDb Connections');
 
-    $scope.currentScreen = 'list';
+    $scope.screens = {
+      LIST: 'LIST',
+      ADD: 'ADD',
+      EDIT: 'EDIT',
+      REMOVE: 'REMOVE'
+    };
+    $scope.currentScreen = $scope.screens.LIST;
+    $scope.selectedConnection = null;
 
     $scope.connections = [];
 
@@ -55,6 +62,16 @@ angular.module('app').controller('connectCtrl', [
       }
     };
 
+    $scope.changeScreen = function(screenName, connection, $event) {
+      if ($event) $event.preventDefault();
+      $scope.currentScreen = screenName;
+      $scope.selectedConnection = connection;
+    };
+
+    $scope.addConnection = function() {
+
+    };
+
     $scope.editConnection = function(connection, $event) {
       if (!connection) return;
       if ($event) $event.preventDefault();
@@ -64,21 +81,15 @@ angular.module('app').controller('connectCtrl', [
       if (!connection) return;
       if ($event) $event.preventDefault();
 
-      modalService.confirm({
-        confirmMessage: 'Are you sure you want to remove this connection?',
-        confirmButtonMessage: 'Remove'
-      }).then(function(remove) {
-        if (remove) {
-          connectionService.delete(connection.id)
-            .then(function(connections) {
-              $rootScope.currentConnections = connections;
-            })
-            .catch(function(err) {
-              console.log(err);
-            });
-        }
-      });
-
+      connectionService.delete(connection.id)
+        .then(function(connections) {
+          $rootScope.currentConnections = connections;
+          $scope.currentScreen = $scope.screens.LIST;
+          alertService.success('Connection removed');
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     };
   }
 ]);
