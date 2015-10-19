@@ -21,7 +21,7 @@ class Collection extends Entity {
    */
   constructor(database, options) {
     super();
-    
+
     if (!(database instanceof MongoDb)) console.error('Collection ctor - database is not an instance of MongoDb');
 
     options = options || {};
@@ -47,6 +47,8 @@ class Collection extends Entity {
     if (!query) return next(new errors.InvalidArugmentError('query is required'));
 
     var _this = this;
+
+    options.limit = 50;
 
     //TODO: validate the query??
 

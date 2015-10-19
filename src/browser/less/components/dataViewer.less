@@ -53,9 +53,11 @@
           }
         }
       }
-      .server-list {li {
+      .server-list {
+        li {
           cursor: default;
-          > span {&.active {
+          > span {
+            &.active {
               background: @brand-primary;
               &:hover {
                 background: @brand-primary;
@@ -65,13 +67,13 @@
               position: absolute;
               right: 0;
               top: 0;
-              padding: 10px 4px 10px 10px;
+              padding: 5px 4px 5px 10px;
             }
           }
           span {
             cursor: default;
             display: block;
-            padding: 10px 12px;
+            padding: 5px 12px;
             color: @text-color;
             border-bottom: 1px solid @gray-lighter;
             position: relative;
@@ -80,13 +82,15 @@
             }
             &:hover {
               background: @gray-lighter;
+              .loader {
+                background: @gray-lighter;
+              }
             }
             .loader {
               position: absolute;
               right: 0;
               top: 0;
-              background: @gray-lighter;
-              padding: 10px 0 10px 10px;
+              padding: 5px 0 5px 10px;
             }
           }
           ul {

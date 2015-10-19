@@ -11,8 +11,7 @@
 /*
  * jQuery Splitter
  */
-.splitter_panel {
-  .vsplitter {
+.splitter_panel {.vsplitter {
     width: 1px !important;
   }
 }
@@ -51,8 +50,7 @@
 /*
  * Collection Query
  */
-.collection-query {
-  .collection-info {
+.collection-query {.collection-info {
     margin-bottom: 15px;
     p {
       margin: 0;
@@ -104,10 +102,15 @@
           .panel-title {
             font-size: 14px;
             .accordion-toggle {
-              padding: 10px 15px;
+              padding: 5px 10px;
               display: block;
               cursor: default;
               text-decoration: none;
+              .fa {
+                font-size: 10px;
+                position: relative;
+                top: -1px;
+              }
             }
           }
         }
@@ -137,9 +140,9 @@
   background: @gray-lighter;
   font-size: 20px;
   font-weight: 500;
+
   // padding: 10px 12px 8px;
-  &.modal-header-w-icon {
-    i {
+  &.modal-header-w-icon {i {
       top: 1px;
       position: relative;
     }
