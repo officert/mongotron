@@ -7,29 +7,47 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
 
+    // const FIND_QUERY_CHECK_REGEX = /^find.*$/; //checks if it's an find query
+    const FIND_QUERY_FULL_REGEX = /^(?:find)([^]+)/; //extracts the query when it's a find query
+
+    // const UPDATE_QUERY_CHECK_REGEX = /^update.*$/;
+    const UPDATE_QUERY_FULL_REGEX = /^(?:update)([^]+)/;
+
+    // const REMOVE_QUERY_CHECK_REGEX = /^remove.*$/;
+    const REMOVE_QUERY_FULL_REGEX = /^(?:remove)([^]+)/;
+
+    // const AGGREGATE_QUERY_CHECK_REGEX = /^aggregate.*$/;
+    const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)([^]+)/;
+
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: '{}'
+      searchQuery: 'find({\n\n})'
     };
 
     $scope.search = function search() {
       $scope.loading = true;
       $scope.error = null;
 
-      var searchQuery;
+      var queryFn = getQueryTypeFn($scope.form.searchQuery);
 
-      try {
-        searchQuery = $scope.$eval($scope.form.searchQuery);
-      } catch (err) {
-        $scope.error = err && err.message ? err.message : err;
+      if (!queryFn) {
+        $scope.error = 'Sorry, that is not a valid mongo query type';
+        $scope.loading = false;
+        return;
+      }
+
+      var searchQuery = convertSearchQueryToJsObject($scope.form.searchQuery);
+
+      if (!searchQuery) {
+        $scope.error = 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
         return;
       }
 
       var startTime = performance.now();
 
-      $scope.collection.find(searchQuery, function(err, results) {
+      queryFn(searchQuery, function(err, results) {
         var endTime = performance.now();
 
         $timeout(function() {
@@ -40,23 +58,77 @@ angular.module('app').controller('collectionQueryCtrl', [
           $scope.loading = false;
 
           $scope.results = results;
-        }, 500);
+        });
       });
     };
 
     $scope.search();
 
-    // function convertToKeyValuPairs(obj) {
-    //   var kvp = [];
-    //
-    //   for (var key in obj) {
-    //     kvp.push({
-    //       key: key,
-    //       value: obj[key]
-    //     });
-    //   }
-    //
-    //   return kvp;
-    // }
+    function convertSearchQueryToJsObject(query) {
+
+      var match;
+
+      if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, FIND_QUERY_FULL_REGEX);
+      } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, UPDATE_QUERY_FULL_REGEX);
+      } else if (matchesRegex(query, REMOVE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, REMOVE_QUERY_FULL_REGEX);
+      } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, AGGREGATE_QUERY_FULL_REGEX);
+      } else {
+        match = null;
+      }
+
+      if (!match) return null;
+
+      try {
+        match = $scope.$eval(match);
+      } catch (err) {
+        $scope.error = err && err.message ? err.message : err;
+        $scope.loading = false;
+      }
+      return match;
+    }
+
+    function getQueryTypeFn(query) {
+      if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
+        return findQuery;
+      } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
+        return updateQuery;
+      } else if (matchesRegex(query, REMOVE_QUERY_FULL_REGEX)) {
+        return removeQuery;
+      } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
+        return aggregateQuery;
+      } else {
+        return null;
+      }
+    }
+
+    function matchesRegex(query, regex) {
+      var match = query.match(regex);
+      return match && match.length ? true : false;
+    }
+
+    function getRegexMatch(query, regex) {
+      var matches = query.match(regex);
+      return matches && matches.length > 1 ? matches[1] : null;
+    }
+
+    function findQuery(query, next) {
+      $scope.collection.find(query, next);
+    }
+
+    function updateQuery(query, next) {
+      $scope.collection.update(query, next);
+    }
+
+    function removeQuery(query, next) {
+      $scope.collection.remove(query, next);
+    }
+
+    function aggregateQuery(aggregate, next) {
+      $scope.collection.aggregate(aggregate, next);
+    }
   }
 ]);
