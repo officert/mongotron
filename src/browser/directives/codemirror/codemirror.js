@@ -16,12 +16,17 @@ angular.module('app').directive('codemirror', [
           name: 'javascript',
           globalVars: true
         };
+        options.hintWords = function(editor, opts) {
+          console.log('GOT HERE');
+        };
 
-        ngModelCtrl = ngModelCtrl; //remove this crap
-
-        new $window.CodeMirror(function(editorElement) {
+        var editor = new $window.CodeMirror(function(editorElement) {
           element.append(editorElement);
         }, options);
+
+        editor.on('change', function(event, value) {
+          ngModelCtrl.$setViewValue(editor.getValue());;
+        });
       }
     };
   }
