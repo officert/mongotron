@@ -29,7 +29,7 @@
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div id="app" class="view-container view-frame view-fade" ui-view>
+  <div id="app" class="view-container view-frame view-fade" ng-controller="appCtrl as app" ng-include="app.helpers.getBrowserUrl('views/app.html')">
   </div>
 </body>
 

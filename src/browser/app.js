@@ -3,7 +3,6 @@ const ipc = require('ipc');
 angular.module('app', [
   'ngResource',
   'ui.bootstrap',
-  'ui.router',
   'ngAnimate',
   'ngSanitize',
   'duScroll',
@@ -17,12 +16,8 @@ angular.module('app').constant('appConfig', {
 
 angular.module('app').run([
   '$rootScope',
-  '$state',
-  '$stateParams',
-  function($rootScope, $state, $stateParams) {
+  function($rootScope) {
 
-    $rootScope.$state = $state;
-    $rootScope.$stateParams = $stateParams;
     $rootScope.currentConnections = [];
 
     // Page meta data defaults
