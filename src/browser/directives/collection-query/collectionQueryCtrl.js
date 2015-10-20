@@ -7,17 +7,13 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
 
-    // const FIND_QUERY_CHECK_REGEX = /^find.*$/; //checks if it's an find query
-    const FIND_QUERY_FULL_REGEX = /^(?:find)([^]+)/; //extracts the query when it's a find query
+    const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/; //extracts the query when it's a find query
 
-    // const UPDATE_QUERY_CHECK_REGEX = /^update.*$/;
-    const UPDATE_QUERY_FULL_REGEX = /^(?:update)([^]+)/;
+    const UPDATE_QUERY_FULL_REGEX = /^(?:update)\(([^]+)\)/;
 
-    // const REMOVE_QUERY_CHECK_REGEX = /^remove.*$/;
-    const REMOVE_QUERY_FULL_REGEX = /^(?:remove)([^]+)/;
+    const REMOVE_QUERY_FULL_REGEX = /^(?:remove)\(([^]+)\)/;
 
-    // const AGGREGATE_QUERY_CHECK_REGEX = /^aggregate.*$/;
-    const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)([^]+)/;
+    const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
 
     $scope.codeEditorOptions = {};
 
