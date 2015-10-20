@@ -36,6 +36,8 @@ angular.module('app').run([
 
     registerKeypressEvents();
 
+    $rootScope.themes = initThemes();
+
     $rootScope.getBrowserUrl = function(url) {
       return UrlHelpers.getBrowserUrl(url);
     };
@@ -125,6 +127,12 @@ angular.module('app').run([
         console.log(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
         $rootScope.showConnections();
       });
+    }
+
+    function initThemes() {
+      return {
+        current: 'isotope-ui'
+      };
     }
   }
 ]);
