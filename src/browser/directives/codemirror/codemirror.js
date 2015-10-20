@@ -1,6 +1,7 @@
 angular.module('app').directive('codemirror', [
   '$window',
-  function($window) {
+  '$timeout',
+  function($window, $timeout) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -8,7 +9,9 @@ angular.module('app').directive('codemirror', [
         codemirror: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
+        var editor;
         var options = scope.codemirror || {};
+
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
         options.extraKeys['Ctrl-Space'] = 'autocomplete';
@@ -17,14 +20,27 @@ angular.module('app').directive('codemirror', [
           globalVars: true
         };
 
-        var editor = new $window.CodeMirror(function(editorElement) {
-          element.append(editorElement);
-        }, options);
+        init();
 
-        editor.on('change', function() {
-          var v = editor.getValue();
-          ngModelCtrl.$setViewValue(v);
+        ngModelCtrl.$formatters.push(function(modelValue) {
+          $timeout(function() {
+            editor.setValue(modelValue);
+          });
+          return modelValue;
         });
+
+        function init() {
+          editor = new $window.CodeMirror(function(editorElement) {
+            element.append(editorElement);
+          }, options);
+
+          editor.on('change', function() {
+            var v = editor.getValue();
+            ngModelCtrl.$setViewValue(v);
+          });
+
+          editor.refresh();
+        }
       }
     };
   }
