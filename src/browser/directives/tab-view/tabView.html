@@ -1,0 +1,17 @@
+<div class="tab-view">
+  <tabset>
+    <tab class="tab" ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled">
+      <tab-heading class="tab-header">
+        <i class="fa fa-files-o"></i> {{ tab.name }} <i class="close fa fa-times" ng-click="closeTab(tab, $event)"></i>
+      </tab-heading>
+    </tab>
+  </tabset>
+  <tabset>
+    <tab class="tab collection-tab" ng-repeat="collection in currentCollections" active="collection.active" disable="collection.disabled">
+      <tab-heading class="collection-tab-header">
+        <i class="fa fa-files-o"></i> {{ collection.name }} <i class="close fa fa-times" ng-click="removeCollection(collection, $event)"></i>
+      </tab-heading>
+      <collection-query collection="collection"></collection-query>
+    </tab>
+  </tabset>
+</div>

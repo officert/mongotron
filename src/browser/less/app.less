@@ -1,0 +1,96 @@
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  .sidebar-wrapper {
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: @sidebar-bg;
+    overflow-y: auto;
+    z-index: 100;
+    .sidebar-header {.logo-wrap {button {
+          padding: 18px 20px;
+          background: none;
+          border: none;
+          display: block;
+          width: 100%;
+          text-align: left;
+          &:focus {
+            outline: none;
+          }
+          .logo {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: @brand-secondary;
+            .o {
+              color: @brand-primary;
+              margin-left: -6px;
+            }
+          }
+        }
+      }
+    }
+    .server-list {li {
+        cursor: default;
+        > span {&.active {
+            background: @brand-primary;
+            &:hover {
+              background: @brand-primary;
+            }
+          }
+          .open-icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 5px 4px 5px 10px;
+          }
+        }
+        span {
+          cursor: default;
+          display: block;
+          padding: 5px 12px;
+          color: @text-color;
+          border-bottom: 1px solid @gray-lighter;
+          position: relative;
+          i {
+            margin-right: 8px;
+          }
+          &:hover {
+            background: @gray-lighter;
+            .loader {
+              background: @gray-lighter;
+            }
+          }
+          .loader {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 5px 0 5px 10px;
+          }
+        }
+        ul {
+          padding-left: 20px;
+        }
+      }
+      .database-list {.collection-list {.collection {
+
+          }
+        }
+      }
+    }
+  }
+  .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: white;
+  }
+}

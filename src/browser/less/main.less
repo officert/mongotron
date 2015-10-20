@@ -4,6 +4,8 @@
 
 //
 //app
+@import 'app.less';
+@import 'appGlobals.less';
 @import 'appVariables';
 @import 'appComponents.less';
 @import 'appAnimations.less';
@@ -11,45 +13,4 @@
 //components
 @import 'components/settings.less';
 @import 'components/connect.less';
-@import 'components/dataViewer.less';
 @import 'components/collections.less';
-
-//global
-body {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  background: @gray-light;
-  font-weight: 200;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: 0;
-  font-weight: 200;
-}
-a {
-  text-decoration: none;
-  .transition(.2s ease);
-  &:hover {
-    text-decoration: none;
-  }
-  &:focus {
-    outline:none;
-  }
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-#app {
-  position: absolute;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-}

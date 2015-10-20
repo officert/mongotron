@@ -24,6 +24,9 @@
     {{ error }}
   </div>
   <div class="query-results">
+    <div class="alert alert-info" ng-show="!loading && !results.length">
+      Your search did not return any results.
+    </div>
     <div ng-show="!loading" ng-repeat="result in results">
       <accordion close-others="true">
         <accordion-group is-open="status.open">

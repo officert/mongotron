@@ -29,7 +29,13 @@
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div id="app" class="view-container view-frame view-fade" ng-controller="appCtrl as app" ng-include="app.helpers.getBrowserUrl('views/app.html')">
+  <div id="app" splitter position="20%" limit="200">
+    <div class="sidebar-wrapper">
+      <sidebar></sidebar>
+    </div>
+    <div class="content">
+      <tab-view></tab-view>
+    </div>
   </div>
 </body>
 
