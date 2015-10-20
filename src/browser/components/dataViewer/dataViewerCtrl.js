@@ -8,7 +8,9 @@ angular.module('app').controller('dataViewerCtrl', [
   'keypressService',
   'modalService',
   function($scope, $rootScope, $log, $state, $timeout, alertService, keypressService, modalService) {
-    $scope.setTitle('Mongotron Data Viewer');
+    var pageTitle = 'Mongotron Data Viewer';
+
+    $scope.setTitle(pageTitle);
 
     $scope.currentCollections = []; //collections stored while user is querying
 
@@ -58,7 +60,10 @@ angular.module('app').controller('dataViewerCtrl', [
 
     $scope.showConnections = function($event) {
       if ($event) $event.preventDefault();
-      modalService.openConnectionManager();
+      modalService.openConnectionManager()
+        .then(function() {
+          $scope.setTitle(pageTitle);
+        });
     };
 
     function registerKeypressEvents() {

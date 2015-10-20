@@ -7,15 +7,15 @@ angular.module('app').config([
     $urlRouterProvider.otherwise('/dataviewer');
 
     $stateProvider
-      // .state('connect', {
-      //   url: '/connect',
-      //   templateUrl: __dirname + '/components/connect/connect.html',
-      //   controller: 'connectCtrl'
-      // })
       .state('data-viewer', {
         url: '/dataviewer',
         templateUrl: __dirname + '/components/dataViewer/dataViewer.html',
         controller: 'dataViewerCtrl'
+      })
+      .state('data-viewer.settings', {
+        url: '/settings',
+        templateUrl: __dirname + '/components/dataViewer/settings/settings.html',
+        controller: 'settingsCtrl'
       })
       .state('data-viewer.collections', {
         url: '/collections',
