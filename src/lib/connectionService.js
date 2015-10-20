@@ -25,9 +25,7 @@ class ConnectionService {
    * @method create
    */
    create() {
-     var _this = this;
-
-
+    //  var _this = this;
    }
 
   /**
