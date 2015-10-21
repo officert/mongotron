@@ -1,6 +1,6 @@
 <div id="connect">
   <div class="modal-header modal-header-w-icon clearfix">
-    <i class="fa fa-server"></i> &nbsp;Manage Your Connections
+    <i class="fa fa-server"></i> &nbsp;{{ currentScreen.name }}
     <div class="pull-right">
       <button class="btn btn-sm" ng-click="changeScreen(screens.ADD, null, $event)">
         Add
@@ -40,7 +40,7 @@
           <input class="form-control" type="text">
         </div>
         <div class="pull-right">
-          <button class="btn btn-default" type="button" ng-click="currentScreen = screens.LIST; selectedConnection = null">
+          <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
             Cancel
           </button>
           <button class="btn btn-primary" type="button" ng-click="addConnection(addConnectionForm, $event)">
@@ -65,7 +65,7 @@
           <input class="form-control" type="text" ng-model="selectedConnection.port">
         </div>
         <div class="pull-right">
-          <button class="btn btn-default" type="button" ng-click="currentScreen = screens.LIST; selectedConnection = null">
+          <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
             Cancel
           </button>
           <button class="btn btn-primary" type="button" ng-click="editConnection(addConnectionForm, $event)">
@@ -81,7 +81,7 @@
         <strong>'{{ selectedConnection.name }}'</strong>?
       </div>
       <div class="pull-right">
-        <button class="btn btn-default" type="button" ng-click="currentScreen = screens.LIST; selectedConnection = null">
+        <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
           Cancel
         </button>
         <button class="btn btn-primary" type="button" ng-click="removeConnection(selectedConnection, $event)">

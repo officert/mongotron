@@ -9,10 +9,22 @@ angular.module('app').controller('connectCtrl', [
     $scope.setTitle('MongoDb Connections');
 
     $scope.screens = {
-      LIST: 'LIST',
-      ADD: 'ADD',
-      EDIT: 'EDIT',
-      REMOVE: 'REMOVE'
+      LIST: {
+        name: 'Manage Your Connections',
+        slug: 'LIST'
+      },
+      ADD: {
+        name: 'Add a New Connection',
+        slug: 'ADD'
+      },
+      EDIT: {
+        name: 'Connection Settings',
+        slug: 'EDIT'
+      },
+      REMOVE: {
+        name: 'Remove Connection',
+        slug: 'REMOVE'
+      }
     };
     $scope.currentScreen = $scope.screens.LIST;
     $scope.selectedConnection = null;
@@ -62,9 +74,9 @@ angular.module('app').controller('connectCtrl', [
       }
     };
 
-    $scope.changeScreen = function(screenName, connection, $event) {
+    $scope.changeScreen = function(screen, connection, $event) {
       if ($event) $event.preventDefault();
-      $scope.currentScreen = screenName;
+      $scope.currentScreen = screen;
       $scope.selectedConnection = connection;
     };
 
