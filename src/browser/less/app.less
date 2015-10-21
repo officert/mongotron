@@ -1,10 +1,15 @@
-#app {
+.app {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
+  .splitter {
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
   .sidebar-wrapper {
     position: relative;
     left: 0;
@@ -13,7 +18,8 @@
     overflow-y: auto;
     z-index: 100;
     .sidebar-header {
-      .logo-wrap {button {
+      .logo-wrap {
+        button {
           padding: 18px 20px;
           background: none;
           border: none;
@@ -37,12 +43,7 @@
     }
     .server-list {li {
         cursor: default;
-        > span {&.active {
-            background: @brand-primary;
-            &:hover {
-              background: @brand-primary;
-            }
-          }
+        > span {
           .open-icon {
             position: absolute;
             right: 0;
@@ -54,7 +55,6 @@
           cursor: default;
           display: block;
           padding: 5px 12px;
-          color: @text-color;
           border-bottom: 1px solid @gray-lighter;
           position: relative;
           i {

@@ -20,18 +20,29 @@
  * Tab-View
  */
 .tab-view {
+  .nav-tabs {
+    border-bottom-color: @gray-lighter;
+  }
   .tab {
-    &.collection-tab {
+    a {
+      border-color: transparent;
+      border-bottom-color: @gray-lighter;
+    }
+    &:hover {
       a {
-        color: @text-color;
-        background: darken(@gray-lighter, 5%);
+        background: none;
       }
-      &.active {
-        a {
-          background: white;
-        }
+    }
+    &.active {
+      a {
+        background: white;
+        border-color:@gray-lighter;
+        border-bottom-color: transparent;
       }
-      .collection-tab-header {.close {
+    }
+    &.collection-tab {
+      .collection-tab-header {
+        .close {
           border-radius: 50%;
           padding: 2.5px 4.5px 4.6px 4.3px;
           margin-left: 10px;
@@ -42,7 +53,6 @@
     }
   }
   .tab-pane {
-    background: white;
     padding: 15px;
     position: relative;
     height: 100%;

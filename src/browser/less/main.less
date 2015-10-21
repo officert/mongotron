@@ -2,15 +2,55 @@
 @import "../vendor/bootstrap/less/bootstrap.less";
 @import "../vendor/font-awesome/less/font-awesome.less";
 
-//
-//app
-@import 'app.less';
-@import 'appGlobals.less';
-@import 'appVariables';
-@import 'appComponents.less';
-@import 'appAnimations.less';
+/* Theme Mixin */
+.theme() {
 
-//components
-@import 'components/settings.less';
-@import 'components/connect.less';
-@import 'components/collections.less';
+  //body
+  background: @theme-bg;
+  color: @theme-text-color;
+
+  //
+  //app
+  @import 'app.less';
+  @import 'appGlobals.less';
+  @import 'appVariables';
+  @import 'appComponents.less';
+  @import 'appAnimations.less';
+
+  //components
+  @import 'components/settings.less';
+  @import 'components/connect.less';
+  @import 'components/collections.less';
+}
+
+/*
+ * Default Theme
+ */
+body.theme-default {
+
+  //globals
+  @theme-bg: white;
+  @theme-text-color: #333;
+
+  //tabs
+  @theme-tab-border-color: @gray-lighter;
+
+  //init mixin
+  .theme();
+}
+
+/*
+ * Isotope UI Theme
+ */
+body.theme-isotope-ui {
+
+  //globals
+  @theme-bg: #343943;
+  @theme-text-color: #9099ab;
+
+  //tabs
+  @theme-tab-border-color: transparent;
+
+  //init mixin
+  .theme();
+}
