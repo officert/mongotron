@@ -3,14 +3,14 @@
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 
-const Entity = require('./entity');
-const Collection = require('./collection');
-const errors = require('./errors');
+const BaseEntity = require('lib/entities/baseEntity');
+const Collection = require('lib/entities/collection');
+const errors = require('lib/errors');
 
 /**
  * @class Database
  */
-class Database extends Entity {
+class Database extends BaseEntity {
   /**
    * @constructor Database
    *

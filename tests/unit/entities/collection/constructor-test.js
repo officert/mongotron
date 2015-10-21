@@ -2,7 +2,7 @@
 
 require('tests/unit/before-all');
 
-const should = require('should');
+// const should = require('should');
 const sinon = require('sinon');
 
 var Connection;
@@ -11,7 +11,7 @@ var sandbox;
 before(function() {
   sandbox = sinon.sandbox.create();
 
-  Connection = require('lib/connection');
+  Connection = require('lib/entities/connection');
 });
 
 afterEach(function() {

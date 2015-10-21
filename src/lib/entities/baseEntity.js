@@ -3,11 +3,11 @@
 const uuid = require('node-uuid');
 
 /**
- * @class Entity
+ * @class BaseEntity
  */
-class Entity {
+class BaseEntity {
   /**
-   * @constructor Entity
+   * @constructor BaseEntity
    *
    */
   constructor() {
@@ -18,4 +18,4 @@ class Entity {
 /**
  * @exports
  */
-module.exports = Entity;
+module.exports = BaseEntity;

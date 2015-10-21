@@ -5,50 +5,32 @@ const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const Promise = require('bluebird');
 
-const Connection = require('./connection');
+const Connection = require('lib/entities/connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../config/dbConnections.json');
+const DB_CONNECTIONS = path.join(__dirname, '../../../' ,'config/dbConnections.json');
 
 /**
- * @class ConnectionService
+ * @class ConnectionRepository
  */
-class ConnectionService {
+class ConnectionRepository {
   /**
-   * @constructor ConnectionService
+   * @constructor ConnectionRepository
    */
-  constructor() {
-    this._connections = []; //cache of Connection instances
-    this._initialized = false;
-  }
+  constructor() {}
 
   /**
    * @method create
    */
-   create() {
+  create() {
     //  var _this = this;
-   }
+  }
 
   /**
    * @method list
    */
   list() {
-    var _this = this;
-
-    if (_this._initialized) {
-      return new Promise(function(resolve) {
-        return resolve(_this._connections);
-      });
-    } else {
-      return readConfigFile()
-        .then(generateConnectionInstancesFromConfig)
-        .then(function(connections) {
-          return new Promise(function(resolve) {
-            _this._connections = _this._connections.concat(connections);
-            _this._initialized = true;
-            return resolve(_this._connections);
-          });
-        });
-    }
+    return readConfigFile()
+      .then(generateConnectionInstancesFromConfig);
   }
 
   /**
@@ -143,4 +125,4 @@ function removeConnection(connectionId, connections) {
 /**
  * @exports
  */
-module.exports = new ConnectionService();
+module.exports = new ConnectionRepository();

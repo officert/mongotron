@@ -1,6 +1,6 @@
 'use strict';
 
-const connectionService = require('lib/connectionService');
+const connectionModule = require('lib/modules/connection');
 
 angular.module('app').service('connectionService', [
   '$q',
@@ -9,7 +9,7 @@ angular.module('app').service('connectionService', [
       list: function() {
         var deferred = $q.defer();
 
-        connectionService.list()
+        connectionModule.list()
           .then(deferred.resolve)
           .catch(deferred.reject);
 
@@ -18,7 +18,7 @@ angular.module('app').service('connectionService', [
       delete: function(id) {
         var deferred = $q.defer();
 
-        connectionService.delete(id)
+        connectionModule.delete(id)
           .then(deferred.resolve)
           .catch(deferred.reject);
 

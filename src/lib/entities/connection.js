@@ -4,14 +4,14 @@ const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
-const Entity = require('./entity');
-const Database = require('./database');
-const errors = require('./errors');
+const BaseEntity = require('lib/entities/baseEntity');
+const Database = require('lib/entities/database');
+const errors = require('lib/errors');
 
 /**
  * @class Connection
  */
-class Connection extends Entity {
+class Connection extends BaseEntity {
   /**
    * @constructor Connection
    *

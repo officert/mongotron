@@ -2,14 +2,14 @@
 
 const MongoDb = require('mongodb').Db;
 
-const errors = require('./errors');
+const errors = require('lib/errors');
 
-const Entity = require('./entity');
+const BaseEntity = require('lib/entities/baseEntity');
 
 /**
  * @class Connection
  */
-class Collection extends Entity {
+class Collection extends BaseEntity {
   /**
    * @constructor Collection
    *
