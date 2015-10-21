@@ -2,8 +2,7 @@ angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
   'alertService',
-  '$state',
-  function($scope, $timeout, alertService, $state) {
+  function($scope, $timeout, alertService) {
     _.each($scope.currentConnections, function(connection) {
       _collapseConnection(connection);
     });
@@ -105,7 +104,7 @@ angular.module('app').controller('sidebarCtrl', [
 
       if (!existingCollection) $scope.currentCollections.push(collection);
 
-      $state.go('data-viewer.collections');
+      // $state.go('data-viewer.collections');
     }
 
     function _collapseConnection(connection) {

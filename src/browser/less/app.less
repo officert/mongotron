@@ -1,0 +1,56 @@
+.app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  .splitter {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    .vsplitter {
+      background-color: transparent;
+    }
+  }
+  .sidebar-wrapper {
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 100;
+    .sidebar-header {
+      .logo-wrap {
+        button {
+          padding: 18px 20px;
+          background: none;
+          border: none;
+          display: block;
+          width: 100%;
+          text-align: left;
+          &:focus {
+            outline: none;
+          }
+          .logo {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: @brand-secondary;
+            .o {
+              color: @brand-primary;
+              margin-left: -6px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+}

@@ -29,10 +29,7 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({
-    // width: 1200,
-    // height: 800
-  });
+  mainWindow = new BrowserWindow({});
 
   mainWindow.maximize();
 

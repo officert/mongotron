@@ -25,11 +25,19 @@
   <!-- endinjectSrcJs -->
 </head>
 
-<body>
+<body class="theme-{{ themes.current }}">
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div id="app" class="view-container view-frame view-fade" ui-view>
+  <div class="app">
+    <div class="splitter" splitter position="20%" limit="200">
+      <div class="sidebar-wrapper">
+        <sidebar></sidebar>
+      </div>
+      <div class="content">
+        <tab-view></tab-view>
+      </div>
+    </div>
   </div>
 </body>
 

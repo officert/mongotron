@@ -2,53 +2,69 @@
 @import "../vendor/bootstrap/less/bootstrap.less";
 @import "../vendor/font-awesome/less/font-awesome.less";
 
-//
-//app
-@import 'appVariables';
-@import 'appComponents.less';
-@import 'appAnimations.less';
+/* Theme Mixin */
+.theme() {
 
-//components
-@import 'components/connect.less';
-@import 'components/dataViewer.less';
-@import 'components/collections.less';
+  //body
+  background: @theme-bg;
+  color: @theme-text-color;
 
-//global
-body {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  background: @gray-light;
-  font-weight: 200;
+  //
+  //app
+  @import 'app.less';
+  @import 'appGlobals.less';
+  @import 'appVariables';
+  @import 'appComponents.less';
+  @import 'appAnimations.less';
+
+  //components
+  @import 'components/settings.less';
+  @import 'components/connect.less';
+  @import 'components/collections.less';
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: 0;
-  font-weight: 200;
+
+/*
+ * Default Theme
+ */
+body.theme-default {
+
+  //globals
+  @theme-bg: white;
+  @theme-text-color: #333;
+
+  //tabs
+  @theme-tab-border-color: @gray-lighter;
+  @theme-tab-active-bg: white;
+  @theme-tab-pane-bg: white;
+  @theme-tab-active-line-bg: @theme-text-color;
+
+  //server list
+  @theme-server-list-border-color: @gray-lighter;
+  @theme-server-list-hover-bg: @gray-lighter;
+
+  //init mixin
+  .theme();
 }
-a {
-  text-decoration: none;
-  .transition(.2s ease);
-  &:hover {
-    text-decoration: none;
-  }
-  &:focus {
-    outline:none;
-  }
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-#app {
-  position: absolute;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
+
+/*
+ * Isotope UI Theme
+ */
+body.theme-isotope-ui {
+
+  //globals
+  @theme-bg: #343943;
+  @theme-text-color: #9099ab;
+
+  //tabs
+  @theme-tab-border-color: transparent;
+  @theme-tab-active-bg: #282c34;
+  @theme-tab-pane-bg: #282c34;
+  @theme-tab-active-line-bg: @theme-text-color;
+
+  //server list
+  @theme-server-list-border-color: transparent;
+  @theme-server-list-hover-bg: #2d323b;
+
+  //init mixin
+  .theme();
 }
