@@ -21,7 +21,7 @@
  */
 .tab-view {
   .nav-tabs {
-    border-bottom-color: @gray-lighter;
+    border-bottom: none;
   }
   .tab {
     a {
@@ -35,8 +35,9 @@
     }
     &.active {
       a {
-        background: white;
-        border-color:@gray-lighter;
+        background: @theme-tab-active-bg;
+        color: @theme-tab-active-color;
+        border-color: @theme-tab-active-border-color;
         border-bottom-color: transparent;
       }
     }
@@ -57,8 +58,56 @@
     position: relative;
     height: 100%;
     width: 100%;
+    background: @theme-tab-pane-bg;
   }
 }
+
+/*
+ * Server List
+ */
+ .server-list {
+   li {
+     cursor: default;
+     > span {
+       .open-icon {
+         position: absolute;
+         right: 0;
+         top: 0;
+         padding: 5px 4px 5px 10px;
+       }
+     }
+     span {
+       cursor: default;
+       display: block;
+       padding: 5px 12px;
+       border-bottom: 1px solid @theme-server-list-border-color;
+       position: relative;
+       i {
+         margin-right: 8px;
+       }
+       &:hover {
+         background: @theme-server-list-hover-bg;
+         .loader {
+           background: @theme-server-list-hover-bg;
+         }
+       }
+       .loader {
+         position: absolute;
+         right: 0;
+         top: 0;
+         padding: 5px 0 5px 10px;
+       }
+     }
+     li {
+       span {
+         padding-left: 35px;
+       }
+       ul {
+         padding-left: 20px;
+       }
+     }
+   }
+ }
 
 /*
  * Collection Query
