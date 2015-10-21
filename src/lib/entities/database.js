@@ -76,6 +76,8 @@ class Database extends BaseEntity {
     }
 
     _this._dbConnection.collections(function(err, collections) {
+      console.log('ERROR');
+      console.log(err);
       if (err) return next(new errors.DatabaseError(err));
 
       _.each(collections, function(collection) {

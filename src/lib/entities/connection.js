@@ -29,8 +29,7 @@ class Connection extends BaseEntity {
     _this.name = options.name || 'local';
     _this.host = options.host || 'localhost';
     _this.port = options.port || 27017;
-    _this.databaseConfigs = options.databaseConfigs || []; //database connection info
-    _this.databases = []; //database instances
+    _this.databases = [];
   }
 
   /**
@@ -40,87 +39,73 @@ class Connection extends BaseEntity {
   connect(next) {
     var _this = this;
 
-    //when connecting to a connection create all the database instances
-    //if it's a local connection then get all the databases from the actual db
-    //instead of from configs
-
-    if (_this.host === 'localhost') {
-      _this._getDbsForLocalhostConnection(next);
-    } else {
-      _.each(_this.databaseConfigs, function(config) {
-        config.name = config.databasename;
-
-        var existingDatabase = _.findWhere(_this.databases, {
-          name: config.name
-        });
-
-        if (!existingDatabase) _this._addDatabase(config);
-      });
-
-      return next(null);
-    }
+    if (_this.host === 'localhost') getDbsForLocalhostConnection(_this, next);
+    else return next(null);
   }
 
   /**
-   * @method _addDatabase
-   * @private
-   * @param {Object} config - hash of config options
+   * @method addDatabase
+   * @param {Object} options
    * @param {String} config.name
    */
-  _addDatabase(config) {
-    config = config || {};
+  addDatabase(options) {
+    options = options || {};
 
     var _this = this;
 
     var existingDatabase = _.findWhere(_this.databases, {
-      name: config.name
+      name: options.name
     });
 
     if (existingDatabase) return;
 
-    var database = new Database(config);
+    var database = new Database({
+      name: options.name,
+      host: options.host,
+      port: options.port,
+      auth: options.auth
+    });
 
     _this.databases.push(database);
 
     return database;
   }
+}
 
-  /**
-   * @method _getDbsForLocalhostConnection
-   * @private
-   * @param {Function} next - callback function
-   */
-  _getDbsForLocalhostConnection(next) {
-    var _this = this;
+/**
+ * @function getDbsForLocalhostConnection
+ * @param {Function} next - callback function
+ */
+function getDbsForLocalhostConnection(connection, next) {
+  if (!connection) return next(new Error('connection is required'));
+  if (!next) return next(new Error('next is required'));
+  if (connection.host !== 'localhost') return next(new Error('cannot get local dbs for non localhost connection'));
 
-    if (_this.host !== 'localhost') return next(new Error('cannot get local dbs for non localhost connection'));
+  var localDb = new MongoDb('local', new MongoServer(connection.host, connection.port));
 
-    var localDb = new MongoDb('local', new MongoServer(_this.host, _this.port));
+  localDb.open(function(err, db) {
+    if (err) return next(new errors.ConnectionError(util.format('An error occured when trying to connect to %s', connection.host)));
 
-    localDb.open(function(err, db) {
-      if (err) return next(new errors.ConnectionError(util.format('An error occured when trying to connect to %s', _this.host)));
+    // Use the admin database for the operation
+    var adminDb = db.admin();
 
-      // Use the admin database for the operation
-      var adminDb = db.admin();
+    // List all the available databases
+    adminDb.listDatabases(function(err, result) {
+      if (err) return next(new errors.DatabaseError(err));
 
-      // List all the available databases
-      adminDb.listDatabases(function(err, result) {
-        if (err) return next(new errors.DatabaseError(err));
+      db.close();
 
-        db.close();
-
-        _.each(result.databases, function(db) {
-          _this._addDatabase({
-            name: db.name,
-            host: _this.host,
-            port: _this.port
-          });
+      _.each(result.databases, function(db) {
+        connection.addDatabase({
+          name: db.name,
+          host: connection.host,
+          port: connection.port
         });
-
-        return next(null);
       });
+
+      return next(null);
     });
-  }
+  });
 }
 
 /**

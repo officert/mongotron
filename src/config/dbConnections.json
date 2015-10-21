@@ -1,15 +1,34 @@
-{
-  "local": {
-    "host": "localhost",
-    "port": 27017
-  },
-  "remote db": {
-    "databasename": "foobar-db",
-    "host": "foobar-host",
-    "port": 65400,
+[{
+  "name": "local",
+  "host": "localhost",
+  "port": 27017,
+  "databases": []
+}, {
+  "name": "remote db",
+  "host": "server-host",
+  "port": 12345,
+  "databases": [{
+    "name": "database-1",
     "auth": {
-      "username": "foobar-user",
-      "password": "foobar-password"
+      "username": "username-1",
+      "password": "password-1"
     }
-  }
-}
+  }, {
+    "name": "database-2",
+    "auth": {
+      "username": "username-2",
+      "password": "password-2"
+    }
+  }]
+}, {
+  "name": "Tablelist-Dev-ReadOnly-1",
+  "host": "candidate.13.mongolayer.com",
+  "port": 10511,
+  "databases": [{
+    "name": "tablelist-dev",
+    "auth": {
+      "username": "readOnly",
+      "password": "sfhD5GfQx9hbQMREJ7U5JCc2"
+    }
+  }]
+}]

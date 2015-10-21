@@ -7,7 +7,7 @@ const Promise = require('bluebird');
 
 const Connection = require('lib/entities/connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../../../' ,'config/dbConnections.json');
+const DB_CONNECTIONS = path.join(__dirname, '../../../', 'config/dbConnections.json');
 
 /**
  * @class ConnectionRepository
@@ -49,7 +49,6 @@ function readConfigFile() {
   return new Promise(function(resolve, reject) {
     jsonfile.readFile(DB_CONNECTIONS, function(err, data) {
       if (err) return reject(err);
-      console.log(data);
       return resolve(data);
     });
   });
@@ -64,45 +63,31 @@ function writeConfigFile(data) {
   });
 }
 
-function generateConnectionInstancesFromConfig(configData) {
+function generateConnectionInstancesFromConfig(connectionConfigs) {
   return new Promise(function(resolve) {
     var connections = [];
 
-    //add the connection name
-    for (var key1 in configData) {
-      var connectionConfig = configData[key1];
-      connectionConfig.name = key1;
-    }
+    _.each(connectionConfigs, function(connectionConfig) {
+      var newConn = new Connection({
+        name: connectionConfig.name,
+        host: connectionConfig.host,
+        port: connectionConfig.port
+      });
 
-    var serverConfigGroups = _.groupBy(configData, function(c) {
-      return [c.name, c.host, c.port].join('_');
+      _.each(connectionConfig.databases, function(databaseConfig) {
+        newConn.addDatabase({
+          name: databaseConfig.name,
+          host: connectionConfig.host,
+          port: connectionConfig.port,
+          auth: connectionConfig.auth
+        });
+      });
+
+      connections.push(newConn);
     });
-
-    for (var key2 in serverConfigGroups) {
-      var databaseConfigs = serverConfigGroups[key2];
-
-      if (!databaseConfigs || !databaseConfigs.length) continue;
-
-      var connection = createConnection(databaseConfigs);
-
-      connections.push(connection);
-    }
 
     return resolve(connections);
   });
-}
-
-function createConnection(databaseConfigs) {
-  var firstConfig = databaseConfigs[0];
-
-  var connection = new Connection({
-    name: firstConfig.name,
-    host: firstConfig.host,
-    port: firstConfig.port,
-    databaseConfigs: databaseConfigs
-  });
-
-  return connection;
 }
 
 function removeConnection(connectionId, connections) {
