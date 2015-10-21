@@ -9,7 +9,7 @@
   </div>
   <div class="modal-body">
     <!-- Server List -->
-    <ul class="server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen === screens.LIST">
+    <ul class="connect-server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen === screens.LIST">
       <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
         <a class="name" href="#" ng-click="connect(connection, $event)">
           <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}

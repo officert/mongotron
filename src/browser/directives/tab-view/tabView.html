@@ -1,19 +1,19 @@
 <div class="tab-view">
-  <tabset ng-show="tabs.length">
-    <tab class="tab" ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled">
-      <tab-heading class="tab-header">
+  <uib-tabset ng-show="tabs.length">
+    <uib-tab class="tab" ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled">
+      <uib-tab-heading class="tab-header">
         <span class="tab-active-line"></span>
         <i class="fa fa-files-o"></i> {{ tab.name }} <i class="close fa fa-times" ng-click="closeTab(tab, $event)"></i>
-      </tab-heading>
-    </tab>
-  </tabset>
-  <tabset ng-show="currentCollections.length">
-    <tab class="tab collection-tab" ng-repeat="collection in currentCollections" active="collection.active" disable="collection.disabled">
-      <tab-heading class="collection-tab-header">
+      </uib-tab-heading>
+    </uib-tab>
+  </uib-tabset>
+  <uib-tabset ng-show="currentCollections.length">
+    <uib-tab class="tab collection-tab" ng-repeat="collection in currentCollections" active="collection.active" disable="collection.disabled">
+      <uib-tab-heading class="collection-tab-header">
         <span class="tab-active-line"></span>
         <i class="fa fa-files-o"></i> {{ collection.name }} <i class="close fa fa-times" ng-click="removeCollection(collection, $event)"></i>
-      </tab-heading>
+      </uib-tab-heading>
       <collection-query collection="collection"></collection-query>
-    </tab>
-  </tabset>
+    </uib-tab>
+  </uib-tabset>
 </div>

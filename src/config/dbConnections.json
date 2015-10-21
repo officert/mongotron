@@ -21,9 +21,9 @@
     }
   }]
 }, {
-  "name": "Tablelist-Dev-ReadOnly-1",
-  "host": "candidate.13.mongolayer.com",
-  "port": 10511,
+  "name": "Tablelist-Dev-ReadOnly-2",
+  "host": "candidate.12.mongolayer.com",
+  "port": 10510,
   "databases": [{
     "name": "tablelist-dev",
     "auth": {
