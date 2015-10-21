@@ -11,7 +11,8 @@
 /*
  * jQuery Splitter
  */
-.splitter_panel {.vsplitter {
+.splitter_panel {
+  .vsplitter {
     width: 1px !important;
   }
 }
@@ -80,49 +81,49 @@
 /*
  * Server List
  */
- .server-list {
-   li {
-     cursor: default;
-     > span {
-       .open-icon {
-         position: absolute;
-         right: 0;
-         top: 0;
-         padding: 5px 4px 5px 10px;
-       }
-     }
-     span {
-       cursor: default;
-       display: block;
-       padding: 5px 12px;
-       border-bottom: 1px solid @theme-server-list-border-color;
-       position: relative;
-       i {
-         margin-right: 8px;
-       }
-       &:hover {
-         background: @theme-server-list-hover-bg;
-         .loader {
-           background: @theme-server-list-hover-bg;
-         }
-       }
-       .loader {
-         position: absolute;
-         right: 0;
-         top: 0;
-         padding: 5px 0 5px 10px;
-       }
-     }
-     li {
-       span {
-         padding-left: 35px;
-       }
-       ul {
-         padding-left: 20px;
-       }
-     }
-   }
- }
+.server-list {
+  li {
+    cursor: default;
+    > span {
+      .open-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 5px 4px 5px 10px;
+      }
+    }
+    span {
+      cursor: default;
+      display: block;
+      padding: 5px 12px;
+      border-bottom: 1px solid @theme-server-list-border-color;
+      position: relative;
+      i {
+        margin-right: 8px;
+      }
+      &:hover {
+        background: @theme-server-list-hover-bg;
+        .loader {
+          background: @theme-server-list-hover-bg;
+        }
+      }
+      .loader {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 5px 0 5px 10px;
+      }
+    }
+    li {
+      span {
+        padding-left: 35px;
+      }
+      ul {
+        padding-left: 20px;
+      }
+    }
+  }
+}
 
 /*
  * Collection Query
@@ -222,7 +223,8 @@
   font-weight: 500;
 
   // padding: 10px 12px 8px;
-  &.modal-header-w-icon {i {
+  &.modal-header-w-icon {
+    i {
       top: 1px;
       position: relative;
     }

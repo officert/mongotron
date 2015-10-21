@@ -1,7 +1,9 @@
-#connect {.modal-header {
+#connect {
+  .modal-header {
 
   }
-  .modal-body {.server-list {
+  .modal-body {
+    .server-list {
       top: -100%;
       list-style: none;
       margin: 0;
@@ -54,8 +56,8 @@
         }
         .links {
           position: absolute;
-          top:0;
-          right:0;
+          top: 0;
+          right: 0;
           a {
             float: left;
             display: inline-block;
@@ -75,7 +77,9 @@
 /*
  * Animations
 */
-.view-fade {&.ng-enter {#connect {
+.view-fade {
+  &.ng-enter {
+    #connect {
 
       // .server-block {
       //     height: 0;
@@ -86,7 +90,8 @@
       //   }
     }
   }
-  &.ng-enter-active {#connect {
+  &.ng-enter-active {
+    #connect {
 
       // .server-block {
       //   height: auto;
