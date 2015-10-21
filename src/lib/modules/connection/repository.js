@@ -79,7 +79,7 @@ function generateConnectionInstancesFromConfig(connectionConfigs) {
           name: databaseConfig.name,
           host: connectionConfig.host,
           port: connectionConfig.port,
-          auth: connectionConfig.auth
+          auth: databaseConfig.auth
         });
       });
 
