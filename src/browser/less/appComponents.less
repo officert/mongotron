@@ -20,13 +20,25 @@
  * Tab-View
  */
 .tab-view {
+  padding-top: 5px;
   .nav-tabs {
     border-bottom: none;
   }
   .tab {
+    position: relative;
     a {
-      border-color: transparent;
-      border-bottom-color: @gray-lighter;
+      color: @theme-text-color;
+      border: none;
+      .tab-active-line {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 2px;
+        height: 0;
+        border-top-left-radius: 4px;
+        background: @theme-tab-active-line-bg;
+        .transition(.4s ease);
+      }
     }
     &:hover {
       a {
@@ -36,9 +48,12 @@
     &.active {
       a {
         background: @theme-tab-active-bg;
-        color: @theme-tab-active-color;
-        border-color: @theme-tab-active-border-color;
-        border-bottom-color: transparent;
+        color: @theme-text-color;
+        border: none;
+        .tab-active-line {
+          top: 1px;
+          height: 100%;
+        }
       }
     }
     &.collection-tab {
@@ -46,9 +61,9 @@
         .close {
           border-radius: 50%;
           padding: 2.5px 4.5px 4.6px 4.3px;
-          margin-left: 10px;
+          margin-left: 15px;
           font-size: 10px;
-          background: @gray-light;
+          background: @theme-text-color;
         }
       }
     }

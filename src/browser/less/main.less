@@ -34,10 +34,9 @@ body.theme-default {
 
   //tabs
   @theme-tab-border-color: @gray-lighter;
-  @theme-tab-active-bg: darken(@theme-bg, 10%);
-  @theme-tab-pane-bg: darken(@theme-bg, 10%);
-  @theme-tab-active-border-color: @gray-lighter;
-  @theme-tab-active-color: white;
+  @theme-tab-active-bg: white;
+  @theme-tab-pane-bg: white;
+  @theme-tab-active-line-bg: @theme-text-color;
 
   //server list
   @theme-server-list-border-color: @gray-lighter;
@@ -58,14 +57,13 @@ body.theme-isotope-ui {
 
   //tabs
   @theme-tab-border-color: transparent;
-  @theme-tab-active-bg: darken(@theme-bg, 10%);
-  @theme-tab-pane-bg: darken(@theme-bg, 10%);
-  @theme-tab-active-border-color: darken(@theme-bg, 25%);
-  @theme-tab-active-color: @theme-text-color;
+  @theme-tab-active-bg: #282c34;
+  @theme-tab-pane-bg: #282c34;
+  @theme-tab-active-line-bg: @theme-text-color;
 
   //server list
   @theme-server-list-border-color: transparent;
-  @theme-server-list-hover-bg: #2D323B;
+  @theme-server-list-hover-bg: #2d323b;
 
   //init mixin
   .theme();

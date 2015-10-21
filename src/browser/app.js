@@ -131,6 +131,7 @@ angular.module('app').run([
 
     function initThemes() {
       return {
+        //current: 'default'
         current: 'isotope-ui'
       };
     }
