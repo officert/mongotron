@@ -49,21 +49,15 @@ angular.module('app').controller('connectCtrl', [
     $scope.isConnected = function(connection) {
       if (!connection) return false;
 
-      var existingConnection = _.findWhere($rootScope.currentConnections, {
-        id: connection.id
-      });
+      var foundConnection = getActiveConnectionById(connection.id);
 
-      return existingConnection ? true : false;
+      return foundConnection ? true : false;
     };
 
     $scope.disconnect = function(connection) {
       if (!connection) return false;
 
-      var index = $rootScope.currentConnections.indexOf(connection);
-
-      if (index >= 0) {
-        $rootScope.currentConnections.splice(index, 1);
-      }
+      removeActiveConnectionById(connection.id);
     };
 
     $scope.connect = function(connection, $event) {
@@ -92,8 +86,11 @@ angular.module('app').controller('connectCtrl', [
         .then(function(connection) {
           $scope.connections.push(connection);
           $scope.currentScreen = $scope.screens.LIST;
+
+          alertService.success('Connection added');
         })
         .catch(function(err) {
+          alertService.error(err);
           console.log(err);
         });
     };
@@ -123,11 +120,28 @@ angular.module('app').controller('connectCtrl', [
           }
 
           $scope.currentScreen = $scope.screens.LIST;
+
           alertService.success('Connection removed');
         })
         .catch(function(err) {
+          alertService.error(err);
           console.log(err);
         });
     };
+
+    function getActiveConnectionById(id) {
+      return _.findWhere($rootScope.currentConnections, {
+        id: id
+      });
+    }
+
+    function removeActiveConnectionById(id) {
+      var foundConnection = getActiveConnectionById(id);
+
+      if (foundConnection) {
+        var index = $rootScope.currentConnections.indexOf(foundConnection);
+        $rootScope.currentConnections.splice(index, 1);
+      }
+    }
   }
 ]);

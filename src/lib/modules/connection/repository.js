@@ -38,6 +38,7 @@ class ConnectionRepository {
       return _this.list()
         .then(function(_connections) {
           connections = _connections;
+          options.id = uuid.v4();
           return createConnection(options, _connections);
         })
         .then(function(_connection) {
