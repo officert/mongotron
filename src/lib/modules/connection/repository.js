@@ -24,31 +24,31 @@ class ConnectionRepository {
    * @method create
    */
   create(options) {
-    var _this = this;
+    let _this = this;
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (!options) return reject(new errors.InvalidArugmentError('options is required'));
       if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
 
       //TODO: validate that port is between x and y??
 
-      var connections;
-      var newConnection;
+      let connections;
+      let newConnection;
 
       return _this.list()
-        .then(function(_connections) {
+        .then((_connections) => {
           connections = _connections;
           options.id = uuid.v4();
           return createConnection(options, _connections);
         })
-        .then(function(_connection) {
+        .then((_connection) => {
           newConnection = _connection;
           connections.push(newConnection);
           return convertConnectionInstancesIntoConfig(connections);
         })
         .then(writeConfigFile)
-        .then(function() {
-          return new Promise(function(resolve) {
+        .then(() => {
+          return new Promise((resolve) => {
             return resolve(newConnection);
           });
         })
@@ -73,13 +73,13 @@ class ConnectionRepository {
     var _this = this;
 
     return _this.list()
-      .then(function(connections) {
+      .then((connections) => {
         return removeConnection(id, connections);
       })
       .then(convertConnectionInstancesIntoConfig)
       .then(writeConfigFile)
-      .then(function() {
-        return new Promise(function(resolve) {
+      .then(() => {
+        return new Promise((resolve) => {
           return resolve(null);
         });
       });
@@ -87,8 +87,8 @@ class ConnectionRepository {
 }
 
 function readConfigFile() {
-  return new Promise(function(resolve, reject) {
-    jsonfile.readFile(DB_CONNECTIONS, function(err, data) {
+  return new Promise((resolve, reject) => {
+    jsonfile.readFile(DB_CONNECTIONS, (err, data) => {
       if (err && !(err.message && err.message === 'Unexpected end of input')) return reject(err);
       return resolve(data || []);
     });
@@ -96,8 +96,8 @@ function readConfigFile() {
 }
 
 function writeConfigFile(data) {
-  return new Promise(function(resolve, reject) {
-    jsonfile.writeFile(DB_CONNECTIONS, data, function(err, data) {
+  return new Promise((resolve, reject) => {
+    jsonfile.writeFile(DB_CONNECTIONS, data, (err, data) => {
       if (err) return reject(err);
       return resolve(data);
     });
@@ -105,7 +105,7 @@ function writeConfigFile(data) {
 }
 
 function generateConnectionInstancesFromConfig(connectionConfigs) {
-  return new Promise(function(resolve) {
+  return new Promise((resolve) => {
     return resolve(connectionConfigs.map(generateConnectionInstanceFromConfig));
   });
 }
@@ -118,7 +118,7 @@ function generateConnectionInstanceFromConfig(connectionConfig) {
     port: connectionConfig.port
   });
 
-  _.each(connectionConfig.databases, function(databaseConfig) {
+  _.each(connectionConfig.databases, (databaseConfig) => {
     newConn.addDatabase({
       id: databaseConfig.id || uuid.v4(),
       name: databaseConfig.name,
@@ -132,7 +132,7 @@ function generateConnectionInstanceFromConfig(connectionConfig) {
 }
 
 function convertConnectionInstancesIntoConfig(connections) {
-  return new Promise(function(resolve) {
+  return new Promise((resolve) => {
     return resolve(connections.map(convertConnectionInstanceIntoConfig));
   });
 }
@@ -149,7 +149,7 @@ function convertConnectionInstanceIntoConfig(connection) {
     name: connection.name,
     host: connection.host,
     port: connection.port,
-    databases: connection.databases.map(function(database) {
+    databases: connection.databases.map((database) => {
       var db = {
         name: database.name
       };
@@ -168,13 +168,13 @@ function convertConnectionInstanceIntoConfig(connection) {
 }
 
 function createConnection(options) {
-  return new Promise(function(resolve) {
+  return new Promise((resolve) => {
     return resolve(new Connection(options));
   });
 }
 
 function removeConnection(connectionId, connections) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     var foundConnection = _.findWhere(connections, {
       id: connectionId
     });
