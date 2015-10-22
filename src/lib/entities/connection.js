@@ -4,14 +4,13 @@ const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
 
-const BaseEntity = require('lib/entities/baseEntity');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
 /**
  * @class Connection
  */
-class Connection extends BaseEntity {
+class Connection {
   /**
    * @constructor Connection
    *
@@ -21,11 +20,10 @@ class Connection extends BaseEntity {
    * @param {String} options.port
    */
   constructor(options) {
-    super();
-
     options = options || {};
 
     var _this = this;
+    _this.id = options.id;
     _this.name = options.name || 'local';
     _this.host = options.host || 'localhost';
     _this.port = options.port || 27017;

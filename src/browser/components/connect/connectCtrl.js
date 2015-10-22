@@ -8,6 +8,16 @@ angular.module('app').controller('connectCtrl', [
   function($scope, $rootScope, $modalInstance, connectionService, $log, alertService) {
     $scope.setTitle('MongoDb Connections');
 
+    $scope.connections = [];
+
+    connectionService.list()
+      .then(function(connections) {
+        $scope.connections = connections;
+      })
+      .catch(function(response) {
+        $log.error(response);
+      });
+
     $scope.screens = {
       LIST: {
         name: 'Manage Your Connections',
@@ -29,15 +39,8 @@ angular.module('app').controller('connectCtrl', [
     $scope.currentScreen = $scope.screens.LIST;
     $scope.selectedConnection = null;
 
-    $scope.connections = [];
-
-    connectionService.list()
-      .then(function(connections) {
-        $scope.connections = connections;
-      })
-      .catch(function(response) {
-        $log.error(response);
-      });
+    $scope.addConnectionForm = {};
+    $scope.addConnectionFormSubmitted = false;
 
     $scope.close = function() {
       $modalInstance.close(1);
@@ -47,7 +50,7 @@ angular.module('app').controller('connectCtrl', [
       if (!connection) return false;
 
       var existingConnection = _.findWhere($rootScope.currentConnections, {
-        name: connection.name
+        id: connection.id
       });
 
       return existingConnection ? true : false;
@@ -80,8 +83,19 @@ angular.module('app').controller('connectCtrl', [
       $scope.selectedConnection = connection;
     };
 
-    $scope.addConnection = function() {
+    $scope.addConnection = function(addConnectionForm) {
+      $scope.addConnectionFormSubmitted = true;
 
+      if (!addConnectionForm.$valid) return;
+
+      connectionService.create($scope.addConnectionForm)
+        .then(function(connection) {
+          $scope.connections.push(connection);
+          $scope.currentScreen = $scope.screens.LIST;
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     };
 
     $scope.editConnection = function(connection, $event) {
@@ -93,9 +107,21 @@ angular.module('app').controller('connectCtrl', [
       if (!connection) return;
       if ($event) $event.preventDefault();
 
+      if ($scope.isConnected(connection)) {
+        $scope.disconnect(connection);
+      }
+
       connectionService.delete(connection.id)
-        .then(function(connections) {
-          $rootScope.currentConnections = connections;
+        .then(function() {
+          var foundConnection = _.findWhere($scope.connections, {
+            id: connection.id
+          });
+
+          if (foundConnection) {
+            var index = $scope.connections.indexOf(foundConnection);
+            $scope.connections.splice(index, 1);
+          }
+
           $scope.currentScreen = $scope.screens.LIST;
           alertService.success('Connection removed');
         })

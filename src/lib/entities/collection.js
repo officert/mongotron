@@ -4,12 +4,10 @@ const MongoDb = require('mongodb').Db;
 
 const errors = require('lib/errors');
 
-const BaseEntity = require('lib/entities/baseEntity');
-
 /**
  * @class Connection
  */
-class Collection extends BaseEntity {
+class Collection {
   /**
    * @constructor Collection
    *
@@ -20,13 +18,12 @@ class Collection extends BaseEntity {
    * @param {String} options.databaseName - name of the database
    */
   constructor(database, options) {
-    super();
-
     if (!(database instanceof MongoDb)) console.error('Collection ctor - database is not an instance of MongoDb');
 
     options = options || {};
 
     var _this = this;
+    _this.id = options.id;
     _this.name = options.name || 'test';
     _this.serverName = options.serverName;
     _this.databaseName = options.databaseName;

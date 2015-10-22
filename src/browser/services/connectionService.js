@@ -6,6 +6,15 @@ angular.module('app').service('connectionService', [
   '$q',
   function($q) {
     return {
+      create: function(options) {
+        var deferred = $q.defer();
+
+        connectionModule.create(options)
+          .then(deferred.resolve)
+          .catch(deferred.reject);
+
+        return deferred.promise;
+      },
       list: function() {
         var deferred = $q.defer();
 

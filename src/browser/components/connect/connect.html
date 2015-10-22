@@ -4,13 +4,16 @@
     <div class="pull-right">
       <button class="btn btn-sm" ng-click="changeScreen(screens.ADD, null, $event)">
         Add
-    </button>
+      </button>
     </div>
   </div>
   <div class="modal-body">
     <!-- Server List -->
     <ul class="connect-server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen === screens.LIST">
-      <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }">
+      <div class="alert alert-info" ng-show="!connections.length">
+        Your don't have any connections yet. Use the Add button to create a new connection.
+      </div>
+      <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }" ng-show="connections.length">
         <a class="name" href="#" ng-click="connect(connection, $event)">
           <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
         </a>
@@ -26,24 +29,24 @@
     </ul>
     <!-- Server Add -->
     <div class="server-add clearfix" ng-show="currentScreen === screens.ADD">
-      <form name="addConnectionForm" novalidate>
-        <div class="form-group">
+      <form name="addForm" novalidate>
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.name.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Name</label>
-          <input class="form-control" type="text">
+          <input class="form-control" ng-model="addConnectionForm.name" name="name" type="text" required>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.host.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Host</label>
-          <input class="form-control" type="text">
+          <input class="form-control" ng-model="addConnectionForm.host" type="text" required placeholder="localhost">
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.port.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Port</label>
-          <input class="form-control" type="text">
+          <input class="form-control" ng-model="addConnectionForm.port" name="port" type="text" required placeholder="27017">
         </div>
         <div class="pull-right">
           <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
             Cancel
           </button>
-          <button class="btn btn-primary" type="button" ng-click="addConnection(addConnectionForm, $event)">
+          <button class="btn btn-primary" type="button" ng-click="addConnection(addForm, $event)">
             Add
           </button>
         </div>

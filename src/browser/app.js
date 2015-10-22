@@ -27,7 +27,7 @@ angular.module('app').run([
   'modalService',
   function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService) {
     $rootScope.tabs = [];
-    $rootScope.currentConnections = [];
+    $rootScope.currentConnections = []; //active connections
     $rootScope.currentCollections = []; //collections stored while user is querying
 
     $rootScope.meta = {
