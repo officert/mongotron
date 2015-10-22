@@ -5,6 +5,6 @@ node_modules
 *.codekit
 *.sublime-*
 build
-src/browser/vendor
+src/ui/vendor
 *.idea
 release

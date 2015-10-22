@@ -5,6 +5,7 @@ const app = require('app');
 const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');
 const ipc = require('ipc');
+const path = require('path');
 
 const appConfig = require('src/config/appConfig');
 
@@ -35,7 +36,7 @@ app.on('ready', function() {
 
   mainWindow.setMinimumSize(770, 400);
 
-  mainWindow.loadUrl('file://' + __dirname + '/browser/index.html');
+  mainWindow.loadUrl(path.join('file://', __dirname, '../ui/index.html'));
 
   if (appConfig.ENV !== 'production') mainWindow.openDevTools();
 

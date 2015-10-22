@@ -27,27 +27,27 @@ const BUILD_DIR = 'build';
 const RELEASE_DIR = 'release';
 
 const VENDOR_JS = [
-  BUILD_DIR + '/browser/vendor/bootstrap/dist/js/bootstrap.js',
-  BUILD_DIR + '/browser/vendor/console-polyfill/index.js',
-  BUILD_DIR + '/browser/vendor/angular/angular.js',
-  BUILD_DIR + '/browser/vendor/angular-resource/angular-resource.js',
-  BUILD_DIR + '/browser/vendor/angular-ui-router/release/angular-ui-router.js',
-  BUILD_DIR + '/browser/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-  BUILD_DIR + '/browser/vendor/underscore/underscore.js',
-  BUILD_DIR + '/browser/vendor/angular-animate/angular-animate.js',
-  BUILD_DIR + '/browser/vendor/angular-sanitize/angular-sanitize.js',
-  BUILD_DIR + '/browser/vendor/angular-scroll/angular-scroll.js',
-  BUILD_DIR + '/browser/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
-  // BUILD_DIR + '/browser/vendor/toastr/toastr.js',
-  BUILD_DIR + '/browser/vendor/moment/moment.js',
-  BUILD_DIR + '/browser/vendor/angular/angular.js',
-  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.js',
-  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
-  BUILD_DIR + '/browser/vendor/Keypress/keypress.js',
-  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.js',
-  BUILD_DIR + '/browser/vendor/codemirror/mode/javascript/javascript.js',
-  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/show-hint.js',
-  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/javascript-hint.js'
+  BUILD_DIR + '/ui/vendor/bootstrap/dist/js/bootstrap.js',
+  BUILD_DIR + '/ui/vendor/console-polyfill/index.js',
+  BUILD_DIR + '/ui/vendor/angular/angular.js',
+  BUILD_DIR + '/ui/vendor/angular-resource/angular-resource.js',
+  BUILD_DIR + '/ui/vendor/angular-ui-router/release/angular-ui-router.js',
+  BUILD_DIR + '/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+  BUILD_DIR + '/ui/vendor/underscore/underscore.js',
+  BUILD_DIR + '/ui/vendor/angular-animate/angular-animate.js',
+  BUILD_DIR + '/ui/vendor/angular-sanitize/angular-sanitize.js',
+  BUILD_DIR + '/ui/vendor/angular-scroll/angular-scroll.js',
+  BUILD_DIR + '/ui/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
+  // BUILD_DIR + '/ui/vendor/toastr/toastr.js',
+  BUILD_DIR + '/ui/vendor/moment/moment.js',
+  BUILD_DIR + '/ui/vendor/angular/angular.js',
+  BUILD_DIR + '/ui/vendor/ng-prettyjson/src/ng-prettyjson.js',
+  BUILD_DIR + '/ui/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
+  BUILD_DIR + '/ui/vendor/Keypress/keypress.js',
+  BUILD_DIR + '/ui/vendor/codemirror/lib/codemirror.js',
+  BUILD_DIR + '/ui/vendor/codemirror/mode/javascript/javascript.js',
+  BUILD_DIR + '/ui/vendor/codemirror/addon/hint/show-hint.js',
+  BUILD_DIR + '/ui/vendor/codemirror/addon/hint/javascript-hint.js'
 ];
 
 const LESSOPTIONS = {
@@ -55,12 +55,12 @@ const LESSOPTIONS = {
 };
 
 const VENDOR_CSS = [
-  BUILD_DIR + '/browser/vendor/jquery.splitter/css/jquery.splitter.css',
-  BUILD_DIR + '/browser/vendor/toastr/toastr.css',
-  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
-  BUILD_DIR + '/browser/vendor/ng-prettyjson/src/ng-prettyjson.css',
-  BUILD_DIR + '/browser/vendor/codemirror/lib/codemirror.css',
-  BUILD_DIR + '/browser/vendor/codemirror/addon/hint/show-hint.css'
+  BUILD_DIR + '/ui/vendor/jquery.splitter/css/jquery.splitter.css',
+  BUILD_DIR + '/ui/vendor/toastr/toastr.css',
+  BUILD_DIR + '/ui/vendor/codemirror/lib/codemirror.css',
+  BUILD_DIR + '/ui/vendor/ng-prettyjson/src/ng-prettyjson.css',
+  BUILD_DIR + '/ui/vendor/codemirror/lib/codemirror.css',
+  BUILD_DIR + '/ui/vendor/codemirror/addon/hint/show-hint.css'
 ];
 
 const MOCHA_SETTINGS = {
@@ -95,34 +95,34 @@ gulp.task('copy', ['clean', 'copy-vendor'], function() {
 gulp.task('copy-vendor', ['clean'], function() {
   return _init(gulp.src('src/broswer/vendor/**/**/*.js'))
     .pipe(wrap('(function(){<%= contents %>\n})();'))
-    .pipe(gulp.dest(BUILD_DIR + '/browser/vendor'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui/vendor'));
 });
 
 gulp.task('replace', ['copy'], function() {
-  return _replace(gulp.src(['build/**/**/*', '!build/browser/vendor/**/*.js']))
+  return _replace(gulp.src(['build/**/**/*', '!build/ui/vendor/**/*.js']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('css', function() {
-  var target = gulp.src(BUILD_DIR + '/browser/index.html');
+  var target = gulp.src(BUILD_DIR + '/ui/index.html');
 
-  var sources = gulp.src(BUILD_DIR + '/browser/less/main.less')
+  var sources = gulp.src(BUILD_DIR + '/ui/less/main.less')
     .pipe(less(LESSOPTIONS))
-    .pipe(gulp.dest(BUILD_DIR + '/browser/css'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui/css'));
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectSrcCss:css -->',
       endtag: '<!-- endinjectSrcCss -->',
       transform: function(filepath) {
-        var path = filepath.replace('/build/browser/', '');
+        var path = filepath.replace('/build/ui/', '');
         return '<link rel="stylesheet" href="' + path + '"/>';
       }
     }))
-    .pipe(gulp.dest(BUILD_DIR + '/browser'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui'));
 });
 
 gulp.task('css-vendor', function() {
-  var target = gulp.src(BUILD_DIR + '/browser/index.html');
+  var target = gulp.src(BUILD_DIR + '/ui/index.html');
 
   var sources = gulp.src(VENDOR_CSS)
     .pipe(less(LESSOPTIONS))
@@ -136,27 +136,27 @@ gulp.task('css-vendor', function() {
         return '<link rel="stylesheet" href="..' + path + '"/>';
       }
     }))
-    .pipe(gulp.dest(BUILD_DIR + '/browser'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui'));
 });
 
 gulp.task('js', function() {
-  var target = gulp.src(BUILD_DIR + '/browser/index.html');
+  var target = gulp.src(BUILD_DIR + '/ui/index.html');
 
-  var sources = gulp.src([BUILD_DIR + '/browser/**/*.js', '!' + BUILD_DIR + '/browser/vendor/**/*.js']);
+  var sources = gulp.src([BUILD_DIR + '/ui/**/*.js', '!' + BUILD_DIR + '/ui/vendor/**/*.js']);
 
   return target.pipe(inject(sources, {
       starttag: '<!-- injectSrcJs:js -->',
       endtag: '<!-- endinjectSrcJs -->',
       transform: function(filepath) {
-        var path = filepath.replace('/build/browser/', '');
+        var path = filepath.replace('/build/ui/', '');
         return '<script src="' + path + '"></script>';
       }
     }))
-    .pipe(gulp.dest(BUILD_DIR + '/browser'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui'));
 });
 
 gulp.task('js-vendor', function() {
-  var target = gulp.src(BUILD_DIR + '/browser/index.html');
+  var target = gulp.src(BUILD_DIR + '/ui/index.html');
 
   var sources = gulp.src(VENDOR_JS);
 
@@ -164,15 +164,15 @@ gulp.task('js-vendor', function() {
       starttag: '<!-- injectVendorJs:js -->',
       endtag: '<!-- endinjectVendorJs -->',
       transform: function(filepath) {
-        var path = filepath.replace('/build/browser/', '');
+        var path = filepath.replace('/build/ui/', '');
         return '<script src="' + path + '"></script>';
       }
     }))
-    .pipe(gulp.dest(BUILD_DIR + '/browser'));
+    .pipe(gulp.dest(BUILD_DIR + '/ui'));
 });
 
 gulp.task('jshint', ['replace'], function() {
-  return _init(gulp.src(['src/**/*.js', '!src/browser/vendor/**/*.js']))
+  return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
@@ -193,14 +193,6 @@ gulp.task('serve', ['build'], function() {
 
   // Start browser process
   electron.start();
-
-  // Restart browser process
-  // gulp.watch(['src/main.js', 'src/lib/**.*'], ['default', electron.restart]);
-  // watch(['src/main.js', 'src/lib/**.*'], [gulp.run('default'), electron.restart]);
-
-  // Reload renderer process
-  // gulp.watch(['src/browser/**.*'], ['default', electron.reload]);
-  // watch(['src/browser/**.*'], [gulp.run('default'), electron.reload]);
 });
 
 gulp.task('default', ['serve']);
