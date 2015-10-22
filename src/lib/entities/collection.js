@@ -53,6 +53,28 @@ class Collection {
   }
 
   /**
+   * @method remove
+   * @param {Object} query - mongo query
+   * @param {Object} [options] - mongo query options
+   * @param {Function} next - callback function
+   */
+  remove(query, options, next) {
+    if (arguments.length === 2) {
+      next = options;
+      options = {};
+    }
+    if (!query) return next(new errors.InvalidArugmentError('query is required'));
+
+    var _this = this;
+
+    options.limit = 50;
+
+    //TODO: validate the query??
+
+    _this._dbCollection.remove(query, options).toArray(next);
+  }
+
+  /**
    * @method aggregate
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
