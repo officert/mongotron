@@ -1,20 +1,21 @@
 /* =========================================================================
  * Dependencies
  * ========================================================================= */
-var appConfig = require('src/config/appConfig');
+const appConfig = require('src/config/appConfig');
 
-var packageJson = require('./package.json');
+const packageJson = require('./package.json');
 
-var gulp = require('gulp');
-var inject = require('gulp-inject'); // jshint ignore:line
-var jshint = require('gulp-jshint');
-var less = require('gulp-less');
-var replace = require('gulp-replace');
-var sh = require('shelljs');
-var wrap = require('gulp-wrap');
-var electronConnect = require('electron-connect');
-var runSequence = require('run-sequence');
-var mocha = require('gulp-mocha');
+const gulp = require('gulp');
+const inject = require('gulp-inject'); // jshint ignore:line
+const jshint = require('gulp-jshint');
+const less = require('gulp-less');
+const replace = require('gulp-replace');
+const sh = require('shelljs');
+const wrap = require('gulp-wrap');
+const electronConnect = require('electron-connect');
+const runSequence = require('run-sequence');
+const mocha = require('gulp-mocha');
+const babel = require('gulp-babel');
 
 require('gulp-task-list')(gulp);
 
@@ -88,11 +89,21 @@ gulp.task('clean', function(next) {
 });
 
 gulp.task('copy', ['clean'], function(next) {
-  runSequence('copy-src', 'copy-vendor', next);
+  if (appConfig.ENV === 'production') {
+    runSequence('copy-src', 'copy-src-js', 'copy-vendor', 'copy-modules', next);
+  } else {
+    runSequence('copy-src', 'copy-src-js', 'copy-vendor', next);
+  }
 });
 
 gulp.task('copy-src', function() {
-  return _init(gulp.src(['package.json', 'src/**/*.*', '!src/ui/vendor/**/*.js']))
+  return _init(gulp.src(['package.json', 'src/**/*.*', '!src/**/*.js', '!src/ui/vendor/**/*.js']))
+    .pipe(gulp.dest(BUILD_DIR));
+});
+
+gulp.task('copy-src-js', function() {
+  return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
+    .pipe(babel())
     .pipe(gulp.dest(BUILD_DIR));
 });
 
@@ -188,7 +199,7 @@ gulp.task('jshint', ['replace'], function() {
 });
 
 gulp.task('release', ['build'], function(done) {
-  sh.exec('./node_modules/.bin/electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
+  sh.exec('NODE_ENV=production ./node_modules/.bin/electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
 });
 
 gulp.task('build', ['clean', 'copy', 'replace'], function(next) {
