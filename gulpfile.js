@@ -87,19 +87,28 @@ gulp.task('clean', function(next) {
   next();
 });
 
-gulp.task('copy', ['clean', 'copy-vendor'], function() {
-  return _init(gulp.src(['package.json', 'src/**/*.*']))
+gulp.task('copy', ['clean'], function(next) {
+  runSequence('copy-src', 'copy-vendor', next);
+});
+
+gulp.task('copy-src', function() {
+  return _init(gulp.src(['package.json', 'src/**/*.*', '!src/ui/vendor/**/*.js']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
-gulp.task('copy-vendor', ['clean'], function() {
-  return _init(gulp.src('src/broswer/vendor/**/**/*.js'))
+gulp.task('copy-modules', function() {
+  return _init(gulp.src(['node_modules/**/*.*']))
+    .pipe(gulp.dest(BUILD_DIR + '/node_modules'));
+});
+
+gulp.task('copy-vendor', function() {
+  return _init(gulp.src('src/ui/vendor/**/**/*.js'))
     .pipe(wrap('(function(){<%= contents %>\n})();'))
     .pipe(gulp.dest(BUILD_DIR + '/ui/vendor'));
 });
 
 gulp.task('replace', ['copy'], function() {
-  return _replace(gulp.src(['build/**/**/*', '!build/ui/vendor/**/*.js']))
+  return _replace(gulp.src(['build/**/**/*', '!build/ui/vendor/**/*.*', '!build/node_modules/**/*.*']))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
