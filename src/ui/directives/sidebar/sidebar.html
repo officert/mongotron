@@ -20,6 +20,7 @@
   <ul class="server-list">
     <li ng-repeat="connection in currentConnections | orderBy : 'name'">
       <span ng-click="openConnection(connection)">
+      <!-- <span ng-click="openConnection(connection)" context-menu="contextMenus.SERVER" context-menu-name="'SERVER'" context-menu-args="[connection]"> -->
         <i class="fa fa-server"></i> {{ connection.name }}<i class="open-icon">+</i>
       </span>
       <ul class="database-list slide" ng-show="connection.isOpen">

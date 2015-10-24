@@ -88,12 +88,12 @@ function getDbsForLocalhostConnection(connection, next) {
     var adminDb = db.admin();
 
     // List all the available databases
-    adminDb.listDatabases(function(err, result) {
+    adminDb.listDatabases((err, result) => {
       if (err) return next(new errors.DatabaseError(err));
 
       db.close();
 
-      _.each(result.databases, function(db) {
+      _.each(result.databases, (db) => {
         connection.addDatabase({
           name: db.name,
           host: connection.host,

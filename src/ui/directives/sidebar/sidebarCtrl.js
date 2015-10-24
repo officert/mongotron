@@ -2,10 +2,24 @@ angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
   'alertService',
-  function($scope, $timeout, alertService) {
+  'menuService',
+  function($scope, $timeout, alertService, menuService) {
+
     _.each($scope.currentConnections, function(connection) {
       _collapseConnection(connection);
     });
+
+    $scope.contextMenus = {
+      SERVER: [{
+        label: 'Disconnect',
+        click: function(server) {
+          console.log(arguments);
+          console.log('DISCONNECT SERVER = ' + server.name);
+        }
+      }]
+    };
+
+    // menuService.registerContextMenu('SERVER', $scope.contextMenus.SERVER);
 
     //connections
     $scope.openConnection = function openConnection(connection) {
