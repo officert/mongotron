@@ -178,9 +178,9 @@ gulp.task('jshint', ['replace'], function() {
     .pipe(jshint.reporter('fail'));
 });
 
-// gulp.task('release', ['build'], function(done) {
-//   sh.exec('./node_modules/electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
-// });
+gulp.task('release', ['build'], function(done) {
+  sh.exec('./node_modules/.bin/electron-packager ' + BUILD_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
+});
 
 gulp.task('build', ['clean', 'copy', 'replace'], function(next) {
   runSequence('css', 'css-vendor', 'js', 'js-vendor', next);
