@@ -2,8 +2,8 @@ angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
   'alertService',
-  'menuService',
-  function($scope, $timeout, alertService, menuService) {
+  // 'menuService',
+  function($scope, $timeout, alertService) {
 
     _.each($scope.currentConnections, function(connection) {
       _collapseConnection(connection);
