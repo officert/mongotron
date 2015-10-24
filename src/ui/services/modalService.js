@@ -1,7 +1,6 @@
 angular.module('app').service('modalService', [
-  '$modal',
   '$uibModal',
-  function($modal, $uibModal) {
+  function($uibModal) {
     function ModalService() {
 
     }
@@ -28,7 +27,7 @@ angular.module('app').service('modalService', [
             $scope.message = options.confirmMessage;
 
             $scope.ok = function() {
-              $modalInstance.close(1);
+              $uibModal.close(1);
             };
 
             $scope.cancel = function() {
