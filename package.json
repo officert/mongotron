@@ -6,14 +6,12 @@
   "engine": "node 4.2.0",
   "dependencies": {
     "async": "1.4.0",
-    "babel": "5.8.29",
-    "bluebird": "^2.10.2",
+    "bluebird": "2.10.2",
     "electron-connect": "0.3.3",
-    "gulp-babel": "^5.3.0",
     "jquery": "2.1.4",
     "jsonfile": "2.2.1",
     "mongodb": "2.0.40",
-    "node-uuid": "^1.4.3",
+    "node-uuid": "1.4.3",
     "underscore": "1.8.3"
   },
   "devDependencies": {
@@ -31,7 +29,7 @@
     "gulp-task-list": "0.0.1",
     "gulp-wrap": "0.11.0",
     "jshint-stylish": "0.4.0",
-    "run-sequence": "^1.1.4",
+    "run-sequence": "1.1.4",
     "shelljs": "0.5.3",
     "should": "3.1.4",
     "sinon": "1.14.1",

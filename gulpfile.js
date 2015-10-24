@@ -15,7 +15,6 @@ const wrap = require('gulp-wrap');
 const electronConnect = require('electron-connect');
 const runSequence = require('run-sequence');
 const mocha = require('gulp-mocha');
-const babel = require('gulp-babel');
 
 require('gulp-task-list')(gulp);
 
@@ -103,7 +102,6 @@ gulp.task('copy-src', function() {
 
 gulp.task('copy-src-js', function() {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
-    .pipe(babel())
     .pipe(gulp.dest(BUILD_DIR));
 });
 
