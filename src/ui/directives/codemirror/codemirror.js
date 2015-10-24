@@ -30,6 +30,23 @@ angular.module('app').directive('codemirror', [
         });
 
         function init() {
+          var orig = $window.CodeMirror.hint.javascript;
+
+          $window.CodeMirror.hint.javascript = function(cm) {
+            var inner = orig(cm) || {
+              from: cm.getCursor(),
+              to: cm.getCursor(),
+              list: []
+            };
+            inner.list = [];
+            inner.list.push('aggregate');
+            inner.list.push('find');
+            inner.list.push('update');
+            inner.list.push('remove');
+
+            return inner;
+          };
+
           editor = new $window.CodeMirror(function(editorElement) {
             element.append(editorElement);
           }, options);
@@ -37,6 +54,15 @@ angular.module('app').directive('codemirror', [
           editor.on('change', function() {
             var v = editor.getValue();
             ngModelCtrl.$setViewValue(v);
+          });
+
+          editor.on('keyup', function(cm, event) {
+            if (!cm.state.completionActive && event.keyCode !== 13) {
+              CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+              });
+              // editor.showHint();
+            }
           });
 
           editor.refresh();
