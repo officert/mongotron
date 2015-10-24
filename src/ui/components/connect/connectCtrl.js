@@ -142,6 +142,14 @@ angular.module('app').controller('connectCtrl', [
         var index = $rootScope.currentConnections.indexOf(foundConnection);
         $rootScope.currentConnections.splice(index, 1);
       }
+
+      removeActiveCollectionsByConnectionId(id);
+    }
+
+    function removeActiveCollectionsByConnectionId(id) {
+      $rootScope.currentCollections = _.filter($rootScope.currentCollections, function(collection) {
+        return collection.connection.id !== id;
+      });
     }
   }
 ]);

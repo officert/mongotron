@@ -58,10 +58,12 @@ class Connection {
     if (existingDatabase) return;
 
     var database = new Database({
+      id: options.id,
       name: options.name,
       host: options.host,
       port: options.port,
-      auth: options.auth
+      auth: options.auth,
+      connection: _this
     });
 
     _this.databases.push(database);

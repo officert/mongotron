@@ -30,6 +30,7 @@ class Database {
     _this.host = options.host || 'localhost';
     _this.port = options.port || 27017;
     _this.auth = options.auth || null;
+    _this.connection = options.connection;
 
     _this.isOpen = false;
 
@@ -77,7 +78,9 @@ class Database {
       if (err) return next(new errors.DatabaseError(err));
 
       _.each(collections, function(collection) {
-        _this._addCollection(collection);
+        _this._addCollection({
+          name: collection.collectionName
+        });
       });
 
       return next(null, _this.collections);
@@ -86,25 +89,25 @@ class Database {
 
   /**
    * @method _addCollection
-   * @param {Object} config - callback function
-   * @param {String} config.collectionName - name of the collection
+   * @param {Object} options
    */
-  _addCollection(config) {
-    config = config || {};
+  _addCollection(options) {
+    options = options || {};
 
     var _this = this;
 
     var existingCollection = _.findWhere(_this.collections, {
-      name: config.collectionName
+      name: options.name
     });
 
     if (existingCollection) return;
 
-    config.name = config.collectionName;
-    config.serverName = _this.host + ':' + _this.port;
-    config.databaseName = _this.name;
+    options.serverName = _this.host + ':' + _this.port;
+    options.databaseName = _this.name;
+    options.connection = _this.connection;
+    options.database = _this;
 
-    var collection = new Collection(_this._dbConnection, config);
+    var collection = new Collection(_this._dbConnection, options);
 
     _this.collections.push(collection);
 

@@ -25,6 +25,8 @@ class Collection {
     var _this = this;
     _this.id = options.id;
     _this.name = options.name || 'test';
+    _this.connection = options.connection;
+    _this.database = options.database;
     _this.serverName = options.serverName;
     _this.databaseName = options.databaseName;
     _this._dbCollection = database.collection(_this.name);
