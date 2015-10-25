@@ -31,8 +31,12 @@
     <div class="server-add clearfix" ng-show="currentScreen === screens.ADD">
       <form name="addForm" novalidate>
         <div class="form-group" ng-class="{ 'has-error' : !addForm.name.$valid && addConnectionFormSubmitted }">
-          <label class="control-label">Name</label>
+          <label class="control-label">Connection Name</label>
           <input class="form-control" ng-model="addConnectionForm.name" name="name" type="text" required>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.name.$valid && addConnectionFormSubmitted }">
+          <label class="control-label">Database Name</label>
+          <input class="form-control" ng-model="addConnectionForm.databaseName" name="databaseName" type="text" required>
         </div>
         <div class="form-group" ng-class="{ 'has-error' : !addForm.host.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Host</label>
@@ -41,6 +45,14 @@
         <div class="form-group" ng-class="{ 'has-error' : !addForm.port.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Port</label>
           <input class="form-control" ng-model="addConnectionForm.port" name="port" type="text" required placeholder="27017">
+        </div>
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.username.$valid && addConnectionFormSubmitted }">
+          <label class="control-label">Username</label>
+          <input class="form-control" ng-model="addConnectionForm.auth.username" name="username" type="text">
+        </div>
+        <div class="form-group" ng-class="{ 'has-error' : !addForm.password.$valid && addConnectionFormSubmitted }">
+          <label class="control-label">Password</label>
+          <input class="form-control" ng-model="addConnectionForm.auth.password" name="password" type="text">
         </div>
         <div class="pull-right">
           <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">

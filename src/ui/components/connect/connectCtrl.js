@@ -39,7 +39,9 @@ angular.module('app').controller('connectCtrl', [
     $scope.currentScreen = $scope.screens.LIST;
     $scope.selectedConnection = null;
 
-    $scope.addConnectionForm = {};
+    $scope.addConnectionForm = {
+      auth: {}
+    };
     $scope.addConnectionFormSubmitted = false;
 
     $scope.close = function() {

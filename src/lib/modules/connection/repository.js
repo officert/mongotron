@@ -29,6 +29,7 @@ class ConnectionRepository {
     return new Promise((resolve, reject) => {
       if (!options) return reject(new errors.InvalidArugmentError('options is required'));
       if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
+      if (!options.databaseName) return reject(new errors.InvalidArugmentError('options.databaseName is required'));
 
       //TODO: validate that port is between x and y??
 
@@ -169,7 +170,15 @@ function convertConnectionInstanceIntoConfig(connection) {
 
 function createConnection(options) {
   return new Promise((resolve) => {
-    return resolve(new Connection(options));
+    var newConn = new Connection(options);
+    newConn.addDatabase({
+      id: uuid.v4(),
+      name: options.databaseName,
+      host: options.host,
+      port: options.port,
+      auth: options.auth
+    });
+    return resolve(newConn);
   });
 }
 
