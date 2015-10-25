@@ -28,7 +28,7 @@ angular.module('app').run([
   function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService) {
     $rootScope.tabs = [];
     $rootScope.currentConnections = []; //active connections
-    $rootScope.currentCollections = []; //collections stored while user is querying
+    $rootScope.currentQueries = []; //active queries
 
     $rootScope.meta = {
       title: 'Mongotron'
@@ -49,45 +49,45 @@ angular.module('app').run([
     var pageTitle = 'Mongotron';
     $rootScope.setTitle(pageTitle);
 
-    $rootScope.closeActiveCollectionWindow = function() {
-      var activeCollection = _.findWhere($rootScope.currentCollections, {
+    $rootScope.closeActiveQueryWindow = function() {
+      var activeQuery = _.findWhere($rootScope.currentQueries, {
         active: true
       });
 
-      if (activeCollection) {
-        activeCollection.active = false;
-        var index = $rootScope.currentCollections.indexOf(activeCollection);
-        $rootScope.currentCollections.splice(index, 1);
+      if (activeQuery) {
+        activeQuery.active = false;
+        var index = $rootScope.currentQueries.indexOf(activeQuery);
+        $rootScope.currentQueries.splice(index, 1);
       }
     };
 
-    $rootScope.activatePreviousCollectionWindow = function() {
-      if ($rootScope.currentCollections.length === 1) return;
+    $rootScope.activatePreviousQueryWindow = function() {
+      if ($rootScope.currentQueries.length === 1) return;
 
-      var activeCollection = _.findWhere($rootScope.currentCollections, {
+      var activeQuery = _.findWhere($rootScope.currentQueries, {
         active: true
       });
 
-      if (activeCollection) {
-        var index = $rootScope.currentCollections.indexOf(activeCollection);
-        var previousCollection = index === 0 ? $rootScope.currentCollections[$rootScope.currentCollections.length - 1] : $rootScope.currentCollections[index - 1];
-        previousCollection.active = true;
-        activeCollection.active = false;
+      if (activeQuery) {
+        var index = $rootScope.currentQueries.indexOf(activeQuery);
+        var previousQuery = index === 0 ? $rootScope.currentQueries[$rootScope.currentQueries.length - 1] : $rootScope.currentQueries[index - 1];
+        previousQuery.active = true;
+        activeQuery.active = false;
       }
     };
 
-    $rootScope.activateNextCollectionWindow = function() {
-      if ($rootScope.currentCollections.length === 1) return;
+    $rootScope.activateNextQueryWindow = function() {
+      if ($rootScope.currentQueries.length === 1) return;
 
-      var activeCollection = _.findWhere($rootScope.currentCollections, {
+      var activeQuery = _.findWhere($rootScope.currentQueries, {
         active: true
       });
 
-      if (activeCollection) {
-        var index = $rootScope.currentCollections.indexOf(activeCollection);
-        var nextCollection = (index === ($rootScope.currentCollections.length - 1)) ? $rootScope.currentCollections[0] : $rootScope.currentCollections[index + 1];
-        nextCollection.active = true;
-        activeCollection.active = false;
+      if (activeQuery) {
+        var index = $rootScope.currentQueries.indexOf(activeQuery);
+        var nextQuery = (index === ($rootScope.currentQueries.length - 1)) ? $rootScope.currentQueries[0] : $rootScope.currentQueries[index + 1];
+        nextQuery.active = true;
+        activeQuery.active = false;
       }
     };
 
@@ -110,17 +110,17 @@ angular.module('app').run([
 
       keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
         console.log(keypressService.EVENTS.CLOSE_WINDOW);
-        $rootScope.closeActiveCollectionWindow();
+        $rootScope.closeActiveQueryWindow();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
         console.log(keypressService.EVENTS.MOVE_LEFT);
-        $rootScope.activatePreviousCollectionWindow();
+        $rootScope.activatePreviousQueryWindow();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
         console.log(keypressService.EVENTS.MOVE_RIGHT);
-        $rootScope.activateNextCollectionWindow();
+        $rootScope.activateNextQueryWindow();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {

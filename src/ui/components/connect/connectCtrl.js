@@ -145,12 +145,12 @@ angular.module('app').controller('connectCtrl', [
         $rootScope.currentConnections.splice(index, 1);
       }
 
-      removeActiveCollectionsByConnectionId(id);
+      removeActiveQueriesByConnectionId(id);
     }
 
-    function removeActiveCollectionsByConnectionId(id) {
-      $rootScope.currentCollections = _.filter($rootScope.currentCollections, function(collection) {
-        return collection.connection.id !== id;
+    function removeActiveQueriesByConnectionId(id) {
+      $rootScope.currentQueries = _.filter($rootScope.currentQueries, function(query) {
+        return query.connection.id !== id;
       });
     }
   }

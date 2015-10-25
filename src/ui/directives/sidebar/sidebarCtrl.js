@@ -103,22 +103,24 @@ angular.module('app').controller('sidebarCtrl', [
 
       switch (type) {
         case 'collection':
-          _addCollection(item);
+          _addQuery(item);
           break;
       }
     };
 
-    function _addCollection(collection) {
+    function _addQuery(collection) {
       if (!collection) return;
 
-      var existingCollection = _.findWhere($scope.currentCollections, {
-        databaseName: collection.databaseName,
-        name: collection.name
+      _deactivateCurrentQueries();
+
+      var newQuery = {
+        active: true,
+        collection: collection
+      };
+
+      $timeout(function() {
+        $scope.currentQueries.push(newQuery);
       });
-
-      if (!existingCollection) $scope.currentCollections.push(collection);
-
-      // $state.go('data-viewer.collections');
     }
 
     function _collapseConnection(connection) {
@@ -131,6 +133,12 @@ angular.module('app').controller('sidebarCtrl', [
 
     function _collapseDatabase(database) {
       database.isOpen = false;
+    }
+
+    function _deactivateCurrentQueries() {
+      _.each($scope.currentQueries, function(query) {
+        query.active = false;
+      });
     }
   }
 ]);

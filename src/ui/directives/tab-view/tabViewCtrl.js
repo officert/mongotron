@@ -8,14 +8,14 @@ angular.module('app').controller('tabViewCtrl', [
       if (!$event) $event.preventDefault();
     };
 
-    $scope.removeCollection = function(collection, $event) {
+    $scope.removeQuery = function(query, $event) {
       if ($event) $event.preventDefault();
 
-      var index = $rootScope.currentCollections.indexOf(collection);
+      var index = $rootScope.currentQueries.indexOf(query);
 
       if (index >= 0) {
-        collection.active = false;
-        $rootScope.currentCollections.splice(index, 1);
+        query.active = false;
+        $rootScope.currentQueries.splice(index, 1);
       }
     };
   }
