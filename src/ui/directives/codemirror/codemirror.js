@@ -56,14 +56,14 @@ angular.module('app').directive('codemirror', [
             ngModelCtrl.$setViewValue(v);
           });
 
-          editor.on('keyup', function(cm, event) {
-            if (!cm.state.completionActive && event.keyCode !== 13) {
-              CodeMirror.commands.autocomplete(cm, null, {
-                completeSingle: false
-              });
-              // editor.showHint();
-            }
-          });
+          // editor.on('keyup', function(cm, event) {
+          //   if (!cm.state.completionActive && event.keyCode !== 13) {
+          //     // CodeMirror.commands.autocomplete(cm, null, {
+          //     //   completeSingle: false
+          //     // });
+          //     editor.showHint();
+          //   }
+          // });
 
           editor.refresh();
         }
