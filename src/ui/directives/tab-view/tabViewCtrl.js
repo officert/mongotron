@@ -2,10 +2,15 @@ angular.module('app').controller('tabViewCtrl', [
   '$scope',
   '$rootScope',
   function($scope, $rootScope) {
-    $scope.tabs = [];
-
     $scope.closeTab = function(tab, $event) {
       if (!$event) $event.preventDefault();
+
+      var index = $rootScope.currentTabs.indexOf(tab);
+
+      if (index >= 0) {
+        tab.active = false;
+        $rootScope.currentTabs.splice(index, 1);
+      }
     };
 
     $scope.removeQuery = function(query, $event) {

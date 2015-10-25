@@ -26,7 +26,7 @@ angular.module('app').run([
   'keypressService',
   'modalService',
   function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService) {
-    $rootScope.tabs = [];
+    $rootScope.currentTabs = [];
     $rootScope.currentConnections = []; //active connections
     $rootScope.currentQueries = []; //active queries
 
@@ -97,6 +97,15 @@ angular.module('app').run([
         .then(function() {
           $rootScope.setTitle(pageTitle);
         });
+    };
+
+    $rootScope.showSettings = function($event) {
+      if ($event) $event.preventDefault();
+
+      $rootScope.currentTabs.push({
+        name: 'Settings',
+        src: __dirname + '/components/settings/settings.html'
+      });
     };
 
     function registerKeypressEvents() {
