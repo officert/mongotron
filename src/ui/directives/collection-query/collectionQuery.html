@@ -11,12 +11,10 @@
     </p>
   </div>
   <form class="query-form" name="query-form" novalidate>
-    <div class="input-group query-input">
+    <div class="query-input">
       <div class="code-editor" codemirror="codeEditorOptions" ng-model="form.searchQuery">
       </div>
-      <span class="input-group-addon">
-        <button class="btn btn-default" ng-click="search()">Search</button>
-      </span>
+      <button class="search-btn btn btn-default" ng-click="search()">Search</button>
     </div>
   </form>
   <loading></loading>
