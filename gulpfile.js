@@ -20,6 +20,21 @@ const APP_NAME = packageJson.name;
 
 const SRC_DIR = 'src';
 const RELEASE_DIR = 'release';
+const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
+  'electron-packager',
+  'electron-prebuilt',
+  'electron-connect',
+  'gulp|gulp-jshint',
+  'gulp-less',
+  'gulp-mocha',
+  'gulp-task-list',
+  'jshint-stylish',
+  'run-sequence',
+  'bower',
+  'should',
+  'sinon',
+  'supertest'
+].join('|');
 
 const LESSOPTIONS = {
   compress: false
@@ -62,7 +77,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('release', ['build'], function(done) {
-  sh.exec('NODE_ENV=production ./node_modules/.bin/electron-packager ' + SRC_DIR + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2', done);
+  sh.exec('./node_modules/.bin/electron-packager ' + '/' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')"', done);
 });
 
 gulp.task('build', ['clean', 'css']);
