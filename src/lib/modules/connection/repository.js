@@ -27,19 +27,16 @@ class ConnectionRepository {
     let _this = this;
 
     return new Promise((resolve, reject) => {
-      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
-      if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
-      if (!options.databaseName) return reject(new errors.InvalidArugmentError('options.databaseName is required'));
-
-      //TODO: validate that port is between x and y??
+      if (!options) return reject(new errors.InternalServiceError('options is required'));
 
       let connections;
       let newConnection;
 
+      options.id = uuid.v4(); //assign a unique id
+
       return _this.list()
         .then((_connections) => {
           connections = _connections;
-          options.id = uuid.v4();
           return createConnection(options, _connections);
         })
         .then((_connection) => {
@@ -49,8 +46,8 @@ class ConnectionRepository {
         })
         .then(writeConfigFile)
         .then(() => {
-          return new Promise((resolve) => {
-            return resolve(newConnection);
+          return new Promise((resolve1) => {
+            return resolve1(newConnection);
           });
         })
         .then(resolve)
