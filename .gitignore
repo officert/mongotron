@@ -1,10 +1,9 @@
 node_modules
 .DS_Store
-*build/.css
 *.log
 *.codekit
 *.sublime-*
-build
 src/ui/vendor
+src/ui/css
 *.idea
 release

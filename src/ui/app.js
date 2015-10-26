@@ -2,7 +2,7 @@
 
 const ipc = require('ipc');
 
-const UrlHelpers = require('lib/helpers/urlHelpers');
+const urlHelpers = require('lib/helpers/urlHelpers');
 
 angular.module('app', [
   'ngResource',
@@ -12,11 +12,6 @@ angular.module('app', [
   'duScroll',
   'ngPrettyJson'
 ]);
-
-angular.module('app').constant('appConfig', {
-  VERSION: '@@VERSION',
-  ENV: '@@ENV'
-});
 
 angular.module('app').run([
   '$rootScope',
@@ -39,7 +34,7 @@ angular.module('app').run([
     $rootScope.themes = initThemes();
 
     $rootScope.getBrowserUrl = function(url) {
-      return UrlHelpers.getBrowserUrl(url);
+      return urlHelpers.getBrowserUrl(url);
     };
 
     $rootScope.setTitle = function(title) {

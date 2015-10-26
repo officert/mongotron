@@ -2,18 +2,11 @@
 
 const path = require('path');
 
-/**
- * @class UrlHelpers
- */
-class UrlHelpers {
-
-  /**
-   * @method getBrowserUrl
-   */
-  static getBrowserUrl(url) {
+var UrlHelpers = {
+  getBrowserUrl: function(url) {
     return path.join(getAppBaseUrl(), 'browser', url);
   }
-}
+};
 
 function getAppBaseUrl() {
   return path.join(__dirname, '../../');
