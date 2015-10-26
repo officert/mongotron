@@ -1,5 +1,8 @@
 'use strict';
 
+const Promise = require('bluebird');
+
+const errors = require('lib/errors');
 const connectionRepository = require('./repository');
 
 /**
@@ -15,7 +18,17 @@ class ConnectionService {
    * @method create
    */
   create(options) {
-    return connectionRepository.create(options);
+    return new Promise((resolve, reject) => {
+      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
+      if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
+      if (!options.databaseName) return reject(new errors.InvalidArugmentError('options.databaseName is required'));
+      if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
+      if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
+
+      return connectionRepository.create(options)
+      .then(resolve)
+      .catch(reject);
+    });
   }
 
   /**
