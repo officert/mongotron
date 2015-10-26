@@ -7,10 +7,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <!-- CSS -->
-  <!-- injectSrcCss:css -->
-  <!-- endinjectSrcCss -->
-  <!-- injectVendorCss:css -->
-  <!-- endinjectVendorCss -->
+  <!-- src -->
+  <link rel="stylesheet" href="./css/main.css" />
+  <!-- vendor -->
+  <link rel="stylesheet" href="./vendor/jquery.splitter/css/jquery.splitter.css" />
+  <link rel="stylesheet" href="./vendor/toastr/toastr.css" />
+  <link rel="stylesheet" href="./vendor/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" href="./vendor/codemirror/addon/hint/show-hint.css" />
+  <link rel="stylesheet" href="./vendor/ng-prettyjson/dist/ng-prettyjson.min.css" />
   <!-- JAVASCRIPT -->
   <script>
     //load jquery using require because it thinks it's loading for node and
@@ -19,10 +23,47 @@
     //same with toastr
     window.toastr = window.toastr = require('./vendor/toastr/toastr.js');
   </script>
-  <!-- injectVendorJs:js -->
-  <!-- endinjectVendorJs -->
-  <!-- injectSrcJs:js -->
-  <!-- endinjectSrcJs -->
+  <!-- vendor -->
+  <script src="./vendor/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="./vendor/console-polyfill/index.js"></script>
+  <script src="./vendor/angular/angular.js"></script>
+  <script src="./vendor/angular-resource/angular-resource.js"></script>
+  <script src="./vendor/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="./vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="./vendor/underscore/underscore.js"></script>
+  <script src="./vendor/angular-animate/angular-animate.js"></script>
+  <script src="./vendor/angular-sanitize/angular-sanitize.js"></script>
+  <script src="./vendor/angular-scroll/angular-scroll.js"></script>
+  <script src="./vendor/jquery.splitter/js/jquery.splitter-0.15.0.js"></script>
+  <script src="./vendor/moment/moment.js"></script>
+  <script src="./vendor/ng-prettyjson/src/ng-prettyjson.js"></script>
+  <script src="./vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js"></script>
+  <script src="./vendor/Keypress/keypress.js"></script>
+  <script src="./vendor/codemirror/lib/codemirror.js"></script>
+  <script src="./vendor/codemirror/mode/javascript/javascript.js"></script>
+  <script src="./vendor/codemirror/addon/hint/show-hint.js"></script>
+  <script src="./vendor/codemirror/addon/hint/javascript-hint.js"></script>
+  <!-- src -->
+  <script src="./app.js"></script>
+  <script src="./directives/loading.js"></script>
+  <script src="./directives/slide-down.js"></script>
+  <script src="./directives/splitter.js"></script>
+  <script src="./services/alertService.js"></script>
+  <script src="./services/connectionService.js"></script>
+  <script src="./services/keypressService.js"></script>
+  <script src="./services/menuService.js"></script>
+  <script src="./services/modalService.js"></script>
+  <script src="./components/connect/connectCtrl.js"></script>
+  <script src="./components/settings/settingsCtrl.js"></script>
+  <script src="./directives/codemirror/codemirror.js"></script>
+  <script src="./directives/context-menu/contextMenu.js"></script>
+  <script src="./directives/context-menu/contextMenuCtrl.js"></script>
+  <script src="./directives/collection-query/collectionQuery.js"></script>
+  <script src="./directives/collection-query/collectionQueryCtrl.js"></script>
+  <script src="./directives/sidebar/sidebar.js"></script>
+  <script src="./directives/sidebar/sidebarCtrl.js"></script>
+  <script src="./directives/tab-view/tab-view.js"></script>
+  <script src="./directives/tab-view/tabViewCtrl.js"></script>
 </head>
 
 <body class="theme-{{ themes.current }}">

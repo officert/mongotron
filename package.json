@@ -2,7 +2,7 @@
   "name": "Mongotron",
   "version": "0.1.0",
   "description": "mongotron",
-  "main": "browser/main.js",
+  "main": "src/browser/main.js",
   "engine": "node 4.2.0",
   "dependencies": {
     "async": "1.4.0",
