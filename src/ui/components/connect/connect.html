@@ -40,7 +40,7 @@
         </div>
         <div class="form-group" ng-class="{ 'has-error' : !addForm.host.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Host</label>
-          <input class="form-control" ng-model="addConnectionForm.host" type="text" required placeholder="localhost">
+          <input class="form-control" ng-model="addConnectionForm.host" name="host" type="text" required placeholder="localhost">
         </div>
         <div class="form-group" ng-class="{ 'has-error' : !addForm.port.$valid && addConnectionFormSubmitted }">
           <label class="control-label">Port</label>
