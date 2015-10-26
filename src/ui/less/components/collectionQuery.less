@@ -1,0 +1,101 @@
+/*
+ * Collection Query
+ */
+.collection-query {
+  .collection-info {
+    margin-bottom: 15px;
+    p {
+      margin: 0;
+      padding: 0;
+      float: left;
+      margin-right: 15px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  .query-error {
+    margin-top: 15px;
+  }
+  .query-form {
+    .query-input {
+      border-radius: 4px;
+      padding: 2px;
+      position: relative;
+      border: none;
+      background: @theme-query-editor-bg;
+      .code-editor {
+        position: relative;
+        z-index: 0;
+        background: transparent;
+        .CodeMirror {
+          background: transparent;
+          height: auto;
+          min-height: 34px;
+          color: @theme-text-color;
+          .CodeMirror-gutters {
+            background: darken(@theme-query-editor-bg, 10%);
+          }
+        }
+      }
+      .search-btn {
+        position: absolute;
+        z-index: 1;
+        top: 8px;
+        right: 8px;
+      }
+
+      // .input-group-addon {
+      //   background: none;
+      //   padding: 0;
+      //   border: 0;
+      //   vertical-align: top;
+      //   .btn {
+      //     border-top-left-radius: 0;
+      //     border-bottom-left-radius: 0;
+      //     border-left: 0;
+      //   }
+      // }
+    }
+  }
+  .query-results {
+    margin-top: 15px;
+    .panel-group {
+      margin-bottom: 5px;
+      .panel {
+        box-shadow: none;
+        .panel-heading {
+          padding: 0;
+          background: white;
+          border-radius: 4px;
+          .panel-title {
+            font-size: 14px;
+            .accordion-toggle {
+              padding: 5px 10px;
+              display: block;
+              cursor: default;
+              text-decoration: none;
+              .fa {
+                font-size: 10px;
+                position: relative;
+                top: -1px;
+              }
+            }
+          }
+        }
+        .panel-body {
+          padding: 0;
+          pre {
+            outline: none;
+            .key {
+              color: darken(@brand-tertiary, 10%);
+            }
+            .string {
+              color: @brand-secondary;
+            }
+          }
+        }
+      }
+    }
+  }
+}

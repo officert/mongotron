@@ -1,0 +1,28 @@
+/*
+ * Modal
+ */
+.modal {
+  .modal-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background: @gray-lighter;
+    font-size: 20px;
+    font-weight: 500;
+
+    // padding: 10px 12px 8px;
+    &.modal-header-w-icon {
+      i {
+        top: 1px;
+        position: relative;
+      }
+    }
+    .close-btn {
+      float: right;
+      background: @brand-secondary;
+      color: white;
+    }
+  }
+  .modal-backdrop {
+    bottom: 0;
+  }
+}

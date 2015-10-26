@@ -32,7 +32,7 @@ class ConnectionRepository {
       let connections;
       let newConnection;
 
-      options.id = uuid.v4(); //assign a unique id
+      options.id = uuid.v4(); //assign a "unique" id
 
       return _this.list()
         .then((_connections) => {
