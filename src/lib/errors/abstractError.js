@@ -24,10 +24,6 @@ AbstractError.prototype.getMessage = function() {
   return this.message;
 };
 
-AbstractError.prototype.getCode = function() {
-  return this.code;
-};
-
 /*
  * @exports
  *
