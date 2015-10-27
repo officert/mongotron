@@ -35,7 +35,10 @@
           top: -2px;
           cursor: pointer;
           background: darken(@theme-tab-active-bg, 3%);
-          visibility: hidden;
+          opacity: 0;
+          .transition-property("opacity");
+          .transition-duration(.35s);
+          .transition-timing-function(ease);
         }
       }
       &:hover,
@@ -48,7 +51,7 @@
       a {
         background: none;
         .tab-close {
-          visibility: visible;
+          opacity: 1;
         }
       }
     }
