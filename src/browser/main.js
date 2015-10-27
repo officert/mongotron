@@ -20,6 +20,10 @@ ipc.on('set-title', function(event, title) {
   mainWindow.setTitle(title || 'Mongotron');
 });
 
+ipc.on('quit', function() {
+  app.quit();
+});
+
 app.on('window-all-closed', function() {
   // Quit when all windows are closed.
   // On OS X it is common for applications and their menu bar
