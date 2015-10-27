@@ -12,7 +12,8 @@ class ConnectionService {
   /**
    * @constructor ConnectionService
    */
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * @method create
@@ -26,8 +27,8 @@ class ConnectionService {
       if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
 
       return connectionRepository.create(options)
-      .then(resolve)
-      .catch(reject);
+        .then(resolve)
+        .catch(reject);
     });
   }
 

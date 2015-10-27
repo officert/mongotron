@@ -1,21 +1,30 @@
+'use strict';
+
 angular.module('app').controller('connectCtrl', [
   '$scope',
   '$rootScope',
+  '$timeout',
   '$modalInstance',
-  'connectionService',
   '$log',
   'alertService',
-  function($scope, $rootScope, $modalInstance, connectionService, $log, alertService) {
+  'connectionCache',
+  function($scope, $rootScope, $timeout, $modalInstance, $log, alertService, connectionCache) {
+    const connectionModule = require('lib/modules/connection');
+
     $scope.setTitle('MongoDb Connections');
 
     $scope.connections = [];
 
-    connectionService.list()
+    connectionModule.list()
       .then(function(connections) {
-        $scope.connections = connections;
+        $timeout(function() {
+          $scope.connections = connections;
+        });
       })
       .catch(function(response) {
-        $log.error(response);
+        $timeout(function() {
+          $log.error(response);
+        });
       });
 
     $scope.screens = {
@@ -51,25 +60,17 @@ angular.module('app').controller('connectCtrl', [
     $scope.isConnected = function(connection) {
       if (!connection) return false;
 
-      var foundConnection = getActiveConnectionById(connection.id);
-
-      return foundConnection ? true : false;
-    };
-
-    $scope.disconnect = function(connection) {
-      if (!connection) return false;
-
-      removeActiveConnectionById(connection.id);
+      return connectionCache.exists(connection);
     };
 
     $scope.connect = function(connection, $event) {
       if (!connection) return;
       if ($event) $event.preventDefault();
 
-      if (!$scope.isConnected(connection)) {
-        $rootScope.currentConnections.push(connection);
+      if (!connectionCache.exists(connection)) {
+        connectionCache.add(connection);
       } else {
-        $scope.disconnect(connection);
+        connectionCache.remove(connection);
       }
     };
 
@@ -84,16 +85,21 @@ angular.module('app').controller('connectCtrl', [
 
       if (!addConnectionForm.$valid) return;
 
-      connectionService.create($scope.addConnectionForm)
+      connectionModule.create($scope.addConnectionForm)
         .then(function(connection) {
-          $scope.connections.push(connection);
-          $scope.currentScreen = $scope.screens.LIST;
+          $timeout(function() {
+            $scope.connections.push(connection);
 
-          alertService.success('Connection added');
+            $scope.currentScreen = $scope.screens.LIST;
+
+            alertService.success('Connection added');
+          });
         })
         .catch(function(err) {
-          alertService.error(err);
-          console.log(err);
+          $timeout(function() {
+            alertService.error(err);
+            console.log(err);
+          });
         });
     };
 
@@ -106,52 +112,24 @@ angular.module('app').controller('connectCtrl', [
       if (!connection) return;
       if ($event) $event.preventDefault();
 
-      if ($scope.isConnected(connection)) {
-        $scope.disconnect(connection);
-      }
-
-      connectionService.delete(connection.id)
+      connectionModule.delete(connection.id)
         .then(function() {
-          var foundConnection = _.findWhere($scope.connections, {
-            id: connection.id
+          $timeout(function() {
+            var index = $scope.connections.indexOf(connection);
+
+            if (index >= 0) $scope.connections.splice(index, 1);
+
+            $scope.currentScreen = $scope.screens.LIST;
+
+            alertService.success('Connection removed');
           });
-
-          if (foundConnection) {
-            var index = $scope.connections.indexOf(foundConnection);
-            $scope.connections.splice(index, 1);
-          }
-
-          $scope.currentScreen = $scope.screens.LIST;
-
-          alertService.success('Connection removed');
         })
         .catch(function(err) {
-          alertService.error(err);
-          console.log(err);
+          $timeout(function() {
+            alertService.error(err);
+            console.log(err);
+          });
         });
     };
-
-    function getActiveConnectionById(id) {
-      return _.findWhere($rootScope.currentConnections, {
-        id: id
-      });
-    }
-
-    function removeActiveConnectionById(id) {
-      var foundConnection = getActiveConnectionById(id);
-
-      if (foundConnection) {
-        var index = $rootScope.currentConnections.indexOf(foundConnection);
-        $rootScope.currentConnections.splice(index, 1);
-      }
-
-      removeActiveQueriesByConnectionId(id);
-    }
-
-    function removeActiveQueriesByConnectionId(id) {
-      $rootScope.currentQueries = _.filter($rootScope.currentQueries, function(query) {
-        return query.connection.id !== id;
-      });
-    }
   }
 ]);

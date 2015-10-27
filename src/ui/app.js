@@ -20,11 +20,9 @@ angular.module('app').run([
   'alertService',
   'keypressService',
   'modalService',
-  function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService) {
-    $rootScope.currentTabs = [];
-    $rootScope.currentConnections = []; //active connections
-    $rootScope.currentQueries = []; //active queries
-
+  'tabCache',
+  'queryCache',
+  function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService, tabCache, queryCache) {
     $rootScope.meta = {
       title: 'Mongotron'
     };
@@ -44,46 +42,8 @@ angular.module('app').run([
     var pageTitle = 'Mongotron';
     $rootScope.setTitle(pageTitle);
 
-    $rootScope.closeActiveQueryWindow = function() {
-      var activeQuery = _.findWhere($rootScope.currentQueries, {
-        active: true
-      });
-
-      if (activeQuery) {
-        activeQuery.active = false;
-        var index = $rootScope.currentQueries.indexOf(activeQuery);
-        $rootScope.currentQueries.splice(index, 1);
-      }
-    };
-
-    $rootScope.activatePreviousQueryWindow = function() {
-      if ($rootScope.currentQueries.length === 1) return;
-
-      var activeQuery = _.findWhere($rootScope.currentQueries, {
-        active: true
-      });
-
-      if (activeQuery) {
-        var index = $rootScope.currentQueries.indexOf(activeQuery);
-        var previousQuery = index === 0 ? $rootScope.currentQueries[$rootScope.currentQueries.length - 1] : $rootScope.currentQueries[index - 1];
-        previousQuery.active = true;
-        activeQuery.active = false;
-      }
-    };
-
     $rootScope.activateNextQueryWindow = function() {
-      if ($rootScope.currentQueries.length === 1) return;
-
-      var activeQuery = _.findWhere($rootScope.currentQueries, {
-        active: true
-      });
-
-      if (activeQuery) {
-        var index = $rootScope.currentQueries.indexOf(activeQuery);
-        var nextQuery = (index === ($rootScope.currentQueries.length - 1)) ? $rootScope.currentQueries[0] : $rootScope.currentQueries[index + 1];
-        nextQuery.active = true;
-        activeQuery.active = false;
-      }
+      queryCache.activateNext();
     };
 
     $rootScope.showConnections = function($event) {
@@ -97,7 +57,7 @@ angular.module('app').run([
     $rootScope.showSettings = function($event) {
       if ($event) $event.preventDefault();
 
-      $rootScope.currentTabs.push({
+      tabCache.add({
         name: 'Settings',
         src: __dirname + '/components/settings/settings.html'
       });
@@ -114,17 +74,17 @@ angular.module('app').run([
 
       keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
         console.log(keypressService.EVENTS.CLOSE_WINDOW);
-        $rootScope.closeActiveQueryWindow();
+        queryCache.removeActive();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
         console.log(keypressService.EVENTS.MOVE_LEFT);
-        $rootScope.activatePreviousQueryWindow();
+        queryCache.activatePrevious();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
         console.log(keypressService.EVENTS.MOVE_RIGHT);
-        $rootScope.activateNextQueryWindow();
+        queryCache.activateNext();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {

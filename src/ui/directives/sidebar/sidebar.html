@@ -21,7 +21,7 @@
     </div>
   </div>
   <ul class="server-list">
-    <li ng-repeat="connection in currentConnections | orderBy : 'name'">
+    <li ng-repeat="connection in activeConnections | orderBy : 'name'">
       <span ng-click="openConnection(connection)">
         <!-- <span ng-click="openConnection(connection)" context-menu="contextMenus.SERVER" context-menu-name="'SERVER'" context-menu-args="[connection]"> -->
         <i class="fa fa-server"></i> {{ connection.name }}<i class="open-icon">+</i>

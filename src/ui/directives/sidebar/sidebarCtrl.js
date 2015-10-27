@@ -3,10 +3,19 @@ angular.module('app').controller('sidebarCtrl', [
   '$timeout',
   'alertService',
   // 'menuService',
-  function($scope, $timeout, alertService) {
+  'queryCache',
+  'connectionCache',
+  'EVENTS',
+  function($scope, $timeout, alertService, queryCache, connectionCache, EVENTS) {
 
-    _.each($scope.currentConnections, function(connection) {
+    $scope.activeConnections = connectionCache.list();
+
+    _.each($scope.activeConnections, function(connection) {
       _collapseConnection(connection);
+    });
+
+    connectionCache.on(EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+      $scope.activeConnections = updatedCache;
     });
 
     $scope.contextMenus = {
@@ -111,7 +120,7 @@ angular.module('app').controller('sidebarCtrl', [
     function _addQuery(collection) {
       if (!collection) return;
 
-      _deactivateCurrentQueries();
+      queryCache.deactivateAll();
 
       var newQuery = {
         active: true,
@@ -119,7 +128,7 @@ angular.module('app').controller('sidebarCtrl', [
       };
 
       $timeout(function() {
-        $scope.currentQueries.push(newQuery);
+        queryCache.add(newQuery);
       });
     }
 
@@ -133,12 +142,6 @@ angular.module('app').controller('sidebarCtrl', [
 
     function _collapseDatabase(database) {
       database.isOpen = false;
-    }
-
-    function _deactivateCurrentQueries() {
-      _.each($scope.currentQueries, function(query) {
-        query.active = false;
-      });
     }
   }
 ]);
