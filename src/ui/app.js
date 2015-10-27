@@ -16,13 +16,8 @@ angular.module('app').run([
   'tabCache',
   function ($rootScope, $log, modalService, tabCache) {
     const ipc = require('ipc');
-    // const urlHelpers = require('lib/helpers/urlHelpers');
 
     $rootScope.themes = initThemes();
-
-    // $rootScope.getBrowserUrl = function(url) {
-    //   return urlHelpers.getBrowserUrl(url);
-    // };
 
     $rootScope.setTitle = function(title) {
       ipc.send('set-title', title);
