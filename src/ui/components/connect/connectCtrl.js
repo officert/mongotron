@@ -8,7 +8,8 @@ angular.module('app').controller('connectCtrl', [
   '$log',
   'alertService',
   'connectionCache',
-  function($scope, $rootScope, $timeout, $modalInstance, $log, alertService, connectionCache) {
+  'state',
+  function($scope, $rootScope, $timeout, $modalInstance, $log, alertService, connectionCache, state) {
     const connectionModule = require('lib/modules/connection');
 
     $scope.setTitle('MongoDb Connections');
@@ -45,7 +46,7 @@ angular.module('app').controller('connectCtrl', [
         slug: 'REMOVE'
       }
     };
-    $scope.currentScreen = $scope.screens.LIST;
+    $scope.currentScreen = state && $scope.screens[state] ? $scope.screens[state] : $scope.screens.LIST;
     $scope.selectedConnection = null;
 
     $scope.addConnectionForm = {
