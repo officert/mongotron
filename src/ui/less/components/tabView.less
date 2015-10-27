@@ -2,13 +2,19 @@
  * Tab-View
  */
 .tab-view {
+  @tab-height: 40px;
   padding-top: 5px;
   .nav-tabs {
     border-bottom: none;
   }
+  .sortable-placeholder {
+    width: 2px;
+    height: @tab-height;
+    background: @theme-tab-active-line-bg;
+  }
   .tab {
     position: relative;
-    height: 40px;
+    height: @tab-height;
     a {
       color: @theme-text-color;
       border: none;
@@ -64,12 +70,6 @@
           height: 100%;
         }
       }
-    }
-    &.ui-sortable-placeholder {
-      width: 2px;
-      height: 40px;
-      display: block;
-      background: red;
     }
   }
   .tab-pane {

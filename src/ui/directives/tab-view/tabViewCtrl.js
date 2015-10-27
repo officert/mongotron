@@ -7,7 +7,9 @@ angular.module('app').controller('tabViewCtrl', [
 
     $scope.TAB_TYPES = tabCache.TYPES;
 
-    $scope.sortableOptions = {};
+    $scope.sortableOptions = {
+      placeholder: 'sortable-placeholder'
+    };
 
     tabCache.on(EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {
       $scope.tabs = updatedCache;
