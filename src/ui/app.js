@@ -1,5 +1,7 @@
 'use strict';
 
+var ipc = require('ipc');
+
 angular.module('app', [
   'ngResource',
   'ui.bootstrap',
@@ -15,8 +17,6 @@ angular.module('app').run([
   'modalService',
   'tabCache',
   function ($rootScope, $log, modalService, tabCache) {
-    const ipc = require('ipc');
-
     $rootScope.themes = initThemes();
 
     $rootScope.setTitle = function(title) {
