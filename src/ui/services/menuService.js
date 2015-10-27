@@ -1,12 +1,12 @@
 'use strict';
 
-const remote = require('remote');
-const Menu = remote.require('menu');
-const MenuItem = remote.require('menu-item');
-
 angular.module('app').factory('menuService', [
   '$window',
   function($window) {
+    const remote = require('remote');
+    const Menu = remote.require('menu');
+    const MenuItem = remote.require('menu-item');
+
     let MENU_CACHE = {};
 
     function MenuService() {
@@ -50,7 +50,7 @@ angular.module('app').factory('menuService', [
 
         menu.append(new MenuItem(menuItem));
       }
-      
+
       MENU_CACHE[menuName] = menu;
 
       return menu;

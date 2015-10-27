@@ -3,10 +3,10 @@ angular.module('app').controller('sidebarCtrl', [
   '$timeout',
   'alertService',
   // 'menuService',
-  'queryCache',
+  'tabCache',
   'connectionCache',
   'EVENTS',
-  function($scope, $timeout, alertService, queryCache, connectionCache, EVENTS) {
+  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS) {
 
     $scope.activeConnections = connectionCache.list();
 
@@ -120,15 +120,16 @@ angular.module('app').controller('sidebarCtrl', [
     function _addQuery(collection) {
       if (!collection) return;
 
-      queryCache.deactivateAll();
+      tabCache.deactivateAll();
 
-      var newQuery = {
-        active: true,
+      var queryTab = {
+        type: tabCache.TYPES.QUERY,
+        name: collection.name,
         collection: collection
       };
 
       $timeout(function() {
-        queryCache.add(newQuery);
+        tabCache.add(queryTab);
       });
     }
 

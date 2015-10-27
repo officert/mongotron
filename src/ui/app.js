@@ -21,12 +21,7 @@ angular.module('app').run([
   'keypressService',
   'modalService',
   'tabCache',
-  'queryCache',
-  function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService, tabCache, queryCache) {
-    $rootScope.meta = {
-      title: 'Mongotron'
-    };
-
+  function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService, tabCache) {
     registerKeypressEvents();
 
     $rootScope.themes = initThemes();
@@ -42,10 +37,6 @@ angular.module('app').run([
     var pageTitle = 'Mongotron';
     $rootScope.setTitle(pageTitle);
 
-    $rootScope.activateNextQueryWindow = function() {
-      queryCache.activateNext();
-    };
-
     $rootScope.showConnections = function($event) {
       if ($event) $event.preventDefault();
       modalService.openConnectionManager()
@@ -57,7 +48,10 @@ angular.module('app').run([
     $rootScope.showSettings = function($event) {
       if ($event) $event.preventDefault();
 
+      tabCache.deactivateAll();
+
       tabCache.add({
+        type: tabCache.TYPES.PAGE,
         name: 'Settings',
         src: __dirname + '/components/settings/settings.html'
       });
@@ -74,17 +68,17 @@ angular.module('app').run([
 
       keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
         console.log(keypressService.EVENTS.CLOSE_WINDOW);
-        queryCache.removeActive();
+        tabCache.removeActive();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
         console.log(keypressService.EVENTS.MOVE_LEFT);
-        queryCache.activatePrevious();
+        tabCache.activatePrevious();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
         console.log(keypressService.EVENTS.MOVE_RIGHT);
-        queryCache.activateNext();
+        tabCache.activateNext();
       });
 
       keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
