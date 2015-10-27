@@ -1,9 +1,5 @@
 'use strict';
 
-const ipc = require('ipc');
-
-const urlHelpers = require('lib/helpers/urlHelpers');
-
 angular.module('app', [
   'ngResource',
   'ui.bootstrap',
@@ -22,6 +18,9 @@ angular.module('app').run([
   'modalService',
   'tabCache',
   function AppCtrl($rootScope, $log, $timeout, alertService, keypressService, modalService, tabCache) {
+    const ipc = require('ipc');
+    const urlHelpers = require('lib/helpers/urlHelpers');
+
     registerKeypressEvents();
 
     $rootScope.themes = initThemes();
