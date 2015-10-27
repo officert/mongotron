@@ -37,8 +37,6 @@ var configs = {
 };
 
 function getConfig(env) {
-  console.log('ENV = ', env);
-
   var envConfig = configs[env];
 
   if (!envConfig) throw new Error(env + ' is not a valid environment');

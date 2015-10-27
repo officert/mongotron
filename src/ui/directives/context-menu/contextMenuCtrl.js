@@ -1,7 +1,6 @@
 angular.module('app').controller('contextMenuCtrl', [
   '$scope',
-  'menuService',
-  function($scope, menuService) {
+  function($scope) {
     var args = $scope.contextMenuArgs;
 
     _.each($scope.contextMenu, function(menuItem) {
@@ -15,7 +14,5 @@ angular.module('app').controller('contextMenuCtrl', [
         ogClick.apply(this, args);
       };
     });
-
-    menuService.registerContextMenu($scope.contextMenuName, $scope.contextMenu);
   }
 ]);

@@ -58,6 +58,8 @@ angular.module('app').factory('tabCache', [
       var index = TAB_CACHE.indexOf(tab);
 
       if (index >= 0) {
+        _activatePrevious(index);
+
         TAB_CACHE.splice(index, 1);
       }
 
@@ -82,19 +84,8 @@ angular.module('app').factory('tabCache', [
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
-    TabCache.prototype.activatePrevious = function() {
-      if (TAB_CACHE.length === 1) return;
-
-      var activeTab = _.findWhere(TAB_CACHE, {
-        active: true
-      });
-
-      if (activeTab) {
-        var index = TAB_CACHE.indexOf(activeTab);
-        var previousTab = index === 0 ? TAB_CACHE[TAB_CACHE.length - 1] : TAB_CACHE[index - 1];
-        previousTab.active = true;
-        activeTab.active = false;
-      }
+    TabCache.prototype.activatePrevious = function(tabIndex) {
+      _activatePrevious(tabIndex);
 
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
@@ -154,6 +145,21 @@ angular.module('app').factory('tabCache', [
       _.each(TAB_CACHE, function(tab) {
         tab.active = false;
       });
+    }
+
+    function _activatePrevious(tabIndex) {
+      if (TAB_CACHE.length === 1) return;
+
+      var activeTab = index ? TAB_CACHE[tabIndex] : _.findWhere(TAB_CACHE, {
+        active: true
+      });
+
+      if (activeTab) {
+        var index = TAB_CACHE.indexOf(activeTab);
+        var previousTab = index === 0 ? TAB_CACHE[TAB_CACHE.length - 1] : TAB_CACHE[index - 1];
+        previousTab.active = true;
+        activeTab.active = false;
+      }
     }
 
     return new TabCache();

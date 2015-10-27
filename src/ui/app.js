@@ -3,9 +3,9 @@
 var ipc = require('ipc');
 
 angular.module('app', [
-  'ngResource',
   'ui.bootstrap',
   'ngAnimate',
+  'ui.sortable',
   'ngSanitize',
   'duScroll',
   'ngPrettyJson'

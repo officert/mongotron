@@ -19,16 +19,16 @@
   <script>
     //load jquery using require because it thinks it's loading for node and
     //doesn't register the global $ or jquery
-    window.$ = window.jQuery = require('./vendor/jquery/dist/jquery.js');
+    window.$ = window.jQuery = require('./vendor/jquery/dist/jquery.min.js');
     //same with toastr
-    window.toastr = window.toastr = require('./vendor/toastr/toastr.js');
+    window.toastr = window.toastr = require('./vendor/toastr/toastr.min.js');
   </script>
   <!-- vendor -->
+  <script src="./vendor/jquery-ui/jquery-ui.min.js"></script>
   <script src="./vendor/bootstrap/dist/js/bootstrap.js"></script>
   <script src="./vendor/console-polyfill/index.js"></script>
   <script src="./vendor/angular/angular.js"></script>
-  <script src="./vendor/angular-resource/angular-resource.js"></script>
-  <script src="./vendor/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="./vendor/angular-ui-sortable/sortable.js"></script>
   <script src="./vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="./vendor/underscore/underscore.js"></script>
   <script src="./vendor/angular-animate/angular-animate.js"></script>

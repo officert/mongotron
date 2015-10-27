@@ -1,11 +1,17 @@
-<div class="tab-view">
-  <uib-tabset>
-    <uib-tab class="tab" ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled">
-      <uib-tab-heading class="tab-header">
+<div class="tab-view" ui-sortable="sortableOptions" ng-model="tabs">
+  <ul class="nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
+  <!-- <ul class="nav nav-tabs"> -->
+    <li class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
+      <!-- <a href="#tab-{{ tab.value }}" data-toggle="tab"> -->
+      <a href="#tab-{{ tab.value }}">
         <span class="tab-active-line"></span>
         <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
         <i class="tab-close fa fa-times" ng-click="closeTab(tab, $event)"></i>
-      </uib-tab-heading>
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">
       <!-- Page Tabs -->
       <div ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
       </div>
@@ -13,6 +19,6 @@
       <div ng-if="tab.type === TAB_TYPES.QUERY">
         <collection-query collection="tab.collection"></collection-query>
       </div>
-    </uib-tab>
-  </uib-tabset>
+    </div>
+  </div>
 </div>
