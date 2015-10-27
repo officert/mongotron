@@ -24,6 +24,7 @@ angular.module('app').factory('tabCache', [
       }
 
       if (tab.active === null || tab.active === undefined) tab.active = true;
+      if (!tab.iconClassName) tab.iconClassName = getTabIconClasssName(tab.type);
 
       TAB_CACHE.push(tab);
 
@@ -111,6 +112,21 @@ angular.module('app').factory('tabCache', [
 
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
+
+    function getTabIconClasssName(type) {
+      var className;
+
+      switch (type) {
+        case TAB_TYPES.QUERY:
+          className = 'fa fa-files-o';
+          break;
+        case TAB_TYPES.PAGE:
+          className = 'fa fa-file-code-o';
+          break;
+      }
+
+      return className;
+    }
 
     return new TabCache();
   }

@@ -3,7 +3,8 @@
     <uib-tab class="tab" ng-repeat="tab in tabs" active="tab.active" disable="tab.disabled">
       <uib-tab-heading class="tab-header">
         <span class="tab-active-line"></span>
-        <i class="fa fa-files-o"></i> {{ tab.name }} <i class="close fa fa-times" ng-click="closeTab(tab, $event)"></i>
+        <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
+        <i class="tab-close fa fa-times" ng-click="closeTab(tab, $event)"></i>
       </uib-tab-heading>
       <!-- Page Tabs -->
       <div ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">

@@ -11,20 +11,45 @@
     a {
       color: @theme-text-color;
       border: none;
-      .tab-active-line {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 2px;
-        height: 0;
-        border-top-left-radius: 4px;
-        background: @theme-tab-active-line-bg;
-        .transition(.4s ease);
+      background: none;
+      .tab-header {
+        .tab-active-line {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 2px;
+          height: 0;
+          border-top-left-radius: 4px;
+          background: @theme-tab-active-line-bg;
+          .transition(.4s ease);
+        }
+        .tab-icon {
+          margin-right: 10px;
+        }
+        .tab-close {
+          border-radius: 50%;
+          padding: 2.5px 4.5px 4.6px 4.3px;
+          margin-left: 10px;
+          font-size: 10px;
+          position: relative;
+          top: -2px;
+          cursor: pointer;
+          background: darken(@theme-tab-active-bg, 3%);
+          visibility: hidden;
+        }
+      }
+      &:hover,
+      &:focus,
+      &:active {
+        background: none;
       }
     }
     &:hover {
       a {
         background: none;
+        .tab-close {
+          visibility: visible;
+        }
       }
     }
     &.active {
@@ -35,17 +60,6 @@
         .tab-active-line {
           top: 1px;
           height: 100%;
-        }
-      }
-    }
-    &.query-tab {
-      .query-tab-header {
-        .close {
-          border-radius: 50%;
-          padding: 2.5px 4.5px 4.6px 4.3px;
-          margin-left: 15px;
-          font-size: 10px;
-          background: @theme-text-color;
         }
       }
     }

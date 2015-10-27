@@ -52,6 +52,7 @@ angular.module('app').run([
 
       tabCache.add({
         type: tabCache.TYPES.PAGE,
+        iconClassName: 'fa fa-wrench',
         name: 'Settings',
         src: __dirname + '/components/settings/settings.html'
       });
