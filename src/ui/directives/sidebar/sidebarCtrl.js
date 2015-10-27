@@ -120,8 +120,6 @@ angular.module('app').controller('sidebarCtrl', [
     function _addQuery(collection) {
       if (!collection) return;
 
-      tabCache.deactivateAll();
-
       var queryTab = {
         type: tabCache.TYPES.QUERY,
         name: collection.name,

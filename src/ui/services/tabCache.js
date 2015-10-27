@@ -23,8 +23,11 @@ angular.module('app').factory('tabCache', [
         return;
       }
 
-      if (tab.active === null || tab.active === undefined) tab.active = true;
+      tab.active = true;
+
       if (!tab.iconClassName) tab.iconClassName = getTabIconClasssName(tab.type);
+
+      this.deactivateAll(); //deactivate any other tabs before adding a new active tab
 
       TAB_CACHE.push(tab);
 
@@ -41,6 +44,14 @@ angular.module('app').factory('tabCache', [
       var index = TAB_CACHE.indexOf(tab);
 
       return index >= 0 ? true : false;
+    };
+
+    TabCache.prototype.existsByName = function(name) {
+      var tabs = _.where(TAB_CACHE, {
+        name: name
+      });
+
+      return tabs && tabs.length ? true : false;
     };
 
     TabCache.prototype.remove = function(tab) {
@@ -103,6 +114,19 @@ angular.module('app').factory('tabCache', [
       }
 
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+    };
+
+    TabCache.prototype.activateByName = function(name) {
+      var tab = _.findWhere(TAB_CACHE, {
+        name: name
+      });
+
+      if (tab) {
+        this.deactivateAll();
+        tab.active = true;
+
+        this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     TabCache.prototype.deactivateAll = function() {

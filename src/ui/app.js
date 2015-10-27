@@ -48,14 +48,18 @@ angular.module('app').run([
     $rootScope.showSettings = function($event) {
       if ($event) $event.preventDefault();
 
-      tabCache.deactivateAll();
+      var settingsTabName = 'Settings';
 
-      tabCache.add({
-        type: tabCache.TYPES.PAGE,
-        iconClassName: 'fa fa-wrench',
-        name: 'Settings',
-        src: __dirname + '/components/settings/settings.html'
-      });
+      if (!tabCache.existsByName(settingsTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-wrench',
+          name: settingsTabName,
+          src: __dirname + '/components/settings/settings.html'
+        });
+      } else {
+        tabCache.activateByName(settingsTabName);
+      }
     };
 
     function registerKeypressEvents() {
