@@ -119,6 +119,8 @@ angular.module('app').controller('connectCtrl', [
 
             if (index >= 0) $scope.connections.splice(index, 1);
 
+            connectionCache.remove(connection);
+
             $scope.currentScreen = $scope.screens.LIST;
 
             alertService.success('Connection removed');

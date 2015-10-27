@@ -40,22 +40,6 @@ describe('modules', function() {
           });
         });
 
-        describe('when no name is passed', function() {
-          var errorMsg = 'options.databaseName is required';
-
-          it('should return an error', function(next) {
-            connectionService.create({
-                name: '123',
-                databaseName: null
-              })
-              .catch(function(err) {
-                should.exist(err);
-                err.message.should.equal(errorMsg);
-                return next(null);
-              });
-          });
-        });
-
         describe('when no host is passed', function() {
           var errorMsg = 'options.host is required';
 
