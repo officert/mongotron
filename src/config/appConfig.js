@@ -8,24 +8,25 @@ var packageJson = require('../../package.json');
  * App Config Settings
  * ========================================================================= */
 var defaultSettings = {
-  VERSION: packageJson.version,
-  BUILD_DIR: 'build'
+  version: packageJson.version,
+  name: packageJson.name,
+  repository: packageJson.repository.url
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {
-  ENV: 'production'
+  env: 'production'
 });
 
 var development = _.extend(_.extend({}, defaultSettings), {
-  ENV: 'development'
+  env: 'development'
 });
 
 var local = _.extend(_.extend({}, defaultSettings), {
-  ENV: 'local'
+  env: 'local'
 });
 
 var test = _.extend(_.extend({}, defaultSettings), {
-  ENV: 'test'
+  env: 'test'
 });
 
 var configs = {
@@ -36,12 +37,16 @@ var configs = {
 };
 
 function getConfig(env) {
+  console.log('ENV = ', env);
+
   var envConfig = configs[env];
 
   if (!envConfig) throw new Error(env + ' is not a valid environment');
+
+  console.log(envConfig);
 
   return envConfig;
 }
 
 // exports
-module.exports = getConfig(process.env.WERCKER_GIT_BRANCH || process.env.NODE_ENV || process.argv[3] || 'development');
+module.exports = getConfig(process.env.WERCKER_GIT_BRANCH || process.env.NODE_ENV || 'development');
