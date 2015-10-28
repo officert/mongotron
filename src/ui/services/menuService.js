@@ -66,11 +66,56 @@ angular.module('app').run([
   '$rootScope',
   '$timeout',
   function($rootScope, $timeout) {
+    var name = appConfig.name;
+
     var template = [{
+      label: name,
+      submenu: [{
+        label: 'About ' + name,
+        role: 'about'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Preferences...',
+        accelerator: 'CmdOrCtrl+,',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showSettings();
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Services',
+        role: 'services',
+        submenu: []
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Hide ' + name,
+        accelerator: 'Command+H',
+        role: 'hide'
+      }, {
+        label: 'Hide Others',
+        accelerator: 'Command+Shift+H',
+        role: 'hideothers'
+      }, {
+        label: 'Show All',
+        role: 'unhide'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click: function() {
+          ipc.send('quit');
+        }
+      }, ]
+    }, {
       label: 'Go',
       submenu: [{
         label: 'Connection Manager',
-        accelerator: 'CmdOrCtrl+Shift+N',
+        accelerator: 'CmdOrCtrl+Shift+O',
         click: function() {
           $timeout(function() {
             $rootScope.showConnections('LIST');
@@ -81,7 +126,7 @@ angular.module('app').run([
       label: 'New',
       submenu: [{
         label: 'Connection',
-        accelerator: 'CmdOrCtrl+N',
+        accelerator: 'CmdOrCtrl+Shift+N',
         click: function() {
           $timeout(function() {
             $rootScope.showConnections('ADD');
@@ -146,53 +191,6 @@ angular.module('app').run([
     }, ];
 
     if (process.platform === 'darwin') {
-      var name = appConfig.name;
-
-      template.unshift({
-        label: name,
-        submenu: [{
-          label: 'About ' + name,
-          role: 'about'
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Preferences...',
-          accelerator: 'CmdOrCtrl+,',
-          click: function() {
-            $timeout(function() {
-              $rootScope.showSettings();
-            });
-          }
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Services',
-          role: 'services',
-          submenu: []
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Hide ' + name,
-          accelerator: 'Command+H',
-          role: 'hide'
-        }, {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          role: 'hideothers'
-        }, {
-          label: 'Show All',
-          role: 'unhide'
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: function() {
-            ipc.send('quit');
-          }
-        }, ]
-      });
-
       // Window menu.
       template[3].submenu.push({
         type: 'separator'
