@@ -1,4 +1,4 @@
-# [Mongotron](http://officert.github.io/mongotron/)
+# <a href="http://officert.github.io/mongotron/" target="_blank">Mongotron</a>
 
 A Mongo DB GUI that doesn't suck. Built using Electron, and Angular Js.
 
