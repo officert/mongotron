@@ -34,7 +34,9 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({
+    center: true
+  });
 
   mainWindow.maximize();
 
