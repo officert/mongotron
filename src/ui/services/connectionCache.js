@@ -42,7 +42,9 @@ angular.module('app').factory('connectionCache', [
     };
 
     ConnectionCache.prototype.removeAll = function() {
-      CONNECTION_CACHE = [];
+      this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+
+      CONNECTION_CACHE.length = 0;
     };
 
     return new ConnectionCache();
