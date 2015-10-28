@@ -1,4 +1,5 @@
-# Mongotron [http://officert.github.io/mongotron/](http://officert.github.io/mongotron/)
+# [Mongotron](http://officert.github.io/mongotron/)
+
 A Mongo DB GUI that doesn't suck. Built using Electron, and Angular Js.
 
 [![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
