@@ -2,7 +2,14 @@
  * Dependencies
  * ========================================================================= */
 var _ = require('underscore');
-var packageJson = require('../../package.json');
+// var packageJson = require('../../package.json');
+var packageJson = {
+  version: 1,
+  name: 'FOOBAR',
+  repository: {
+    url: 'asdfasdf'
+  }
+};
 
 /* =========================================================================
  * App Config Settings
