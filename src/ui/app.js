@@ -16,7 +16,7 @@ angular.module('app').run([
   '$log',
   'modalService',
   'tabCache',
-  function ($rootScope, $log, modalService, tabCache) {
+  function($rootScope, $log, modalService, tabCache) {
     $rootScope.themes = initThemes();
 
     $rootScope.setTitle = function(title) {
@@ -28,6 +28,7 @@ angular.module('app').run([
 
     $rootScope.showConnections = function(state) {
       modalService.openConnectionManager(state)
+        .result
         .then(function() {
           $rootScope.setTitle(pageTitle);
         });
