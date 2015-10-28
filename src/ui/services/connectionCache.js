@@ -29,8 +29,22 @@ angular.module('app').factory('connectionCache', [
       return index >= 0 ? true : false;
     };
 
-    ConnectionCache.prototype.remove = function(connection) {
-      var index = CONNECTION_CACHE.indexOf(connection);
+    ConnectionCache.prototype.existsByName = function(connectionName) {
+      var existingConnection = _.findWhere(CONNECTION_CACHE, {
+        name: connectionName
+      });
+
+      return existingConnection ? true : false;
+    };
+
+    ConnectionCache.prototype.removeByName = function(connectionName) {
+      var existingConnection = _.findWhere(CONNECTION_CACHE, {
+        name: connectionName
+      });
+
+      if (!existingConnection) return;
+
+      var index = CONNECTION_CACHE.indexOf(existingConnection);
 
       if (index >= 0) {
         CONNECTION_CACHE.splice(index, 1);

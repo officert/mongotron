@@ -59,8 +59,7 @@ class ConnectionRepository {
    * @method list
    */
   list() {
-    return readConfigFile()
-      .then(generateConnectionInstancesFromConfig);
+    return getConnectionInstances();
   }
 
   /**
@@ -79,6 +78,20 @@ class ConnectionRepository {
       .then(() => {
         return new Promise((resolve) => {
           return resolve(null);
+        });
+      });
+  }
+
+  existsByName(name) {
+    var _this = this;
+    return _this.list()
+      .then((connections) => {
+        return new Promise((resolve) => {
+          var existingConnection = _.findWhere(connections, {
+            name: name
+          });
+
+          return resolve(existingConnection ? true : false);
         });
       });
   }
@@ -102,10 +115,13 @@ function writeConfigFile(data) {
   });
 }
 
-function generateConnectionInstancesFromConfig(connectionConfigs) {
-  return new Promise((resolve) => {
-    return resolve(connectionConfigs.map(generateConnectionInstanceFromConfig));
-  });
+function getConnectionInstances() {
+  return readConfigFile()
+    .then((connectionConfigs) => {
+      return new Promise((resolve) => {
+        return resolve(connectionConfigs.map(generateConnectionInstanceFromConfig));
+      });
+    });
 }
 
 function generateConnectionInstanceFromConfig(connectionConfig) {

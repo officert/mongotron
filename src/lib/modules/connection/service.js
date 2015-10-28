@@ -12,8 +12,7 @@ class ConnectionService {
   /**
    * @constructor ConnectionService
    */
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * @method create
@@ -25,7 +24,16 @@ class ConnectionService {
       if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
       if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
 
-      return connectionRepository.create(options)
+      return connectionRepository.existsByName(options.name)
+        .then(function(exists) {
+          return new Promise((resolve, reject) => {
+            if (exists) return reject(new errors.InvalidArugmentError('Sorry, connection names must be unique.'));
+            return resolve(null);
+          });
+        })
+        .then(() => {
+          return connectionRepository.create(options);
+        })
         .then(resolve)
         .catch(reject);
     });

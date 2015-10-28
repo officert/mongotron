@@ -61,17 +61,17 @@ angular.module('app').controller('connectCtrl', [
     $scope.isConnected = function(connection) {
       if (!connection) return false;
 
-      return connectionCache.exists(connection);
+      return connectionCache.existsByName(connection.name);
     };
 
     $scope.connect = function(connection, $event) {
       if (!connection) return;
       if ($event) $event.preventDefault();
 
-      if (!connectionCache.exists(connection)) {
+      if (!$scope.isConnected(connection)) {
         connectionCache.add(connection);
       } else {
-        connectionCache.remove(connection);
+        connectionCache.removeByName(connection.name);
       }
     };
 
@@ -120,7 +120,7 @@ angular.module('app').controller('connectCtrl', [
 
             if (index >= 0) $scope.connections.splice(index, 1);
 
-            connectionCache.remove(connection);
+            connectionCache.removeByName(connection.name);
 
             $scope.currentScreen = $scope.screens.LIST;
 
