@@ -24,6 +24,8 @@ class ConnectionService {
       if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
       if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
 
+      if (options.port < 0 || options.port > 65535) return reject(new errors.InvalidArugmentError('port number must be between 0 and 65535'));
+
       return connectionRepository.existsByName(options.name)
         .then(function(exists) {
           return new Promise((resolve, reject) => {
