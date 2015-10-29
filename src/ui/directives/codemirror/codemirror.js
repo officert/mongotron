@@ -59,8 +59,12 @@ angular.module('app').directive('codemirror', [
 
           editor.on('change', function() {
             var value = editor.getValue();
-            console.log('changed', value);
-            ngModelCtrl.$setViewValue(value);
+
+            console.log('change', value);
+
+            //if(value.length === 1) editor.showHint();
+
+            ngModelCtrl.$setViewValue(value && value.trim ? value.trim() : value);
           });
 
           editor.on('endCompletion', function() {
@@ -88,7 +92,7 @@ angular.module('app').directive('codemirror', [
           } else if (val.match(REMOVE_QUERY)) {
             return 'remove({\n\n})';
           } else if (val.match(AGGREGATE_QUERY)) {
-            return 'aggregate([\n\n}]';
+            return 'aggregate([\n\n])';
           }
         }
       }

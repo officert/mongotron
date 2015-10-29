@@ -9,8 +9,6 @@ const crashReporter = require('crash-reporter');
 const ipc = require('ipc');
 const path = require('path');
 
-const appConfig = require('src/config/appConfig');
-
 /* ------------------------------------------------
  * App initialization
  * ------------------------------------------------ */
