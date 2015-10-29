@@ -35,6 +35,7 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'sinon',
   'supertest'
 ].join('|');
+const RELEASE_IMAGE_ICON = __dirname + '/src/ui/images/logo_icon.icns';
 
 const LESSOPTIONS = {
   compress: false
@@ -77,7 +78,10 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('release', ['build'], function(done) {
-  var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')"';
+  var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')" --icon=' + RELEASE_IMAGE_ICON;
+
+  console.log(cmd);
+
   sh.exec(cmd, done);
 });
 

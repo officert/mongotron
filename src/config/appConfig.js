@@ -5,9 +5,9 @@ var _ = require('underscore');
 // var packageJson = require('../../package.json');
 var packageJson = {
   version: 1,
-  name: 'FOOBAR',
+  name: 'Mongotron',
   repository: {
-    url: 'asdfasdf'
+    url: 'htts://github.com/mongotron'
   }
 };
 
