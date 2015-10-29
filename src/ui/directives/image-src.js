@@ -7,13 +7,7 @@ angular.module('app').directive('imageSrc', [
       replace: true,
       template: '<img src="{{ src }}">',
       link: function(scope, element, attrs) {
-        console.log('attrs.imageSrc', attrs.imageSrc);
-
-        var newSrc = path.join(__dirname, attrs.imageSrc);
-
-        console.log('newSrc', newSrc);
-
-        scope.src = newSrc;
+        scope.src = path.join(__dirname, attrs.imageSrc);
       }
     };
   }

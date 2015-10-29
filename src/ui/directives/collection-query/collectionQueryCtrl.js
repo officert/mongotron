@@ -18,7 +18,7 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: 'find({\n\n})'
+      searchQuery: 'find({})'
     };
 
     $scope.search = function search() {
