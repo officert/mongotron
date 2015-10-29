@@ -12,10 +12,10 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
-        const FIND_QUERY = /^find$/;
-        const UPDATE_QUERY = /^update$/;
-        const REMOVE_QUERY = /^remove$/;
-        const AGGREGATE_QUERY = /^aggregate$/;
+        const FIND_QUERY = /^[\s\S]*find$/;
+        const UPDATE_QUERY = /^[\s\S]*update$/;
+        const REMOVE_QUERY = /^[\s\S]*remove$/;
+        const AGGREGATE_QUERY = /^[\s\S]*aggregate$/;
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
@@ -29,6 +29,8 @@ angular.module('app').directive('codemirror', [
         init();
 
         ngModelCtrl.$formatters.push(function(modelValue) {
+          console.log('formatter running...', modelValue);
+
           $timeout(function() {
             editor.setValue(modelValue);
           });
@@ -60,9 +62,7 @@ angular.module('app').directive('codemirror', [
           editor.on('change', function() {
             var value = editor.getValue();
 
-            console.log('change', value);
-
-            //if(value.length === 1) editor.showHint();
+            if(value.length === 1) editor.showHint();
 
             ngModelCtrl.$setViewValue(value && value.trim ? value.trim() : value);
           });
