@@ -12,9 +12,15 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
+        const FIND_QUERY = /^find$/;
+        const UPDATE_QUERY = /^update$/;
+        const REMOVE_QUERY = /^remove$/;
+        const AGGREGATE_QUERY = /^aggregate$/;
+
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
         options.extraKeys['Ctrl-Space'] = 'autocomplete';
+
         options.mode = {
           name: 'javascript',
           globalVars: true
@@ -52,20 +58,38 @@ angular.module('app').directive('codemirror', [
           }, options);
 
           editor.on('change', function() {
-            var v = editor.getValue();
-            ngModelCtrl.$setViewValue(v);
+            var value = editor.getValue();
+            console.log('changed', value);
+            ngModelCtrl.$setViewValue(value);
           });
 
-          // editor.on('keyup', function(cm, event) {
-          //   if (!cm.state.completionActive && event.keyCode !== 13) {
-          //     // CodeMirror.commands.autocomplete(cm, null, {
-          //     //   completeSingle: false
-          //     // });
-          //     editor.showHint();
-          //   }
-          // });
+          editor.on('endCompletion', function() {
+            var value = getFullValue(editor.getValue());
+            editor.setValue(value);
+
+            var char = 20;
+
+            $timeout(function() {
+              editor.setCursor({
+                line: 1,
+                ch: char
+              });
+            });
+          });
 
           editor.refresh();
+        }
+
+        function getFullValue(val) {
+          if (val.match(FIND_QUERY)) {
+            return 'find({\n\n})';
+          } else if (val.match(UPDATE_QUERY)) {
+            return 'update({\n\n})';
+          } else if (val.match(REMOVE_QUERY)) {
+            return 'remove({\n\n})';
+          } else if (val.match(AGGREGATE_QUERY)) {
+            return 'aggregate([\n\n}]';
+          }
         }
       }
     };
