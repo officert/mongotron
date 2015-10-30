@@ -19,6 +19,8 @@ angular.module('app').run([
   function($rootScope, $log, modalService, tabCache) {
     $rootScope.themes = initThemes();
 
+    $rootScope.currentQuery = null;
+
     $rootScope.setTitle = function(title) {
       ipc.send('set-title', title);
     };

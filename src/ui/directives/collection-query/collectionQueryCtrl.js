@@ -1,7 +1,8 @@
 angular.module('app').controller('collectionQueryCtrl', [
   '$scope',
   '$timeout',
-  function($scope, $timeout) {
+  '$rootScope',
+  function($scope, $timeout, $rootScope) {
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
     $scope.loading = false;
@@ -23,6 +24,13 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     $scope.$watch('editorHasFocus', function(val) {
       console.log('editorHasFocus', val);
+      if (val) {
+        $rootScope.currentQuery = {
+          search: $scope.search
+        };
+      } else {
+        $rootScope.currentQuery = null;
+      }
     });
 
     $scope.search = function search() {
