@@ -12,10 +12,17 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
+        //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
         const UPDATE_QUERY = /^[\s\S]*update$/;
         const REMOVE_QUERY = /^[\s\S]*remove$/;
         const AGGREGATE_QUERY = /^[\s\S]*aggregate$/;
+
+        //defaults when autocomplete selection is made
+        const FIND_DEFAULT = 'find({\n    \n})';
+        const UPDATE_DEFAULT = 'update({\n    \n})';
+        const REMOVE_DEFAULT = 'remove({\n    \n})';
+        const AGGREGATE_DEFAULT = 'aggregate([\n    \n])';
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
@@ -62,7 +69,7 @@ angular.module('app').directive('codemirror', [
           editor.on('change', function() {
             var value = editor.getValue();
 
-            if(value.length === 1) editor.showHint();
+            if (value.length === 1) editor.showHint();
 
             ngModelCtrl.$setViewValue(value && value.trim ? value.trim() : value);
           });
@@ -71,13 +78,8 @@ angular.module('app').directive('codemirror', [
             var value = getFullValue(editor.getValue());
             editor.setValue(value);
 
-            var char = 20;
-
             $timeout(function() {
-              editor.setCursor({
-                line: 1,
-                ch: char
-              });
+              editor.setCursor(1, 4);
             });
           });
 
@@ -86,13 +88,13 @@ angular.module('app').directive('codemirror', [
 
         function getFullValue(val) {
           if (val.match(FIND_QUERY)) {
-            return 'find({\n\n})';
+            return FIND_DEFAULT;
           } else if (val.match(UPDATE_QUERY)) {
-            return 'update({\n\n})';
+            return UPDATE_DEFAULT;
           } else if (val.match(REMOVE_QUERY)) {
-            return 'remove({\n\n})';
+            return REMOVE_DEFAULT;
           } else if (val.match(AGGREGATE_QUERY)) {
-            return 'aggregate([\n\n])';
+            return AGGREGATE_DEFAULT;
           }
         }
       }

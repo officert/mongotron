@@ -7,18 +7,16 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
 
-    const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/; //extracts the query when it's a find query
-
+    //extraction regexes to pull out a valid mongo query object, or array (aggregate)
+    const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/;
     const UPDATE_QUERY_FULL_REGEX = /^(?:update)\(([^]+)\)/;
-
     const REMOVE_QUERY_FULL_REGEX = /^(?:remove)\(([^]+)\)/;
-
     const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
 
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: 'find({})'
+      searchQuery: 'find({\n    \n})'
     };
 
     $scope.search = function search() {
