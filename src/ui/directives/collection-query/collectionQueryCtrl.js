@@ -11,7 +11,7 @@ angular.module('app').controller('collectionQueryCtrl', [
     //extraction regexes to pull out a valid mongo query object, or array (aggregate)
     const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/;
     const UPDATE_QUERY_FULL_REGEX = /^(?:update)\(([^]+)\)/;
-    const REMOVE_QUERY_FULL_REGEX = /^(?:remove)\(([^]+)\)/;
+    const DELETE_MANY_QUERY_FULL_REGEX = /^(?:deleteMany)\(([^]+)\)/;
     const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
 
     $scope.codeEditorOptions = {};
@@ -55,19 +55,22 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       var startTime = performance.now();
 
-      queryFn(searchQuery, function(err, results) {
-        var endTime = performance.now();
+      var promise = queryFn(searchQuery);
 
-        $timeout(function() {
-          if (err) $scope.error = err;
+      promise.then(function(results) {
+          var endTime = performance.now();
 
-          $scope.queryTime = (endTime - startTime).toFixed(5);
+          $timeout(function() {
+            $scope.queryTime = (endTime - startTime).toFixed(5);
 
-          $scope.loading = false;
+            $scope.loading = false;
 
-          $scope.results = results;
+            $scope.results = results;
+          });
+        })
+        .catch(function(err) {
+          $scope.error = err;
         });
-      });
     };
 
     $scope.search();
@@ -80,8 +83,8 @@ angular.module('app').controller('collectionQueryCtrl', [
         match = getRegexMatch(query, FIND_QUERY_FULL_REGEX);
       } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, UPDATE_QUERY_FULL_REGEX);
-      } else if (matchesRegex(query, REMOVE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, REMOVE_QUERY_FULL_REGEX);
+      } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, DELETE_MANY_QUERY_FULL_REGEX);
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, AGGREGATE_QUERY_FULL_REGEX);
       } else {
@@ -104,8 +107,8 @@ angular.module('app').controller('collectionQueryCtrl', [
         return findQuery;
       } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
         return updateQuery;
-      } else if (matchesRegex(query, REMOVE_QUERY_FULL_REGEX)) {
-        return removeQuery;
+      } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
+        return deleteManyQuery;
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         return aggregateQuery;
       } else {
@@ -123,20 +126,20 @@ angular.module('app').controller('collectionQueryCtrl', [
       return matches && matches.length > 1 ? matches[1] : null;
     }
 
-    function findQuery(query, next) {
-      $scope.collection.find(query, next);
+    function findQuery(query) {
+      return $scope.collection.find(query);
     }
 
-    function updateQuery(query, next) {
-      $scope.collection.update(query, next);
+    function updateQuery(query) {
+      return $scope.collection.update(query);
     }
 
-    function removeQuery(query, next) {
-      $scope.collection.remove(query, next);
+    function deleteManyQuery(query) {
+      return $scope.collection.deleteMany(query);
     }
 
-    function aggregateQuery(aggregate, next) {
-      $scope.collection.aggregate(aggregate, next);
+    function aggregateQuery(aggregate) {
+      return $scope.collection.aggregate(aggregate);
     }
   }
 ]);

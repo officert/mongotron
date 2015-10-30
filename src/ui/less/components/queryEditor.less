@@ -1,0 +1,14 @@
+.query-editor {
+  position: relative;
+  z-index: 0;
+  background: transparent;
+  .CodeMirror {
+    background: transparent;
+    height: auto;
+    min-height: 34px;
+    color: @theme-text-color;
+    .CodeMirror-gutters {
+      background: darken(@theme-query-editor-bg, 10%);
+    }
+  }
+}

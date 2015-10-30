@@ -21,13 +21,13 @@ angular.module('app').directive('codemirror', [
         //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
         const UPDATE_QUERY = /^[\s\S]*update$/;
-        const REMOVE_QUERY = /^[\s\S]*remove$/;
+        const DELETE_MANY_QUERY = /^[\s\S]*deleteMany$/;
         const AGGREGATE_QUERY = /^[\s\S]*aggregate$/;
 
         //defaults when autocomplete selection is made
         const FIND_DEFAULT = 'find({\n    \n})';
         const UPDATE_DEFAULT = 'update({\n    \n})';
-        const REMOVE_DEFAULT = 'remove({\n    \n})';
+        const DELETE_MANY_DEFAULT = 'deleteMany({\n    \n})';
         const AGGREGATE_DEFAULT = 'aggregate([\n    \n])';
 
         options.lineNumbers = options.lineNumbers || true;
@@ -63,7 +63,7 @@ angular.module('app').directive('codemirror', [
             inner.list.push('aggregate');
             inner.list.push('find');
             inner.list.push('update');
-            inner.list.push('remove');
+            inner.list.push('deleteMany');
 
             return inner;
           };
@@ -113,8 +113,8 @@ angular.module('app').directive('codemirror', [
             return FIND_DEFAULT;
           } else if (val.match(UPDATE_QUERY)) {
             return UPDATE_DEFAULT;
-          } else if (val.match(REMOVE_QUERY)) {
-            return REMOVE_DEFAULT;
+          } else if (val.match(DELETE_MANY_QUERY)) {
+            return DELETE_MANY_DEFAULT;
           } else if (val.match(AGGREGATE_QUERY)) {
             return AGGREGATE_DEFAULT;
           }

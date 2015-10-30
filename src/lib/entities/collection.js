@@ -1,6 +1,7 @@
 'use strict';
 
 const MongoDb = require('mongodb').Db;
+const Promise = require('bluebird');
 
 const errors = require('lib/errors');
 
@@ -38,42 +39,46 @@ class Collection {
    * @param {Object} [options] - mongo query options
    * @param {Function} next - callback function
    */
-  find(query, options, next) {
-    if (arguments.length === 2) {
-      next = options;
-      options = {};
-    }
-    if (!query) return next(new errors.InvalidArugmentError('query is required'));
-
+  find(query, options) {
     var _this = this;
+    options = options || {};
 
-    options.limit = 50;
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-    //TODO: validate the query??
+      options.limit = 50;
 
-    _this._dbCollection.find(query, options).toArray(next);
+      //TODO: validate the query??
+
+      _this._dbCollection.find(query, options).toArray(function(err, docs) {
+        if (err) return reject(err);
+        return resolve(docs);
+      });
+    });
   }
 
   /**
-   * @method remove
+   * @method deleteMany
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
    * @param {Function} next - callback function
    */
-  remove(query, options, next) {
-    if (arguments.length === 2) {
-      next = options;
-      options = {};
-    }
-    if (!query) return next(new errors.InvalidArugmentError('query is required'));
-
+  deleteMany(query, options) {
     var _this = this;
+    options = options || {};
 
-    options.limit = 50;
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-    //TODO: validate the query??
+      options.limit = 50;
 
-    _this._dbCollection.remove(query, options).toArray(next);
+      //TODO: validate the query??
+
+      _this._dbCollection.remove(query, options, function(err, result) {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
