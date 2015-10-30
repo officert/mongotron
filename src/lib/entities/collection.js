@@ -91,22 +91,23 @@ class Collection {
    * @method aggregate
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
-  aggregate(query, options, next) {
-    if (arguments.length === 2) {
-      next = options;
-      options = {};
-    }
-    if (!query) return next(new errors.InvalidArugmentError('query is required'));
-
+  aggregate(query, options) {
     var _this = this;
+    options = options || {};
 
-    options.limit = 50;
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-    //TODO: validate the query??
+      options.limit = 50;
 
-    _this._dbCollection.aggregate(query, options).toArray(next);
+      //TODO: validate the query??
+
+      _this._dbCollection.aggregate(query, options).toArray(function(err, result) {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 }
 
