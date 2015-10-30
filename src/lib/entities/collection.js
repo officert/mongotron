@@ -5,6 +5,8 @@ const Promise = require('bluebird');
 
 const errors = require('lib/errors');
 
+const PAGE_SIZE = 50;
+
 /**
  * @class Connection
  */
@@ -46,11 +48,15 @@ class Collection {
     return new Promise(function(resolve, reject) {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      options.limit = 50;
-
       //TODO: validate the query??
 
-      _this._dbCollection.find(query, options).toArray(function(err, docs) {
+      var dbQuery = _this._dbCollection.find(query, options);
+
+      if (options.skip) dbQuery.skip(Number(options.skip));
+
+      dbQuery.limit(options.limit && options.limit <= PAGE_SIZE ? options.limit : PAGE_SIZE);
+
+      dbQuery.toArray(function(err, docs) {
         if (err) return reject(err);
         return resolve(docs);
       });

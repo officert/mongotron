@@ -2,15 +2,32 @@
  * Collection Query
  */
 .collection-query {
-  .collection-info {
-    margin-bottom: 15px;
-    p {
+  .collection-query-nav {
+    padding-bottom: 15px;
+    .collection-info {
+      p {
+        margin: 0;
+        padding: 0;
+        float: left;
+        margin-right: 15px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    .query-btn-list {
       margin: 0;
       padding: 0;
-      float: left;
-      margin-right: 15px;
-      &:last-child {
-        margin-right: 0;
+      li {
+        display: inline-block;
+        .number-input {
+          width: 50px;
+        }
+        .search-btn {
+          padding: 7px 12px;
+          position: relative;
+          top: -1px;
+        }
       }
     }
   }
@@ -24,12 +41,6 @@
       position: relative;
       border: none;
       background: @theme-query-editor-bg;
-      .search-btn {
-        position: absolute;
-        z-index: 1;
-        top: 8px;
-        right: 8px;
-      }
     }
   }
   .query-results {

@@ -41,9 +41,8 @@ angular.module('app').directive('codemirror', [
 
         init();
 
+        //take initial model value and set editor with it
         ngModelCtrl.$formatters.push(function(modelValue) {
-          console.log('formatter running...', modelValue);
-
           $timeout(function() {
             editor.setValue(modelValue);
           });
@@ -74,10 +73,11 @@ angular.module('app').directive('codemirror', [
 
           editor.on('change', function() {
             var value = editor.getValue();
+            value = value && value.trim ? value.trim() : value;
 
             if (value.length === 1) editor.showHint();
 
-            ngModelCtrl.$setViewValue(value && value.trim ? value.trim() : value);
+            ngModelCtrl.$setViewValue(value);
           });
 
           editor.on('endCompletion', function() {

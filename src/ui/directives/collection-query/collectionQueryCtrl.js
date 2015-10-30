@@ -17,13 +17,14 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: 'find({\n    \n})'
+      searchQuery: 'find({\n    \n})',
+      skip: 0,
+      limit: 50
     };
 
     $scope.editorHasFocus = false;
 
     $scope.$watch('editorHasFocus', function(val) {
-      console.log('editorHasFocus', val);
       if (val) {
         $rootScope.currentQuery = {
           search: $scope.search
@@ -55,7 +56,10 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       var startTime = performance.now();
 
-      var promise = queryFn(searchQuery);
+      var promise = queryFn(searchQuery, {
+        skip: $scope.form.skip,
+        limit: $scope.form.limit
+      });
 
       promise.then(function(results) {
           var endTime = performance.now();
@@ -126,8 +130,8 @@ angular.module('app').controller('collectionQueryCtrl', [
       return matches && matches.length > 1 ? matches[1] : null;
     }
 
-    function findQuery(query) {
-      return $scope.collection.find(query);
+    function findQuery(query, options) {
+      return $scope.collection.find(query, options);
     }
 
     function updateQuery(query) {

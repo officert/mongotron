@@ -1,20 +1,34 @@
 <div class="collection-query">
-  <div class="collection-info clearfix">
-    <p>
-      <i class="fa fa-server"></i> {{ collection.serverName }}
-    </p>
-    <p>
-      <i class="fa fa-database"></i> {{ collection.databaseName }}
-    </p>
-    <p ng-show="queryTime">
-      <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
-    </p>
+  <div class="collection-query-nav clearfix">
+    <div class="collection-info pull-left">
+      <p>
+        <i class="fa fa-server"></i> {{ collection.serverName }}
+      </p>
+      <p>
+        <i class="fa fa-database"></i> {{ collection.databaseName }}
+      </p>
+      <p ng-show="queryTime">
+        <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
+      </p>
+    </div>
+    <div class="pull-right">
+      <ul class="query-btn-list">
+        <li>
+          <input class="number-input form-control" type="number" ng-model="form.skip">
+        </li>
+        <li>
+          <input class="number-input form-control" type="number" ng-model="form.limit">
+        </li>
+        <li>
+          <button class="search-btn btn btn-default btn-sm" ng-click="search()">Search</button>
+        </li>
+      </ul>
+    </div>
   </div>
   <form class="query-form" name="query-form" novalidate>
     <div class="query-input">
       <div class="query-editor" codemirror="codeEditorOptions" has-focus="editorHasFocus" ng-model="form.searchQuery">
       </div>
-      <button class="search-btn btn btn-default btn-sm" ng-click="search()">Search</button>
     </div>
   </form>
   <loading></loading>
