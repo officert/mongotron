@@ -13,6 +13,11 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
+        // scope.$watch('hasFocus', function(val) {
+        //   if (!editor) return;
+        //   if (val) editor.focus();
+        // });
+
         //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
         const UPDATE_QUERY = /^[\s\S]*update$/;
@@ -97,6 +102,10 @@ angular.module('app').directive('codemirror', [
           });
 
           editor.refresh();
+
+          $timeout(function() {
+            editor.focus();
+          });
         }
 
         function getFullValue(val) {
