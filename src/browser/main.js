@@ -1,8 +1,21 @@
-require('electron-compile').init();
-
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
+// const appConfig = require('src/config/appConfig');
+
+//TODO: figure out how to conditionally require this
+//because using it during development makes the Chrome debugger shit the bed
+//
+
+// require('electron-compile').initWithOptions({
+//   cacheDir: appConfig.builddir,
+//   compilerOpts: {
+//     js: {
+//       only: '**/*.js'
+//     }
+//   }
+// });
+
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');

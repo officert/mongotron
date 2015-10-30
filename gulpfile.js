@@ -11,6 +11,8 @@ const electronConnect = require('electron-connect');
 const runSequence = require('run-sequence');
 const mocha = require('gulp-mocha');
 
+const appConfig = require('src/config/appConfig');
+
 require('gulp-task-list')(gulp);
 
 /* =========================================================================
@@ -77,8 +79,20 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('release', ['build'], function(done) {
-  var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')" --icon=' + RELEASE_IMAGE_ICON;
+gulp.task('release', function(done) {
+  runSequence('build', 'pre-release', function(err) {
+    // if (err) return done(err);
+
+    var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')" --icon=' + RELEASE_IMAGE_ICON;
+
+    console.log(cmd);
+
+    sh.exec(cmd, done);
+  });
+});
+
+gulp.task('pre-release', function(done) {
+  var cmd = 'NODE_ENV=production ./node_modules/.bin/electron-compile . -v -t=' + appConfig.builddir;
 
   console.log(cmd);
 

@@ -7,3 +7,4 @@ src/ui/vendor
 src/ui/css
 *.idea
 release
+build

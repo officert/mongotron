@@ -2,6 +2,8 @@
  * Dependencies
  * ========================================================================= */
 var _ = require('underscore');
+var path = require('path');
+
 // var packageJson = require('../../package.json');
 var packageJson = {
   version: 1,
@@ -17,7 +19,8 @@ var packageJson = {
 var defaultSettings = {
   version: packageJson.version,
   name: packageJson.name,
-  repository: packageJson.repository.url
+  repository: packageJson.repository.url,
+  builddir: path.join(__dirname, '../../build')
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {
@@ -48,6 +51,7 @@ function getConfig(env) {
 
   if (!envConfig) throw new Error(env + ' is not a valid environment');
 
+  console.log(env);
   console.log(envConfig);
 
   return envConfig;
