@@ -3,6 +3,7 @@
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const util = require('util');
+const _ = require('underscore');
 
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
