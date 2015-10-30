@@ -19,6 +19,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       searchQuery: 'find({\n    \n})'
     };
 
+    $scope.editorHasFocus = false;
+
+    $scope.$watch('editorHasFocus', function(val) {
+      console.log('editorHasFocus', val);
+    });
+
     $scope.search = function search() {
       $scope.loading = true;
       $scope.error = null;
