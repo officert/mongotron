@@ -1,6 +1,7 @@
 <div class="tab-view">
-  <ul class="nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
-  <!-- <ul class="nav nav-tabs"> -->
+  <!-- Tab Bar -->
+  <ul class="tab-bar nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
+    <!-- <ul class="nav nav-tabs"> -->
     <li class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
       <!-- <a href="#tab-{{ tab.value }}" data-toggle="tab"> -->
       <a href="#tab-{{ tab.value }}">
@@ -10,14 +11,17 @@
       </a>
     </li>
   </ul>
-  <div class="tab-content">
+  <!-- Tab Panes -->
+  <div class="tab-panes">
     <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">
-      <!-- Page Tabs -->
-      <div ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
-      </div>
-      <!-- Query Tabs -->
-      <div ng-if="tab.type === TAB_TYPES.QUERY">
-        <collection-query collection="tab.collection"></collection-query>
+      <div class="tab-pane-inner">
+        <!-- Page Tabs -->
+        <div ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
+        </div>
+        <!-- Query Tabs -->
+        <div ng-if="tab.type === TAB_TYPES.QUERY">
+          <collection-query collection="tab.collection"></collection-query>
+        </div>
       </div>
     </div>
   </div>
