@@ -45,7 +45,8 @@ angular.module('app').factory('keypressService', [
       NEW_TAB: 'meta t',
       MOVE_LEFT: 'meta shift {',
       MOVE_RIGHT: 'meta shift }',
-      OPEN_CONNECTION_MANAGER: 'meta shift n'
+      OPEN_CONNECTION_MANAGER: 'meta shift n',
+      RUN_CURRENT_QUERY: 'meta enter'
     };
 
     return new KeypressService();
@@ -80,6 +81,11 @@ angular.module('app').run([
     keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
       console.log(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
       $rootScope.showConnections();
+    });
+
+    keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
+      console.log(keypressService.EVENTS.RUN_CURRENT_QUERY);
+      console.log('RUN_CURRENT_QUERY');
     });
   }
 ]);
