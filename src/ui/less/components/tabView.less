@@ -21,11 +21,18 @@
     -webkit-user-select: none;
     .tab {
       position: relative;
+      top: 0;
       height: @tab-height;
+      flex: 1;
+      max-width: 22em;
+      min-width: 7em;
+      -webkit-user-drag: element;
       a {
         color: @theme-text-color;
         border: none;
         background: none;
+        border-top: 1px solid transparent;
+        text-align: center;
         .tab-active-line {
           position: absolute;
           top: 50%;
@@ -38,14 +45,18 @@
         }
         .tab-icon {
           margin-right: 10px;
+          position: absolute;
+          left: 18px;
+          top: 14px;
         }
         .tab-close {
           border-radius: 50%;
           padding: 2.5px 4.5px 4.6px 4.3px;
           margin-left: 10px;
           font-size: 10px;
-          position: relative;
-          top: -2px;
+          position: absolute;
+          right: 18px;
+          top: 10px;
           cursor: pointer;
           background: darken(@theme-tab-active-bg, 3%);
           opacity: 0;
@@ -71,8 +82,8 @@
       &.ui-sortable-helper {
         a {
           background: @theme-tab-active-bg;
-          color: @theme-text-color;
-          border: none;
+          color: lighten(@theme-text-color, 20%);
+          border-top-color: lighten(@theme-tab-active-bg, 14%);
           .tab-active-line {
             top: 1px;
             height: 100%;

@@ -4,7 +4,7 @@
     <!-- <ul class="nav nav-tabs"> -->
     <li class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
       <!-- <a href="#tab-{{ tab.value }}" data-toggle="tab"> -->
-      <a href="#tab-{{ tab.value }}">
+      <a class="clearfix" href="#tab-{{ tab.value }}">
         <span class="tab-active-line"></span>
         <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
         <i class="tab-close fa fa-times" ng-click="closeTab(tab, $event)"></i>
