@@ -6,7 +6,8 @@ angular.module('app').directive('codemirror', [
       restrict: 'A',
       require: 'ngModel',
       scope: {
-        codemirror: '='
+        codemirror: '=',
+        hasFocus: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         var editor;
@@ -80,6 +81,18 @@ angular.module('app').directive('codemirror', [
 
             $timeout(function() {
               editor.setCursor(1, 4);
+            });
+          });
+
+          editor.on('focus', function() {
+            $timeout(function() {
+              scope.hasFocus = true;
+            });
+          });
+
+          editor.on('blur', function() {
+            $timeout(function() {
+              scope.hasFocus = false;
             });
           });
 
