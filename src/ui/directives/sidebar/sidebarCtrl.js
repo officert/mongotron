@@ -38,8 +38,14 @@ angular.module('app').controller('sidebarCtrl', [
     };
 
     //databases
-    $scope.openDatabase = function openDatabase(database) {
+    $scope.openDatabase = function openDatabase(database, connection) {
       if (!database) return;
+
+      if (connection) {
+        _.each(connection.databases, function(database) {
+          _collapseDatabase(database);
+        });
+      }
 
       if (!database.isOpen) {
         database.opening = true;

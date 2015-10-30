@@ -14,7 +14,7 @@
       </span>
       <ul class="database-list slide" ng-show="connection.isOpen">
         <li ng-repeat="database in connection.databases | orderBy : 'name'">
-          <span class="level-2" ng-click="openDatabase(database)">
+          <span class="level-2" ng-click="openDatabase(database, connection)">
             <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon">+</i>
             <span class="loader" ng-show="database.opening">
               <i class="fa fa-cog fa-spin"></i>
