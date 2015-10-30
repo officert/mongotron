@@ -41,13 +41,13 @@ angular.module('app').controller('sidebarCtrl', [
     $scope.openDatabase = function openDatabase(database, connection) {
       if (!database) return;
 
-      if (connection) {
-        _.each(connection.databases, function(database) {
-          _collapseDatabase(database);
-        });
-      }
-
       if (!database.isOpen) {
+        if (connection) { //collapse other databases with the same connection
+          _.each(connection.databases, function(database) {
+            _collapseDatabase(database);
+          });
+        }
+
         database.opening = true;
         database.open(function(err) {
           $timeout(function() {
