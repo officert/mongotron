@@ -22,6 +22,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       limit: 50
     };
 
+    $scope.VIEWS = {
+      LIST: 'LIST',
+      RAW: 'RAW'
+    };
+    $scope.currentView = $scope.VIEWS.RAW;
+
     $scope.editorHasFocus = false;
 
     $scope.$watch('editorHasFocus', function(val) {

@@ -40,15 +40,21 @@
       Your search did not return any results.
     </div>
     <div ng-show="!loading" ng-repeat="result in results">
-      <uib-accordion close-others="true">
-        <uib-accordion-group is-open="status.open">
-          <uib-accordion-heading>
+      <div class="list-view clearfix" ng-show="currentView === VIEWS.LIST">
+        <div class="result" ng-repeat="result in results">
+          <span class="result-header" ng-click="result.isOpen = !result.isOpen">
             <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ result._id }}
-          </uib-accordion-heading>
-          <pre pretty-json="result">
-          </pre>
-        </uib-accordion-group>
-      </uib-accordion>
+          </span>
+          <div class="result-body slide" ng-show="result.isOpen">
+            <pre pretty-json="result">
+            </pre>
+          </div>
+        </div>
+      </div>
+      <div class="raw-view" ng-show="currentView === VIEWS.RAW">
+        <pre pretty-json="results">
+        </pre>
+      </div>
     </div>
   </div>
 </div>
