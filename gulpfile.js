@@ -21,6 +21,7 @@ require('gulp-task-list')(gulp);
 const APP_NAME = packageJson.name;
 
 const SRC_DIR = 'src';
+const DOCS_DIR = 'docs';
 const RELEASE_DIR = 'release';
 const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
   'electron-packager',
@@ -72,6 +73,12 @@ gulp.task('css', function() {
     .pipe(gulp.dest(SRC_DIR + '/ui/css'));
 });
 
+gulp.task('site-css', function() {
+  return gulp.src(DOCS_DIR + '/less/main.less')
+    .pipe(less(LESSOPTIONS))
+    .pipe(gulp.dest(DOCS_DIR + '/css'));
+});
+
 gulp.task('jshint', function() {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
     .pipe(jshint())
@@ -80,9 +87,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('release', function(done) {
-  runSequence('build', 'pre-release', function(err) {
-    // if (err) return done(err);
-
+  runSequence('build', 'pre-release', function() {
     var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')" --icon=' + RELEASE_IMAGE_ICON;
 
     console.log(cmd);
