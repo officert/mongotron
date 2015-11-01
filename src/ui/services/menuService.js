@@ -65,7 +65,8 @@ angular.module('app').factory('menuService', [
 angular.module('app').run([
   '$rootScope',
   '$timeout',
-  function($rootScope, $timeout) {
+  'dialogService',
+  function($rootScope, $timeout, dialogService) {
     var name = appConfig.name;
 
     var template = [{
@@ -111,6 +112,20 @@ angular.module('app').run([
           ipc.send('quit');
         }
       }, ]
+    }, {
+      label: 'File',
+      submenu: [{
+        label: 'Save',
+        accelerator: 'CmdOrCtrl+S',
+        click: function() {
+          $timeout(function() {
+            dialogService.showSaveDialog()
+              .then(function(fileNames) {
+                console.log(fileNames);
+              });
+          });
+        }
+      }]
     }, {
       label: 'Go',
       submenu: [{
@@ -187,8 +202,8 @@ angular.module('app').run([
         click: function() {
           shell.openExternal(appConfig.repository);
         }
-      }, ]
-    }, ];
+      }]
+    }];
 
     if (process.platform === 'darwin') {
       // Window menu.
