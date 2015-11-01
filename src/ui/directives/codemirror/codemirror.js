@@ -23,12 +23,14 @@ angular.module('app').directive('codemirror', [
         const UPDATE_QUERY = /^[\s\S]*update$/;
         const DELETE_MANY_QUERY = /^[\s\S]*deleteMany$/;
         const AGGREGATE_QUERY = /^[\s\S]*aggregate$/;
+        const INSERT_ONE_QUERY = /^[\s\S]*insertOne$/;
 
         //defaults when autocomplete selection is made
         const FIND_DEFAULT = 'find({\n    \n})';
         const UPDATE_DEFAULT = 'update({\n    \n})';
         const DELETE_MANY_DEFAULT = 'deleteMany({\n    \n})';
         const AGGREGATE_DEFAULT = 'aggregate([\n    \n])';
+        const INSERT_ONE_DEFAULT = 'insertOne({\n    \n})';
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
@@ -63,6 +65,7 @@ angular.module('app').directive('codemirror', [
             inner.list.push('find');
             inner.list.push('update');
             inner.list.push('deleteMany');
+            inner.list.push('insertOne');
 
             return inner;
           };
@@ -117,6 +120,8 @@ angular.module('app').directive('codemirror', [
             return DELETE_MANY_DEFAULT;
           } else if (val.match(AGGREGATE_QUERY)) {
             return AGGREGATE_DEFAULT;
+          } else if (val.match(INSERT_ONE_QUERY)) {
+            return INSERT_ONE_DEFAULT;
           }
         }
       }

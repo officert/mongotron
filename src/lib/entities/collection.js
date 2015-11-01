@@ -36,6 +36,22 @@ class Collection {
   }
 
   /**
+   * @method insertOne
+   * @param {Object} doc
+   * @param {Function} next - callback function
+   */
+  insertOne(doc) {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      _this._dbCollection.insertOne(doc, function(err, newDoc) {
+        if (err) return reject(err);
+        return resolve(newDoc);
+      });
+    });
+  }
+
+  /**
    * @method find
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options

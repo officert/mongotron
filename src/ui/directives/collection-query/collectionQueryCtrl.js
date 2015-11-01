@@ -13,6 +13,7 @@ angular.module('app').controller('collectionQueryCtrl', [
     const UPDATE_QUERY_FULL_REGEX = /^(?:update)\(([^]+)\)/;
     const DELETE_MANY_QUERY_FULL_REGEX = /^(?:deleteMany)\(([^]+)\)/;
     const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
+    const INSERT_ONE_QUERY_FULL_REGEX = /^(?:insertOne)\(([^]+)\)/;
 
     $scope.codeEditorOptions = {};
 
@@ -97,6 +98,8 @@ angular.module('app').controller('collectionQueryCtrl', [
         match = getRegexMatch(query, DELETE_MANY_QUERY_FULL_REGEX);
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, AGGREGATE_QUERY_FULL_REGEX);
+      } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, INSERT_ONE_QUERY_FULL_REGEX);
       } else {
         match = null;
       }
@@ -121,6 +124,8 @@ angular.module('app').controller('collectionQueryCtrl', [
         return deleteManyQuery;
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         return aggregateQuery;
+      } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
+        return insertOneQuery;
       } else {
         return null;
       }
@@ -150,6 +155,10 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     function aggregateQuery(aggregate) {
       return $scope.collection.aggregate(aggregate);
+    }
+
+    function insertOneQuery(doc, options) {
+      return $scope.collection.insertOne(doc, options);
     }
   }
 ]);
