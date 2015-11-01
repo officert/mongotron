@@ -8,7 +8,8 @@ angular.module('app', [
   'ui.sortable',
   'ngSanitize',
   'duScroll',
-  'ngPrettyJson'
+  'ngPrettyJson',
+  'autoGrowInput'
 ]);
 
 angular.module('app').run([
