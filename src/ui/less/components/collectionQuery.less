@@ -16,10 +16,16 @@
       }
     }
     .query-btn-list {
-      margin: 0;
+      margin: 0 10px 0 0;
       padding: 0;
-      li {
+      .form-control {
         display: inline-block;
+        width: auto;
+        margin-right: 5px;
+      }
+      .btn {
+        display: inline-block;
+        border-radius: @border-radius-base;
         .number-input {
           width: 50px;
         }
@@ -41,6 +47,7 @@
       position: relative;
       border: none;
       background: @theme-query-editor-bg;
+      border-color: @theme-query-editor-border-color;
     }
   }
   .query-results {

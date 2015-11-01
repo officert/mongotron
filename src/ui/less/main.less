@@ -36,6 +36,9 @@
  */
 body.theme-default {
 
+  //colors
+  @theme-brand-primary: @brand-primary;
+
   //globals
   @theme-bg: white;
   @theme-text-color: #333;
@@ -53,13 +56,18 @@ body.theme-default {
 
   //query
   @theme-query-editor-bg: white;
-
+  @theme-query-editor-border-color: lighten(@theme-bg, 10%);
+  @theme-query-editor-input-bg: @theme-bg; //query edit skip + take input bg
   //query-result-json
   @theme-query-result-json-bg: white;
   @theme-query-result-json-seprator: @theme-text-color;
   @theme-query-result-json-key: red;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+
+  //buttons
+  @theme-btn-primary-color: white;
+  @theme-btn-primary-bg: @theme-brand-primary;
 
   //init mixin
   .theme();
@@ -69,6 +77,9 @@ body.theme-default {
  * Isotope UI Theme
  */
 body.theme-isotope-ui {
+
+  //colors
+  @theme-brand-primary: @brand-primary;
 
   //globals
   @theme-bg: #343943;
@@ -87,13 +98,18 @@ body.theme-isotope-ui {
 
   //query
   @theme-query-editor-bg: @theme-bg;
-
+  @theme-query-editor-border-color: lighten(@theme-bg, 10%);
+  @theme-query-editor-input-bg: @theme-bg; //query edit skip + take input bg
   //query-result-json
   @theme-query-result-json-bg: @theme-bg;
   @theme-query-result-json-seprator: white;
   @theme-query-result-json-key: red;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+
+  //buttons
+  @theme-btn-primary-color: white;
+  @theme-btn-primary-bg: @theme-brand-primary;
 
   //init mixin
   .theme();
@@ -104,6 +120,9 @@ body.theme-isotope-ui {
  */
 body.theme-atom {
   @atom-blue: #52a8ff;
+
+  //colors
+  @theme-brand-primary: @atom-blue;
 
   //globals
   @theme-bg: #161719;
@@ -122,13 +141,18 @@ body.theme-atom {
 
   //query
   @theme-query-editor-bg: @theme-bg;
-
+  @theme-query-editor-border-color: lighten(@theme-bg, 10%);
+  @theme-query-editor-input-bg: lighten(@theme-bg, 10%); //query edit skip + take input bg
   //query-result-json
   @theme-query-result-json-bg: @theme-bg;
   @theme-query-result-json-seprator: white;
   @theme-query-result-json-key: #b294bb;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+
+  //buttons
+  @theme-btn-primary-color: white;
+  @theme-btn-primary-bg: @theme-brand-primary;
 
   //init mixin
   .theme();
