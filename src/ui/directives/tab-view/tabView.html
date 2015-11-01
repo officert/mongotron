@@ -1,16 +1,18 @@
 <div class="tab-view">
   <!-- Tab Bar -->
-  <ul class="tab-bar nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
-    <!-- <ul class="nav nav-tabs"> -->
-    <li class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
-      <!-- <a href="#tab-{{ tab.value }}" data-toggle="tab"> -->
-      <a class="clearfix" href="#tab-{{ tab.value }}">
-        <span class="tab-active-line"></span>
-        <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
-        <i class="tab-close fa fa-times" ng-click="closeTab(tab, $event)"></i>
-      </a>
-    </li>
-  </ul>
+  <div class="tab-bar">
+    <ul class="nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
+      <!-- <ul class="nav nav-tabs"> -->
+      <li class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
+        <!-- <a href="#tab-{{ tab.value }}" data-toggle="tab"> -->
+        <a class="clearfix" href="#tab-{{ tab.value }}">
+          <span class="tab-active-line"></span>
+          <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
+          <i class="tab-close fa fa-times" ng-click="closeTab(tab, $event)"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
   <!-- Tab Panes -->
   <div class="tab-panes">
     <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">

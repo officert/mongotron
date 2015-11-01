@@ -12,84 +12,93 @@
   //vars
   @tab-height: 40px;
   .tab-bar {
-    border-bottom: none;
     height: @tab-height;
+    width: 100%;
     position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
-    display: -webkit-flex;
-    -webkit-user-select: none;
-    .tab {
+    overflow: hidden;
+    ul {
+      height: auto;
+      width: 100%;
       position: relative;
-      top: 0;
-      height: @tab-height;
-      flex: 1;
-      max-width: 22em;
-      min-width: 7em;
-      padding: 0;
-      margin: 0;
-      background-clip: content-box;
-      -webkit-user-drag: element;
-      a {
-        color: @theme-text-color;
-        border: none;
-        background: none;
-        border-top: 1px solid transparent;
-        text-align: center;
-        .tab-active-line {
-          position: absolute;
-          top: 50%;
-          left: 0;
-          width: 2px;
-          height: 0;
-          border-top-left-radius: 4px;
-          background: @theme-tab-active-line-bg;
-          .transition(.4s ease);
-        }
-        .tab-icon {
-          margin-right: 10px;
-          position: absolute;
-          left: 18px;
-          top: 14px;
-        }
-        .tab-close {
-          border-radius: 50%;
-          padding: 2.5px 4.5px 4.6px 4.3px;
-          margin-left: 10px;
-          font-size: 10px;
-          position: absolute;
-          right: 18px;
-          top: 10px;
-          cursor: pointer;
-          background: darken(@theme-tab-active-bg, 3%);
-          opacity: 0;
-          .transition-property('opacity');
-          .transition-duration(.35s);
-          .transition-timing-function(ease);
-        }
-        &:hover,
-        &:focus,
-        &:active {
-          background: none;
-        }
-      }
-      &:hover {
+      border-bottom: none;
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 15px; //gets rid of the scrollbar showing
+      display: -webkit-flex;
+      -webkit-user-select: none;
+      .tab {
+        position: relative;
+        top: 0;
+        height: @tab-height;
+        flex: 1;
+        max-width: 22em;
+        min-width: 7em;
+        padding: 0;
+        margin: 0;
+        background-clip: content-box;
+        -webkit-user-drag: element;
         a {
+          color: @theme-text-color;
+          border: none;
           background: none;
+          border-top: 1px solid transparent;
+          text-align: center;
+          .tab-active-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 2px;
+            height: 0;
+            border-top-left-radius: 4px;
+            background: @theme-tab-active-line-bg;
+            .transition(.4s ease);
+          }
+          .tab-icon {
+            margin-right: 10px;
+            position: absolute;
+            left: 18px;
+            top: 14px;
+          }
           .tab-close {
-            opacity: 1;
+            border-radius: 50%;
+            padding: 2.5px 4.5px 4.6px 4.3px;
+            margin-left: 10px;
+            font-size: 10px;
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            cursor: pointer;
+            background: darken(@theme-tab-active-bg, 3%);
+            opacity: 0;
+            .transition-property('opacity');
+            .transition-duration(.35s);
+            .transition-timing-function(ease);
+          }
+          &:hover,
+          &:focus,
+          &:active {
+            background: none;
           }
         }
-      }
-      &.active,
-      &.ui-sortable-helper {
-        a {
-          background: @theme-tab-active-bg;
-          color: lighten(@theme-text-color, 20%);
-          border-top-color: lighten(@theme-tab-active-bg, 14%);
-          .tab-active-line {
-            top: 1px;
-            height: 100%;
+        &:hover {
+          a {
+            background: none;
+            .tab-close {
+              opacity: 1;
+            }
+          }
+        }
+        &.active,
+        &.ui-sortable-helper {
+          a {
+            background: @theme-tab-active-bg;
+            color: lighten(@theme-text-color, 20%);
+            border-top-color: lighten(@theme-tab-active-bg, 14%);
+            .tab-active-line {
+              top: 1px;
+              height: 100%;
+            }
           }
         }
       }
