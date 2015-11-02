@@ -13,7 +13,7 @@
     width: 100%;
     position: relative;
     .vsplitter {
-      background-color: darken(@brand-secondary, 15%);
+      background: none;
     }
   }
   .sidebar-wrapper {
@@ -22,7 +22,6 @@
     top: 0;
     height: 100%;
     overflow-y: auto;
-    z-index: 100;
     .sidebar-header {
       .logo-wrap {
         .logo {
@@ -35,13 +34,23 @@
       }
     }
   }
-  .content {
+  .content-wrapper {
     position: absolute;
     top: 0;
     right: 0;
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    display: -webkit-flex;
+
+    // display: -webkit-flex;
+    .content {
+      position: relative;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      padding: 10px 10px 10px 0;
+      display: -webkit-flex;
+    }
   }
 }

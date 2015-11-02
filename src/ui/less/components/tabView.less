@@ -7,7 +7,12 @@
   -webkit-flex-direction: column;
   overflow: visible;
   display: -webkit-flex;
-  padding-top: 10px;
+  padding: 0;
+  position: relative;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 
   //vars
   @tab-height: 40px;
@@ -108,6 +113,9 @@
     -webkit-flex: 1;
     display: -webkit-flex;
     position: relative;
+    height: 100%;
+    width: 100%;
+    border: 1px solid @theme-border-color;
     .tab-pane {
       padding: 15px;
       position: absolute;
