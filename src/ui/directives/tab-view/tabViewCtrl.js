@@ -10,7 +10,11 @@ angular.module('app').controller('tabViewCtrl', [
     $scope.sortableOptions = {
       placeholder: 'sortable-placeholder',
       delay: 150,
-      helper: 'clone'
+      appendTo: 'body',
+      helper: function(e, item) {
+        item.css('display', 'block');
+        return item.clone();
+      }
     };
 
     tabCache.on(EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {

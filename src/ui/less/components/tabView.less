@@ -1,6 +1,18 @@
 /*
  * Tab-View
  */
+.tab() {
+  a {
+    background: @theme-tab-active-bg;
+    color: lighten(@theme-text-color, 20%);
+    border-top-color: lighten(@theme-tab-active-bg, 14%);
+    .tab-active-line {
+      top: 1px;
+      height: 100%;
+      background: @theme-tab-active-line-bg;
+    }
+  }
+}
 .tab-view {
   flex-grow: 1;
   -webkit-flex: 1;
@@ -34,6 +46,26 @@
       padding-bottom: 15px; //gets rid of the scrollbar showing
       display: -webkit-flex;
       -webkit-user-select: none;
+      .sortable-placeholder {
+        width: 2px;
+        position: relative;
+        background: @theme-tab-active-line-bg;
+        &::before {
+          left: 100%;
+          top: 50%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          border-color: @theme-tab-active-line-bg;
+        }
+      }
+      .sortable-helper {
+        display: block;
+        visibility: visible;
+      }
       .tab {
         position: relative;
         top: 0;
@@ -97,18 +129,8 @@
             }
           }
         }
-        &.active,
-        &.ui-sortable-helper {
-          a {
-            background: @theme-tab-active-bg;
-            color: lighten(@theme-text-color, 20%);
-            border-top-color: lighten(@theme-tab-active-bg, 14%);
-            .tab-active-line {
-              top: 1px;
-              height: 100%;
-              background: @theme-tab-active-line-bg;
-            }
-          }
+        &.active {
+          .tab();
         }
       }
     }
@@ -141,4 +163,10 @@
       }
     }
   }
+}
+
+.ui-sortable-helper {
+  background:red;
+
+  .tab();
 }

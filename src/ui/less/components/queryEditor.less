@@ -6,9 +6,39 @@
     background: transparent;
     height: auto;
     min-height: 34px;
-    color: @theme-text-color;
+    color: @theme-query-editor-color;
     .CodeMirror-gutters {
       background: darken(@theme-query-editor-bg, 10%);
+    }
+    &.sortable-placeholder {
+      width: 2px;
+      position: relative;
+      background: @theme-tab-active-line-bg;
+      &::before {
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: @theme-tab-active-line-bg;
+      }
+    }
+    .CodeMirror-cursor {
+      border-color: @theme-text-color;
+    }
+    .CodeMirror-line {
+      .cm-property {
+        color: @theme-query-editor-color;
+      }
+      .cm-string {
+        color: @theme-query-editor-string-color;
+      }
+      .cm-atom {
+        color: @theme-query-editor-boolean-color;
+      }
     }
   }
 }
