@@ -54,10 +54,10 @@
             top: 50%;
             left: 0;
             width: 2px;
-            height: 0;
+            height: 3px;
             border-top-left-radius: 4px;
-            background: @theme-tab-active-line-bg;
-            .transition(.4s ease);
+            background: @theme-tab-active-bg;
+            .transition(.2s ease);
           }
           .tab-icon {
             margin-right: 10px;
@@ -103,6 +103,7 @@
             .tab-active-line {
               top: 1px;
               height: 100%;
+              background: @theme-tab-active-line-bg;
             }
           }
         }
@@ -117,7 +118,6 @@
     width: 100%;
     border: 1px solid @theme-border-color;
     .tab-pane {
-      padding: 15px;
       position: absolute;
       height: 100%;
       width: 100%;
@@ -130,7 +130,11 @@
       .tab-pane-inner {
         height: 100%;
         width: 100%;
+        padding: 15px;
         overflow-y: auto;
+        &.query-tab-pane {
+          overflow-y: hidden;
+        }
       }
     }
   }

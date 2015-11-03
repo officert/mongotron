@@ -14,14 +14,12 @@
   <!-- Tab Panes -->
   <div class="tab-panes">
     <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">
-      <div class="tab-pane-inner">
-        <!-- Page Tabs -->
-        <div ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
-        </div>
-        <!-- Query Tabs -->
-        <div ng-if="tab.type === TAB_TYPES.QUERY">
-          <collection-query collection="tab.collection"></collection-query>
-        </div>
+      <!-- Page Tabs -->
+      <div class="tab-pane-inner" ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
+      </div>
+      <!-- Query Tabs -->
+      <div class="tab-pane-inner query-tab-pane" ng-if="tab.type === TAB_TYPES.QUERY">
+        <collection-query collection="tab.collection"></collection-query>
       </div>
     </div>
   </div>
