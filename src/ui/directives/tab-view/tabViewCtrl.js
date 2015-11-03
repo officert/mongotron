@@ -2,7 +2,8 @@ angular.module('app').controller('tabViewCtrl', [
   '$scope',
   'tabCache',
   'EVENTS',
-  function($scope, tabCache, EVENTS) {
+  '$timeout',
+  function($scope, tabCache, EVENTS, $timeout) {
     $scope.tabs = tabCache.list();
 
     $scope.TAB_TYPES = tabCache.TYPES;
@@ -12,7 +13,9 @@ angular.module('app').controller('tabViewCtrl', [
       delay: 150,
       appendTo: 'body',
       helper: function(e, item) {
-        item.css('display', 'block');
+        $timeout(function() {
+          item.attr('style', 'display: block !important');
+        });
         return item.clone();
       }
     };
