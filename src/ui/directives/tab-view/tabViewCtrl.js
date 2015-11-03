@@ -9,15 +9,21 @@ angular.module('app').controller('tabViewCtrl', [
     $scope.TAB_TYPES = tabCache.TYPES;
 
     $scope.sortableOptions = {
+      //http://api.jqueryui.com/sortable
       placeholder: 'sortable-placeholder',
       delay: 150,
       appendTo: 'body',
+      revert: 50,
       helper: function(e, item) {
         $timeout(function() {
+          //force the element to show, race condition :(
           item.attr('style', 'display: block !important');
         });
         return item.clone();
-      }
+      },
+      // helper: 'clone',
+      opacity: 1,
+      tolerance: 'intersect'
     };
 
     tabCache.on(EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {
