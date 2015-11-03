@@ -38,30 +38,32 @@
     {{ error }}
   </div>
   <div class="query-results">
-    <div class="alert alert-info" ng-show="!loading && !results.length">
-      Your search did not return any results.
-    </div>
-    <div ng-show="!loading && results.length">
-      <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
-        <div class="result" ng-repeat="result in results">
-          <span class="result-header" ng-click="result.isOpen = !result.isOpen">
-            <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
-          </span>
-          <div class="result-body slide" ng-show="result.isOpen">
-            <pre>
-              {{ ::result | json }}
-            </pre>
-            <!-- <pre pretty-json="result">
-            </pre> -->
+    <div class="query-results-inner">
+      <div class="alert alert-info" ng-show="!loading && !results.length">
+        Your search did not return any results.
+      </div>
+      <div ng-show="!loading && results.length">
+        <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
+          <div class="result" ng-repeat="result in results">
+            <span class="result-header" ng-click="result.isOpen = !result.isOpen">
+              <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+            </span>
+            <div class="result-body slide" ng-show="result.isOpen">
+              <pre>
+                {{ ::result | json }}
+              </pre>
+              <!-- <pre pretty-json="result">
+              </pre> -->
+            </div>
           </div>
         </div>
-      </div>
-      <div class="raw-view" ng-if="currentView === VIEWS.RAW">
-        <pre ng-repeat="result in results">
-          {{ ::result | json }}
-        </pre>
-        <!-- <pre pretty-json="results">
-        </pre> -->
+        <div class="raw-view" ng-if="currentView === VIEWS.RAW">
+          <pre ng-repeat="result in results">
+            {{ ::result | json }}
+          </pre>
+          <!-- <pre pretty-json="results">
+          </pre> -->
+        </div>
       </div>
     </div>
   </div>
