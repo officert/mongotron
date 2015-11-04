@@ -14,11 +14,13 @@
   }
 }
 .tab-view {
-  flex-grow: 1;
-  -webkit-flex: 1;
-  -webkit-flex-direction: column;
+
+  // flex-grow: 1;
+  // -webkit-flex: 1;
+  // -webkit-flex-direction: column;
   overflow: visible;
-  display: -webkit-flex;
+
+  // display: -webkit-flex;
   padding: 0;
   position: relative;
   top: 0;
@@ -44,22 +46,34 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding-bottom: 15px; //gets rid of the scrollbar showing
-      display: -webkit-flex;
-      -webkit-user-select: none;
+
+// display: -webkit-flex;
+      // -webkit-user-select: none;
       .sortable-placeholder {
-        width: 2px;
         position: relative;
-        background: @theme-tab-active-line-bg;
-        &::before {
-          left: 100%;
-          top: 50%;
-          border: solid transparent;
-          content: " ";
-          height: 0;
-          width: 0;
+        height: @tab-height;
+        width: 0;
+        &::after {
+          width: 2px;
+          height: 100%;
           position: absolute;
-          pointer-events: none;
-          border-color: @theme-tab-active-line-bg;
+          content: " ";
+          left: 0;
+          top: 0;
+          background: @theme-tab-active-line-bg;
+        }
+        &::before {
+          content: " ";
+          width: 0;
+          height: 0;
+          display: block;
+          left: 0;
+          top: 50%;
+          margin-top: -6px;
+          position: relative;
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+          border-left: 8px solid @theme-tab-active-line-bg;
         }
       }
       .sortable-helper {
@@ -70,13 +84,15 @@
         position: relative;
         top: 0;
         height: @tab-height;
-        flex: 1;
+
+        // flex: 1;
         max-width: 22em;
         min-width: 7em;
         padding: 0;
         margin: 0;
         background-clip: content-box;
-        -webkit-user-drag: element;
+
+        // -webkit-user-drag: element;
         a {
           color: @theme-text-color;
           border: none;
@@ -136,8 +152,9 @@
     }
   }
   .tab-panes {
-    -webkit-flex: 1;
-    display: -webkit-flex;
+
+    // -webkit-flex: 1;
+    // display: -webkit-flex;
     position: relative;
     height: 100%;
     width: 100%;
@@ -147,10 +164,11 @@
       height: 100%;
       width: 100%;
       background: @theme-tab-pane-bg;
-      display: none;
-      -webkit-flex: 1;
+
+      // -webkit-flex: 1;
       &.active {
-        display: -webkit-flex;
+
+        // display: -webkit-flex;
       }
       .tab-pane-inner {
         height: 100%;
@@ -164,9 +182,7 @@
     }
   }
 }
-
 .ui-sortable-helper {
-  background:red;
-
+  background: red;
   .tab();
 }

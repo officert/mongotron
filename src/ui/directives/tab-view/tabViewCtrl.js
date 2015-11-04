@@ -26,6 +26,7 @@ angular.module('app').controller('tabViewCtrl', [
       tolerance: 'intersect',
       stop: function(event, ui) {
         $timeout(function() {
+          //activate the dropped tab
           var tabId = angular.element(ui.item).attr('tab-id');
 
           if (!tabId) return;
