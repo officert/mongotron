@@ -27,15 +27,15 @@
   //vars
   @tab-height: 40px;
   .tab-bar {
+    display: flex;
+
+    // flex-direction: column;
     height: @tab-height;
     width: 100%;
     position: relative;
     overflow: hidden;
     bottom: -1px;
     z-index: 1;
-    display: flex;
-
-    // -webkit-user-select: none;
     ul {
       height: auto;
       width: 100%;
@@ -148,8 +148,9 @@
     }
   }
   .tab-panes {
-    display: flex;
-    flex: 1;
+
+    // display: flex;
+    // flex: 1;
     position: relative;
     height: 100%;
     width: 100%;
@@ -159,11 +160,9 @@
       height: 100%;
       width: 100%;
       background: @theme-tab-pane-bg;
-
-      // -webkit-flex: 1;
+      display: none;
       &.active {
-
-        // display: -webkit-flex;
+        display: block;
       }
       .tab-pane-inner {
         height: 100%;
