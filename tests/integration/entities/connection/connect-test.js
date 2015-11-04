@@ -76,6 +76,31 @@ describe('entities', function() {
           });
         });
       });
+
+      describe('when host is not localhost', function() {
+        var connection;
+
+        before(function(done) {
+          connection = new Connection({
+            name: 'Test Connection',
+            host: 'foobarhost',
+            port: 92833
+          });
+
+          return done(null);
+        });
+
+        it('should not add nay databases to collection.databases array', function(done) {
+          connection.connect(function(err) {
+            should.not.exist(err);
+
+            should.exist(connection.databases);
+            connection.databases.length.should.equal(0);
+
+            return done(null);
+          });
+        });
+      });
     });
   });
 });
