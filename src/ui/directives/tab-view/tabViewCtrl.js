@@ -23,7 +23,16 @@ angular.module('app').controller('tabViewCtrl', [
       },
       // helper: 'clone',
       opacity: 1,
-      tolerance: 'intersect'
+      tolerance: 'intersect',
+      stop: function(event, ui) {
+        $timeout(function() {
+          var tabId = angular.element(ui.item).attr('tab-id');
+
+          if (!tabId) return;
+
+          tabCache.activateById(tabId);
+        });
+      }
     };
 
     tabCache.on(EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {

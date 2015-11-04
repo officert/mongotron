@@ -2,7 +2,7 @@
   <!-- Tab Bar -->
   <div class="tab-bar">
     <ul class="nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
-      <li name="{{ tab.name }}" class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
+      <li tab-id="{{ tab.id }}" class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
         <a class="clearfix" href="#tab-{{ tab.value }}">
           <span class="tab-active-line"></span>
           <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
