@@ -14,13 +14,9 @@
   }
 }
 .tab-view {
-
-  // flex-grow: 1;
-  // -webkit-flex: 1;
-  // -webkit-flex-direction: column;
+  display: flex;
+  flex-direction: column;
   overflow: visible;
-
-  // display: -webkit-flex;
   padding: 0;
   position: relative;
   top: 0;
@@ -37,6 +33,9 @@
     overflow: hidden;
     bottom: -1px;
     z-index: 1;
+    display: flex;
+
+    // -webkit-user-select: none;
     ul {
       height: auto;
       width: 100%;
@@ -46,9 +45,6 @@
       overflow-x: auto;
       overflow-y: hidden;
       padding-bottom: 15px; //gets rid of the scrollbar showing
-
-// display: -webkit-flex;
-      // -webkit-user-select: none;
       .sortable-placeholder {
         position: relative;
         height: @tab-height;
@@ -152,9 +148,8 @@
     }
   }
   .tab-panes {
-
-    // -webkit-flex: 1;
-    // display: -webkit-flex;
+    display: flex;
+    flex: 1;
     position: relative;
     height: 100%;
     width: 100%;
