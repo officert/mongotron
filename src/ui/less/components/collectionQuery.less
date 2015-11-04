@@ -6,6 +6,8 @@
   height: 100%;
   width: 100%;
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
   .collection-query-nav {
     padding-bottom: 15px;
     .collection-info {
@@ -57,7 +59,7 @@
   .query-results {
     margin-top: 15px;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
     .query-results-inner {
       position: relative;
       top: 0;
