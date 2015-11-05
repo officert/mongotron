@@ -109,7 +109,7 @@ angular.module('app').controller('collectionQueryCtrl', [
               for (var key in result) {
                 //TODO: if it's a nested object then recurse and generate key/value for all of it's props
                 props.push({
-                  _id: result[key]._id,
+                  _id: result[key] ? result[key]._id : result[key],
                   key: key,
                   value: result[key],
                   type: getPropertyType(result[key])
