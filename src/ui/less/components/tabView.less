@@ -28,15 +28,15 @@
   @tab-height: 40px;
   .tab-bar {
     display: flex;
-
-    // flex-direction: column;
-    height: @tab-height;
+    height: (@tab-height + 4);
     width: 100%;
     position: relative;
     overflow: hidden;
     bottom: -1px;
     z-index: 1;
     ul {
+      display: flex;
+      flex-direction: row;
       height: auto;
       width: 100%;
       position: relative;
@@ -44,7 +44,7 @@
       position: relative;
       overflow-x: auto;
       overflow-y: hidden;
-      padding-bottom: 15px; //gets rid of the scrollbar showing
+      padding-bottom: (@tab-height + 10); //gets rid of the scrollbar showing
       .sortable-placeholder {
         position: relative;
         height: @tab-height;
@@ -77,6 +77,7 @@
         visibility: visible;
       }
       .tab {
+        flex: 1;
         position: relative;
         top: 0;
         height: @tab-height;
@@ -144,9 +145,6 @@
     }
   }
   .tab-panes {
-
-    // display: flex;
-    // flex: 1;
     position: relative;
     height: 100%;
     width: 100%;
@@ -163,7 +161,7 @@
       .tab-pane-inner {
         height: 100%;
         width: 100%;
-        padding: 15px;
+        padding: 20px;
         overflow-y: auto;
         &.query-tab-pane {
           overflow-y: hidden;
