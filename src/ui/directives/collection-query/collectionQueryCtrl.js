@@ -28,7 +28,7 @@ angular.module('app').controller('collectionQueryCtrl', [
       RAW: 'RAW',
       KEYVALUE: 'KEYVALUE'
     };
-    $scope.currentView = $scope.VIEWS.KEYVALUE;
+    $scope.currentView = $scope.VIEWS.RAW;
 
     $scope.getPropertyTypeIcon = function(propertyType) {
       var icon;
