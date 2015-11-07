@@ -121,14 +121,22 @@ gulp.task('test', function(next) {
   runSequence('jshint', 'test-int', 'test-unit', next);
 });
 
-gulp.task('test-int', function() {
+gulp.task('test-int', function(next) {
   return gulp.src('tests/integration/**/**/**-test.js')
-    .pipe(mocha(MOCHA_SETTINGS));
+    .pipe(mocha(MOCHA_SETTINGS))
+    .on('close', function() {
+      process.exit(-1);
+      next();
+    });
 });
 
-gulp.task('test-unit', function() {
+gulp.task('test-unit', function(next) {
   return gulp.src('tests/unit/**/**/**-test.js')
-    .pipe(mocha(MOCHA_SETTINGS));
+    .pipe(mocha(MOCHA_SETTINGS))
+    .on('close', function() {
+      process.exit(-1);
+      next();
+    });
 });
 
 /* =========================================================================
