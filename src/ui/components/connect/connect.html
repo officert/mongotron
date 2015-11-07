@@ -12,24 +12,29 @@
       </div>
     </div>
     <!-- Server List -->
-    <ul class="connect-server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen === screens.LIST">
-      <div class="alert alert-info" ng-show="!connections.length">
-        Your don't have any connections yet. Use the Add button to create a new connection.
-      </div>
-      <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }" ng-show="connections.length">
-        <a class="name" href="#" ng-click="connect(connection, $event)">
-          <i class="icon-connected fa fa-check-circle-o"></i> {{ ::connection.name }}
-        </a>
-        <span class="links">
-          <a class="edit" href="#" ng-click="changeScreen(screens.EDIT, connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
-            <i class="fa fa-pencil"></i>
+    <div class="connect-server-list" ng-show="currentScreen === screens.LIST">
+      <ul>
+        <div class="alert alert-info" ng-show="!connections.length">
+          Your don't have any connections yet. Use the Add button to create a new connection.
+        </div>
+        <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }" ng-show="connections.length">
+          <a class="name" href="#" ng-click="connect(connection, $event)">
+            <i class="icon-connected fa fa-check-circle-o"></i> {{ ::connection.name }}
           </a>
-          <a class="remove" href="#" ng-click="changeScreen(screens.REMOVE, connection, $event)" uib-tooltip="Delete Connection" tooltip-popup-delay="600">
-            <i class="fa fa-times"></i>
-          </a>
-        </span>
-      </li>
-    </ul>
+          <span class="links">
+            <a class="edit" href="#" ng-click="changeScreen(screens.EDIT, connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a class="remove" href="#" ng-click="changeScreen(screens.REMOVE, connection, $event)" uib-tooltip="Delete Connection" tooltip-popup-delay="600">
+              <i class="fa fa-times"></i>
+            </a>
+          </span>
+        </li>
+      </ul>
+      <p class="user-info-note user-info-note-dark center">
+        Click a connection to add it the workplace
+      </p>
+    </div>
     <!-- Server Add -->
     <div class="server-add clearfix" ng-show="currentScreen === screens.ADD">
       <form name="addForm" novalidate>
@@ -77,7 +82,7 @@
       </form>
     </div>
     <!-- Server Remove -->
-    <div class="server-edit clearfix" ng-show="currentScreen === screens.REMOVE">
+    <div class="server-remove clearfix" ng-show="currentScreen === screens.REMOVE">
       <div class="alert alert-danger">
         Are you sure you want to remove the connection
         <strong>'{{ selectedConnection.name }}'</strong>?
