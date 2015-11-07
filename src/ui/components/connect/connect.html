@@ -1,6 +1,7 @@
 <div id="connect">
   <div class="modal-header modal-header-w-icon clearfix">
     <i class="fa fa-server"></i> &nbsp;{{ currentScreen.name }}
+    <i class="close fa fa-plus rotate-45" ng-click="close()"></i>
   </div>
   <div class="modal-body">
     <div class="clearfix top-links">
@@ -56,14 +57,6 @@
           <label class="control-label">Password</label>
           <input class="form-control" ng-model="addConnectionForm.auth.password" name="password" type="text">
         </div>
-        <div class="pull-right">
-          <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
-            Cancel
-          </button>
-          <button class="btn btn-primary" type="button" ng-click="addConnection(addForm, $event)">
-            Add
-          </button>
-        </div>
       </form>
     </div>
     <!-- Server Edit -->
@@ -81,14 +74,6 @@
           <label class="control-label">Port</label>
           <input class="form-control" type="text" ng-model="selectedConnection.port">
         </div>
-        <div class="pull-right">
-          <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
-            Cancel
-          </button>
-          <button class="btn btn-primary" type="button" ng-click="editConnection(addConnectionForm, $event)">
-            Save
-          </button>
-        </div>
       </form>
     </div>
     <!-- Server Remove -->
@@ -97,21 +82,46 @@
         Are you sure you want to remove the connection
         <strong>'{{ selectedConnection.name }}'</strong>?
       </div>
-      <div class="pull-right">
-        <button class="btn btn-default" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
-          Cancel
-        </button>
-        <button class="btn btn-primary" type="button" ng-click="removeConnection(selectedConnection, $event)">
-          Remove
-        </button>
-      </div>
     </div>
   </div>
   <div class="modal-footer">
     <p class="center">
-      <button class="btn btn-sm btn-primary close-btn" ng-click="close()">
-        Complete
-      </button>
+      <!-- Server List -->
+      <div class="list-buttons" ng-show="currentScreen === screens.LIST">
+        <button class="btn btn-primary close-btn col-xs-6 col-xs-offset-3" ng-click="close()">
+          Complete
+        </button>
+      </div>
+
+      <!-- Server Add -->
+      <div class="add-buttons" ng-show="currentScreen === screens.ADD">
+        <button class="btn btn-default col-xs-4 col-xs-offset-2" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
+          Cancel
+        </button>
+        <button class="btn btn-primary col-xs-4" type="button" ng-click="addConnection(addForm, $event)">
+          Add
+        </button>
+      </div>
+
+      <!-- Server Remove -->
+      <div class="remove-buttons" ng-show="currentScreen === screens.REMOVE">
+        <button class="btn btn-default col-xs-4 col-xs-offset-2" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
+          Cancel
+        </button>
+        <button class="btn btn-primary col-xs-4" type="button" ng-click="removeConnection(selectedConnection, $event)">
+          Remove
+        </button>
+      </div>
+
+      <!-- Server Edit -->
+      <div class="edit-buttons" ng-show="currentScreen === screens.EDIT">
+        <button class="btn btn-default col-xs-4 col-xs-offset-2" type="button" ng-click="changeScreen(screens.LIST, null, $event)">
+          Cancel
+        </button>
+        <button class="btn btn-primary col-xs-4" type="button" ng-click="editConnection(addConnectionForm, $event)">
+          Save
+        </button>
+      </div>
     </p>
   </div>
 </div>

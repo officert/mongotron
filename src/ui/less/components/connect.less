@@ -43,11 +43,10 @@
           overflow: hidden;
           position: relative;
           text-decoration: none;
-          color: @gray;
           padding: 15px;
           .transition(.2s ease);
           &:hover {
-            background: @gray-lighter;
+            background: darken(@theme-modal-content-bg, 4%);
           }
           &.name {
             display: block;
@@ -82,8 +81,10 @@
     p {
       padding: 0;
       margin: 0;
-      .btn {
-        width: 300px;
+      .list-buttons {
+      }
+      .add-buttons {
+
       }
     }
   }
