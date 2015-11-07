@@ -2,10 +2,75 @@
  * Tab-View
  */
 .tab() {
+  position: relative;
+  top: 0;
+  height: 40px;
+  max-width: 22em;
+  min-width: 7em;
+  padding: 0;
+  margin: 0;
+  background-clip: content-box;
+  text-align: center;
+  color: @theme-text-color;
+  list-style: none;
+  border-top: 1px solid transparent;
   a {
+    border: none;
+    background: none;
+    border-top: 1px solid transparent;
+    margin: 0;
+    color: @theme-text-color;
+    .tab-active-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 2px;
+      height: 0;
+      border-top-left-radius: 4px;
+      background: @theme-tab-active-bg;
+      .transition(.2s ease);
+    }
+    .tab-icon {
+      margin-right: 10px;
+      position: absolute;
+      left: 18px;
+      top: 14px;
+    }
+    .tab-close {
+      border-radius: 50%;
+      padding: 2.5px 4.5px 4.6px 4.3px;
+      margin-left: 10px;
+      font-size: 10px;
+      position: absolute;
+      right: 18px;
+      top: 10px;
+      cursor: pointer;
+      background: darken(@theme-tab-active-bg, 3%);
+      opacity: 0;
+      .transition-property('opacity');
+      .transition-duration(.35s);
+      .transition-timing-function(ease);
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      background: none;
+    }
+  }
+  &:hover {
+    a {
+      background: none;
+      .tab-close {
+        opacity: 1;
+      }
+    }
+  }
+  &.active {
     background: @theme-tab-active-bg;
     color: lighten(@theme-text-color, 20%);
     border-top-color: lighten(@theme-tab-active-bg, 14%);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     .tab-active-line {
       top: 1px;
       height: 100%;
@@ -14,11 +79,9 @@
   }
 }
 .tab-view {
-  flex-grow: 1;
-  -webkit-flex: 1;
-  -webkit-flex-direction: column;
+  display: flex;
+  flex-direction: column;
   overflow: visible;
-  display: -webkit-flex;
   padding: 0;
   position: relative;
   top: 0;
@@ -29,13 +92,19 @@
   //vars
   @tab-height: 40px;
   .tab-bar {
-    height: @tab-height;
+    display: flex;
+    height: (@tab-height + 4);
     width: 100%;
     position: relative;
     overflow: hidden;
     bottom: -1px;
     z-index: 1;
+    flex-basis: @tab-height;
+    flex-grow: 0;
+    flex-shrink: 0;
     ul {
+      display: flex;
+      flex-direction: row;
       height: auto;
       width: 100%;
       position: relative;
@@ -43,23 +112,32 @@
       position: relative;
       overflow-x: auto;
       overflow-y: hidden;
-      padding-bottom: 15px; //gets rid of the scrollbar showing
-      display: -webkit-flex;
-      -webkit-user-select: none;
+      padding-bottom: (@tab-height + 10); //gets rid of the scrollbar showing
       .sortable-placeholder {
-        width: 2px;
         position: relative;
-        background: @theme-tab-active-line-bg;
-        &::before {
-          left: 100%;
-          top: 50%;
-          border: solid transparent;
-          content: " ";
-          height: 0;
-          width: 0;
+        height: @tab-height;
+        width: 0;
+        &::after {
+          width: 2px;
+          height: 100%;
           position: absolute;
-          pointer-events: none;
-          border-color: @theme-tab-active-line-bg;
+          content: " ";
+          left: 0;
+          top: 0;
+          background: @theme-tab-active-line-bg;
+        }
+        &::before {
+          content: " ";
+          width: 0;
+          height: 0;
+          display: block;
+          left: 0;
+          top: 50%;
+          margin-top: -6px;
+          position: relative;
+          border-top: 8px solid transparent;
+          border-bottom: 8px solid transparent;
+          border-left: 8px solid @theme-tab-active-line-bg;
         }
       }
       .sortable-helper {
@@ -67,95 +145,38 @@
         visibility: visible;
       }
       .tab {
-        position: relative;
-        top: 0;
-        height: @tab-height;
         flex: 1;
-        max-width: 22em;
-        min-width: 7em;
-        padding: 0;
-        margin: 0;
-        background-clip: content-box;
-        -webkit-user-drag: element;
-        a {
-          color: @theme-text-color;
-          border: none;
-          background: none;
-          border-top: 1px solid transparent;
-          text-align: center;
-          margin: 0;
-          .tab-active-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 2px;
-            height: 3px;
-            border-top-left-radius: 4px;
-            background: @theme-tab-active-bg;
-            .transition(.2s ease);
-          }
-          .tab-icon {
-            margin-right: 10px;
-            position: absolute;
-            left: 18px;
-            top: 14px;
-          }
-          .tab-close {
-            border-radius: 50%;
-            padding: 2.5px 4.5px 4.6px 4.3px;
-            margin-left: 10px;
-            font-size: 10px;
-            position: absolute;
-            right: 18px;
-            top: 10px;
-            cursor: pointer;
-            background: darken(@theme-tab-active-bg, 3%);
-            opacity: 0;
-            .transition-property('opacity');
-            .transition-duration(.35s);
-            .transition-timing-function(ease);
-          }
-          &:hover,
-          &:focus,
-          &:active {
-            background: none;
-          }
-        }
-        &:hover {
-          a {
-            background: none;
-            .tab-close {
-              opacity: 1;
-            }
-          }
-        }
-        &.active {
-          .tab();
-        }
+        .tab();
       }
     }
   }
   .tab-panes {
-    -webkit-flex: 1;
-    display: -webkit-flex;
     position: relative;
     height: 100%;
     width: 100%;
     border: 1px solid @theme-border-color;
+    .no-connections {
+      p {
+        padding-top: 200px;
+        color: lighten(@text-color, 4%);
+        font-size: 20px;
+        font-weight: 500;
+        font-style: italic;
+      }
+    }
     .tab-pane {
       position: absolute;
       height: 100%;
       width: 100%;
       background: @theme-tab-pane-bg;
       display: none;
-      -webkit-flex: 1;
       &.active {
-        display: -webkit-flex;
+        display: block;
       }
       .tab-pane-inner {
         height: 100%;
         width: 100%;
-        padding: 15px;
+        padding: 20px;
         overflow-y: auto;
         &.query-tab-pane {
           overflow-y: hidden;
@@ -164,9 +185,13 @@
     }
   }
 }
-
 .ui-sortable-helper {
-  background:red;
-
+  background: @theme-tab-active-bg;
+  color: lighten(@theme-text-color, 20%);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  .tab-active-line {
+    display: none;
+  }
   .tab();
 }

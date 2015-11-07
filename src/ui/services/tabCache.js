@@ -3,6 +3,7 @@ angular.module('app').factory('tabCache', [
   function(EVENTS) {
     const EventEmitter = require('events').EventEmitter;
     const util = require('util');
+    const uuid = require('node-uuid');
 
     var TAB_CACHE = [];
 
@@ -23,6 +24,7 @@ angular.module('app').factory('tabCache', [
         return;
       }
 
+      tab.id = uuid.v4();
       tab.active = true;
 
       if (!tab.iconClassName) tab.iconClassName = getTabIconClasssName(tab.type);
@@ -34,6 +36,14 @@ angular.module('app').factory('tabCache', [
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
       return TAB_CACHE;
+    };
+
+    TabCache.prototype.getById = function(id) {
+      var tab = _.findWhere(TAB_CACHE, {
+        id: id
+      });
+
+      return tab;
     };
 
     TabCache.prototype.list = function() {
@@ -80,6 +90,18 @@ angular.module('app').factory('tabCache', [
 
     TabCache.prototype.removeAll = function() {
       TAB_CACHE = [];
+
+      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+    };
+
+    TabCache.prototype.activateById = function(id) {
+      var tab = this.getById(id);
+
+      if (!tab) return;
+
+      this.deactivateAll();
+
+      tab.active = true;
 
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };

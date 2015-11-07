@@ -13,10 +13,8 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
-        // scope.$watch('hasFocus', function(val) {
-        //   if (!editor) return;
-        //   if (val) editor.focus();
-        // });
+        var javascriptHintFn = $window.CodeMirror.hint.javascript;
+        $window.CodeMirror.hint.javascript = customHint; //override the javascript autocomplete
 
         //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
@@ -52,24 +50,6 @@ angular.module('app').directive('codemirror', [
         });
 
         function init() {
-          var orig = $window.CodeMirror.hint.javascript;
-
-          $window.CodeMirror.hint.javascript = function(cm) {
-            var inner = orig(cm) || {
-              from: cm.getCursor(),
-              to: cm.getCursor(),
-              list: []
-            };
-            inner.list = [];
-            inner.list.push('aggregate');
-            inner.list.push('find');
-            inner.list.push('update');
-            inner.list.push('deleteMany');
-            inner.list.push('insertOne');
-
-            return inner;
-          };
-
           editor = new $window.CodeMirror(function(editorElement) {
             element.append(editorElement);
           }, options);
@@ -109,6 +89,42 @@ angular.module('app').directive('codemirror', [
           $timeout(function() {
             editor.focus();
           });
+        }
+
+        function customHint(codemirror) {
+          var currentValue = editor.getValue();
+
+          var inner = javascriptHintFn(codemirror) || {
+            from: codemirror.getCursor(),
+            to: codemirror.getCursor(),
+            list: []
+          };
+
+          inner.list = [];
+          inner.list.push('aggregate');
+          inner.list.push('find');
+          inner.list.push('update');
+          inner.list.push('deleteMany');
+          inner.list.push('insertOne');
+
+          // ---------------
+
+          var term = $.ui.autocomplete.escapeRegex(currentValue);
+
+          var startsWithMatcher = new RegExp("^" + term, "i");
+          var startsWith = $.grep(inner.list, function(value) {
+            return startsWithMatcher.test(value.label || value.value || value);
+          });
+
+          var containsMatcher = new RegExp(term, "i");
+          var contains = $.grep(inner.list, function(value) {
+            return $.inArray(value, startsWith) < 0 &&
+              containsMatcher.test(value.label || value.value || value);
+          });
+
+          inner.list = startsWith.concat(contains);
+
+          return inner;
         }
 
         function getFullValue(val) {

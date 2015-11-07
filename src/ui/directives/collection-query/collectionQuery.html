@@ -24,6 +24,9 @@
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }">
           <i class="fa fa-code"></i>
         </button>
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }">
+          <i class="fa fa-code"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -43,6 +46,7 @@
         Your search did not return any results.
       </div>
       <div ng-show="!loading && results.length">
+        <!-- List View -->
         <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
           <div class="result" ng-repeat="result in results">
             <span class="result-header" ng-click="result.isOpen = !result.isOpen">
@@ -52,17 +56,37 @@
               <pre>
                 {{ ::result | json }}
               </pre>
-              <!-- <pre pretty-json="result">
-              </pre> -->
             </div>
           </div>
         </div>
+        <!-- Raw View -->
         <div class="raw-view" ng-if="currentView === VIEWS.RAW">
           <pre ng-repeat="result in results">
             {{ ::result | json }}
           </pre>
           <!-- <pre pretty-json="results">
           </pre> -->
+        </div>
+        <!-- Key Value View -->
+        <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
+          <div class="result" ng-repeat="result in keyValueResults">
+            <span class="result-header" ng-click="result.isOpen = !result.isOpen">
+              <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+            </span>
+            <div class="result-body slide" ng-show="result.isOpen">
+              <div class="table-row" ng-repeat="keyvalue in result">
+                <span class="table-cell key">
+                  <i class="fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+                </span>
+                <span class="table-cell value">
+                  {{ keyvalue.value }}
+                </span>
+                <span class="table-cell type">
+                  {{ keyvalue.type }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

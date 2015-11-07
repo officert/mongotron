@@ -2,27 +2,35 @@
  * Modal
  */
 .modal {
+  .modal-content {
+    border-radius: @border-radius-base;
+    background: @theme-modal-content-bg;
+    a {
+      color: @theme-text-color;
+    }
+  }
   .modal-header {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    background: @gray-lighter;
+    padding: 10px 15px;
     font-size: 20px;
     font-weight: 500;
-
-    // padding: 10px 12px 8px;
+    border: none;
+    background: @theme-modal-header-bg;
     &.modal-header-w-icon {
       i {
         top: 1px;
         position: relative;
       }
     }
-    .close-btn {
-      float: right;
-      background: @brand-secondary;
-      color: white;
+    .close {
+      color: @theme-text-color;
     }
   }
-  .modal-backdrop {
-    bottom: 0;
+  .modal-footer {
+    padding: 10px 15px;
+    border: none;
+    background: @theme-modal-footer-bg;
   }
+}
+.modal-backdrop {
+  bottom: 0;
 }

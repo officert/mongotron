@@ -18,7 +18,8 @@
     "after": true,
     "afterEach": true,
     "it": true,
-    "Promise": true
+    "Promise": true,
+    "$": true
   },
   "camelcase": true,
   "bitwise": true,

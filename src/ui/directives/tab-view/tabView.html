@@ -2,7 +2,7 @@
   <!-- Tab Bar -->
   <div class="tab-bar">
     <ul class="nav nav-tabs" ui-sortable="sortableOptions" ng-model="tabs">
-      <li name="{{ tab.name }}" class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
+      <li tab-id="{{ tab.id }}" class="tab" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-click="activateTab(tab, $event)">
         <a class="clearfix" href="#tab-{{ tab.value }}">
           <span class="tab-active-line"></span>
           <i class="tab-icon {{ tab.iconClassName }}"></i> {{ tab.name }}
@@ -13,6 +13,13 @@
   </div>
   <!-- Tab Panes -->
   <div class="tab-panes">
+    <div class="no-connections" ng-show="!tabs.length && !connections.length">
+      <p class="center">
+        You don't have any connections in your workplace yet...
+        <br>
+        Click <a href="#" ng-click="showConnections(null, $event)">here</a> to add some connections.
+      </p>
+    </div>
     <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">
       <!-- Page Tabs -->
       <div class="tab-pane-inner" ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">

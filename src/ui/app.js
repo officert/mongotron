@@ -29,7 +29,9 @@ angular.module('app').run([
     var pageTitle = 'Mongotron';
     $rootScope.setTitle(pageTitle);
 
-    $rootScope.showConnections = function(state) {
+    $rootScope.showConnections = function(state, $event) {
+      if ($event) $event.preventDefault();
+
       modalService.openConnectionManager(state)
         .result
         .then(function() {

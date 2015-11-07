@@ -25,9 +25,34 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     $scope.VIEWS = {
       LIST: 'LIST',
-      RAW: 'RAW'
+      RAW: 'RAW',
+      KEYVALUE: 'KEYVALUE'
     };
     $scope.currentView = $scope.VIEWS.RAW;
+
+    $scope.getPropertyTypeIcon = function(propertyType) {
+      var icon;
+
+      switch (propertyType) {
+        case 'number':
+          icon = '';
+          break;
+        case 'string':
+          icon = 'fa-quote-left';
+          break;
+        case 'boolean':
+          icon = 'fa-calendar';
+          break;
+        case 'date':
+          icon = 'fa-calendar';
+          break;
+        case 'array':
+          icon = 'fa-calendar';
+          break;
+      }
+
+      return icon;
+    };
 
     $scope.editorHasFocus = false;
 
@@ -77,6 +102,22 @@ angular.module('app').controller('collectionQueryCtrl', [
             $scope.loading = false;
 
             $scope.results = results;
+
+            $scope.keyValueResults = results.map(function(result) {
+              var props = [];
+
+              for (var key in result) {
+                //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+                props.push({
+                  _id: result[key] ? result[key]._id : result[key],
+                  key: key,
+                  value: result[key],
+                  type: getPropertyType(result[key])
+                });
+              }
+
+              return props;
+            });
           });
         })
         .catch(function(err) {
@@ -159,6 +200,14 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     function insertOneQuery(doc, options) {
       return $scope.collection.insertOne(doc, options);
+    }
+
+    function getPropertyType(property) {
+      if (_.isNumber(property)) return 'number';
+      if (_.isString(property)) return 'string';
+      if (_.isArray(property)) return 'array';
+      if (_.isDate(property)) return 'date';
+      if (_.isBoolean(property)) return 'boolean';
     }
   }
 ]);

@@ -11,3 +11,25 @@
 @import 'components/button.less';
 @import 'components/formControl.less';
 @import 'components/queryEditor.less';
+
+//TODO: move into seperate files
+/*
+ * User Info Note
+ */
+.user-info-note {
+  font: italic normal normal 12px/1 FontAwesome;
+  margin: 0;
+  padding: 0;
+  &.user-info-note-light {
+    color: @text-color;
+  }
+  &.user-info-note-dark {
+    color: darken(@text-color, 15%);
+  }
+  &::before {
+    font-style: normal;
+    content: "\f111";
+    opacity: 0.8;
+    color: @theme-user-info-note-dot-color;
+  }
+}

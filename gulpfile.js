@@ -118,7 +118,10 @@ gulp.task('serve', ['build'], function() {
 gulp.task('default', ['serve']);
 
 gulp.task('test', function(next) {
-  runSequence('jshint', 'test-int', 'test-unit', next);
+  runSequence('jshint', 'test-int', 'test-unit', function() {
+    process.exit(0);
+    next();
+  });
 });
 
 gulp.task('test-int', function() {
