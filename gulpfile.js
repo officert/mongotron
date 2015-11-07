@@ -119,7 +119,7 @@ gulp.task('default', ['serve']);
 
 gulp.task('test', function(next) {
   runSequence('jshint', 'test-int', 'test-unit', function() {
-    process.exit(-1);
+    process.exit(0);
     next();
   });
 });
