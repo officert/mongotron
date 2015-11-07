@@ -96,9 +96,9 @@ class Collection {
 
       //TODO: validate the query??
 
-      _this._dbCollection.remove(query, options, function(err, result) {
+      _this._dbCollection.remove(query, options, function(err) {
         if (err) return reject(err);
-        return resolve(result);
+        return resolve(null);
       });
     });
   }
