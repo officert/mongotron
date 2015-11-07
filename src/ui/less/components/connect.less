@@ -3,11 +3,17 @@
 
   }
   .modal-body {
+    .top-links {
+      padding: 5px 0 20px;
+      .add-link {
+        display: block;
+      }
+    }
     .connect-server-list {
       top: -100%;
       list-style: none;
       margin: 0;
-      padding: 0;
+      padding: 0 0 15px;
       &.active {
         top: 0;
       }
@@ -69,6 +75,15 @@
             }
           }
         }
+      }
+    }
+  }
+  .modal-footer {
+    p {
+      padding: 0;
+      margin: 0;
+      .btn {
+        width: 300px;
       }
     }
   }

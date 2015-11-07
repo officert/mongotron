@@ -1,13 +1,15 @@
 <div id="connect">
   <div class="modal-header modal-header-w-icon clearfix">
     <i class="fa fa-server"></i> &nbsp;{{ currentScreen.name }}
-    <div class="pull-right">
-      <button class="btn btn-sm" ng-click="changeScreen(screens.ADD, null, $event)">
-        Add
-      </button>
-    </div>
   </div>
   <div class="modal-body">
+    <div class="clearfix top-links">
+      <div class="pull-right">
+        <a href="#" class="add-link" ng-click="changeScreen(screens.ADD, null, $event)">
+          <i class="fa fa-plus"></i> Add
+        </a>
+      </div>
+    </div>
     <!-- Server List -->
     <ul class="connect-server-list" ng-class="{ 'active' : connections.length }" ng-show="currentScreen === screens.LIST">
       <div class="alert alert-info" ng-show="!connections.length">
@@ -106,10 +108,10 @@
     </div>
   </div>
   <div class="modal-footer">
-    <div class="pull-right">
-      <button class="btn btn-sm close-btn" ng-click="close()">
-        Done
+    <p class="center">
+      <button class="btn btn-sm btn-primary close-btn" ng-click="close()">
+        Complete
       </button>
-    </div>
+    </p>
   </div>
 </div>
