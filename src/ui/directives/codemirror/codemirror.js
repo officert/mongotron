@@ -127,8 +127,6 @@ angular.module('app').directive('codemirror', [
           return inner;
         }
 
-
-
         function getFullValue(val) {
           if (val.match(FIND_QUERY)) {
             return FIND_DEFAULT;
