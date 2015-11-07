@@ -1,6 +1,8 @@
 .pretty-buttons(@color, @background, @text-shadow: none) {
   color: @color;
-  #gradient > .vertical(lighten(@background, 5%), darken(@background, 5%), 0%, 100%);
+  background: @background;
+
+  // #gradient > .vertical(lighten(@background, 5%), darken(@background, 5%), 0%, 100%);
   border-color: darken(@background, 10%);
   border-bottom-color: darken(@background, 20%);
   text-shadow: @text-shadow;
@@ -9,7 +11,9 @@
   &:focus,
   &:active,
   &.active {
-    #gradient > .vertical(darken(@background, 0), darken(@background, 10%), 0%, 100%);
+    background: darken(@background, 0);
+
+    // #gradient > .vertical(darken(@background, 0), darken(@background, 10%), 0%, 100%);
     border-color: darken(@background, 20%);
     color: @color;
   }
