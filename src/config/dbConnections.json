@@ -1,1 +1,1 @@
-[{"id":"9a48ebf9-e27a-44e5-a6af-b92d67b09a7a","name":"Local Host","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"869bdfb3-5ab1-4e5a-a5b5-e0f0b8b43fd9"}}]},{"id":"ec62b8bc-2779-4776-8cd8-4d0e03f0c853","name":"Through Company Dev","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"ef0556d5-f944-486a-ba5d-c165f21d4a9c"}}]}]
+[{"id":"ad7bff31-5358-4a55-8f2f-edbaba3d3f37","name":"Local Connection","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"420c7f2a-e449-450b-ae95-57f8cc539e82"}}]}]
