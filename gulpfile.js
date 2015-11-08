@@ -89,7 +89,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('release', function() {
-  runSequence('build', function() {
+  runSequence('build', 'pre-release', function() {
     var env = _.extend({}, process.env);
     env.NODE_ENV = 'production';
 
