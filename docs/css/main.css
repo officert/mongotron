@@ -11410,7 +11410,7 @@ body {
 .top-container #header .logo {
   position: relative;
   margin: 0;
-  bottom: -10px;
+  bottom: -4px;
 }
 .top-container #header .logo span {
   position: absolute;
@@ -11431,7 +11431,16 @@ body {
   margin-left: 20px;
 }
 .top-container #header .main-nav ul li a {
+  padding: 5px 10px;
   color: #ccced2;
+  line-height: 1.5;
+  position: relative;
+  top: 4px;
+}
+.top-container #header .main-nav ul li a.btn {
+  top: 0;
+  border-radius: 20px;
+  background: none;
 }
 .top-container .banner {
   padding: 30px 0 60px;
