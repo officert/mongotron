@@ -11360,12 +11360,99 @@ body.theme-atom .user-info-note::before {
   opacity: 0.8;
   color: #52a8ff;
 }
+@font-face {
+  font-family: 'Avenir';
+  src: url('../fonts/AvenirNextLTPro-Regular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Avenir Light';
+  src: url('../fonts/AvenirNextLTPro-UltLtCn.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Avenir Bold';
+  src: url('../fonts/AvenirNextLTPro-Bold.otf') format('opentype');
+}
+.font-family-light {
+  font-family: 'Avenir Light';
+}
+.font-family-regular {
+  font-family: 'Avenir';
+}
+.font-family-bold {
+  font-family: 'Avenir Bold';
+}
 body {
   overflow: auto !important;
+  font-family: 'Avenir';
+  color: #ccced2;
 }
-.hero {
-  background: none;
+.top-container {
+  background: #161719;
 }
-.screenshot-section .screenshot {
+.top-container .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.top-container #header {
+  padding: 20px 0 0;
+  border-bottom: 1px solid #000;
+  position: relative;
+}
+.top-container #header::after {
+  border-bottom: 1px solid #393939;
+  content: '';
+  position: absolute;
+  height: 100%;
   width: 100%;
+  bottom: -2px;
+  left: 0;
+}
+.top-container #header .logo {
+  position: relative;
+  margin: 0;
+  bottom: -10px;
+}
+.top-container #header .logo span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+}
+.top-container #header .main-nav {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+}
+.top-container #header .main-nav ul {
+  list-style: none;
+}
+.top-container #header .main-nav ul li {
+  float: left;
+  margin-left: 20px;
+}
+.top-container #header .main-nav ul li a {
+  color: #ccced2;
+}
+.top-container .banner {
+  padding: 30px 0 60px;
+}
+.top-container .banner h2 {
+  font-size: 33px;
+  line-height: 1.4;
+}
+.top-container .banner h2 .strong {
+  font-family: 'Avenir Bold';
+}
+.middle-container {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.middle-container .screen-shot {
+  margin: 0 auto;
+  -webkit-box-shadow: 0 1px 23px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 23px rgba(0, 0, 0, 0.25);
+}
+.bottom-container {
+  background: #161719;
+  padding: 20px 0;
 }
