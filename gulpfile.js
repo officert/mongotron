@@ -115,6 +115,14 @@ gulp.task('serve', ['build'], function() {
   electron.start();
 });
 
+gulp.task('serve-site', function() {
+  gulp.watch(DOCS_DIR + '/less/*.less', function() {
+    gulp.src(DOCS_DIR + '/less/main.less')
+      .pipe(less(LESSOPTIONS))
+      .pipe(gulp.dest(DOCS_DIR + '/css'));
+  });
+});
+
 gulp.task('default', ['serve']);
 
 gulp.task('test', function(next) {
