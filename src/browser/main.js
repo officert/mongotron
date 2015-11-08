@@ -1,20 +1,18 @@
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
-// const appConfig = require('src/config/appConfig');
+const appConfig = require('src/config/appConfig');
 
-//TODO: figure out how to conditionally require this
-//because using it during development makes the Chrome debugger shit the bed
-//
-
-// require('electron-compile').initWithOptions({
-//   cacheDir: appConfig.builddir,
-//   compilerOpts: {
-//     js: {
-//       only: '**/*.js'
-//     }
-//   }
-// });
+if (appConfig.env === 'production') {
+  require('electron-compile').initWithOptions({
+    cacheDir: appConfig.builddir,
+    compilerOpts: {
+      js: {
+        only: '**/*.js'
+      }
+    }
+  });
+}
 
 const app = require('app');
 const BrowserWindow = require('browser-window');
@@ -57,7 +55,7 @@ app.on('ready', function() {
 
   mainWindow.loadUrl(path.join('file://', __dirname, '../ui/index.html'));
 
-  // if (appConfig.ENV !== 'production') mainWindow.openDevTools();
+  if (appConfig.env !== 'production') mainWindow.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.setTitle('Mongotron');

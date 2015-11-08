@@ -7,9 +7,10 @@ const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
 const sh = require('shelljs');
-const electronConnect = require('electron-connect');
 const runSequence = require('run-sequence');
 const mocha = require('gulp-mocha');
+const _ = require('underscore');
+const childProcess = require('child_process');
 
 const appConfig = require('src/config/appConfig');
 
@@ -97,7 +98,7 @@ gulp.task('release', function(done) {
 });
 
 gulp.task('pre-release', function(done) {
-  var cmd = 'NODE_ENV=production ./node_modules/.bin/electron-compile . -v -t=' + appConfig.builddir;
+  var cmd = './node_modules/.bin/electron-compile . -v -t=' + appConfig.builddir;
 
   console.log(cmd);
 
@@ -107,12 +108,23 @@ gulp.task('pre-release', function(done) {
 gulp.task('build', ['clean', 'css']);
 
 gulp.task('serve', ['build'], function() {
-  var electron = electronConnect.server.create({
-    path: './'
+
+  var env = _.extend({}, process.env);
+  // env.NODE_ENV = 'production';
+
+  var child = childProcess.spawn('./node_modules/.bin/electron', ['./'], {
+    env: env
   });
 
-  // Start browser process
-  electron.start();
+  child.stdout.on('data',
+    function(data) {
+      console.log('tail output: ' + data);
+    }
+  );
+
+  child.on('exit', function(exitCode) {
+    console.log('Child exited with code: ' + exitCode);
+  });
 });
 
 gulp.task('serve-site', function() {

@@ -10,7 +10,6 @@
     "bluebird": "2.10.2",
     "electron-compile": "1.0.1",
     "electron-compilers": "1.0.1",
-    "electron-connect": "0.3.3",
     "jquery": "2.1.4",
     "jsonfile": "2.2.1",
     "mongodb": "2.0.47",
