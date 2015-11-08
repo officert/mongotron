@@ -5,7 +5,8 @@ angular.module('app').controller('sidebarCtrl', [
   'tabCache',
   'connectionCache',
   'EVENTS',
-  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS) {
+  'menuService',
+  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService) {
 
     $scope.activeConnections = connectionCache.list();
 
@@ -16,6 +17,21 @@ angular.module('app').controller('sidebarCtrl', [
     connectionCache.on(EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
       $scope.activeConnections = updatedCache;
     });
+
+    $scope.openServerContextMenu = function(connection) {
+      if (!connection) return;
+
+      menuService.showMenu([{
+        label: 'Disconnect',
+        click: function() {
+          $timeout(function() {
+            connectionCache.removeByName(connection.name);
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
 
     //connections
     $scope.openConnection = function openConnection(connection) {

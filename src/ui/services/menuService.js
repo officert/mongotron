@@ -1,29 +1,22 @@
 'use strict';
-var ipc = require('ipc');
-var shell = require('shell');
-var remote = require('remote');
-var Menu = remote.require('menu');
-var MenuItem = remote.require('menu-item');
-var appConfig = require('src/config/appConfig');
-
 angular.module('app').factory('menuService', [
   '$window',
   '$rootScope',
   '$timeout',
   'dialogService',
   function($window, $rootScope, $timeout, dialogService) {
-    let MENU_CACHE = {};
+    const ipc = require('ipc');
+    const shell = require('shell');
+    const remote = require('remote');
+    const Menu = remote.require('menu');
+    const MenuItem = remote.require('menu-item');
+    const appConfig = require('src/config/appConfig');
 
     function MenuService() {
       initMainMenu();
-      initContextMenus();
     }
 
-    MenuService.prototype.registerContextMenu = function(menuName, menuItems) {
-      var existingMenu = MENU_CACHE[menuName];
-
-      if (existingMenu) return existingMenu;
-
+    MenuService.prototype.showMenu = function(menuItems) {
       var menu = new Menu();
 
       for (let i = 0; i < menuItems.length; i++) {
@@ -37,37 +30,8 @@ angular.module('app').factory('menuService', [
         menu.append(new MenuItem(menuItem));
       }
 
-      MENU_CACHE[menuName] = menu;
-
-      return menu;
+      menu.popup(remote.getCurrentWindow());
     };
-
-    /* ------------------------
-     * Private Helpers
-     * ------------------------ */
-    function initContextMenus() {
-      $window.addEventListener('contextmenu', (e) => {
-        var $el = angular.element(e.srcElement);
-        var menuName = $el.attr('context-menu-name');
-
-        if (!menuName) return;
-
-        if (menuName[0] === '\'') {
-          menuName = menuName.substr(1);
-        }
-        if (menuName[menuName.length - 1] === '\'') {
-          menuName = menuName.substr(0, menuName.length - 1);
-        }
-
-        var menu = MENU_CACHE[menuName];
-
-        if (!menu) return;
-
-        e.preventDefault();
-
-        menu.popup(remote.getCurrentWindow());
-      }, false);
-    }
 
     function initMainMenu() {
       var name = appConfig.name;
