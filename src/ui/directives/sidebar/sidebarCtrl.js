@@ -18,10 +18,18 @@ angular.module('app').controller('sidebarCtrl', [
       $scope.activeConnections = updatedCache;
     });
 
-    $scope.openServerContextMenu = function(connection) {
+    //connections
+    $scope.openConnectionContextMenu = function(connection) {
       if (!connection) return;
 
       menuService.showMenu([{
+        label: 'New Database',
+        click: function() {
+          $timeout(function() {
+            alert('New Database!!');
+          });
+        }
+      }, {
         label: 'Disconnect',
         click: function() {
           $timeout(function() {
@@ -33,7 +41,6 @@ angular.module('app').controller('sidebarCtrl', [
       });
     };
 
-    //connections
     $scope.openConnection = function openConnection(connection) {
       if (!connection) return;
 
@@ -54,6 +61,21 @@ angular.module('app').controller('sidebarCtrl', [
     };
 
     //databases
+    $scope.openDatabaseContextMenu = function openDatabaseContextMenu(database, connection) {
+      if (!database || !connection) return;
+
+      menuService.showMenu([{
+        label: 'New Collection',
+        click: function() {
+          $timeout(function() {
+            alert('New Collection!!');
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
+
     $scope.openDatabase = function openDatabase(database, connection) {
       if (!database) return;
 
