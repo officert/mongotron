@@ -4,8 +4,8 @@ angular.module('app').controller('addDatabaseCtrl', [
   '$scope',
   '$modalInstance',
   'connection',
-  function($scope, $modalInstance, connection) {
-    const connectionModule = require('lib/modules/connection');
+  'alertService',
+  function($scope, $modalInstance, connection, alertService) {
 
     $scope.close = function() {
       $modalInstance.close(1);
@@ -14,9 +14,13 @@ angular.module('app').controller('addDatabaseCtrl', [
     $scope.form = {};
 
     $scope.addDatabase = function(addDatabaseForm) {
-      if (addDatabaseForm.$valid) return;
+      if (!addDatabaseForm.$valid) return;
 
       connection.addDatabase($scope.form);
+
+      alertService.success('New database added');
+
+      $scope.close();
     };
   }
 ]);

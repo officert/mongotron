@@ -26,7 +26,7 @@ class Database {
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'test';
+    _this.name = options.name || 'test'; //TODO: validate name doesn't contain spaces
     _this.host = options.host || 'localhost';
     _this.port = options.port || 27017;
     _this.auth = options.auth || null;

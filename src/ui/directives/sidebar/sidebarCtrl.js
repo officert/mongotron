@@ -69,7 +69,21 @@ angular.module('app').controller('sidebarCtrl', [
         label: 'New Collection',
         click: function() {
           $timeout(function() {
-            alert('New Collection!!');
+            modalService.openAddCollection(database);
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
+    $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(database, connection) {
+      if (!database || !connection) return;
+
+      menuService.showMenu([{
+        label: 'New Collection',
+        click: function() {
+          $timeout(function() {
+            modalService.openAddCollection(database);
           });
         }
       }], {

@@ -21,7 +21,7 @@
           </span>
           <ul class="collection-list slide" ng-show="database.isOpen">
             <li>
-              <span class="level-3" ng-click="openCollections(database)">
+              <span class="level-3" ng-click="openCollections(database)" ng-right-click="openDatabaseCollectionContextMenu(database, connection)">
                 <i class="fa fa-folder-o"></i> Collections<i class="open-icon">+</i>
                 <span class="loader" ng-show="database.loadingCollections">
                   <i class="fa fa-cog fa-spin"></i>

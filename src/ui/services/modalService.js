@@ -36,6 +36,20 @@ angular.module('app').service('modalService', [
       return modal;
     };
 
+    ModalService.prototype.openAddCollection = function(database) {
+      var modal = $uibModal.open({
+        templateUrl: __dirname + '/components/addCollection/addCollection.html',
+        controller: 'addCollectionCtrl',
+        resolve: {
+          database: [function() {
+            return database;
+          }]
+        }
+      });
+
+      return modal;
+    };
+
     // ModalService.prototype.confirm = function confirm(options) {
     //   if (!options) throw new Error('options is required');
     //
