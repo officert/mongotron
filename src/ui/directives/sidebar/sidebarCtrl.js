@@ -6,7 +6,8 @@ angular.module('app').controller('sidebarCtrl', [
   'connectionCache',
   'EVENTS',
   'menuService',
-  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService) {
+  'modalService',
+  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService, modalService) {
 
     $scope.activeConnections = connectionCache.list();
 
@@ -26,7 +27,7 @@ angular.module('app').controller('sidebarCtrl', [
         label: 'New Database',
         click: function() {
           $timeout(function() {
-            alert('New Database!!');
+            modalService.openAddDatabase(connection);
           });
         }
       }, {

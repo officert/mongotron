@@ -22,6 +22,20 @@ angular.module('app').service('modalService', [
       return modal;
     };
 
+    ModalService.prototype.openAddDatabase = function(connection) {
+      var modal = $uibModal.open({
+        templateUrl: __dirname + '/components/addDatabase/addDatabase.html',
+        controller: 'addDatabaseCtrl',
+        resolve: {
+          connection: [function() {
+            return connection;
+          }]
+        }
+      });
+
+      return modal;
+    };
+
     // ModalService.prototype.confirm = function confirm(options) {
     //   if (!options) throw new Error('options is required');
     //
