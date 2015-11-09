@@ -103,6 +103,8 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.results = results;
 
+            if (!results) return;
+
             $scope.keyValueResults = results.map(function(result) {
               var props = [];
 
