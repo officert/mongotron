@@ -68,17 +68,12 @@ describe('modules', function() {
 
         describe('when connection is found', function() {
           var id = 12345;
-          var jsonWriteFileStub;
 
           before(function() {
             sandbox.stub(connectionRepository, 'list')
               .resolves([{
                 id: id
               }]);
-
-            jsonWriteFileStub = sandbox.stub(jsonfile, 'writeFile', function(arg1, arg2, done) {
-              return done();
-            });
           });
 
           it('should return the connection', function(next) {
@@ -88,7 +83,6 @@ describe('modules', function() {
                 should.exist(connection);
 
                 connection.id.should.equal(id);
-
               })
               .catch(next)
               .done(next);

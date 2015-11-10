@@ -32,14 +32,9 @@ class ConnectionRepository {
 
       return _this.list()
         .then((connections) => {
-          var found = _.findWhere(connections, {
-            id: id
-          });
-
-          if (!found) return reject(new errors.ObjectNotFoundError('Connection not found'));
-
-          return resolve(found);
+          return findConnectionById(id, connections);
         })
+        .then(resolve)
         .catch(reject);
     });
   }
@@ -90,21 +85,27 @@ class ConnectionRepository {
    * @method update
    * @param {String} id - id of the connection to update
    */
-  // update(id, options) {
-  //   var _this = this;
-  //
-  //   return _this.list()
-  //     .then((connections) => {
-  //       return updateConnection(id, options, connections);
-  //     })
-  //     .then(convertConnectionInstancesIntoConfig)
-  //     .then(writeConfigFile)
-  //     .then(() => {
-  //       return new Promise((resolve) => {
-  //         return resolve(null);
-  //       });
-  //     });
-  // }
+  update(id, options) {
+    var _this = this;
+
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+
+      return _this.list()
+        .then((connections) => {
+          return findConnectionById(id, connections)
+            .then(function(connection) {
+              return updateConnection(connection, options, connections);
+            });
+        })
+        .then(convertConnectionInstancesIntoConfig)
+        .then(writeConfigFile)
+        .then(() => {
+          return resolve(null);
+        })
+        .catch(reject);
+    });
+  }
 
   /**
    * @method delete
@@ -118,7 +119,10 @@ class ConnectionRepository {
 
       return _this.list()
         .then((connections) => {
-          return removeConnection(id, connections);
+          return findConnectionById(id, connections)
+            .then(function(connection) {
+              return removeConnection(connection, connections);
+            });
         })
         .then(convertConnectionInstancesIntoConfig)
         .then(writeConfigFile)
@@ -232,6 +236,20 @@ function convertConnectionInstanceIntoConfig(connection) {
   };
 }
 
+function findConnectionById(connectionId, connections) {
+  return new Promise((resolve, reject) => {
+    var foundConnection = _.findWhere(connections, {
+      id: connectionId
+    });
+
+    if (foundConnection) {
+      return resolve(foundConnection);
+    } else {
+      return reject(new errors.ObjectNotFoundError('Connection not found'));
+    }
+  });
+}
+
 function createConnection(options) {
   return new Promise((resolve) => {
     var newConn = new Connection(options);
@@ -246,7 +264,16 @@ function createConnection(options) {
   });
 }
 
-function removeConnection(connectionId, connections) {
+function removeConnection(connection, connections) {
+  return new Promise((resolve) => {
+    var index = connections.indexOf(connection);
+    connections.splice(index, 1);
+
+    return resolve(connections);
+  });
+}
+
+function updateConnection(connectionId, options, connections) {
   return new Promise((resolve, reject) => {
     var foundConnection = _.findWhere(connections, {
       id: connectionId
