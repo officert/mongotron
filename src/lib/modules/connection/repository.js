@@ -6,10 +6,11 @@ const _ = require('underscore');
 const Promise = require('bluebird');
 const uuid = require('node-uuid');
 
+const appConfig = require('src/config/appConfig');
 const errors = require('lib/errors');
 const Connection = require('lib/entities/connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../../../', 'config/dbConnections.json');
+const DB_CONNECTIONS = path.join(__dirname, '../../../../', appConfig.dbConfigPath);
 
 /**
  * @class ConnectionRepository
@@ -19,6 +20,29 @@ class ConnectionRepository {
    * @constructor ConnectionRepository
    */
   constructor() {}
+
+  /**
+   * @method findById
+   */
+  findById(id) {
+    let _this = this;
+
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+
+      return _this.list()
+        .then((connections) => {
+          var found = _.findWhere(connections, {
+            id: id
+          });
+
+          if (!found) return reject(new errors.ObjectNotFoundError('connection not found'));
+
+          return resolve(found);
+        })
+        .catch(reject);
+    });
+  }
 
   /**
    * @method create
@@ -63,6 +87,26 @@ class ConnectionRepository {
   }
 
   /**
+   * @method update
+   * @param {String} id - id of the connection to update
+   */
+  // update(id, options) {
+  //   var _this = this;
+  //
+  //   return _this.list()
+  //     .then((connections) => {
+  //       return updateConnection(id, options, connections);
+  //     })
+  //     .then(convertConnectionInstancesIntoConfig)
+  //     .then(writeConfigFile)
+  //     .then(() => {
+  //       return new Promise((resolve) => {
+  //         return resolve(null);
+  //       });
+  //     });
+  // }
+
+  /**
    * @method delete
    * @param {String} id - id of the connection to delete
    */
@@ -82,6 +126,10 @@ class ConnectionRepository {
       });
   }
 
+  /**
+   * @method existsByName
+   * @param {String} name
+   */
   existsByName(name) {
     var _this = this;
     return _this.list()
@@ -163,7 +211,7 @@ function convertConnectionInstanceIntoConfig(connection) {
     name: connection.name,
     host: connection.host,
     port: connection.port,
-    databases: connection.databases.map((database) => {
+    databases: connection.databases ? connection.databases.map((database) => {
       var db = {
         name: database.name
       };
@@ -177,7 +225,7 @@ function convertConnectionInstanceIntoConfig(connection) {
       }
 
       return db;
-    })
+    }) : []
   };
 }
 

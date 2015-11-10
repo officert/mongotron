@@ -15,6 +15,13 @@ class ConnectionService {
   constructor() {}
 
   /**
+   * @method findById
+   */
+  findById(id) {
+    return connectionRepository.findById(id);
+  }
+
+  /**
    * @method create
    */
   create(options) {
@@ -47,6 +54,21 @@ class ConnectionService {
   list() {
     return connectionRepository.list();
   }
+
+  // /**
+  //  * @method update
+  //  * @param {String} id - id of the connection to update
+  //  */
+  // update(id, options) {
+  //   return new Promise((resolve, reject) => {
+  //     if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+  //     if (!options) return reject(new errors.InvalidArugmentError('options is required'));
+  //
+  //     connectionRepository.update(id, options)
+  //       .then(resolve)
+  //       .catch(reject);
+  //   });
+  // }
 
   /**
    * @method delete
