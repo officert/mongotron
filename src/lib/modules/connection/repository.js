@@ -113,17 +113,20 @@ class ConnectionRepository {
   delete(id) {
     var _this = this;
 
-    return _this.list()
-      .then((connections) => {
-        return removeConnection(id, connections);
-      })
-      .then(convertConnectionInstancesIntoConfig)
-      .then(writeConfigFile)
-      .then(() => {
-        return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+
+      return _this.list()
+        .then((connections) => {
+          return removeConnection(id, connections);
+        })
+        .then(convertConnectionInstancesIntoConfig)
+        .then(writeConfigFile)
+        .then(() => {
           return resolve(null);
-        });
-      });
+        })
+        .catch(reject);
+    });
   }
 
   /**
@@ -253,7 +256,7 @@ function removeConnection(connectionId, connections) {
       var index = connections.indexOf(foundConnection);
       connections.splice(index, 1);
     } else {
-      return reject(new Error('Connection not found'));
+      return reject(new errors.ObjectNotFoundError('Connection not found'));
     }
 
     return resolve(connections);

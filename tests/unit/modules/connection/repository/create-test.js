@@ -39,8 +39,6 @@ describe('modules', function() {
                 connection.should.have.property('host', 'localhost');
                 connection.should.have.property('port', 27017);
 
-                // console.log(connection);
-
               }).done(next);
           });
         });

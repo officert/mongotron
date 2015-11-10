@@ -53,9 +53,9 @@ function getConfig(env) {
 
   if (!envConfig) throw new Error(env + ' is not a valid environment');
 
-  console.log('\nENVIRONMENT');
-  console.log(env);
+  console.log('\nENVIRONMENT\n------------------');
   console.log(envConfig);
+  console.log('\n');
 
   return envConfig;
 }
