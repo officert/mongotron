@@ -36,7 +36,7 @@ class ConnectionRepository {
             id: id
           });
 
-          if (!found) return reject(new errors.ObjectNotFoundError('connection not found'));
+          if (!found) return reject(new errors.ObjectNotFoundError('Connection not found'));
 
           return resolve(found);
         })
