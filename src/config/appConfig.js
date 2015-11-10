@@ -20,7 +20,8 @@ var defaultSettings = {
   version: packageJson.version,
   name: packageJson.name,
   repository: packageJson.repository.url,
-  builddir: path.join(__dirname, '../../build')
+  builddir: path.join(__dirname, '../../build'),
+  dbConfigPath: 'src/config/dbConnections.json'
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {
@@ -36,7 +37,8 @@ var local = _.extend(_.extend({}, defaultSettings), {
 });
 
 var test = _.extend(_.extend({}, defaultSettings), {
-  env: 'test'
+  env: 'test',
+  dbConfigPath: 'tests/config/dbConnections-test.json'
 });
 
 var configs = {
