@@ -1,1 +1,1 @@
-[{"id":"88050065-e11d-4ba7-a8d4-83e482af3e30","name":"Local Connection","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"5871049e-a857-4428-98b3-71150a75ce27"}}]},{"id":"ea46aaf5-d4ea-4311-b4b8-e0648ba0ee9c","name":"Foobar","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"8d066a74-db41-4f0c-8536-9938b3512e2b"}}]}]
+[{"id":"0f0af36a-f3dd-4e8c-97be-b0bfe27e65a4","name":"Local","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"11962276-8c64-463b-9352-745a83924ea6"}}]}]
