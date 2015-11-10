@@ -8,7 +8,7 @@ const jshint = require('gulp-jshint');
 const less = require('gulp-less');
 const sh = require('shelljs');
 const runSequence = require('run-sequence');
-const mocha = require('gulp-mocha');
+const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
 
@@ -49,8 +49,9 @@ const LESSOPTIONS = {
 const MOCHA_SETTINGS = {
   reporter: 'spec',
   growl: true,
-  useColors: true,
-  useInlineDiffs: true
+  env: {
+    NODE_ENV: 'test'
+  }
 };
 
 /* =========================================================================
