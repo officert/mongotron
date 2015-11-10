@@ -90,18 +90,23 @@ class ConnectionRepository {
 
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
+
+      var connection;
 
       return _this.list()
         .then((connections) => {
           return findConnectionById(id, connections)
-            .then(function(connection) {
-              return updateConnection(connection, options, connections);
+            .then(function(_connection) {
+              connection = _connection;
+
+              return updateConnection(_connection, options, connections);
             });
         })
         .then(convertConnectionInstancesIntoConfig)
         .then(writeConfigFile)
         .then(() => {
-          return resolve(null);
+          return resolve(connection);
         })
         .catch(reject);
     });
@@ -273,18 +278,9 @@ function removeConnection(connection, connections) {
   });
 }
 
-function updateConnection(connectionId, options, connections) {
-  return new Promise((resolve, reject) => {
-    var foundConnection = _.findWhere(connections, {
-      id: connectionId
-    });
-
-    if (foundConnection) {
-      var index = connections.indexOf(foundConnection);
-      connections.splice(index, 1);
-    } else {
-      return reject(new errors.ObjectNotFoundError('Connection not found'));
-    }
+function updateConnection(connection, options, connections) {
+  return new Promise((resolve) => {
+    connection = _.extend(connection, options);
 
     return resolve(connections);
   });
