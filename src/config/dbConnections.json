@@ -1,1 +1,1 @@
-[{"id":"8088333e-bc83-42ef-9c15-1820ccb2309c","name":"Localhost","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"94217445-906a-40ba-81c8-7b3885d43f1a"}}]}]
+[{"id":"4a065f35-b34c-4102-b728-ddfe93e88bf1","name":"Hello","host":"localhost","port":"27017","databases":[{"name":"test","auth":{"id":"74595adb-6af9-46ef-af1e-cc32b9ac92dd"}}]}]

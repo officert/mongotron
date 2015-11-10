@@ -1,9 +1,16 @@
 'use strict';
 
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const errors = require('lib/errors');
 const connectionRepository = require('./repository');
+
+const ALLOWED_UPDATES = [
+  'name',
+  'host',
+  'port'
+];
 
 /**
  * @class ConnectionService
@@ -55,20 +62,22 @@ class ConnectionService {
     return connectionRepository.list();
   }
 
-  // /**
-  //  * @method update
-  //  * @param {String} id - id of the connection to update
-  //  */
-  // update(id, options) {
-  //   return new Promise((resolve, reject) => {
-  //     if (!id) return reject(new errors.InvalidArugmentError('id is required'));
-  //     if (!options) return reject(new errors.InvalidArugmentError('options is required'));
-  //
-  //     connectionRepository.update(id, options)
-  //       .then(resolve)
-  //       .catch(reject);
-  //   });
-  // }
+  /**
+   * @method update
+   * @param {String} id - id of the connection to update
+   */
+  update(id, options) {
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
+
+      options = _.pick(options, ALLOWED_UPDATES);
+
+      connectionRepository.update(id, options)
+        .then(resolve)
+        .catch(reject);
+    });
+  }
 
   /**
    * @method delete
