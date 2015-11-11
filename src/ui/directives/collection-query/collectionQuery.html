@@ -61,9 +61,17 @@
         </div>
         <!-- Raw View -->
         <div class="raw-view" ng-if="currentView === VIEWS.RAW">
-          <pre class="result" ng-repeat="result in results">
-            {{ ::result | json }}
-          </pre>
+          <div class="result" ng-repeat="result in results">
+            <ul class="menu">
+              <li>
+                <i class="fa fa-pencil"></i>
+              </li>
+              <li>
+                <i class="fa fa-plus rotate-45"></i>
+              </li>
+            </ul>
+            <pre>{{ ::result | json }}</pre>
+          </div>
         </div>
         <!-- Key Value View -->
         <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
