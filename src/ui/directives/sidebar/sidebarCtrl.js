@@ -5,7 +5,9 @@ angular.module('app').controller('sidebarCtrl', [
   'tabCache',
   'connectionCache',
   'EVENTS',
-  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS) {
+  'menuService',
+  'modalService',
+  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService, modalService) {
 
     $scope.activeConnections = connectionCache.list();
 
@@ -18,6 +20,28 @@ angular.module('app').controller('sidebarCtrl', [
     });
 
     //connections
+    $scope.openConnectionContextMenu = function(connection) {
+      if (!connection) return;
+
+      menuService.showMenu([{
+        label: 'New Database',
+        click: function() {
+          $timeout(function() {
+            modalService.openAddDatabase(connection);
+          });
+        }
+      }, {
+        label: 'Disconnect',
+        click: function() {
+          $timeout(function() {
+            connectionCache.removeByName(connection.name);
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
+
     $scope.openConnection = function openConnection(connection) {
       if (!connection) return;
 
@@ -38,6 +62,35 @@ angular.module('app').controller('sidebarCtrl', [
     };
 
     //databases
+    $scope.openDatabaseContextMenu = function openDatabaseContextMenu(database, connection) {
+      if (!database || !connection) return;
+
+      menuService.showMenu([{
+        label: 'New Collection',
+        click: function() {
+          $timeout(function() {
+            modalService.openAddCollection(database);
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
+    $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(database, connection) {
+      if (!database || !connection) return;
+
+      menuService.showMenu([{
+        label: 'New Collection',
+        click: function() {
+          $timeout(function() {
+            modalService.openAddCollection(database);
+          });
+        }
+      }], {
+        connection: connection
+      });
+    };
+
     $scope.openDatabase = function openDatabase(database, connection) {
       if (!database) return;
 

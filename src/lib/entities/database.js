@@ -26,7 +26,7 @@ class Database {
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'test';
+    _this.name = options.name || 'test'; //TODO: validate name doesn't contain spaces
     _this.host = options.host || 'localhost';
     _this.port = options.port || 27017;
     _this.auth = options.auth || null;
@@ -78,7 +78,7 @@ class Database {
       if (err) return next(new errors.DatabaseError(err));
 
       _.each(collections, function(collection) {
-        _this._addCollection({
+        _this.addCollection({
           name: collection.collectionName
         });
       });
@@ -88,10 +88,10 @@ class Database {
   }
 
   /**
-   * @method _addCollection
+   * @method addCollection
    * @param {Object} options
    */
-  _addCollection(options) {
+  addCollection(options) {
     options = options || {};
 
     var _this = this;

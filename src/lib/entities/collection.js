@@ -44,9 +44,9 @@ class Collection {
     var _this = this;
 
     return new Promise(function(resolve, reject) {
-      _this._dbCollection.insertOne(doc, function(err, newDoc) {
+      _this._dbCollection.insertOne(doc, function(err) {
         if (err) return reject(err);
-        return resolve(newDoc);
+        return resolve(null);
       });
     });
   }

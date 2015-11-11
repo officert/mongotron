@@ -7,6 +7,7 @@ const ConnectionError = require('./connectionError');
 const DatabaseError = require('./databaseError');
 const InvalidArugmentError = require('./invalidArgumentError');
 const InternalServiceError = require('./internalServiceError');
+const ObjectNotFoundError = require('./objectNotFoundError');
 
 /*
  * @exports
@@ -17,5 +18,6 @@ module.exports = {
   ConnectionError: ConnectionError,
   DatabaseError: DatabaseError,
   InvalidArugmentError: InvalidArugmentError,
-  InternalServiceError: InternalServiceError
+  InternalServiceError: InternalServiceError,
+  ObjectNotFoundError: ObjectNotFoundError
 };

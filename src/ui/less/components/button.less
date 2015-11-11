@@ -11,7 +11,8 @@
   &:focus,
   &:active,
   &.active {
-    background: darken(@background, 0);
+    background: darken(@background, 10%);
+    outline: none;
 
     // #gradient > .vertical(darken(@background, 0), darken(@background, 10%), 0%, 100%);
     border-color: darken(@background, 20%);
@@ -25,7 +26,7 @@
     &:focus,
     &:active,
     &.active {
-      background-color: @background;
+      background-color: darken(@background, 5%);
       border-color: darken(@background, 5%);
     }
   }
@@ -36,7 +37,7 @@
   padding: 0.5em 1em 0.6em;
 }
 .btn-default {
-  .pretty-buttons(@btn-default-color, @btn-default-bg);
+  .pretty-buttons(@theme-btn-default-color, @theme-btn-default-bg);
 }
 .btn-primary {
   .pretty-buttons(@theme-btn-primary-color, @theme-btn-primary-bg);

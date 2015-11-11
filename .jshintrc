@@ -19,7 +19,8 @@
     "afterEach": true,
     "it": true,
     "Promise": true,
-    "$": true
+    "$": true,
+    "alert": true
   },
   "camelcase": true,
   "bitwise": true,

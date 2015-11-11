@@ -85,8 +85,8 @@ angular.module('app').run([
 
     keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
       console.log(keypressService.EVENTS.RUN_CURRENT_QUERY);
-      if ($rootScope.currentQuery && $rootScope.currentQuery.search) {
-        $rootScope.currentQuery.search();
+      if ($rootScope.currentQuery && $rootScope.currentQuery.runQuery) {
+        $rootScope.currentQuery.runQuery();
       }
     });
   }

@@ -1,0 +1,24 @@
+<div id="add-collection">
+  <form name="addCollectionForm" novalidate>
+    <div class="modal-header modal-header-w-icon clearfix">
+      <i class="fa fa-database"></i>&nbsp;Add a new collection
+      <i class="close fa fa-plus rotate-45" ng-click="close()"></i>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" ng-class="{ 'has-error' : !addCollectionForm.name.$valid && addCollectionFormSubmitted }">
+        <label class="control-label">Name</label>
+        <input class="form-control" type="text" name="name" ng-model="form.name" required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="center">
+        <button class="btn btn-default col-xs-4 col-xs-offset-2" type="button" ng-click="close()">
+          Cancel
+        </button>
+        <button class="btn btn-primary col-xs-4" type="button" ng-click="addCollection(addCollectionForm, $event)">
+          Save
+        </button>
+      </p>
+    </div>
+  </form>
+</div>

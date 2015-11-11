@@ -7,9 +7,10 @@ const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
 const sh = require('shelljs');
-const electronConnect = require('electron-connect');
 const runSequence = require('run-sequence');
-const mocha = require('gulp-mocha');
+const mocha = require('gulp-spawn-mocha');
+const _ = require('underscore');
+const childProcess = require('child_process');
 
 const appConfig = require('src/config/appConfig');
 
@@ -34,6 +35,7 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'jshint-stylish',
   'run-sequence',
   'bower',
+  'babel',
   'should',
   'sinon',
   'supertest'
@@ -47,8 +49,9 @@ const LESSOPTIONS = {
 const MOCHA_SETTINGS = {
   reporter: 'spec',
   growl: true,
-  useColors: true,
-  useInlineDiffs: true
+  env: {
+    NODE_ENV: 'test'
+  }
 };
 
 /* =========================================================================
@@ -86,33 +89,96 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('release', function(done) {
+gulp.task('release', function() {
   runSequence('build', 'pre-release', function() {
-    var cmd = './node_modules/.bin/electron-packager ' + '.' + ' ' + APP_NAME + ' --out=' + RELEASE_DIR + ' --platform=darwin  --arch=x64 --version=0.30.2 --ignore="node_modules/(' + RELEASE_IGNORE_PKGS + ')" --icon=' + RELEASE_IMAGE_ICON;
+    var env = _.extend({}, process.env);
+    env.NODE_ENV = 'production';
 
-    console.log(cmd);
+    var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
+      '.',
+      APP_NAME,
+      '--out',
+      RELEASE_DIR,
+      '--platform',
+      'darwin',
+      '--arch',
+      'x64',
+      '--version',
+      '0.30.2',
+      '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
+      '--icon',
+      RELEASE_IMAGE_ICON
+    ], {
+      env: env
+    });
 
-    sh.exec(cmd, done);
+    child.stdout.on('data',
+      function(data) {
+        console.log('tail output: ' + data);
+      }
+    );
+
+    child.on('exit', function(exitCode) {
+      console.log('Child exited with code: ' + exitCode);
+    });
   });
 });
 
-gulp.task('pre-release', function(done) {
-  var cmd = 'NODE_ENV=production ./node_modules/.bin/electron-compile . -v -t=' + appConfig.builddir;
+/*
+ * @task pre-release - compile ES6 to ES5 using babel
+ */
+gulp.task('pre-release', function() {
+  var env = _.extend({}, process.env);
+  env.NODE_ENV = 'production';
 
-  console.log(cmd);
+  var child = childProcess.spawn('./node_modules/.bin/electron-compile', [
+    '.',
+    '-v',
+    '-t',
+    appConfig.builddir
+  ], {
+    env: env
+  });
 
-  sh.exec(cmd, done);
+  child.stdout.on('data',
+    function(data) {
+      console.log('tail output: ' + data);
+    }
+  );
+
+  child.on('exit', function(exitCode) {
+    console.log('Child exited with code: ' + exitCode);
+  });
 });
 
 gulp.task('build', ['clean', 'css']);
 
 gulp.task('serve', ['build'], function() {
-  var electron = electronConnect.server.create({
-    path: './'
+
+  var env = _.extend({}, process.env);
+  // env.NODE_ENV = 'production';
+
+  var child = childProcess.spawn('./node_modules/.bin/electron', ['./'], {
+    env: env
   });
 
-  // Start browser process
-  electron.start();
+  child.stdout.on('data',
+    function(data) {
+      console.log('tail output: ' + data);
+    }
+  );
+
+  child.on('exit', function(exitCode) {
+    console.log('Child exited with code: ' + exitCode);
+  });
+});
+
+gulp.task('serve-site', function() {
+  gulp.watch(DOCS_DIR + '/less/*.less', function() {
+    gulp.src(DOCS_DIR + '/less/main.less')
+      .pipe(less(LESSOPTIONS))
+      .pipe(gulp.dest(DOCS_DIR + '/css'));
+  });
 });
 
 gulp.task('default', ['serve']);

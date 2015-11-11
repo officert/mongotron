@@ -104,9 +104,27 @@ angular.module('app').controller('connectCtrl', [
         });
     };
 
-    $scope.editConnection = function(connection, $event) {
-      if (!connection) return;
-      if ($event) $event.preventDefault();
+    $scope.editConnection = function(editConnectionForm) {
+      if (!editConnectionForm.$valid) return;
+
+      connectionModule.update($scope.selectedConnection.id, $scope.selectedConnection)
+        .then(function(connection) {
+          $timeout(function() {
+            //TODO: need to update cached connection, if it's in the cache
+
+            _.extend($scope.selectedConnection, connection);
+
+            $scope.currentScreen = $scope.screens.LIST;
+
+            alertService.success('Connection updated');
+          });
+        })
+        .catch(function(err) {
+          $timeout(function() {
+            alertService.error(err);
+            console.log(err);
+          });
+        });
     };
 
     $scope.removeConnection = function(connection, $event) {

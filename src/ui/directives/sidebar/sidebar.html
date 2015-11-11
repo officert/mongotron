@@ -8,13 +8,12 @@
   </div>
   <ul class="server-list">
     <li ng-repeat="connection in activeConnections | orderBy : 'name'">
-      <span class="level-1" ng-click="openConnection(connection)">
-        <!-- <span ng-click="openConnection(connection)" context-menu="contextMenus.SERVER" context-menu-name="'SERVER'" context-menu-args="[connection]"> -->
+      <span ng-click="openConnection(connection)" ng-right-click="openConnectionContextMenu(connection)">
         <i class="fa fa-server"></i> {{ connection.name }}<i class="open-icon">+</i>
       </span>
       <ul class="database-list slide" ng-show="connection.isOpen">
         <li ng-repeat="database in connection.databases | orderBy : 'name'">
-          <span class="level-2" ng-click="openDatabase(database, connection)">
+          <span class="level-2" ng-click="openDatabase(database, connection)" ng-right-click="openDatabaseContextMenu(database, connection)">
             <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon">+</i>
             <span class="loader" ng-show="database.opening">
               <i class="fa fa-cog fa-spin"></i>
@@ -22,7 +21,7 @@
           </span>
           <ul class="collection-list slide" ng-show="database.isOpen">
             <li>
-              <span class="level-3" ng-click="openCollections(database)">
+              <span class="level-3" ng-click="openCollections(database)" ng-right-click="openDatabaseCollectionContextMenu(database, connection)">
                 <i class="fa fa-folder-o"></i> Collections<i class="open-icon">+</i>
                 <span class="loader" ng-show="database.loadingCollections">
                   <i class="fa fa-cog fa-spin"></i>

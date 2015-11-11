@@ -8,8 +8,8 @@ const AbstractError = require('./abstractError');
 /*
  * @constructor DatabaseError
  */
-var DatabaseError = function(error) {
-  AbstractError.call(this, error ? error.message : error);
+var DatabaseError = function() {
+  AbstractError.apply(this, arguments);
 };
 util.inherits(DatabaseError, AbstractError);
 DatabaseError.prototype.name = 'Database Error';

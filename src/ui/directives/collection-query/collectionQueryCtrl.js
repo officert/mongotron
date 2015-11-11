@@ -2,7 +2,8 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$scope',
   '$timeout',
   '$rootScope',
-  function($scope, $timeout, $rootScope) {
+  'alertService',
+  function($scope, $timeout, $rootScope, alertService) {
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
     $scope.loading = false;
@@ -15,12 +16,18 @@ angular.module('app').controller('collectionQueryCtrl', [
     const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
     const INSERT_ONE_QUERY_FULL_REGEX = /^(?:insertOne)\(([^]+)\)/;
 
+    const SEARCH_QUERY_DEFAULT = 'find({\n    \n})';
+
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: 'find({\n    \n})',
+      searchQuery: SEARCH_QUERY_DEFAULT,
       skip: 0,
       limit: 50
+    };
+
+    $scope.resetSearchQuery = function() {
+      $scope.form.searchQuery = SEARCH_QUERY_DEFAULT;
     };
 
     $scope.VIEWS = {
@@ -54,19 +61,27 @@ angular.module('app').controller('collectionQueryCtrl', [
       return icon;
     };
 
+    $scope.deleteResult = function(resultId) {
+      if (!resultId) return;
+
+      _runQuery(deleteManyQuery, {
+        _id: resultId
+      });
+    };
+
     $scope.editorHasFocus = false;
 
     $scope.$watch('editorHasFocus', function(val) {
       if (val) {
         $rootScope.currentQuery = {
-          search: $scope.search
+          runQuery: $scope.runQuery
         };
       } else {
         $rootScope.currentQuery = null;
       }
     });
 
-    $scope.search = function search() {
+    $scope.runQuery = function runQuery() {
       $scope.loading = true;
       $scope.error = null;
 
@@ -86,12 +101,24 @@ angular.module('app').controller('collectionQueryCtrl', [
         return;
       }
 
+      _runQuery(queryFn, searchQuery);
+    };
+
+    $scope.runQuery();
+
+    function _runQuery(fn, searchQuery) {
       var startTime = performance.now();
 
-      var promise = queryFn(searchQuery, {
-        skip: $scope.form.skip,
-        limit: $scope.form.limit
-      });
+      searchQuery = searchQuery || {};
+
+      var searchOptions = {};
+
+      if (fn === findQuery) {
+        searchOptions.skip = $scope.form.skip;
+        searchOptions.limit = $scope.form.limit;
+      }
+
+      var promise = fn(searchQuery, searchOptions);
 
       promise.then(function(results) {
           var endTime = performance.now();
@@ -100,6 +127,23 @@ angular.module('app').controller('collectionQueryCtrl', [
             $scope.queryTime = (endTime - startTime).toFixed(5);
 
             $scope.loading = false;
+
+            if (fn === insertOneQuery || fn === deleteManyQuery || fn === updateQuery) {
+              var msg = '';
+
+              if (fn === insertOneQuery) msg += 'Insert ';
+              else if (fn === deleteManyQuery) msg += 'Delete ';
+              else if (fn === updateQuery) msg += 'Update ';
+
+              msg += 'successful...';
+
+              alertService.success(msg);
+
+              $scope.resetSearchQuery();
+
+              return _runQuery(findQuery);
+            }
+            if (!results) return;
 
             $scope.results = results;
 
@@ -123,9 +167,7 @@ angular.module('app').controller('collectionQueryCtrl', [
         .catch(function(err) {
           $scope.error = err;
         });
-    };
-
-    $scope.search();
+    }
 
     function convertSearchQueryToJsObject(query) {
 

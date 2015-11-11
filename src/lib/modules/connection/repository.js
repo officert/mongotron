@@ -6,10 +6,11 @@ const _ = require('underscore');
 const Promise = require('bluebird');
 const uuid = require('node-uuid');
 
+const appConfig = require('src/config/appConfig');
 const errors = require('lib/errors');
 const Connection = require('lib/entities/connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../../../', 'config/dbConnections.json');
+const DB_CONNECTIONS = path.join(__dirname, '../../../../', appConfig.dbConfigPath);
 
 /**
  * @class ConnectionRepository
@@ -19,6 +20,24 @@ class ConnectionRepository {
    * @constructor ConnectionRepository
    */
   constructor() {}
+
+  /**
+   * @method findById
+   */
+  findById(id) {
+    let _this = this;
+
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+
+      return _this.list()
+        .then((connections) => {
+          return findConnectionById(id, connections);
+        })
+        .then(resolve)
+        .catch(reject);
+    });
+  }
 
   /**
    * @method create
@@ -63,25 +82,66 @@ class ConnectionRepository {
   }
 
   /**
+   * @method update
+   * @param {String} id - id of the connection to update
+   */
+  update(id, options) {
+    var _this = this;
+
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
+
+      var connection;
+
+      return _this.list()
+        .then((connections) => {
+          return findConnectionById(id, connections)
+            .then(function(_connection) {
+              connection = _connection;
+
+              return updateConnection(_connection, options, connections);
+            });
+        })
+        .then(convertConnectionInstancesIntoConfig)
+        .then(writeConfigFile)
+        .then(() => {
+          return resolve(connection);
+        })
+        .catch(reject);
+    });
+  }
+
+  /**
    * @method delete
    * @param {String} id - id of the connection to delete
    */
   delete(id) {
     var _this = this;
 
-    return _this.list()
-      .then((connections) => {
-        return removeConnection(id, connections);
-      })
-      .then(convertConnectionInstancesIntoConfig)
-      .then(writeConfigFile)
-      .then(() => {
-        return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      if (!id) return reject(new errors.InvalidArugmentError('id is required'));
+
+      return _this.list()
+        .then((connections) => {
+          return findConnectionById(id, connections)
+            .then(function(connection) {
+              return removeConnection(connection, connections);
+            });
+        })
+        .then(convertConnectionInstancesIntoConfig)
+        .then(writeConfigFile)
+        .then(() => {
           return resolve(null);
-        });
-      });
+        })
+        .catch(reject);
+    });
   }
 
+  /**
+   * @method existsByName
+   * @param {String} name
+   */
   existsByName(name) {
     var _this = this;
     return _this.list()
@@ -163,7 +223,7 @@ function convertConnectionInstanceIntoConfig(connection) {
     name: connection.name,
     host: connection.host,
     port: connection.port,
-    databases: connection.databases.map((database) => {
+    databases: connection.databases ? connection.databases.map((database) => {
       var db = {
         name: database.name
       };
@@ -177,8 +237,22 @@ function convertConnectionInstanceIntoConfig(connection) {
       }
 
       return db;
-    })
+    }) : []
   };
+}
+
+function findConnectionById(connectionId, connections) {
+  return new Promise((resolve, reject) => {
+    var foundConnection = _.findWhere(connections, {
+      id: connectionId
+    });
+
+    if (foundConnection) {
+      return resolve(foundConnection);
+    } else {
+      return reject(new errors.ObjectNotFoundError('Connection not found'));
+    }
+  });
 }
 
 function createConnection(options) {
@@ -195,18 +269,18 @@ function createConnection(options) {
   });
 }
 
-function removeConnection(connectionId, connections) {
-  return new Promise((resolve, reject) => {
-    var foundConnection = _.findWhere(connections, {
-      id: connectionId
-    });
+function removeConnection(connection, connections) {
+  return new Promise((resolve) => {
+    var index = connections.indexOf(connection);
+    connections.splice(index, 1);
 
-    if (foundConnection) {
-      var index = connections.indexOf(foundConnection);
-      connections.splice(index, 1);
-    } else {
-      return reject(new Error('Connection not found'));
-    }
+    return resolve(connections);
+  });
+}
+
+function updateConnection(connection, options, connections) {
+  return new Promise((resolve) => {
+    connection = _.extend(connection, options);
 
     return resolve(connections);
   });
