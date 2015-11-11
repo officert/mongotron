@@ -61,7 +61,7 @@
         </div>
         <!-- Raw View -->
         <div class="raw-view" ng-if="currentView === VIEWS.RAW">
-          <pre ng-repeat="result in results">
+          <pre class="result" ng-repeat="result in results">
             {{ ::result | json }}
           </pre>
         </div>
