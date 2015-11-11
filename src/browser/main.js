@@ -1,24 +1,15 @@
 /* ------------------------------------------------
  * Dependencies
  * ------------------------------------------------ */
-const appConfig = require('src/config/appConfig');
-
-if (appConfig.env === 'production') {
-  require('electron-compile').initWithOptions({
-    cacheDir: appConfig.builddir,
-    compilerOpts: {
-      js: {
-        only: '**/*.js'
-      }
-    }
-  });
-}
-
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');
 const ipc = require('ipc');
 const path = require('path');
+
+const appConfig = require('src/config/appConfig');
+
+console.log(appConfig);
 
 /* ------------------------------------------------
  * App initialization

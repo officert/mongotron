@@ -27,7 +27,6 @@ const RELEASE_DIR = 'release';
 const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
   'electron-packager',
   'electron-prebuilt',
-  'electron-connect',
   'gulp|gulp-jshint',
   'gulp-less',
   'gulp-mocha',
@@ -67,6 +66,7 @@ gulp.task('?', function(next) {
 
 gulp.task('clean', function(next) {
   sh.rm('-rf', RELEASE_DIR);
+  sh.rm('-rf', appConfig.builddir);
   next();
 });
 
@@ -128,17 +128,21 @@ gulp.task('release', function() {
  * @task pre-release - compile ES6 to ES5 using babel
  */
 gulp.task('pre-release', function() {
-  var env = _.extend({}, process.env);
-  env.NODE_ENV = 'production';
+  _init(gulp.src(['src/**/*.html', 'src/**/*.less', 'src/**/*.css']))
+    .pipe(gulp.dest(appConfig.builddir));
 
-  var child = childProcess.spawn('./node_modules/.bin/electron-compile', [
-    '.',
-    '-v',
-    '-t',
-    appConfig.builddir
-  ], {
-    env: env
-  });
+  _init(gulp.src(['src/ui/vendor/**/*.*']))
+    .pipe(gulp.dest(appConfig.builddir + '/ui/vendor'));
+
+  var child = childProcess.spawn('./node_modules/.bin/babel', [
+    './src',
+    '--out-dir',
+    appConfig.builddir,
+    '--extensions',
+    '.js',
+    '--ignore',
+    'src/ui/vendor/*'
+  ]);
 
   child.stdout.on('data',
     function(data) {
