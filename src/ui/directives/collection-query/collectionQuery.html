@@ -15,7 +15,7 @@
       <div class="query-btn-list btn-group clearfix">
         <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
         <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input>
-        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="search()">Search</button>
+        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.LIST" ng-class="{ active : currentView === VIEWS.LIST }">
@@ -66,7 +66,7 @@
               <li>
                 <i class="fa fa-pencil"></i>
               </li>
-              <li>
+              <li ng-click="deleteResult(result._id.toString())">
                 <i class="fa fa-plus rotate-45"></i>
               </li>
             </ul>

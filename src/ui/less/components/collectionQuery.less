@@ -93,9 +93,13 @@
     .raw-view {
       .result {
         position: relative;
+        overflow: hidden;
         .menu {
+          .transition-property('top');
+          .transition-duration(.35s);
+          .transition-timing-function(ease);
           position: absolute;
-          top: -1px;
+          top: -32px;
           right: -1px;
           border-top-right-radius: @border-radius-base;
           border: 1px solid @theme-query-result-json-border-color;
@@ -104,6 +108,7 @@
             float: left;
             padding: 5px;
             width: 30px;
+            height: 30px;
             text-align: center;
             cursor: pointer;
             &:hover {
@@ -114,6 +119,7 @@
         &:hover {
           border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
           .menu {
+            top: -1px;
             border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
           }
         }
