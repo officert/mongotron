@@ -14,6 +14,8 @@ angular.module('app').controller('addCollectionCtrl', [
     $scope.form = {};
 
     $scope.addCollection = function(addCollectionForm) {
+      $scope.addCollectionFormSubmitted = true;
+
       if (!addCollectionForm.$valid) return;
 
       database.addCollection($scope.form);

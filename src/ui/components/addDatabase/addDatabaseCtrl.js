@@ -14,6 +14,8 @@ angular.module('app').controller('addDatabaseCtrl', [
     $scope.form = {};
 
     $scope.addDatabase = function(addDatabaseForm) {
+      $scope.addDatabaseFormSubmitted = true;
+
       if (!addDatabaseForm.$valid) return;
 
       connection.addDatabase($scope.form);
