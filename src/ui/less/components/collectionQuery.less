@@ -40,10 +40,8 @@
         .number-input {
           width: 50px;
         }
-        .search-btn {
-          padding: 7px 12px;
-          position: relative;
-          top: -1px;
+        &.active {
+
         }
       }
     }
@@ -52,6 +50,7 @@
     margin-top: 15px;
   }
   .query-form {
+    min-height: 75px;
     .query-input {
       border-radius: 4px;
       padding: 2px;
@@ -75,7 +74,8 @@
     }
     pre {
       background: @theme-query-result-json-bg;
-      color: @theme-text-color;
+      color: @theme-query-result-json-color;
+      border: @theme-query-result-json-border-color;
     }
     .list-view {
 
