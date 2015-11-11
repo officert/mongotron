@@ -53,9 +53,7 @@
               <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
             </span>
             <div class="result-body slide" ng-show="result.isOpen">
-              <pre>
-                {{ ::result | json }}
-              </pre>
+              <pre>{{ ::result | json }}</pre>
             </div>
           </div>
         </div>
