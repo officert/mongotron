@@ -61,12 +61,10 @@ angular.module('app').controller('collectionQueryCtrl', [
       return icon;
     };
 
-    $scope.deleteResult = function(resultId) {
-      if (!resultId) return;
+    $scope.deleteResult = function(result) {
+      if (!result) return;
 
-      _runQuery(deleteManyQuery, {
-        _id: resultId
-      });
+      _runQuery(deleteByIdQuery, result._id);
     };
 
     $scope.editorHasFocus = false;
@@ -128,11 +126,12 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.loading = false;
 
-            if (fn === insertOneQuery || fn === deleteManyQuery || fn === updateQuery) {
+            if (fn === insertOneQuery || fn === deleteManyQuery || fn === deleteByIdQuery || fn === updateQuery) {
               var msg = '';
 
               if (fn === insertOneQuery) msg += 'Insert ';
               else if (fn === deleteManyQuery) msg += 'Delete ';
+              else if (fn === deleteByIdQuery) msg += 'Delete ';
               else if (fn === updateQuery) msg += 'Update ';
 
               msg += 'successful...';
@@ -165,7 +164,9 @@ angular.module('app').controller('collectionQueryCtrl', [
           });
         })
         .catch(function(err) {
-          $scope.error = err;
+          $timeout(function() {
+            $scope.error = err;
+          });
         });
     }
 
@@ -234,6 +235,10 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     function deleteManyQuery(query) {
       return $scope.collection.deleteMany(query);
+    }
+
+    function deleteByIdQuery(id) {
+      return $scope.collection.deleteById(id);
     }
 
     function aggregateQuery(aggregate) {

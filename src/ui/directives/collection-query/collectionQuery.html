@@ -62,10 +62,14 @@
           <div class="result" ng-repeat="result in results">
             <ul class="menu">
               <li>
-                <i class="fa fa-pencil"></i>
+                <button class="btn btn-default">
+                  <i class="fa fa-pencil"></i>
+                </button>
               </li>
-              <li ng-click="deleteResult(result._id.toString())">
-                <i class="fa fa-plus rotate-45"></i>
+              <li>
+                <button class="btn btn-default" ng-click="deleteResult(result)">
+                  <i class="fa fa-plus rotate-45"></i>
+                </button>
               </li>
             </ul>
             <pre>{{ ::result | json }}</pre>
