@@ -4,6 +4,8 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$rootScope',
   'alertService',
   function($scope, $timeout, $rootScope, alertService) {
+    const ObjectId = require('mongodb').ObjectId;
+
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
     $scope.loading = false;
@@ -55,6 +57,9 @@ angular.module('app').controller('collectionQueryCtrl', [
           break;
         case 'array':
           icon = 'fa-calendar';
+          break;
+        case 'objectId':
+          icon = 'fa-cog';
           break;
       }
 
@@ -148,7 +153,8 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.keyValueResults = results.map(function(result) {
               var props = [];
-
+              props._id = result._id;
+              
               for (var key in result) {
                 //TODO: if it's a nested object then recurse and generate key/value for all of it's props
                 props.push({
@@ -255,6 +261,11 @@ angular.module('app').controller('collectionQueryCtrl', [
       if (_.isArray(property)) return 'array';
       if (_.isDate(property)) return 'date';
       if (_.isBoolean(property)) return 'boolean';
+      if (isObjectId(property)) return 'objectId';
+    }
+
+    function isObjectId(id) {
+      return id instanceof ObjectId;
     }
   }
 ]);
