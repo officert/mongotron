@@ -130,15 +130,7 @@
     .list-view,
     .key-value-view {
       .table-cell {
-        padding: 5px 8px;
-        display: table-cell;
-      }
-      .table-header {
-        display: table-row;
-        border-bottom: 1px solid @theme-query-result-json-border-color;
-      }
-      .table-row {
-        display: table-row;
+
       }
       .top-header {
         padding: 10px;
@@ -151,8 +143,13 @@
           display: block;
         }
         .result-body {
-          padding: 10px;
-          display: table;
+          padding-bottom: 10px;
+          .date {
+            color: @theme-query-result-date-icon;
+          }
+          .string {
+            color: @theme-query-result-string-icon;
+          }
         }
       }
     }

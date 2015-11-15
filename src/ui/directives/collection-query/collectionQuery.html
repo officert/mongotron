@@ -77,14 +77,14 @@
         </div>
         <!-- Key Value View -->
         <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
-          <div class="top-header table-row table-header">
-            <span class="table-cell key">
+          <div class="top-header clearfix">
+            <span class="table-cell col-sm-3 key">
               Key
             </span>
-            <span class="table-cell key">
+            <span class="col-sm-3 key">
               Value
             </span>
-            <span class="table-cell key">
+            <span class="col-sm-3 key">
               Type
             </span>
           </div>
@@ -101,26 +101,26 @@
                 </button>
               </li>
             </ul>
-            <span class="result-header table-row " ng-click="result.isOpen = !result.isOpen">
-              <span class="table-cell key">
+            <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
+              <span class="key">
                 <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
               </span>
-              <span class="table-cell key">
+              <span class="key">
                 {{ ::result.length }} fields
               </span>
-              <span class="table-cell key">
+              <span class="key">
 
               </span>
             </span>
-            <div class="result-body slide" ng-show="result.isOpen">
-              <div class="table-row" ng-repeat="keyvalue in result">
-                <span class="table-cell key">
-                  <i class="fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+            <div class="result-body slide clearfix" ng-show="result.isOpen">
+              <div class="clearfix" ng-repeat="keyvalue in result">
+                <span class="col-sm-3 key">
+                  <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
                 </span>
-                <span class="table-cell value">
+                <span class="col-sm-3 value">
                   {{ keyvalue.value }}
                 </span>
-                <span class="table-cell type">
+                <span class="col-sm-3 type">
                   {{ keyvalue.type }}
                 </span>
               </div>
