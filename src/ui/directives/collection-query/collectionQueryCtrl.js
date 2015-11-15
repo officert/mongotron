@@ -4,7 +4,7 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$rootScope',
   'alertService',
   function($scope, $timeout, $rootScope, alertService) {
-    const ObjectId = require('mongodb').ObjectId;
+    const mongoUtils = require('src/lib/utils/mongoUtils');
 
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
@@ -99,10 +99,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       var searchQuery = convertSearchQueryToJsObject($scope.form.searchQuery);
 
       if (!searchQuery) {
-        $scope.error = 'Sorry, that is not a valid mongo query';
+        $scope.error = $scope.error || 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
         return;
       }
+
+      console.log('running query', searchQuery);
 
       _runQuery(queryFn, searchQuery);
     };
@@ -154,7 +156,7 @@ angular.module('app').controller('collectionQueryCtrl', [
             $scope.keyValueResults = results.map(function(result) {
               var props = [];
               props._id = result._id;
-              
+
               for (var key in result) {
                 //TODO: if it's a nested object then recurse and generate key/value for all of it's props
                 props.push({
@@ -197,10 +199,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       if (!match) return null;
 
       try {
-        match = $scope.$eval(match);
+        // match = $scope.$eval(match);
+        match = eval('(' + match + ')');
       } catch (err) {
         $scope.error = err && err.message ? err.message : err;
         $scope.loading = false;
+        match = null;
       }
       return match;
     }
@@ -261,11 +265,7 @@ angular.module('app').controller('collectionQueryCtrl', [
       if (_.isArray(property)) return 'array';
       if (_.isDate(property)) return 'date';
       if (_.isBoolean(property)) return 'boolean';
-      if (isObjectId(property)) return 'objectId';
-    }
-
-    function isObjectId(id) {
-      return id instanceof ObjectId;
+      if (mongoUtils.isObjectId(property)) return 'objectId';
     }
   }
 ]);

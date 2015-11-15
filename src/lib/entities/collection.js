@@ -1,9 +1,9 @@
 'use strict';
 
 const MongoDb = require('mongodb').Db;
-const ObjectId = require('mongodb').ObjectId;
 const Promise = require('bluebird');
 
+const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
 
 const PAGE_SIZE = 50;
@@ -109,7 +109,7 @@ class Collection {
 
     return new Promise(function(resolve, reject) {
       if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
-      if (!(objectId instanceof ObjectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
+      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
 
       _this._dbCollection.deleteOne({
         _id: objectId
