@@ -3,7 +3,8 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$timeout',
   '$rootScope',
   'alertService',
-  function($scope, $timeout, $rootScope, alertService) {
+  'modalService',
+  function($scope, $timeout, $rootScope, alertService, modalService) {
     const mongoUtils = require('src/lib/utils/mongoUtils');
 
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
@@ -33,7 +34,6 @@ angular.module('app').controller('collectionQueryCtrl', [
     };
 
     $scope.VIEWS = {
-      LIST: 'LIST',
       RAW: 'RAW',
       KEYVALUE: 'KEYVALUE'
     };
@@ -69,7 +69,13 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.deleteResult = function(result) {
       if (!result) return;
 
-      _runQuery(deleteByIdQuery, result._id);
+      modalService.confirm({
+        message: 'Are you sure you want to delete this record?',
+        confirmButtonMessage: 'Yes',
+        cancelButtonMessage: 'No'
+      }).result.then(function() {
+        _runQuery(deleteByIdQuery, result._id);
+      });
     };
 
     $scope.editorHasFocus = false;

@@ -76,7 +76,8 @@ angular.module('app').controller('sidebarCtrl', [
         connection: connection
       });
     };
-    $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(database, connection) {
+
+    $scope.openDatabaseCollectionFolderContextMenu = function openDatabaseCollectionFolderContextMenu(database, connection) {
       if (!database || !connection) return;
 
       menuService.showMenu([{
@@ -86,9 +87,20 @@ angular.module('app').controller('sidebarCtrl', [
             modalService.openAddCollection(database);
           });
         }
-      }], {
-        connection: connection
-      });
+      }]);
+    };
+
+    $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(collection, database) {
+      if (!collection || !database) return;
+
+      menuService.showMenu([{
+        label: 'New Query',
+        click: function() {
+          $timeout(function() {
+            $scope.activateItem(collection, 'collection');
+          });
+        }
+      }]);
     };
 
     $scope.openDatabase = function openDatabase(database, connection) {
