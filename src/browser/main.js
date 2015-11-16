@@ -5,7 +5,7 @@ const appConfig = require('src/config/appConfig');
 //
 // if (appConfig.env === 'production') {
 //   require('electron-compile').initWithOptions({
-//     cacheDir: appConfig.builddir,
+//     cacheDir: appConfig.buildPath,
 //     compilerOpts: {
 //       js: {
 //         only: '**/*.js'

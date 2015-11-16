@@ -59,32 +59,34 @@ angular.module('app').run([
   'keypressService',
   'tabCache',
   function($rootScope, keypressService, tabCache) {
+    const logger = require('lib/modules/logger');
+
     $rootScope.$on('$destroy', function() {
       keypressService.unregisterAllCombos();
     });
 
     keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
-      console.log(keypressService.EVENTS.CLOSE_WINDOW);
+      logger.debug(keypressService.EVENTS.CLOSE_WINDOW);
       tabCache.removeActive();
     });
 
     keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
-      console.log(keypressService.EVENTS.MOVE_LEFT);
+      logger.debug(keypressService.EVENTS.MOVE_LEFT);
       tabCache.activatePrevious();
     });
 
     keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
-      console.log(keypressService.EVENTS.MOVE_RIGHT);
+      logger.debug(keypressService.EVENTS.MOVE_RIGHT);
       tabCache.activateNext();
     });
 
     keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
-      console.log(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
+      logger.debug(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
       $rootScope.showConnections();
     });
 
     keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
-      console.log(keypressService.EVENTS.RUN_CURRENT_QUERY);
+      logger.debug(keypressService.EVENTS.RUN_CURRENT_QUERY);
       if ($rootScope.currentQuery && $rootScope.currentQuery.runQuery) {
         $rootScope.currentQuery.runQuery();
       }

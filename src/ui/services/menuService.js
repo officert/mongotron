@@ -125,6 +125,14 @@ angular.module('app').factory('menuService', [
               focusedWindow.reload();
           }
         }, {
+          label: 'Logs',
+          accelerator: 'CmdOrCtrl+L',
+          click: function() {
+            $timeout(function() {
+              $rootScope.showLogs();
+            });
+          }
+        }, {
           label: 'Toggle Full Screen',
           accelerator: (function() {
             if (process.platform === 'darwin')

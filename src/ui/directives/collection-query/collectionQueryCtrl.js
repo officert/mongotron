@@ -6,6 +6,7 @@ angular.module('app').controller('collectionQueryCtrl', [
   'modalService',
   function($scope, $timeout, $rootScope, alertService, modalService) {
     const mongoUtils = require('src/lib/utils/mongoUtils');
+    const logger = require('lib/modules/logger');
 
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
@@ -110,7 +111,7 @@ angular.module('app').controller('collectionQueryCtrl', [
         return;
       }
 
-      console.log('running query', searchQuery);
+      logger.debug('running query', searchQuery);
 
       _runQuery(queryFn, searchQuery);
     };
