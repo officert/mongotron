@@ -150,6 +150,19 @@
           .string {
             color: @theme-query-result-string-icon;
           }
+          .result-row {
+            border-bottom: 1px solid lighten(@theme-query-result-json-border-color, 20%);
+            &:hover {
+              background: darken(@theme-query-result-json-bg, 10%);
+            }
+            .result-cell {
+              padding-top: 10px;
+              padding-bottom: 10px;
+              i {
+                margin-right: 10px;
+              }
+            }
+          }
         }
       }
     }
