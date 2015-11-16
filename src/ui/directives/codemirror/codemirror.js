@@ -58,17 +58,22 @@ angular.module('app').directive('codemirror', [
             var value = editor.getValue();
             value = value && value.trim ? value.trim() : value;
 
-            if (value.length === 1) editor.showHint();
+            // if (value.length === 1) editor.showHint();
 
-            ngModelCtrl.$setViewValue(value);
+            $timeout(function() {
+              ngModelCtrl.$setViewValue(value);
+            });
           });
 
           editor.on('endCompletion', function() {
-            var value = getFullValue(editor.getValue());
-            editor.setValue(value);
+            var editorValue = editor.getValue();
+            var value = getFullValue(editorValue);
 
             $timeout(function() {
-              editor.setCursor(1, 4);
+              if (value) {
+                editor.setValue(value);
+                editor.setCursor(1, 4);
+              }
             });
           });
 
@@ -94,7 +99,13 @@ angular.module('app').directive('codemirror', [
         function customHint(codemirror) {
           var currentValue = editor.getValue();
 
-          var inner = javascriptHintFn(codemirror) || {
+          // var inner = javascriptHintFn(codemirror) || {
+          //   from: codemirror.getCursor(),
+          //   to: codemirror.getCursor(),
+          //   list: []
+          // };
+
+          var inner = {
             from: codemirror.getCursor(),
             to: codemirror.getCursor(),
             list: []
