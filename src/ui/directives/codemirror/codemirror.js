@@ -29,12 +29,7 @@ angular.module('app').directive('codemirror', [
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
-        options.extraKeys['Ctrl-Space'] = 'autocomplete';
-        options.onKeyEvent = function(e, s) {
-          if (s && s.type === "keyup") {
-            console.log("test", s);
-          }
-        };
+        // options.extraKeys['Ctrl-Space'] = 'autocomplete';
 
         options.mode = {
           name: 'javascript',
@@ -56,11 +51,22 @@ angular.module('app').directive('codemirror', [
             element.append(editorElement);
           }, options);
 
+          editor.on('keyup', function(cm, event) {
+            // if (!cm.state.completionActive && event.keyCode !== 13) {
+            //   CodeMirror.commands.autocomplete(cm, null, {
+            //     completeSingle: false
+            //   });
+            // }
+            if (event.keyCode !== 13) {
+              CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+              });
+            }
+          });
+
           editor.on('change', function() {
             var value = editor.getValue();
             value = value && value.trim ? value.trim() : value;
-
-            // if (value.length === 1) editor.showHint();
 
             $timeout(function() {
               ngModelCtrl.$setViewValue(value);
