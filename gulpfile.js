@@ -11,6 +11,7 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
+const babel = require('gulp-babel');
 
 const appConfig = require('src/config/appConfig');
 
@@ -129,31 +130,12 @@ gulp.task('release', function() {
  * @task pre-release - compile ES6 to ES5 using babel
  */
 gulp.task('pre-release', function() {
-  _init(gulp.src(['src/**/*.html', 'src/**/*.less', 'src/**/*.css']))
+
+  _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.*']))
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     .pipe(gulp.dest(appConfig.buildPath));
-
-  _init(gulp.src(['src/ui/vendor/**/*.*']))
-    .pipe(gulp.dest(appConfig.buildPath + '/ui/vendor'));
-
-  var child = childProcess.spawn('./node_modules/.bin/babel', [
-    './src',
-    '--out-dir',
-    appConfig.buildPath,
-    '--extensions',
-    '.js',
-    '--ignore',
-    'src/ui/vendor/*'
-  ]);
-
-  child.stdout.on('data',
-    function(data) {
-      console.log('tail output: ' + data);
-    }
-  );
-
-  child.on('exit', function(exitCode) {
-    console.log('Child exited with code: ' + exitCode);
-  });
 });
 
 gulp.task('build', ['clean', 'css']);
