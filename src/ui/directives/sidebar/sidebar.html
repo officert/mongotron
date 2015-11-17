@@ -21,21 +21,21 @@
           </span>
           <ul class="collection-list slide" ng-show="database.isOpen">
             <li>
-              <span class="level-3" ng-click="openCollections(database)" ng-right-click="openDatabaseCollectionContextMenu(database, connection)">
+              <span class="level-3" ng-click="openCollections(database)" ng-right-click="openDatabaseCollectionFolderContextMenu(database, connection)">
                 <i class="fa fa-folder-o"></i> Collections<i class="open-icon">+</i>
                 <span class="loader" ng-show="database.loadingCollections">
                   <i class="fa fa-cog fa-spin"></i>
                 </span>
               </span>
               <ul class="collection-list slide" ng-show="database.showCollections && !database.loadingCollections">
-                <li ng-repeat="collection in database.collections | orderBy : 'name'">
+                <li ng-repeat="collection in database.collections | orderBy : 'name'" ng-right-click="openDatabaseCollectionContextMenu(collection, database)">
                   <span class="level-4" class="collection" ng-click="activateItem(collection, 'collection')" ng-class="{ active : collection.active }">
                     <i class="fa fa-files-o"></i> {{ collection.name }}
                   </span>
                 </li>
               </ul>
             </li>
-            <li>
+            <!-- <li>
               <span class="level-3">
                 <i class="fa fa-folder-o"></i> Functions
               </span>
@@ -44,7 +44,7 @@
               <span class="level-3">
                 <i class="fa fa-folder-o"></i> Users
               </span>
-            </li>
+            </li> -->
           </ul>
         </li>
       </ul>

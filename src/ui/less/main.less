@@ -17,6 +17,7 @@
   left: 0;
   height: 100%;
   width: 100%;
+  .font-family-regular;
 
   //
   //app
@@ -26,6 +27,7 @@
   @import 'appAnimations.less';
   @import 'appUtils.less';
   @import 'appVendorOverrides.less';
+  @import 'appFonts.less';
 
   //components
   @import 'appComponents.less';
@@ -71,6 +73,9 @@ body.theme-default {
   @theme-query-result-json-key: red;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+  //query-result icons
+  @theme-query-result-date-icon: red;
+  @theme-query-result-string-icon: white;
 
   //buttons
   @theme-btn-default-bg: @btn-default-bg;
@@ -132,6 +137,9 @@ body.theme-isotope-ui {
   @theme-query-result-json-key: red;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+  //query-result icons
+  @theme-query-result-date-icon: red;
+  @theme-query-result-string-icon: white;
 
   //buttons
   @theme-btn-default-bg: @btn-default-bg;
@@ -194,6 +202,9 @@ body.theme-atom {
   @theme-query-result-json-key: #b294bb;
   @theme-query-result-json-string: white;
   @theme-query-result-json-boolean: white;
+  //query-result icons
+  @theme-query-result-date-icon: red;
+  @theme-query-result-string-icon: white;
 
   //buttons
   @theme-btn-default-bg: #303337;

@@ -56,6 +56,23 @@ angular.module('app').run([
       }
     };
 
+    $rootScope.showLogs = function($event) {
+      if ($event) $event.preventDefault();
+
+      var logsTabName = 'Logs';
+
+      if (!tabCache.existsByName(logsTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-cog',
+          name: logsTabName,
+          src: __dirname + '/components/logs/logs.html'
+        });
+      } else {
+        tabCache.activateByName(logsTabName);
+      }
+    };
+
     function initThemes() {
       return {
         //current: 'default',
