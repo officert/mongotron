@@ -204,7 +204,7 @@ gulp.task('serve', ['build'], function(next) {
   });
 });
 
-gulp.task('serve-site', function() {
+gulp.task('serve-site', ['site-css'], function() {
   gulp.watch(DOCS_DIR + '/less/*.less', function() {
     gulp.src(DOCS_DIR + '/less/main.less')
       .pipe(less(LESSOPTIONS))
