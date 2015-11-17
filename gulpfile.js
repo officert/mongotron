@@ -1,8 +1,6 @@
 /* =========================================================================
  * Dependencies
  * ========================================================================= */
-const packageJson = require('./package.json');
-
 const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
@@ -11,7 +9,6 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
-const babel = require('gulp-babel');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -132,13 +129,32 @@ gulp.task('pre-release', function(next) {
   runSequence('build', 'babel', 'prod-sym-links', next);
 });
 
-gulp.task('babel', function() {
+gulp.task('babel', function(next) {
+  var env = _.extend({}, process.env);
+  env.NODE_ENV = 'production';
 
-  _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.*']))
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(gulp.dest(appConfig.buildPath));
+  var child = childProcess.spawn('./node_modules/.bin/babel', [
+    './src',
+    '--out-dir',
+    appConfig.buildPath,
+    '--extensions',
+    '.js',
+    '--ignore',
+    'src/ui/vendor/*'
+  ], {
+    env: env
+  });
+
+  child.stdout.on('data',
+    function(data) {
+      console.log('tail output: ' + data);
+    }
+  );
+
+  child.on('exit', function(exitCode) {
+    console.log('Child exited with code: ' + exitCode);
+    return next(null);
+  });
 });
 
 gulp.task('prod-sym-links', function(next) {
@@ -167,7 +183,7 @@ gulp.task('dev-sym-links', function() {
 
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);
 
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', ['build'], function(next) {
 
   var env = _.extend({}, process.env);
   // env.NODE_ENV = 'production';
@@ -184,6 +200,7 @@ gulp.task('serve', ['build'], function() {
 
   child.on('exit', function(exitCode) {
     console.log('Child exited with code: ' + exitCode);
+    return next(null);
   });
 });
 
