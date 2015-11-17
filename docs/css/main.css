@@ -11951,6 +11951,17 @@ body {
   padding-left: 40px;
   padding-right: 40px;
 }
+@media (max-width: 480px) {
+  .top-container .download .btn {
+    width: 100%;
+  }
+  .top-container .download .btn:first-child {
+    margin-bottom: 15px;
+  }
+}
+.top-container .download .btn:first-child {
+  margin-right: 15px;
+}
 .middle-container {
   min-height: 200px;
   background-repeat: repeat-x;
