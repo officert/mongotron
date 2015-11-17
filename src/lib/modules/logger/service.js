@@ -2,13 +2,16 @@
 
 const winston = require('winston');
 const Promise = require('bluebird');
+const fs = require('fs');
 
 const appConfig = require('src/config/appConfig');
 
 const isElectron = process.versions.electron;
 
+createLogDir();
+
 var logger = new winston.Logger({
-  // level: appConfig.logLevel,
+  level: appConfig.logLevel,
   colorize: true,
   transports: [
     new(winston.transports.Console)(),
@@ -17,8 +20,6 @@ var logger = new winston.Logger({
     })
   ]
 });
-
-console.log('LOGGER', logger);
 
 /**
  * @class LoggerService
@@ -39,7 +40,7 @@ class LoggerService {
   debug(msg) {
     logger.debug(msg);
     if (isElectron) {
-      console.debug(msg);
+      console.log(msg);
     }
   }
 
@@ -80,6 +81,22 @@ class LoggerService {
         return resolve(results);
       });
     });
+  }
+}
+
+function createLogDir() {
+  try {
+    // Query the entry
+    var stats = fs.lstatSync(appConfig.logFileDir);
+
+    // Is it a directory?
+    if (stats.isDirectory()) {
+      // Yes it is
+    } else {
+      fs.mkdirSync(appConfig.logFileDir);
+    }
+  } catch (e) {
+    logger.error(e);
   }
 }
 
