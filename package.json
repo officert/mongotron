@@ -32,8 +32,7 @@
     "should": "3.1.4",
     "sinon": "1.14.1",
     "sinon-as-promised": "4.0.0",
-    "supertest": "0.15.0",
-    "winston": "0.8.x"
+    "supertest": "0.15.0"
   },
   "scripts": {
     "test": "gulp test",
