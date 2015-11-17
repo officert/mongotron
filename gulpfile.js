@@ -129,7 +129,7 @@ gulp.task('release', ['pre-release'], function() {
 });
 
 gulp.task('pre-release', function(next) {
-  runSequence('build', 'babel', next);
+  runSequence('build', 'babel', 'prod-sym-links', next);
 });
 
 gulp.task('babel', function() {
