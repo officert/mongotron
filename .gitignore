@@ -5,6 +5,7 @@ node_modules
 *.sublime-*
 src/ui/vendor
 src/ui/css
+docs/css
 *.idea
 release
 build
