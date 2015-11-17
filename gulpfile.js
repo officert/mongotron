@@ -23,7 +23,6 @@ const APP_NAME = packageJson.name;
 
 const SRC_DIR = 'src';
 const DOCS_DIR = 'docs';
-const RELEASE_DIR = 'release';
 const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
   'electron-packager',
   'electron-prebuilt',
@@ -65,8 +64,8 @@ gulp.task('?', function(next) {
 });
 
 gulp.task('clean', function(next) {
-  sh.rm('-rf', RELEASE_DIR);
-  sh.rm('-rf', appConfig.builddir);
+  sh.rm('-rf', appConfig.releasePath);
+  sh.rm('-rf', appConfig.buildPath);
   next();
 });
 
@@ -98,7 +97,7 @@ gulp.task('release', function() {
       '.',
       APP_NAME,
       '--out',
-      RELEASE_DIR,
+      appConfig.releasePath,
       '--platform',
       'darwin',
       '--arch',
@@ -107,7 +106,9 @@ gulp.task('release', function() {
       '0.30.2',
       '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
       '--icon',
-      RELEASE_IMAGE_ICON
+      RELEASE_IMAGE_ICON,
+      '--appPath',
+      'build/browser/main.js'
     ], {
       env: env
     });
@@ -129,15 +130,15 @@ gulp.task('release', function() {
  */
 gulp.task('pre-release', function() {
   _init(gulp.src(['src/**/*.html', 'src/**/*.less', 'src/**/*.css']))
-    .pipe(gulp.dest(appConfig.builddir));
+    .pipe(gulp.dest(appConfig.buildPath));
 
   _init(gulp.src(['src/ui/vendor/**/*.*']))
-    .pipe(gulp.dest(appConfig.builddir + '/ui/vendor'));
+    .pipe(gulp.dest(appConfig.buildPath + '/ui/vendor'));
 
   var child = childProcess.spawn('./node_modules/.bin/babel', [
     './src',
     '--out-dir',
-    appConfig.builddir,
+    appConfig.buildPath,
     '--extensions',
     '.js',
     '--ignore',

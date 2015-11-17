@@ -20,7 +20,8 @@ var defaultSettings = {
   name: packageJson.name,
   repository: packageJson.repository.url,
   logLevel: 'debug',
-  buildPath: 'src/build',
+  buildPath: 'build',
+  releasePath: 'release',
   logFilePath: '~/.config/' + packageJson.name + '-logs.json',
   dbConfigPath: 'src/config/dbConnections.json'
 };
