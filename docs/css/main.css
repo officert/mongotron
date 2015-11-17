@@ -8557,6 +8557,59 @@ button.close {
 .fa-fonticons:before {
   content: "\f280";
 }
+/* ----------------------------------------------------------------------
+ * Globals
+ * ---------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  font-weight: 200;
+}
+a {
+  text-decoration: none;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:focus {
+  outline: none;
+}
+i {
+  font-style: normal;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* ----------------------------------------------------------------------
+ * Reusable helpers and utilities
+ * ---------------------------------------------------------------------- */
+.center {
+  text-align: center;
+}
+.loading {
+  padding: 20px 0;
+}
+.loading i {
+  font-size: 20px;
+}
+.rotate-45 {
+  transform: rotate(45deg);
+}
 /* Theme Mixin */
 /* Themes */
 /*
@@ -8573,9 +8626,6 @@ button.close {
   height: 100%;
   width: 100%;
   font-family: 'Avenir';
-  /* ----------------------------------------------------------------------
- * Globals
- * ---------------------------------------------------------------------- */
   /*
  * Sidebar
  */
@@ -8585,9 +8635,6 @@ button.close {
   /*
  * Fonts
  */
-  /* ----------------------------------------------------------------------
- * Reusable helpers and utilities
- * ---------------------------------------------------------------------- */
   /* ----------------------------------------------------------------------
  * 3rd Party Overrides
  * ---------------------------------------------------------------------- */
@@ -8660,41 +8707,6 @@ button.close {
   height: 100%;
   padding: 10px 10px 10px 0;
 }
-.theme-default h1,
-.theme-default h2,
-.theme-default h3,
-.theme-default h4,
-.theme-default h5,
-.theme-default h6 {
-  margin-top: 0;
-  font-weight: 200;
-}
-.theme-default a {
-  text-decoration: none;
-  -webkit-transition: 0.2s ease;
-  -o-transition: 0.2s ease;
-  transition: 0.2s ease;
-}
-.theme-default a:hover {
-  text-decoration: underline;
-}
-.theme-default a:focus {
-  outline: none;
-}
-.theme-default i {
-  font-style: normal;
-}
-.theme-default ul,
-.theme-default ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.theme-default input::-webkit-outer-spin-button,
-.theme-default input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 .theme-default .view-fade.ng-enter {
   -webkit-transition: 1.2s ease;
   -o-transition: 1.2s ease;
@@ -8729,18 +8741,6 @@ button.close {
 }
 .theme-default .view-slide.ng-leave.ng-leave-active {
   left: -100%;
-}
-.theme-default .center {
-  text-align: center;
-}
-.theme-default .loading {
-  padding: 20px 0;
-}
-.theme-default .loading i {
-  font-size: 20px;
-}
-.theme-default .rotate-45 {
-  transform: rotate(45deg);
 }
 .theme-default .splitter_panel .vsplitter {
   width: 1px !important;
@@ -9705,9 +9705,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   height: 100%;
   width: 100%;
   font-family: 'Avenir';
-  /* ----------------------------------------------------------------------
- * Globals
- * ---------------------------------------------------------------------- */
   /*
  * Sidebar
  */
@@ -9717,9 +9714,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   /*
  * Fonts
  */
-  /* ----------------------------------------------------------------------
- * Reusable helpers and utilities
- * ---------------------------------------------------------------------- */
   /* ----------------------------------------------------------------------
  * 3rd Party Overrides
  * ---------------------------------------------------------------------- */
@@ -9792,41 +9786,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   height: 100%;
   padding: 10px 10px 10px 0;
 }
-.theme-isotope-ui h1,
-.theme-isotope-ui h2,
-.theme-isotope-ui h3,
-.theme-isotope-ui h4,
-.theme-isotope-ui h5,
-.theme-isotope-ui h6 {
-  margin-top: 0;
-  font-weight: 200;
-}
-.theme-isotope-ui a {
-  text-decoration: none;
-  -webkit-transition: 0.2s ease;
-  -o-transition: 0.2s ease;
-  transition: 0.2s ease;
-}
-.theme-isotope-ui a:hover {
-  text-decoration: underline;
-}
-.theme-isotope-ui a:focus {
-  outline: none;
-}
-.theme-isotope-ui i {
-  font-style: normal;
-}
-.theme-isotope-ui ul,
-.theme-isotope-ui ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.theme-isotope-ui input::-webkit-outer-spin-button,
-.theme-isotope-ui input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 .theme-isotope-ui .view-fade.ng-enter {
   -webkit-transition: 1.2s ease;
   -o-transition: 1.2s ease;
@@ -9861,18 +9820,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .view-slide.ng-leave.ng-leave-active {
   left: -100%;
-}
-.theme-isotope-ui .center {
-  text-align: center;
-}
-.theme-isotope-ui .loading {
-  padding: 20px 0;
-}
-.theme-isotope-ui .loading i {
-  font-size: 20px;
-}
-.theme-isotope-ui .rotate-45 {
-  transform: rotate(45deg);
 }
 .theme-isotope-ui .splitter_panel .vsplitter {
   width: 1px !important;
@@ -10837,9 +10784,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   height: 100%;
   width: 100%;
   font-family: 'Avenir';
-  /* ----------------------------------------------------------------------
- * Globals
- * ---------------------------------------------------------------------- */
   /*
  * Sidebar
  */
@@ -10849,9 +10793,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   /*
  * Fonts
  */
-  /* ----------------------------------------------------------------------
- * Reusable helpers and utilities
- * ---------------------------------------------------------------------- */
   /* ----------------------------------------------------------------------
  * 3rd Party Overrides
  * ---------------------------------------------------------------------- */
@@ -10924,41 +10865,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   height: 100%;
   padding: 10px 10px 10px 0;
 }
-.theme-atom h1,
-.theme-atom h2,
-.theme-atom h3,
-.theme-atom h4,
-.theme-atom h5,
-.theme-atom h6 {
-  margin-top: 0;
-  font-weight: 200;
-}
-.theme-atom a {
-  text-decoration: none;
-  -webkit-transition: 0.2s ease;
-  -o-transition: 0.2s ease;
-  transition: 0.2s ease;
-}
-.theme-atom a:hover {
-  text-decoration: underline;
-}
-.theme-atom a:focus {
-  outline: none;
-}
-.theme-atom i {
-  font-style: normal;
-}
-.theme-atom ul,
-.theme-atom ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.theme-atom input::-webkit-outer-spin-button,
-.theme-atom input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 .theme-atom .view-fade.ng-enter {
   -webkit-transition: 1.2s ease;
   -o-transition: 1.2s ease;
@@ -10993,18 +10899,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .view-slide.ng-leave.ng-leave-active {
   left: -100%;
-}
-.theme-atom .center {
-  text-align: center;
-}
-.theme-atom .loading {
-  padding: 20px 0;
-}
-.theme-atom .loading i {
-  font-size: 20px;
-}
-.theme-atom .rotate-45 {
-  transform: rotate(45deg);
 }
 .theme-atom .splitter_panel .vsplitter {
   width: 1px !important;
@@ -11955,6 +11849,7 @@ fieldset[disabled] .theme-atom .btn-inverse.active {
   opacity: 0.8;
   color: #52a8ff;
 }
+/* ---------------- FONTS ----------------- */
 /* stupid hack - otherise Less crashes - not sure why yet */
 @font-face {
   font-family: 'Avenir';
@@ -11977,6 +11872,7 @@ fieldset[disabled] .theme-atom .btn-inverse.active {
 .font-family-bold {
   font-family: 'Avenir Bold';
 }
+/* --------------------------------- */
 body {
   overflow: auto !important;
   font-family: 'Avenir';
@@ -11990,34 +11886,26 @@ body {
   margin: 0 auto;
 }
 .top-container #header {
-  padding: 20px 0 0;
-  border-bottom: 1px solid #000;
+  padding: 30px 0 0;
+  border-bottom: 1px solid #393939;
   position: relative;
 }
-.top-container #header::after {
-  border-bottom: 1px solid #393939;
-  content: '';
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  bottom: -2px;
-  left: 0;
+.top-container #header .header-inner {
+  border-bottom: 1px solid #000;
 }
 .top-container #header .logo {
   position: relative;
+  top: -10px;
   margin: 0;
-  bottom: -4px;
+}
+.top-container #header .logo img {
+  height: 50px;
 }
 .top-container #header .logo span {
   position: absolute;
   left: 0;
   top: 0;
   visibility: hidden;
-}
-.top-container #header .main-nav {
-  position: absolute;
-  right: 0;
-  bottom: 10px;
 }
 .top-container #header .main-nav ul {
   list-style: none;
@@ -12039,23 +11927,11 @@ body {
   background: none;
 }
 .top-container .banner {
-  padding: 30px 0 60px;
+  padding: 60px 0 60px;
 }
 .top-container .banner h2 {
-  font-size: 33px;
+  font-size: 36px;
   line-height: 1.4;
-}
-.top-container .banner h2 .strong {
-  font-family: 'Avenir Bold';
-}
-.middle-container {
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-.middle-container .screen-shot {
-  margin: 0 auto;
-  -webkit-box-shadow: 0 1px 23px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 1px 23px rgba(0, 0, 0, 0.25);
 }
 .bottom-container {
   background: #161719;
