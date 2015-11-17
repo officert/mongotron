@@ -11878,6 +11878,49 @@ body {
   font-family: 'Avenir';
   color: #ccced2;
 }
+body.show-mobile-menu .mobile-menu {
+  display: block;
+}
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #0a0b0b;
+  display: none;
+}
+.mobile-menu .mobile-nav-btn {
+  padding: 5px 10px;
+  position: absolute;
+  top: 29px;
+  right: 16px;
+  font-size: 18px;
+}
+.mobile-menu ul {
+  position: relative;
+  top: 12%;
+}
+.mobile-menu ul li a {
+  color: white;
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+  border-radius: 0;
+  text-decoration: none;
+  background: #0a0b0b;
+  border: 1px solid transparent;
+  border-left: none;
+  border-right: none;
+}
+.mobile-menu ul li a:hover {
+  border: 1px solid #2e6da4;
+  border-left: none;
+  border-right: none;
+  background: #161719;
+}
 .top-container {
   background-repeat: repeat-x;
   background-image: -webkit-linear-gradient(-20deg, #183854, #161719);

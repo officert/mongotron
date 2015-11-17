@@ -9,11 +9,10 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <meta name="title" content="Mongotron">
   <meta name="description" content="Mongotron is a new GUI for Mongo DB built using Electron and Angular JS">
-  <link rel="stylesheet" href="./docs/css/main.css" />
+  <link rel="stylesheet" href="./docs/css/docs.css" />
 </head>
 
 <body>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <div class="top-container">
     <div class="container">
       <header id="header" class="clearfix">
@@ -25,6 +24,9 @@
             </a>
           </h1>
           <nav class="main-nav pull-right">
+            <a id="showMobileMenuBtn" href="#" class="mobile-nav-btn">
+              <i class="fa fa-bars"></i>
+            </a>
             <ul>
               <li>
                 <a href="#">Getting Started</a>
@@ -72,6 +74,24 @@
       </footer>
     </div>
   </div>
+  <div class="mobile-menu">
+    <a id="hideMobileMenuBtn" href="#" class="mobile-nav-btn">
+      <i class="fa fa-times"></i>
+    </a>
+    <ul>
+      <li>
+        <a href="#">Getting Started</a>
+      </li>
+      <li>
+        <a href="https://github.com/officert/mongotron" target="_blank">Github</a>
+      </li>
+      <li>
+        <a href="#">Download</a>
+      </li>
+    </ul>
+  </div>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="./docs/js/docs.js"></script>
 </body>
 
 </html>

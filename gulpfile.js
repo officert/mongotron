@@ -72,7 +72,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('site-css', function() {
-  return gulp.src(DOCS_DIR + '/less/main.less')
+  return gulp.src(DOCS_DIR + '/less/docs.less')
     .pipe(less(LESSOPTIONS))
     .pipe(gulp.dest(DOCS_DIR + '/css'));
 });
@@ -206,7 +206,7 @@ gulp.task('serve', ['build'], function(next) {
 
 gulp.task('serve-site', ['site-css'], function() {
   gulp.watch(DOCS_DIR + '/less/*.less', function() {
-    gulp.src(DOCS_DIR + '/less/main.less')
+    gulp.src(DOCS_DIR + '/less/docs.less')
       .pipe(less(LESSOPTIONS))
       .pipe(gulp.dest(DOCS_DIR + '/css'));
   });
