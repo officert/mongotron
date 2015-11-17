@@ -11,6 +11,7 @@
     "jsonfile": "2.2.1",
     "mongodb": "2.0.47",
     "node-uuid": "1.4.3",
+    "path-extra": "3.0.0",
     "underscore": "1.8.3",
     "winston": "2.1.0"
   },

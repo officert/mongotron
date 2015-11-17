@@ -207,7 +207,7 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       try {
         // match = $scope.$eval(match);
-        match = eval('(' + match + ')');
+        match = eval('(' + match + ')'); // jshint ignore:line
       } catch (err) {
         $scope.error = err && err.message ? err.message : err;
         $scope.loading = false;

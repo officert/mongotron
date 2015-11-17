@@ -8,8 +8,10 @@ const ipc = require('ipc');
 const path = require('path');
 
 const appConfig = require('src/config/appConfig');
+const logger = require('lib/modules/logger');
 
-console.log(appConfig);
+logger.debug('appConfig');
+logger.debug(appConfig);
 
 /* ------------------------------------------------
  * App initialization
