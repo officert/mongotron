@@ -45,7 +45,7 @@
       <div ng-show="!loading && results.length">
         <!-- List View -->
         <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
-          <div class="result" ng-repeat="result in ::results">
+          <div class="result" ng-repeat="result in results">
             <span class="result-header" ng-click="result.isOpen = !result.isOpen">
               <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
             </span>
@@ -56,7 +56,7 @@
         </div>
         <!-- Raw View -->
         <div class="raw-view" ng-if="currentView === VIEWS.RAW">
-          <div class="result" ng-repeat="result in ::results">
+          <div class="result" ng-repeat="result in results">
             <ul class="menu">
               <li>
                 <button class="btn btn-default">
@@ -85,7 +85,7 @@
               Type
             </span>
           </div>
-          <div class="result" ng-repeat="result in ::keyValueResults">
+          <div class="result" ng-repeat="result in keyValueResults">
             <ul class="menu">
               <li>
                 <button class="btn btn-default">
