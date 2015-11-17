@@ -12003,6 +12003,7 @@ body.show-mobile-menu .mobile-menu {
   padding-bottom: 80px;
 }
 .top-container .download .btn {
+  background: transparent;
   padding: 10px 70px;
 }
 @media (max-width: 480px) {
