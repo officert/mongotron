@@ -24,6 +24,8 @@
 .font-family-bold {
   font-family: 'Avenir Bold';
 }
+@blue: #2e6da4;
+@gray: #161719;
 /* --------------------------------- */
 body {
   overflow: auto !important;
@@ -31,9 +33,9 @@ body {
   color: #ccced2;
 }
 .top-container {
-  background: #161719;
+  #gradient > .directional(darken(@blue, 20%), @gray, -20deg);
   .container {
-    max-width: 900px;
+    max-width: 970px;
     margin: 0 auto;
   }
   #header {
@@ -65,7 +67,7 @@ body {
           margin-left: 20px;
           a {
             padding: 5px 10px;
-            color: #ccced2;
+            color: white;
             line-height: 1.5;
             position: relative;
             top: 4px;
@@ -80,22 +82,35 @@ body {
     }
   }
   .banner {
-    padding: 60px 0 60px;
+    padding: 60px 0;
     h2 {
       font-size: 36px;
       line-height: 1.4;
     }
   }
+  .screen-shot {
+    margin-bottom: 40px;
+    img {
+      .box-shadow(0 0 20px 0 rgba(0, 0, 0, .6));
+    }
+  }
+  .download {
+    padding-top: 40px;
+    padding-bottom: 60px;
+    .btn {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+  }
 }
-
-// .middle-container {
-//   padding-top: 40px;
-//   padding-bottom: 40px;
-//   .screen-shot {
-//     margin: 0 auto;
-//     .box-shadow(0 1px 23px rgba(0,0,0,.25));
-//   }
-// }
+.middle-container {
+  min-height: 200px;
+  #gradient > .directional(darken(@blue, 70%), @gray);
+  .container {
+    max-width: 970px;
+    margin: 0 auto;
+  }
+}
 .bottom-container {
   background: #161719;
   padding: 20px 0;
