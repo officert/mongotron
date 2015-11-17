@@ -9,6 +9,7 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
+const open = require('gulp-open');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -210,6 +211,9 @@ gulp.task('serve-site', function() {
       .pipe(less(LESSOPTIONS))
       .pipe(gulp.dest(DOCS_DIR + '/css'));
   });
+
+  gulp.src('index.html')
+    .pipe(open());
 });
 
 gulp.task('default', ['serve']);
