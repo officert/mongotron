@@ -23,9 +23,9 @@ var defaultSettings = {
   logLevel: 'debug',
   buildPath: 'build',
   releasePath: 'release',
-  logFileDir: path.join(path.homedir(), '.config', packageJson.name),
-  logFilePath: path.join(path.homedir(), '.config', packageJson.name, 'logs.json'),
-  dbConfigPath: 'src/config/dbConnections.json'
+  configDir: path.join(path.homedir(), '.config', packageJson.name.toLowerCase()),
+  logFilePath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'logs.json'),
+  dbConfigPath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'dbConnections.json')
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {

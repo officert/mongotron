@@ -7,6 +7,8 @@ const crashReporter = require('crash-reporter');
 const ipc = require('ipc');
 const path = require('path');
 
+require('src/mongotron').init();
+
 const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
 

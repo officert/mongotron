@@ -1,6 +1,5 @@
 'use strict';
 
-const path = require('path');
 const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const Promise = require('bluebird');
@@ -10,7 +9,7 @@ const appConfig = require('src/config/appConfig');
 const errors = require('lib/errors');
 const Connection = require('lib/entities/connection');
 
-const DB_CONNECTIONS = path.join(__dirname, '../../../../', appConfig.dbConfigPath);
+const DB_CONNECTIONS = appConfig.dbConfigPath;
 
 /**
  * @class ConnectionRepository
