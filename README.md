@@ -1,12 +1,12 @@
 # <a href="http://officert.github.io/mongotron/" target="_blank">Mongotron</a>
 
-# <a href="https://s3.amazonaws.com/mongotron/releases/mongotron-0.1.0.zip" target="_blank">Download</a>
-
 A Mongo DB GUI built using Electron, and Angular Js.
 
 [![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
 
 ![screenshot](https://github.com/officert/mongotron/blob/master/docs/images/screenshot.png)
+
+Download a VERY initial release <a href="https://s3.amazonaws.com/mongotron/releases/mongotron-0.1.0.zip" target="_blank">here</a>.
 
 ## Development
 
