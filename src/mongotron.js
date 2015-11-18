@@ -19,6 +19,7 @@ class Mongotron {
    */
   init() {
     createConfigDir();
+    createAppConfigDir();
     createDbConfigFile();
     createLogFile();
   }
@@ -41,6 +42,26 @@ function createConfigDir() {
 
   if (!dirExists) {
     fs.mkdirSync(appConfig.configDir);
+  }
+}
+
+function createAppConfigDir() {
+  var dirExists = false;
+
+  try {
+    var stats = fs.lstatSync(appConfig.appConfigDir);
+
+    if (stats.isDirectory()) {
+      dirExists = true;
+    }
+  } catch (e) {
+    //eat the error because you'll get an error if the dir doesn't exists,
+    //in which case we should create the dir
+    console.log(e);
+  }
+
+  if (!dirExists) {
+    fs.mkdirSync(appConfig.appConfigDir);
   }
 }
 

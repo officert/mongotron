@@ -23,7 +23,8 @@ var defaultSettings = {
   logLevel: 'debug',
   buildPath: 'build',
   releasePath: 'release',
-  configDir: path.join(path.homedir(), '.config', packageJson.name.toLowerCase()),
+  configDir: path.join(path.homedir(), '.config'),
+  appConfigDir: path.join(path.homedir(), '.config', packageJson.name.toLowerCase()),
   logFilePath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'logs.json'),
   dbConfigPath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'dbConnections.json')
 };
