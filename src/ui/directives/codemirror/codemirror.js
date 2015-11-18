@@ -51,17 +51,19 @@ angular.module('app').directive('codemirror', [
             element.append(editorElement);
           }, options);
 
+          element.data('CodeMirrorInstance', editor);
+
           editor.on('keyup', function(cm, event) {
-            // if (!cm.state.completionActive && event.keyCode !== 13) {
-            //   CodeMirror.commands.autocomplete(cm, null, {
-            //     completeSingle: false
-            //   });
-            // }
-            if (event.keyCode !== 13) {
+            if (!cm.state.completionActive && event.keyCode !== 13) {
               CodeMirror.commands.autocomplete(cm, null, {
                 completeSingle: false
               });
             }
+            // if (event.keyCode !== 13) {
+            //   CodeMirror.commands.autocomplete(cm, null, {
+            //     completeSingle: false
+            //   });
+            // }
           });
 
           editor.on('change', function() {
