@@ -18,14 +18,11 @@
         <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.LIST" ng-class="{ active : currentView === VIEWS.LIST }">
-          <i class="fa fa-bars"></i>
-        </button>
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }">
           <i class="fa fa-code"></i>
         </button>
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }">
-          <i class="fa fa-code"></i>
+          <i class="fa fa-bars"></i>
         </button>
       </div>
     </div>
@@ -62,10 +59,14 @@
           <div class="result" ng-repeat="result in results">
             <ul class="menu">
               <li>
-                <i class="fa fa-pencil"></i>
+                <button class="btn btn-default">
+                  <i class="fa fa-pencil"></i>
+                </button>
               </li>
-              <li ng-click="deleteResult(result._id.toString())">
-                <i class="fa fa-plus rotate-45"></i>
+              <li>
+                <button class="btn btn-default" ng-click="deleteResult(result)">
+                  <i class="fa fa-plus rotate-45"></i>
+                </button>
               </li>
             </ul>
             <pre>{{ ::result | json }}</pre>
@@ -73,19 +74,50 @@
         </div>
         <!-- Key Value View -->
         <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
-          <div class="result" ng-repeat="result in keyValueResults">
-            <span class="result-header" ng-click="result.isOpen = !result.isOpen">
-              <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+          <div class="top-header clearfix">
+            <span class="table-cell col-sm-3 key">
+              Key
             </span>
-            <div class="result-body slide" ng-show="result.isOpen">
-              <div class="table-row" ng-repeat="keyvalue in result">
-                <span class="table-cell key">
-                  <i class="fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+            <span class="col-sm-3 key">
+              Value
+            </span>
+            <span class="col-sm-3 key">
+              Type
+            </span>
+          </div>
+          <div class="result" ng-repeat="result in keyValueResults">
+            <ul class="menu">
+              <li>
+                <button class="btn btn-default">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </li>
+              <li>
+                <button class="btn btn-default" ng-click="deleteResult(result)">
+                  <i class="fa fa-plus rotate-45"></i>
+                </button>
+              </li>
+            </ul>
+            <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
+              <span class="key">
+                <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+              </span>
+              <span class="key">
+                {{ ::result.length }} fields
+              </span>
+              <span class="key">
+
+              </span>
+            </span>
+            <div class="result-body slide clearfix" ng-show="result.isOpen">
+              <div class="result-row clearfix" ng-repeat="keyvalue in result">
+                <span class="result-cell col-sm-3 key">
+                  <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
                 </span>
-                <span class="table-cell value">
+                <span class="result-cell col-sm-3 value">
                   {{ keyvalue.value }}
                 </span>
-                <span class="table-cell type">
+                <span class="result-cell col-sm-3 type">
                   {{ keyvalue.type }}
                 </span>
               </div>

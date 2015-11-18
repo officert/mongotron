@@ -1,0 +1,64 @@
+/*
+ * Isotope UI Theme
+ */
+.theme-isotope-ui {
+
+  //colors
+  @theme-brand-primary: @brand-primary;
+
+  //globals
+  @theme-bg: #343943;
+  @theme-text-color: #9099ab;
+  @theme-border-color: lighten(@theme-bg, 10%);
+
+  //tabs
+  @theme-tab-border-color: transparent;
+  @theme-tab-active-bg: #282c34;
+  @theme-tab-pane-bg: #282c34;
+  @theme-tab-active-line-bg: @theme-text-color;
+
+  //server list
+  @theme-server-list-border-color: transparent;
+  @theme-server-list-hover-bg: #2d323b;
+  @theme-server-list-hover-color: darken(@theme-text-color, 10%);
+
+  //query
+  @theme-query-editor-color: #c5c8c6;
+  @theme-query-editor-bg: @theme-bg;
+  @theme-query-editor-border-color: lighten(@theme-bg, 10%);
+  @theme-query-editor-input-bg: @theme-bg; //query edit skip + take input bg
+  @theme-query-editor-string-color: #b5bd68;
+  @theme-query-editor-boolean-color: #de935f;
+
+  //query-result-json
+  @theme-query-result-json-bg: @theme-bg;
+  @theme-query-result-json-color: white;
+  @theme-query-result-json-border-color: white;
+  @theme-query-result-json-seprator: white;
+  @theme-query-result-json-key: red;
+  @theme-query-result-json-string: white;
+  @theme-query-result-json-boolean: white;
+
+  //query-result icons
+  @theme-query-result-date-icon: red;
+  @theme-query-result-string-icon: white;
+
+  //buttons
+  @theme-btn-default-bg: @btn-default-bg;
+  @theme-btn-default-color: @btn-default-color;
+  @theme-btn-primary-color: white;
+  @theme-btn-primary-bg: @theme-brand-primary;
+
+  //modals
+  @theme-modal-content-bg: white;
+  @theme-modal-header-bg: white;
+  @theme-modal-footer-bg: white;
+  @theme-modal-close-icon-color: @brand-primary;
+  @theme-modal-connected-icon-color: @brand-primary;
+
+  //user info note
+  @theme-user-info-note-dot-color: @brand-primary;
+
+  //init mixin
+  .theme();
+}

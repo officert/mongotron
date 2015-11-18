@@ -1,8 +1,15 @@
-postinstall:
+postinstall:	createDevelopmentSymLinks
+
+createDevelopmentSymLinks:
 	cd ./node_modules; \
-	ln -snf ../src; \
-	ln -snf ../src/lib; \
-	ln -snf ../tests;
+	ln -snfv ../src src; \
+	ln -snfv ../src/lib lib; \
+	ln -snfv ../tests tests; \
+
+createProductionSymLinks:
+	cd ./node_modules; \
+	ln -snfv ../build src; \
+	ln -snfv ../build/lib lib; \
 
 #
 # .PHONY: build

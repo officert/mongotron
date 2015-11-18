@@ -3,7 +3,11 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$timeout',
   '$rootScope',
   'alertService',
-  function($scope, $timeout, $rootScope, alertService) {
+  'modalService',
+  function($scope, $timeout, $rootScope, alertService, modalService) {
+    const mongoUtils = require('src/lib/utils/mongoUtils');
+    const logger = require('lib/modules/logger');
+
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
     $scope.loading = false;
@@ -31,7 +35,6 @@ angular.module('app').controller('collectionQueryCtrl', [
     };
 
     $scope.VIEWS = {
-      LIST: 'LIST',
       RAW: 'RAW',
       KEYVALUE: 'KEYVALUE'
     };
@@ -56,16 +59,23 @@ angular.module('app').controller('collectionQueryCtrl', [
         case 'array':
           icon = 'fa-calendar';
           break;
+        case 'objectId':
+          icon = 'fa-cog';
+          break;
       }
 
       return icon;
     };
 
-    $scope.deleteResult = function(resultId) {
-      if (!resultId) return;
+    $scope.deleteResult = function(result) {
+      if (!result) return;
 
-      _runQuery(deleteManyQuery, {
-        _id: resultId
+      modalService.confirm({
+        message: 'Are you sure you want to delete this record?',
+        confirmButtonMessage: 'Yes',
+        cancelButtonMessage: 'No'
+      }).result.then(function() {
+        _runQuery(deleteByIdQuery, result._id);
       });
     };
 
@@ -96,10 +106,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       var searchQuery = convertSearchQueryToJsObject($scope.form.searchQuery);
 
       if (!searchQuery) {
-        $scope.error = 'Sorry, that is not a valid mongo query';
+        $scope.error = $scope.error || 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
         return;
       }
+
+      logger.debug('running query', searchQuery);
 
       _runQuery(queryFn, searchQuery);
     };
@@ -128,11 +140,12 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.loading = false;
 
-            if (fn === insertOneQuery || fn === deleteManyQuery || fn === updateQuery) {
+            if (fn === insertOneQuery || fn === deleteManyQuery || fn === deleteByIdQuery || fn === updateQuery) {
               var msg = '';
 
               if (fn === insertOneQuery) msg += 'Insert ';
               else if (fn === deleteManyQuery) msg += 'Delete ';
+              else if (fn === deleteByIdQuery) msg += 'Delete ';
               else if (fn === updateQuery) msg += 'Update ';
 
               msg += 'successful...';
@@ -149,6 +162,7 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.keyValueResults = results.map(function(result) {
               var props = [];
+              props._id = result._id;
 
               for (var key in result) {
                 //TODO: if it's a nested object then recurse and generate key/value for all of it's props
@@ -165,7 +179,9 @@ angular.module('app').controller('collectionQueryCtrl', [
           });
         })
         .catch(function(err) {
-          $scope.error = err;
+          $timeout(function() {
+            $scope.error = err;
+          });
         });
     }
 
@@ -190,10 +206,12 @@ angular.module('app').controller('collectionQueryCtrl', [
       if (!match) return null;
 
       try {
-        match = $scope.$eval(match);
+        // match = $scope.$eval(match);
+        match = eval('(' + match + ')'); // jshint ignore:line
       } catch (err) {
         $scope.error = err && err.message ? err.message : err;
         $scope.loading = false;
+        match = null;
       }
       return match;
     }
@@ -236,6 +254,10 @@ angular.module('app').controller('collectionQueryCtrl', [
       return $scope.collection.deleteMany(query);
     }
 
+    function deleteByIdQuery(id) {
+      return $scope.collection.deleteById(id);
+    }
+
     function aggregateQuery(aggregate) {
       return $scope.collection.aggregate(aggregate);
     }
@@ -250,6 +272,7 @@ angular.module('app').controller('collectionQueryCtrl', [
       if (_.isArray(property)) return 'array';
       if (_.isDate(property)) return 'date';
       if (_.isBoolean(property)) return 'boolean';
+      if (mongoUtils.isObjectId(property)) return 'objectId';
     }
   }
 ]);

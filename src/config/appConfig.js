@@ -2,7 +2,7 @@
  * Dependencies
  * ========================================================================= */
 var _ = require('underscore');
-var path = require('path');
+var path = require('path-extra');
 
 // var packageJson = require('../../package.json');
 var packageJson = {
@@ -20,8 +20,12 @@ var defaultSettings = {
   version: packageJson.version,
   name: packageJson.name,
   repository: packageJson.repository.url,
-  builddir: path.join(__dirname, '../../build'),
-  dbConfigPath: 'src/config/dbConnections.json'
+  logLevel: 'debug',
+  buildPath: 'build',
+  releasePath: 'release',
+  configDir: path.join(path.homedir(), '.config', packageJson.name.toLowerCase()),
+  logFilePath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'logs.json'),
+  dbConfigPath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'dbConnections.json')
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {

@@ -13,9 +13,6 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
-        var javascriptHintFn = $window.CodeMirror.hint.javascript;
-        $window.CodeMirror.hint.javascript = customHint; //override the javascript autocomplete
-
         //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
         const UPDATE_QUERY = /^[\s\S]*update$/;
@@ -32,7 +29,7 @@ angular.module('app').directive('codemirror', [
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
-        options.extraKeys['Ctrl-Space'] = 'autocomplete';
+        // options.extraKeys['Ctrl-Space'] = 'autocomplete';
 
         options.mode = {
           name: 'javascript',
@@ -54,21 +51,37 @@ angular.module('app').directive('codemirror', [
             element.append(editorElement);
           }, options);
 
+          editor.on('keyup', function(cm, event) {
+            // if (!cm.state.completionActive && event.keyCode !== 13) {
+            //   CodeMirror.commands.autocomplete(cm, null, {
+            //     completeSingle: false
+            //   });
+            // }
+            if (event.keyCode !== 13) {
+              CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+              });
+            }
+          });
+
           editor.on('change', function() {
             var value = editor.getValue();
             value = value && value.trim ? value.trim() : value;
 
-            if (value.length === 1) editor.showHint();
-
-            ngModelCtrl.$setViewValue(value);
+            $timeout(function() {
+              ngModelCtrl.$setViewValue(value);
+            });
           });
 
           editor.on('endCompletion', function() {
-            var value = getFullValue(editor.getValue());
-            editor.setValue(value);
+            var editorValue = editor.getValue();
+            var value = getFullValue(editorValue);
 
             $timeout(function() {
-              editor.setCursor(1, 4);
+              if (value) {
+                editor.setValue(value);
+                editor.setCursor(1, 4);
+              }
             });
           });
 
@@ -91,41 +104,9 @@ angular.module('app').directive('codemirror', [
           });
         }
 
-        function customHint(codemirror) {
-          var currentValue = editor.getValue();
-
-          var inner = javascriptHintFn(codemirror) || {
-            from: codemirror.getCursor(),
-            to: codemirror.getCursor(),
-            list: []
-          };
-
-          inner.list = [];
-          inner.list.push('aggregate');
-          inner.list.push('find');
-          inner.list.push('update');
-          inner.list.push('deleteMany');
-          inner.list.push('insertOne');
-
-          // ---------------
-
-          var term = $.ui.autocomplete.escapeRegex(currentValue);
-
-          var startsWithMatcher = new RegExp("^" + term, "i");
-          var startsWith = $.grep(inner.list, function(value) {
-            return startsWithMatcher.test(value.label || value.value || value);
-          });
-
-          var containsMatcher = new RegExp(term, "i");
-          var contains = $.grep(inner.list, function(value) {
-            return $.inArray(value, startsWith) < 0 &&
-              containsMatcher.test(value.label || value.value || value);
-          });
-
-          inner.list = startsWith.concat(contains);
-
-          return inner;
-        }
+        /* -----------------------------------------------
+        /* Private Helpers
+        /* ----------------------------------------------- */
 
         function getFullValue(val) {
           if (val.match(FIND_QUERY)) {

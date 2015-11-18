@@ -3,6 +3,7 @@
 const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
 
+const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
 
 const PAGE_SIZE = 50;
@@ -85,18 +86,34 @@ class Collection {
    * @param {Object} [options] - mongo query options
    * @param {Function} next - callback function
    */
-  deleteMany(query, options) {
+  deleteMany(query) {
     var _this = this;
-    options = options || {};
 
     return new Promise(function(resolve, reject) {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      options.limit = 50;
+      _this._dbCollection.deleteMany(query, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
 
-      //TODO: validate the query??
+  /**
+   * @method deleteById
+   * @param {Object} Mongo ObjectId
+   * @param {Function} next - callback function
+   */
+  deleteById(objectId) {
+    var _this = this;
 
-      _this._dbCollection.remove(query, options, function(err) {
+    return new Promise(function(resolve, reject) {
+      if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
+      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
+
+      _this._dbCollection.deleteOne({
+        _id: objectId
+      }, function(err) {
         if (err) return reject(err);
         return resolve(null);
       });
