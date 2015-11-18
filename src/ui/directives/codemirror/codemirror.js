@@ -59,11 +59,6 @@ angular.module('app').directive('codemirror', [
                 completeSingle: false
               });
             }
-            // if (event.keyCode !== 13) {
-            //   CodeMirror.commands.autocomplete(cm, null, {
-            //     completeSingle: false
-            //   });
-            // }
           });
 
           editor.on('change', function() {
