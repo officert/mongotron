@@ -1,15 +1,20 @@
 <div class="collection-query">
   <div class="collection-query-nav clearfix">
     <div class="collection-info pull-left">
-      <p>
-        <i class="fa fa-server"></i> {{ ::collection.serverName }}
-      </p>
-      <p>
-        <i class="fa fa-database"></i> {{ ::collection.databaseName }}
-      </p>
-      <p ng-show="queryTime">
-        <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
-      </p>
+      <ul>
+        <li>
+          <i class="fa fa-server"></i> {{ ::collection.serverName }}
+        </li>
+        <li>
+          <i class="fa fa-database"></i> {{ ::collection.databaseName }}
+        </li>
+        <li ng-show="queryTime">
+          <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
+        </li>
+        <li>
+          {{ results.length }} Count
+        </li>
+      </ul>
     </div>
     <div class="pull-right">
       <div class="query-btn-list btn-group clearfix">
