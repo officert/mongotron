@@ -34,7 +34,7 @@ angular.module('app').controller('sidebarCtrl', [
         label: 'Disconnect',
         click: function() {
           $timeout(function() {
-            connectionCache.removeByName(connection.name);
+            connectionCache.removeById(connection.id);
           });
         }
       }], {
