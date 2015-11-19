@@ -230,6 +230,7 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       switch (type) {
         case QUERY_TYPES.FIND:
+        case QUERY_TYPES.INSERT_ONE:
           queryValue = {
             query: evalQueryValue(value)
           };
