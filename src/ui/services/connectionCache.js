@@ -9,12 +9,34 @@ angular.module('app').factory('connectionCache', [
     function ConnectionCache() {}
     util.inherits(ConnectionCache, EventEmitter);
 
+    ConnectionCache.prototype.findById = function(connectionId) {
+      if (!connectionId) return;
+
+      return _.findWhere(CONNECTION_CACHE, {
+        id: connectionId
+      });
+    };
+
     ConnectionCache.prototype.add = function(connection) {
       if (!connection) return;
 
       CONNECTION_CACHE.push(connection);
 
       this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+
+      return CONNECTION_CACHE;
+    };
+
+    ConnectionCache.prototype.updateById = function(connectionId, updates) {
+      if (!connectionId) return;
+
+      var connection = this.findById(connectionId);
+
+      if (connection) {
+        connection = _.extend(connection, updates);
+
+        this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+      }
 
       return CONNECTION_CACHE;
     };
@@ -37,20 +59,16 @@ angular.module('app').factory('connectionCache', [
       return existingConnection ? true : false;
     };
 
-    ConnectionCache.prototype.removeByName = function(connectionName) {
-      var existingConnection = _.findWhere(CONNECTION_CACHE, {
-        name: connectionName
-      });
+    ConnectionCache.prototype.removeById = function(connectionId) {
+      if (!connectionId) return;
 
-      if (!existingConnection) return;
-
-      var index = CONNECTION_CACHE.indexOf(existingConnection);
+      var connection = this.findById(connectionId);
+      var index = CONNECTION_CACHE.indexOf(connection);
 
       if (index >= 0) {
         CONNECTION_CACHE.splice(index, 1);
+        this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
       }
-
-      this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
 
       return CONNECTION_CACHE;
     };

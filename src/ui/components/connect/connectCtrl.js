@@ -71,7 +71,7 @@ angular.module('app').controller('connectCtrl', [
       if (!$scope.isConnected(connection)) {
         connectionCache.add(connection);
       } else {
-        connectionCache.removeByName(connection.name);
+        connectionCache.removeById(connection.id);
       }
     };
 
@@ -110,9 +110,9 @@ angular.module('app').controller('connectCtrl', [
       connectionModule.update($scope.selectedConnection.id, $scope.selectedConnection)
         .then(function(connection) {
           $timeout(function() {
-            //TODO: need to update cached connection, if it's in the cache
+            connectionCache.updateById($scope.selectedConnection.id, connection);
 
-            _.extend($scope.selectedConnection, connection);
+            $scope.selectedConnection = _.extend($scope.selectedConnection, connection);
 
             $scope.currentScreen = $scope.screens.LIST;
 
@@ -138,7 +138,7 @@ angular.module('app').controller('connectCtrl', [
 
             if (index >= 0) $scope.connections.splice(index, 1);
 
-            connectionCache.removeByName(connection.name);
+            connectionCache.removeById(connection.id);
 
             $scope.currentScreen = $scope.screens.LIST;
 

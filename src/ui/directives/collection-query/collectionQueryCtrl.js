@@ -13,25 +13,34 @@ angular.module('app').controller('collectionQueryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
 
+    const QUERY_TYPES = {
+      FIND: 'FIND',
+      UPDATE_MANY: 'UPDATE_MANY',
+      UPDATE_ONE: 'UPDATE_ONE',
+      DELETE_MANY: 'DELETE_MANY',
+      DELETE_ONE: 'DELETE_ONE',
+      AGGREGATE: 'AGGREGATE',
+      INSERT_ONE: 'INSERT_ONE'
+    };
+
     //extraction regexes to pull out a valid mongo query object, or array (aggregate)
     const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/;
-    const UPDATE_QUERY_FULL_REGEX = /^(?:update)\(([^]+)\)/;
+    const UPDATE_MANY_QUERY_FULL_REGEX = /^(?:updateMany)\(([^]+)\)/;
+    const UPDATE_ONE_QUERY_FULL_REGEX = /^(?:updateOne)\(([^]+)\)/;
     const DELETE_MANY_QUERY_FULL_REGEX = /^(?:deleteMany)\(([^]+)\)/;
+    const DELETE_ONE_QUERY_FULL_REGEX = /^(?:deleteOne)\(([^]+)\)/;
     const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
     const INSERT_ONE_QUERY_FULL_REGEX = /^(?:insertOne)\(([^]+)\)/;
-
-    const SEARCH_QUERY_DEFAULT = 'find({\n    \n})';
+    //given a string '{...},{...}' this will capture the 2 objects seperately
+    //used for any query that requires passing options arg
+    const QUERY_WITH_OPTIONS_REGEX = /^({[^]+}),(?:[ \n\r])({[^]+})/;
 
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: SEARCH_QUERY_DEFAULT,
+      searchQuery: 'find({\n  \n})',
       skip: 0,
       limit: 50
-    };
-
-    $scope.resetSearchQuery = function() {
-      $scope.form.searchQuery = SEARCH_QUERY_DEFAULT;
     };
 
     $scope.VIEWS = {
@@ -91,6 +100,10 @@ angular.module('app').controller('collectionQueryCtrl', [
       }
     });
 
+    $scope.exportResults = function() {
+      alert('exportResults');
+    };
+
     $scope.runQuery = function runQuery() {
       $scope.loading = true;
       $scope.error = null;
@@ -103,34 +116,33 @@ angular.module('app').controller('collectionQueryCtrl', [
         return;
       }
 
-      var searchQuery = convertSearchQueryToJsObject($scope.form.searchQuery);
+      var searchQueryOptions = convertSearchQueryToJsObject($scope.form.searchQuery);
 
-      if (!searchQuery) {
+      if (!searchQueryOptions) {
         $scope.error = $scope.error || 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
         return;
       }
 
-      logger.debug('running query', searchQuery);
+      logger.debug('running query', searchQueryOptions.query, searchQueryOptions.options);
 
-      _runQuery(queryFn, searchQuery);
+      _runQuery(queryFn, searchQueryOptions.query, searchQueryOptions.options);
     };
 
     $scope.runQuery();
 
-    function _runQuery(fn, searchQuery) {
+    function _runQuery(fn, query, queryOptions) {
       var startTime = performance.now();
 
-      searchQuery = searchQuery || {};
-
-      var searchOptions = {};
+      query = query || {};
 
       if (fn === findQuery) {
-        searchOptions.skip = $scope.form.skip;
-        searchOptions.limit = $scope.form.limit;
+        queryOptions = {};
+        queryOptions.skip = $scope.form.skip;
+        queryOptions.limit = $scope.form.limit;
       }
 
-      var promise = fn(searchQuery, searchOptions);
+      var promise = fn(query, queryOptions);
 
       promise.then(function(results) {
           var endTime = performance.now();
@@ -140,19 +152,16 @@ angular.module('app').controller('collectionQueryCtrl', [
 
             $scope.loading = false;
 
-            if (fn === insertOneQuery || fn === deleteManyQuery || fn === deleteByIdQuery || fn === updateQuery) {
+            if (fn === insertOneQuery || fn === deleteOneQuery || fn === deleteByIdQuery || fn === deleteManyQuery || fn === updateOneQuery || fn === updateByIdQuery || fn === updateManyQuery) {
               var msg = '';
 
               if (fn === insertOneQuery) msg += 'Insert ';
-              else if (fn === deleteManyQuery) msg += 'Delete ';
-              else if (fn === deleteByIdQuery) msg += 'Delete ';
-              else if (fn === updateQuery) msg += 'Update ';
+              else if (fn === deleteOneQuery || fn === deleteByIdQuery || fn === deleteManyQuery) msg += 'Delete ';
+              else if (fn === updateOneQuery || fn === updateByIdQuery || fn === updateManyQuery) msg += 'Update ';
 
               msg += 'successful...';
 
               alertService.success(msg);
-
-              $scope.resetSearchQuery();
 
               return _runQuery(findQuery);
             }
@@ -180,6 +189,7 @@ angular.module('app').controller('collectionQueryCtrl', [
         })
         .catch(function(err) {
           $timeout(function() {
+            $scope.loading = false;
             $scope.error = err;
           });
         });
@@ -191,38 +201,81 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, FIND_QUERY_FULL_REGEX);
-      } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, UPDATE_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.FIND, match);
+      } else if (matchesRegex(query, UPDATE_MANY_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, UPDATE_MANY_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.UPDATE_MANY, match);
+      } else if (matchesRegex(query, UPDATE_ONE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, UPDATE_ONE_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.UPDATE_ONE, match);
       } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, DELETE_MANY_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.DELETE_MANY, match);
+      } else if (matchesRegex(query, DELETE_ONE_QUERY_FULL_REGEX)) {
+        match = getRegexMatch(query, DELETE_ONE_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.DELETE_ONE, match);
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, AGGREGATE_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.AGGREGATE, match);
       } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
         match = getRegexMatch(query, INSERT_ONE_QUERY_FULL_REGEX);
+        return evalQueryValueByType(QUERY_TYPES.INSERT_ONE, match);
       } else {
-        match = null;
+        return null;
+      }
+    }
+
+    function evalQueryValueByType(type, value) {
+      var queryValue;
+
+      switch (type) {
+        case QUERY_TYPES.FIND:
+        case QUERY_TYPES.INSERT_ONE:
+          queryValue = {
+            query: evalQueryValue(value)
+          };
+          break;
+        case QUERY_TYPES.UPDATE_MANY:
+        case QUERY_TYPES.UPDATE_ONE:
+        case QUERY_TYPES.DELETE_ONE:
+        case QUERY_TYPES.DELETE_MANY:
+          var matches = value.match(QUERY_WITH_OPTIONS_REGEX);
+          if (matches && matches.length > 2) {
+            queryValue = {
+              query: evalQueryValue(matches[1]),
+              options: evalQueryValue(matches[2])
+            };
+          }
+          break;
       }
 
-      if (!match) return null;
+      return queryValue;
+    }
 
+    function evalQueryValue(rawValue) {
+      var queryValue;
       try {
         // match = $scope.$eval(match);
-        match = eval('(' + match + ')'); // jshint ignore:line
+        queryValue = eval('(' + rawValue + ')'); // jshint ignore:line
       } catch (err) {
         $scope.error = err && err.message ? err.message : err;
         $scope.loading = false;
-        match = null;
+        queryValue = null;
       }
-      return match;
+      return queryValue;
     }
 
     function getQueryTypeFn(query) {
       if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
         return findQuery;
-      } else if (matchesRegex(query, UPDATE_QUERY_FULL_REGEX)) {
-        return updateQuery;
+      } else if (matchesRegex(query, UPDATE_MANY_QUERY_FULL_REGEX)) {
+        return updateManyQuery;
+      } else if (matchesRegex(query, UPDATE_ONE_QUERY_FULL_REGEX)) {
+        return updateOneQuery;
       } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
         return deleteManyQuery;
+      } else if (matchesRegex(query, DELETE_ONE_QUERY_FULL_REGEX)) {
+        return deleteOneQuery;
       } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
         return aggregateQuery;
       } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
@@ -246,12 +299,24 @@ angular.module('app').controller('collectionQueryCtrl', [
       return $scope.collection.find(query, options);
     }
 
-    function updateQuery(query) {
-      return $scope.collection.update(query);
+    function updateManyQuery(query, updates) {
+      return $scope.collection.updateMany(query, updates);
+    }
+
+    function updateOneQuery(query, updates) {
+      return $scope.collection.updateOne(query, updates);
+    }
+
+    function updateByIdQuery(id, updates) {
+      return $scope.collection.updateById(id, updates);
     }
 
     function deleteManyQuery(query) {
       return $scope.collection.deleteMany(query);
+    }
+
+    function deleteOneQuery(query) {
+      return $scope.collection.deleteOne(query);
     }
 
     function deleteByIdQuery(id) {

@@ -39,7 +39,6 @@ class Collection {
   /**
    * @method insertOne
    * @param {Object} doc
-   * @param {Function} next - callback function
    */
   insertOne(doc) {
     var _this = this;
@@ -56,7 +55,6 @@ class Collection {
    * @method find
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
   find(query, options) {
     var _this = this;
@@ -84,15 +82,15 @@ class Collection {
    * @method deleteMany
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
-  deleteMany(query) {
+  deleteMany(query, options) {
     var _this = this;
+    options = options || {};
 
     return new Promise(function(resolve, reject) {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      _this._dbCollection.deleteMany(query, function(err) {
+      _this._dbCollection.deleteMany(query, options, function(err) {
         if (err) return reject(err);
         return resolve(null);
       });
@@ -102,7 +100,6 @@ class Collection {
   /**
    * @method deleteById
    * @param {Object} Mongo ObjectId
-   * @param {Function} next - callback function
    */
   deleteById(objectId) {
     var _this = this;
@@ -121,9 +118,25 @@ class Collection {
   }
 
   /**
+   * @method deleteOne
+   * @param {Object} query - mongo query
+   */
+  deleteOne(query) {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+
+      _this._dbCollection.deleteOne(query, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
+
+  /**
    * @method aggregate
    * @param {Object} query - mongo query
-   * @param {Object} [options] - mongo query options
    */
   aggregate(query, options) {
     var _this = this;
@@ -139,6 +152,82 @@ class Collection {
       _this._dbCollection.aggregate(query, options).toArray(function(err, result) {
         if (err) return reject(err);
         return resolve(result);
+      });
+    });
+  }
+
+  /**
+   * @method updateMany
+   * @param {Object} query - mongo query
+   * @param {Object} updates - updates to apply
+   * @param {Object} [options] - mongo query options
+   */
+  updateMany(query, updates, options) {
+    var _this = this;
+    options = options || {};
+
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+
+      _this._dbCollection.updateMany(query, updates, options, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
+
+  /**
+   * @method updateById
+   * @param {Object} Mongo ObjectId
+   * @param {Object} updates - updates to apply
+   */
+  updateById(objectId, updates) {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
+
+      _this._dbCollection.updateOne({
+        _id: objectId
+      }, updates, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
+
+  /**
+   * @method updateOne
+   * @param {Object} query - mongo query
+   * @param {Object} updates - updates to apply
+   */
+  updateOne(query, updates) {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+
+      _this._dbCollection.updateOne(query, updates, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
+
+  /**
+   * @method drop
+   */
+  drop() {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      _this._dbCollection.drop(function(err) {
+        if (err) return reject(err);
+        return resolve(null);
       });
     });
   }

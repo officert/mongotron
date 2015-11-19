@@ -42,3 +42,22 @@
     }
   }
 }
+.CodeMirror-hints {
+  min-width: 250px;
+  box-shadow: none;
+  background: @theme-query-result-autocomplete-menu-bg;
+  border: 1px solid @theme-query-result-autocomplete-menu-border-color;
+  padding: 0;
+  border-radius: 0;
+  .box-shadow(0 0 6px 0 rgba(0, 0, 0, .5));
+  .CodeMirror-hint {
+    padding: 5px 10px;
+    color: @theme-query-result-autocomplete-menu-color;
+    margin: 0;
+    border-radius: 0;
+    max-width: none;
+    &.CodeMirror-hint-active {
+      background: @theme-query-result-autocomplete-menu-active-bg;
+    }
+  }
+}

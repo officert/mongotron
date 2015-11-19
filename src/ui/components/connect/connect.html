@@ -19,7 +19,7 @@
         </div>
         <li ng-repeat="connection in connections" ng-class="{ 'connected' : isConnected(connection) }" ng-show="connections.length">
           <a class="name" href="#" ng-click="connect(connection, $event)">
-            <i class="icon-connected fa fa-check-circle-o"></i> {{ ::connection.name }}
+            <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
           </a>
           <span class="links">
             <a class="edit" href="#" ng-click="changeScreen(screens.EDIT, connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
