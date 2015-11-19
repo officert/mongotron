@@ -11,7 +11,9 @@
       list: [
         'aggregate',
         'find',
-        'update',
+        'updateOne',
+        'updateMany',
+        'deleteOne',
         'deleteMany',
         'insertOne'
       ]
