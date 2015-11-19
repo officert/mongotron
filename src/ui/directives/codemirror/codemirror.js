@@ -13,6 +13,8 @@ angular.module('app').directive('codemirror', [
         var editor;
         var options = scope.codemirror || {};
 
+        const TAB = '  '; //2 spaces
+
         //regexes for matching input to a mongo query type for autocomplete
         const FIND_QUERY = /^[\s\S]*find$/;
         const UPDATE_MANY_QUERY = /^[\s\S]*updateMany$/;
@@ -23,18 +25,18 @@ angular.module('app').directive('codemirror', [
         const INSERT_ONE_QUERY = /^[\s\S]*insertOne$/;
 
         //defaults when autocomplete selection is made
-        const FIND_DEFAULT = 'find({\n    \n})';
-        const UPDATE_MANY_DEFAULT = 'updateMany({\n    \n}, {\n    $set : {\n    \n    }\n})';
-        const UPDATE_ONE_DEFAULT = 'updateOne({\n    \n}, {\n    $set : {\n    \n    }\n})';
-        const DELETE_MANY_DEFAULT = 'deleteMany({\n    \n}, {\n    \n})';
-        const DELETE_ONE_DEFAULT = 'deleteOne({\n    \n}, {\n    \n})';
-        const AGGREGATE_DEFAULT = 'aggregate([\n    \n])';
-        const INSERT_ONE_DEFAULT = 'insertOne({\n    \n})';
+        const FIND_DEFAULT = 'find({\n' + TAB + '\n})';
+        const UPDATE_MANY_DEFAULT = 'updateMany({\n' + TAB + '\n}, {\n' + TAB + '$set : {\n' + TAB + '\n' + TAB + '}\n})';
+        const UPDATE_ONE_DEFAULT = 'updateOne({\n' + TAB + '\n}, {\n    $set : {\n    \n    }\n})';
+        const DELETE_MANY_DEFAULT = 'deleteMany({\n' + TAB + '\n}, {\n' + TAB + '\n})';
+        const DELETE_ONE_DEFAULT = 'deleteOne({\n' + TAB + '\n}, {\n' + TAB + '\n})';
+        const AGGREGATE_DEFAULT = 'aggregate([\n' + TAB + '\n])';
+        const INSERT_ONE_DEFAULT = 'insertOne({\n' + TAB + '\n})';
 
         options.lineNumbers = options.lineNumbers || true;
         options.extraKeys = options.extraKeys || {};
-        // options.extraKeys['Ctrl-Space'] = 'autocomplete';
-
+        options.tabSize = TAB.length;
+        options.indentWithTabs = false;
         options.mode = {
           name: 'javascript',
           globalVars: true
@@ -55,7 +57,14 @@ angular.module('app').directive('codemirror', [
             element.append(editorElement);
           }, options);
 
-          element.data('CodeMirrorInstance', editor);
+          element.data('CodeMirrorInstance', editor); //make the instance available from the DOM
+
+          editor.setOption('extraKeys', {
+            Tab: function(cm) { //use spaces instead of tabs
+              var spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+              cm.replaceSelection(spaces);
+            }
+          });
 
           editor.on('keyup', function(cm, event) {
             if (!cm.state.completionActive && event.keyCode !== 13) {

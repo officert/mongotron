@@ -35,18 +35,12 @@ angular.module('app').controller('collectionQueryCtrl', [
     //used for any query that requires passing options arg
     const QUERY_WITH_OPTIONS_REGEX = /^({[^]+}),(?:[ \n\r])({[^]+})/;
 
-    const SEARCH_QUERY_DEFAULT = 'find({\n    \n})';
-
     $scope.codeEditorOptions = {};
 
     $scope.form = {
-      searchQuery: SEARCH_QUERY_DEFAULT,
+      searchQuery: 'find({\n  \n})',
       skip: 0,
       limit: 50
-    };
-
-    $scope.resetSearchQuery = function() {
-      $scope.form.searchQuery = SEARCH_QUERY_DEFAULT;
     };
 
     $scope.VIEWS = {
@@ -164,8 +158,6 @@ angular.module('app').controller('collectionQueryCtrl', [
               msg += 'successful...';
 
               alertService.success(msg);
-
-              // $scope.resetSearchQuery();
 
               return _runQuery(findQuery);
             }
