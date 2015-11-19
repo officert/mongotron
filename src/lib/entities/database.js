@@ -113,6 +113,21 @@ class Database {
 
     return collection;
   }
+
+  /**
+   * @method drop
+   */
+  drop() {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      _this._dbConnection.dropDatabase(function(err) {
+        if (err) return reject(err);
+        return resolve();
+      });
+    });
+  }
+
 }
 
 /**

@@ -73,6 +73,31 @@ angular.module('app').controller('sidebarCtrl', [
             modalService.openAddCollection(database);
           });
         }
+      }, {
+        label: 'Drop Database',
+        click: function() {
+          $timeout(function() {
+            modalService.confirm({
+              message: 'Are you sure you want to drop this collection?',
+              confirmButtonMessage: 'Yes',
+              cancelButtonMessage: 'No'
+            }).result.then(function() {
+              database.drop()
+                .then(function() {
+                  alertService.success('Database dropped');
+
+                  var index = connection.databases.indexOf(database);
+                  if (index >= 0) {
+                    connection.databases.splice(index, 1);
+                  }
+                })
+                .catch(function(err) {
+                  logger.error(err);
+                  alertService.error(err);
+                });
+            });
+          });
+        }
       }], {
         connection: connection
       });
@@ -121,7 +146,7 @@ angular.module('app').controller('sidebarCtrl', [
                 })
                 .catch(function(err) {
                   logger.error(err);
-                  alertService.error('Error dropping collection');
+                  alertService.error(err);
                 });
             });
           });
