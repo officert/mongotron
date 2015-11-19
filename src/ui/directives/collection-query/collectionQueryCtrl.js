@@ -100,6 +100,10 @@ angular.module('app').controller('collectionQueryCtrl', [
       }
     });
 
+    $scope.exportResults = function() {
+      alert('exportResults');
+    };
+
     $scope.runQuery = function runQuery() {
       $scope.loading = true;
       $scope.error = null;

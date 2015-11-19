@@ -23,11 +23,16 @@
         <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
+        </button>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm" ng-click="exportResults()" uib-tooltip="Export Results" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+          <i class="fa fa-external-link-square"></i>
         </button>
       </div>
     </div>
