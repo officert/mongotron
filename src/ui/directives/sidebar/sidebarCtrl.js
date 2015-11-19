@@ -8,6 +8,7 @@ angular.module('app').controller('sidebarCtrl', [
   'menuService',
   'modalService',
   function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService, modalService) {
+    const logger = require('lib/modules/logger');
 
     $scope.activeConnections = connectionCache.list();
 
@@ -98,6 +99,31 @@ angular.module('app').controller('sidebarCtrl', [
         click: function() {
           $timeout(function() {
             $scope.activateItem(collection, 'collection');
+          });
+        }
+      }, {
+        label: 'Drop Collection',
+        click: function() {
+          $timeout(function() {
+            modalService.confirm({
+              message: 'Are you sure you want to drop this collection?',
+              confirmButtonMessage: 'Yes',
+              cancelButtonMessage: 'No'
+            }).result.then(function() {
+              collection.drop()
+                .then(function() {
+                  alertService.success('Collection dropped');
+
+                  var index = database.collections.indexOf(collection);
+                  if (index >= 0) {
+                    database.collections.splice(index, 1);
+                  }
+                })
+                .catch(function(err) {
+                  logger.error(err);
+                  alertService.error('Error dropping collection');
+                });
+            });
           });
         }
       }]);

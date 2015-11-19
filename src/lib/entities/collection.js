@@ -39,7 +39,6 @@ class Collection {
   /**
    * @method insertOne
    * @param {Object} doc
-   * @param {Function} next - callback function
    */
   insertOne(doc) {
     var _this = this;
@@ -56,7 +55,6 @@ class Collection {
    * @method find
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
   find(query, options) {
     var _this = this;
@@ -84,7 +82,6 @@ class Collection {
    * @method deleteMany
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
   deleteMany(query, options) {
     var _this = this;
@@ -103,7 +100,6 @@ class Collection {
   /**
    * @method deleteById
    * @param {Object} Mongo ObjectId
-   * @param {Function} next - callback function
    */
   deleteById(objectId) {
     var _this = this;
@@ -124,7 +120,6 @@ class Collection {
   /**
    * @method deleteOne
    * @param {Object} query - mongo query
-   * @param {Function} next - callback function
    */
   deleteOne(query) {
     var _this = this;
@@ -142,7 +137,6 @@ class Collection {
   /**
    * @method aggregate
    * @param {Object} query - mongo query
-   * @param {Object} [options] - mongo query options
    */
   aggregate(query, options) {
     var _this = this;
@@ -167,7 +161,6 @@ class Collection {
    * @param {Object} query - mongo query
    * @param {Object} updates - updates to apply
    * @param {Object} [options] - mongo query options
-   * @param {Function} next - callback function
    */
   updateMany(query, updates, options) {
     var _this = this;
@@ -188,7 +181,6 @@ class Collection {
    * @method updateById
    * @param {Object} Mongo ObjectId
    * @param {Object} updates - updates to apply
-   * @param {Function} next - callback function
    */
   updateById(objectId, updates) {
     var _this = this;
@@ -211,7 +203,6 @@ class Collection {
    * @method updateOne
    * @param {Object} query - mongo query
    * @param {Object} updates - updates to apply
-   * @param {Function} next - callback function
    */
   updateOne(query, updates) {
     var _this = this;
@@ -221,6 +212,20 @@ class Collection {
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
 
       _this._dbCollection.updateOne(query, updates, function(err) {
+        if (err) return reject(err);
+        return resolve(null);
+      });
+    });
+  }
+
+  /**
+   * @method drop
+   */
+  drop() {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      _this._dbCollection.drop(function(err) {
         if (err) return reject(err);
         return resolve(null);
       });
