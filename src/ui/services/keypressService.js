@@ -42,7 +42,6 @@ angular.module('app').factory('keypressService', [
 
     KeypressService.prototype.EVENTS = {
       CLOSE_WINDOW: 'meta w',
-      NEW_TAB: 'meta t',
       MOVE_LEFT: 'meta shift {',
       MOVE_RIGHT: 'meta shift }',
       OPEN_CONNECTION_MANAGER: 'meta shift o',
