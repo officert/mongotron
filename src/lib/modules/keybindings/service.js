@@ -36,6 +36,8 @@ function readKeybindingsFile() {
 
 function parseKeybindingsFileData(data) {
   if (!data || !_.isArray(data)) return null;
+
+  
 }
 
 /**
