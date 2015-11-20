@@ -21,6 +21,7 @@ class Mongotron {
     createAppConfigDir();
     createDbConfigFile();
     createLogFile();
+    createKeybindingsFile();
   }
 }
 
@@ -38,6 +39,10 @@ function createDbConfigFile() {
 
 function createLogFile() {
   fileUtils.createFile(appConfig.logFilePath);
+}
+
+function createKeybindingsFile() {
+  fileUtils.createFile(appConfig.keybindingsPath);
 }
 
 /**
