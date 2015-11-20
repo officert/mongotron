@@ -118,7 +118,7 @@ angular.module('app').controller('collectionQueryCtrl', [
 
       var searchQueryOptions = convertSearchQueryToJsObject($scope.form.searchQuery);
 
-      if (!searchQueryOptions) {
+      if (!searchQueryOptions || !searchQueryOptions.query) {
         $scope.error = $scope.error || 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
         return;

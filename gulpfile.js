@@ -85,12 +85,6 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('release', ['pre-release'], function() {
-  // Build Steps:
-  //-------------------------------------
-  // run build to cleanup dirs and compile less
-  // run babel to compile ES6 => ES5
-  // run prod-sym-links to change symlinks in node_modules that point to src dir to the build dir (which will contain the compiled ES5 code)
-  //-------------------------------------
   var env = _.extend({}, process.env);
   env.NODE_ENV = 'production';
 
@@ -126,6 +120,12 @@ gulp.task('release', ['pre-release'], function() {
 });
 
 gulp.task('pre-release', function(next) {
+  // Build Steps:
+  //-------------------------------------
+  // run build to cleanup dirs and compile less
+  // run babel to compile ES6 => ES5
+  // run prod-sym-links to change symlinks in node_modules that point to src dir to the build dir (which will contain the compiled ES5 code)
+  //-------------------------------------
   runSequence('build', 'babel', 'prod-sym-links', next);
 });
 
