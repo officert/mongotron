@@ -6,6 +6,8 @@ const _ = require('underscore');
 const appConfig = require('src/config/appConfig');
 const fileUtils = require('lib/utils/fileUtils');
 
+const Context = require('./context');
+
 const DEFAULT_KEYBINDINGS = require('./defaults');
 
 /**
@@ -15,8 +17,9 @@ class KeybindingsService {
   /**
    * @method list
    */
-  list() {
-    return readKeybindingsFile();
+  listContexts() {
+    return readKeybindingsFile()
+      .then(parseKeybindingsFileDataAsContexts);
   }
 
   get defaultBindings() {
@@ -25,19 +28,25 @@ class KeybindingsService {
 }
 
 function readKeybindingsFile() {
-  return new Promise(function(resolve, reject) {
-    fileUtils.readFile(appConfig.keybindingsPath, function(err, data) {
-      if (err) return reject(err);
-      var results = parseKeybindingsFileData(data);
-      return resolve(results);
-    });
-  });
+  return fileUtils.readJsonFile(appConfig.keybindingsPath);
 }
 
-function parseKeybindingsFileData(data) {
-  if (!data || !_.isArray(data)) return null;
+/**
+ * @method parseKeybindingsFileDataAsContexts
+ * @private
+ *
+ * @param {Object} data - raw contexts from keybindings file
+ */
+function parseKeybindingsFileDataAsContexts(data) {
+  return new Promise((resolve, reject) => {
+    if (!data || !_.isArray(data)) return reject('error parsing keybindings file data');
 
-  
+    //TODO: should we group these by context name to avoid duplicates??
+
+    return resolve(data.map((context) => {
+      return new Context(context.context, context.commands);
+    }));
+  });
 }
 
 /**

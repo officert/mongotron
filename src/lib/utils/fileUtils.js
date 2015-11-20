@@ -1,6 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
+const jsonfile = require('jsonfile');
 
 const fs = require('fs');
 
@@ -31,8 +32,6 @@ class FileUtils {
   }
 
   createFileSync(path, fileData) {
-    console.log(arguments);
-
     var fileExists = false;
     fileData = fileData || '';
 
@@ -58,9 +57,19 @@ class FileUtils {
     }
   }
 
-  readFile(path) {
-    return new Promise(function(resolve, reject) {
-      fs.readFile(path, function(err, data) {
+  readJsonFile(path) {
+    return new Promise((resolve, reject) => {
+      jsonfile.readFile(path, (err, data) => {
+        // if (err && !(err.message && err.message === 'Unexpected end of input')) return reject(err);
+        if (err) return reject(err);
+        return resolve(data);
+      });
+    });
+  }
+
+  writeJsonFile(path, fileData) {
+    return new Promise((resolve, reject) => {
+      jsonfile.writeFile(path, fileData, (err, data) => {
         if (err) return reject(err);
         return resolve(data);
       });

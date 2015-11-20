@@ -1,10 +1,10 @@
 'use strict';
 
-const jsonfile = require('jsonfile');
 const _ = require('underscore');
 const Promise = require('bluebird');
 const uuid = require('node-uuid');
 
+const fileUtils = require('lib/utils/fileUtils');
 const appConfig = require('src/config/appConfig');
 const errors = require('lib/errors');
 const Connection = require('lib/entities/connection');
@@ -158,16 +158,16 @@ class ConnectionRepository {
 
 function readConfigFile() {
   return new Promise((resolve, reject) => {
-    jsonfile.readFile(DB_CONNECTIONS, (err, data) => {
-      if (err && !(err.message && err.message === 'Unexpected end of input')) return reject(err);
-      return resolve(data || []);
+    fileUtils.readJsonFile(DB_CONNECTIONS, (err, data) => {
+      if (err) return reject(err);
+      return resolve(data);
     });
   });
 }
 
 function writeConfigFile(data) {
   return new Promise((resolve, reject) => {
-    jsonfile.writeFile(DB_CONNECTIONS, data, (err, data) => {
+    fileUtils.writeJsonFile(DB_CONNECTIONS, data, (err, data) => {
       if (err) return reject(err);
       return resolve(data);
     });

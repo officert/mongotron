@@ -2,11 +2,25 @@ angular.module('app').factory('keypressService', [
   '$window',
   '$rootScope',
   '$log',
-  function($window, $rootScope, $log) {
+  '$timeout',
+  function($window, $rootScope, $log, $timeout) {
+    const keybindings = require('lib/modules/keybindings');
 
     function KeypressService() {
       this.registeredCombos = [];
       this.listener = new $window.keypress.Listener();
+
+      keybindings.listContexts()
+        .then(function(contexts) {
+          $timeout(function() {
+            console.log('contexts', contexts);
+          });
+        })
+        .catch(function(err) {
+          $timeout(function() {
+            $log.error(err);
+          });
+        });
     }
 
     KeypressService.prototype.isRegistered = function isRegistered(combo) {
