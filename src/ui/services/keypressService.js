@@ -16,7 +16,7 @@ angular.module('app').factory('keypressService', [
 
     KeypressService.prototype.registerCombo = function registerCombo(combo, callback) {
       if (this.isRegistered(combo)) {
-        $log.error(combo + ' is already registered, unregistering previous combo');
+        $log.warn(combo + ' is already registered, unregistering previous combo');
         this.unregisterCombo(combo);
       }
 
@@ -45,7 +45,7 @@ angular.module('app').factory('keypressService', [
       NEW_TAB: 'meta t',
       MOVE_LEFT: 'meta shift {',
       MOVE_RIGHT: 'meta shift }',
-      OPEN_CONNECTION_MANAGER: 'meta shift n',
+      OPEN_CONNECTION_MANAGER: 'meta shift o',
       RUN_CURRENT_QUERY: 'meta enter'
     };
 
