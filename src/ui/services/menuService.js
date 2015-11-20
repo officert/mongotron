@@ -33,171 +33,194 @@ angular.module('app').factory('menuService', [
       menu.popup(remote.getCurrentWindow());
     };
 
-    function initMainMenu() {
-      var name = appConfig.name;
+    var mongotronMenu = {
+      label: appConfig.name,
+      submenu: [{
+        label: 'About ' + appConfig.name,
+        role: 'about'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Preferences...',
+        accelerator: 'CmdOrCtrl+,',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showSettings();
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Services',
+        role: 'services',
+        submenu: []
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Hide ' + appConfig.name,
+        accelerator: 'Command+H',
+        role: 'hide'
+      }, {
+        label: 'Hide Others',
+        accelerator: 'Command+Shift+H',
+        role: 'hideothers'
+      }, {
+        label: 'Show All',
+        role: 'unhide'
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click: function() {
+          ipc.send('quit');
+        }
+      }, ]
+    };
 
-      var template = [{
-        label: name,
-        submenu: [{
-          label: 'About ' + name,
-          role: 'about'
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Preferences...',
-          accelerator: 'CmdOrCtrl+,',
-          click: function() {
-            $timeout(function() {
-              $rootScope.showSettings();
-            });
-          }
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Services',
-          role: 'services',
-          submenu: []
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Hide ' + name,
-          accelerator: 'Command+H',
-          role: 'hide'
-        }, {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          role: 'hideothers'
-        }, {
-          label: 'Show All',
-          role: 'unhide'
-        }, {
-          type: 'separator'
-        }, {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: function() {
-            ipc.send('quit');
-          }
-        }, ]
+    var fileMenu = {
+      label: 'File',
+      submenu: [{
+        label: 'Save',
+        accelerator: 'CmdOrCtrl+S',
+        click: function() {
+          $timeout(function() {
+            dialogService.showSaveDialog()
+              .then(function(fileNames) {
+                console.log(fileNames);
+              });
+          });
+        }
+      }]
+    };
+
+    var editMenu = {
+      label: 'Edit',
+      submenu: [{
+        label: 'Cut',
+        accelerator: 'Cmd+X',
+        selector: 'cut:'
       }, {
-        label: 'File',
-        submenu: [{
-          label: 'Save',
-          accelerator: 'CmdOrCtrl+S',
-          click: function() {
-            $timeout(function() {
-              dialogService.showSaveDialog()
-                .then(function(fileNames) {
-                  console.log(fileNames);
-                });
-            });
-          }
-        }]
+        label: 'Copy',
+        accelerator: 'Cmd+C',
+        selector: 'copy:'
       }, {
-        label: 'Edit',
-        submenu: [{
-          label: 'Cut',
-          accelerator: 'Cmd+X',
-          selector: 'cut:'
-        }, {
-          label: 'Copy',
-          accelerator: 'Cmd+C',
-          selector: 'copy:'
-        }, {
-          label: 'Paste',
-          accelerator: 'Cmd+V',
-          selector: 'paste:'
-        }, {
-          label: 'Select All',
-          accelerator: 'Cmd+A',
-          selector: 'selectAll:'
-        }]
+        label: 'Paste',
+        accelerator: 'Cmd+V',
+        selector: 'paste:'
       }, {
-        label: 'Go',
-        submenu: [{
-          label: 'Connection Manager',
-          accelerator: 'CmdOrCtrl+Shift+O',
-          click: function() {
-            $timeout(function() {
-              $rootScope.showConnections('LIST');
-            });
-          }
-        }, ]
+        label: 'Select All',
+        accelerator: 'Cmd+A',
+        selector: 'selectAll:'
+      }]
+    };
+
+    var goMenu = {
+      label: 'Go',
+      submenu: [{
+        label: 'Connection Manager',
+        accelerator: 'CmdOrCtrl+Shift+O',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showConnections('LIST');
+          });
+        }
+      }, ]
+    };
+
+    var newMenu = {
+      label: 'New',
+      submenu: [{
+        label: 'Connection',
+        accelerator: 'CmdOrCtrl+Shift+N',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showConnections('ADD');
+          });
+        }
+      }, ]
+    };
+
+    var viewMenu = {
+      label: 'View',
+      submenu: [{
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
+        click: function(item, focusedWindow) {
+          if (focusedWindow)
+            focusedWindow.reload();
+        }
       }, {
-        label: 'New',
-        submenu: [{
-          label: 'Connection',
-          accelerator: 'CmdOrCtrl+Shift+N',
-          click: function() {
-            $timeout(function() {
-              $rootScope.showConnections('ADD');
-            });
-          }
-        }, ]
+        label: 'Logs',
+        accelerator: 'CmdOrCtrl+L',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showLogs();
+          });
+        }
       }, {
-        label: 'View',
-        submenu: [{
-          label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
-          click: function(item, focusedWindow) {
-            if (focusedWindow)
-              focusedWindow.reload();
-          }
-        }, {
-          label: 'Logs',
-          accelerator: 'CmdOrCtrl+L',
-          click: function() {
-            $timeout(function() {
-              $rootScope.showLogs();
-            });
-          }
-        }, {
-          label: 'Toggle Full Screen',
-          accelerator: (function() {
-            if (process.platform === 'darwin')
-              return 'Ctrl+Command+F';
-            else
-              return 'F11';
-          })(),
-          click: function(item, focusedWindow) {
-            if (focusedWindow)
-              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-          }
-        }, {
-          label: 'Toggle Developer Tools',
-          accelerator: (function() {
-            if (process.platform === 'darwin')
-              return 'Alt+Command+I';
-            else
-              return 'Ctrl+Shift+I';
-          })(),
-          click: function(item, focusedWindow) {
-            if (focusedWindow)
-              focusedWindow.toggleDevTools();
-          }
-        }, ]
+        label: 'Toggle Full Screen',
+        accelerator: (function() {
+          if (process.platform === 'darwin')
+            return 'Ctrl+Command+F';
+          else
+            return 'F11';
+        })(),
+        click: function(item, focusedWindow) {
+          if (focusedWindow)
+            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+        }
       }, {
-        label: 'Window',
-        role: 'window',
-        submenu: [{
-          label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
-          role: 'minimize'
-        }, {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
-          role: 'close'
-        }, ]
+        label: 'Toggle Developer Tools',
+        accelerator: (function() {
+          if (process.platform === 'darwin')
+            return 'Alt+Command+I';
+          else
+            return 'Ctrl+Shift+I';
+        })(),
+        click: function(item, focusedWindow) {
+          if (focusedWindow)
+            focusedWindow.toggleDevTools();
+        }
+      }, ]
+    };
+
+    var windowMenu = {
+      label: 'Window',
+      role: 'window',
+      submenu: [{
+        label: 'Minimize',
+        accelerator: 'CmdOrCtrl+M',
+        role: 'minimize'
       }, {
-        label: 'Help',
-        role: 'help',
-        submenu: [{
-          label: 'Learn More',
-          click: function() {
-            shell.openExternal(appConfig.repository);
-          }
-        }]
-      }];
+        label: 'Close',
+        accelerator: 'CmdOrCtrl+W',
+        role: 'close'
+      }, ]
+    };
+
+    var helpMenu = {
+      label: 'Help',
+      role: 'help',
+      submenu: [{
+        label: 'Learn More',
+        click: function() {
+          shell.openExternal(appConfig.repository);
+        }
+      }]
+    };
+
+    function initMainMenu() {
+      var template = [
+        mongotronMenu,
+        fileMenu,
+        editMenu,
+        goMenu,
+        newMenu,
+        viewMenu,
+        windowMenu,
+        helpMenu
+      ];
 
       if (process.platform === 'darwin') {
         // Window menu.
@@ -220,7 +243,5 @@ angular.module('app').factory('menuService', [
 
 angular.module('app').run([
   'menuService',
-  function(menuService) { // jshint ignore:line
-
-  }
+  function() {}
 ]);
