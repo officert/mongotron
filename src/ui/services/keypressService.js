@@ -1,12 +1,45 @@
+'use strict';
+
 angular.module('app').factory('keypressService', [
   '$window',
   '$rootScope',
   '$log',
-  function($window, $rootScope, $log) {
+  '$timeout',
+  function($window, $rootScope, $log, $timeout) {
+    const keybindings = require('lib/modules/keybindings');
 
     function KeypressService() {
-      this.registeredCombos = [];
-      this.listener = new $window.keypress.Listener();
+      var _this = this;
+      _this.registeredCombos = {};
+      _this.registeredCommandHandlers = {};
+      _this.listener = new $window.keypress.Listener();
+      _this.keybindingContext = null;
+
+      keybindings.list()
+        .then(function(keybindings) {
+          $timeout(function() {
+            var keybindingGroups = _.groupBy(keybindings, 'keystroke');
+
+            for (let key in keybindingGroups) {
+              var bindings = keybindingGroups[key];
+
+              _.each(bindings, function(binding) {
+                var commandHandler = _this.registeredCommandHandlers[binding.command];
+
+                if (!commandHandler) {
+                  $log.warn('KeypressService - constructor - no command handler registered for command : ' + binding.command);
+                } else {
+                  _this.registerCombo(key, binding.context, commandHandler);
+                }
+              }); // jshint ignore:line
+            }
+          });
+        })
+        .catch(function(err) {
+          $timeout(function() {
+            $log.error(err);
+          });
+        });
     }
 
     KeypressService.prototype.isRegistered = function isRegistered(combo) {
@@ -14,18 +47,54 @@ angular.module('app').factory('keypressService', [
       return registration ? true : false;
     };
 
-    KeypressService.prototype.registerCombo = function registerCombo(combo, callback) {
-      if (this.isRegistered(combo)) {
-        $log.error(combo + ' is already registered, unregistering previous combo');
-        this.unregisterCombo(combo);
+    KeypressService.prototype.registerCombo = function registerCombo(combo, context, callback) {
+      var _this = this;
+
+      if (!combo || !context || !callback || !_.isFunction(callback)) return;
+
+      //can only register a combo 1 time per context
+      //you can have multiple registrations per combo, as long as the contexts are different
+      //since we should only ever fire one handler for any given context
+
+      //if the callback is already registered just add the listener
+      if (_this.isRegistered(combo)) {
+        var registeredCallback = _.findWhere(_this.registeredCombos[combo], {
+          context: _this.keybindingContext
+        });
+
+        if (registeredCallback) {
+          throw new Error('registerCombo - combo has already been registered for the give context - can only have 1 callback per key combo');
+        } else {
+          var callbacks = _this.registeredCombos[combo];
+          callbacks.push(callback);
+        }
       }
+      //otherwise register the combo with a wrapper that will fire any register callbacks that match
+      //the current keybindingContext
+      else {
+        var callbackWrapper = function() {
+          var args = Array.prototype.slice.call(arguments);
 
-      $log.debug('Registering keypress combo : ' + combo);
+          var callbacks = _this.registeredCombos[combo];
+          var registeredCallback = _.findWhere(callbacks, {
+            context: _this.keybindingContext
+          });
 
-      this.listener.counting_combo(combo, function() { // jshint ignore:line
-        callback.call(arguments);
-        $rootScope.$apply();
-      }, true);
+          if (registeredCallback) {
+            registeredCallback.callback.call(args);
+            $rootScope.$apply();
+          }
+        };
+
+        _this.registeredCombos[combo] = [{
+          context: context,
+          callback: callback
+        }];
+
+        $log.debug('Registering keypress combo : ' + combo);
+
+        _this.listener.counting_combo(convertCommand(combo), callbackWrapper, true); // jshint ignore:line
+      }
     };
 
     KeypressService.prototype.unregisterCombo = function unregisterCombo(combo) {
@@ -40,56 +109,42 @@ angular.module('app').factory('keypressService', [
       });
     };
 
-    KeypressService.prototype.EVENTS = {
-      CLOSE_WINDOW: 'meta w',
-      NEW_TAB: 'meta t',
-      MOVE_LEFT: 'meta shift {',
-      MOVE_RIGHT: 'meta shift }',
-      OPEN_CONNECTION_MANAGER: 'meta shift n',
-      RUN_CURRENT_QUERY: 'meta enter'
+    KeypressService.prototype.changeCurrentContext = function changeCurrentContext(context) {
+      if (!context) return;
+
+      $log.debug('keybinding context changed', context);
+
+      this.keybindingContext = context;
     };
+
+    KeypressService.prototype.registerCommandHandler = function registerCommandHandler(command, callback) {
+      if (!command || !callback) return;
+
+      var _this = this;
+
+      if (_this.registeredCommandHandlers[command]) throw new Error('registerCommandHandler - command \'' + command + '\' is already registerd');
+
+      _this.registeredCommandHandlers[command] = callback;
+    };
+
+    function convertCommand(command) {
+
+      command = command.replace(/cmd/g, 'meta');
+      command = command.replace(/-/g, ' ');
+
+      return command;
+    }
 
     return new KeypressService();
   }
 ]);
 
-// run block for registering keypress events
 angular.module('app').run([
   '$rootScope',
   'keypressService',
-  'tabCache',
-  function($rootScope, keypressService, tabCache) {
-    const logger = require('lib/modules/logger');
-
+  function($rootScope, keypressService) {
     $rootScope.$on('$destroy', function() {
       keypressService.unregisterAllCombos();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
-      logger.debug(keypressService.EVENTS.CLOSE_WINDOW);
-      tabCache.removeActive();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
-      logger.debug(keypressService.EVENTS.MOVE_LEFT);
-      tabCache.activatePrevious();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
-      logger.debug(keypressService.EVENTS.MOVE_RIGHT);
-      tabCache.activateNext();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
-      logger.debug(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
-      $rootScope.showConnections();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
-      logger.debug(keypressService.EVENTS.RUN_CURRENT_QUERY);
-      if ($rootScope.currentQuery && $rootScope.currentQuery.runQuery) {
-        $rootScope.currentQuery.runQuery();
-      }
     });
   }
 ]);

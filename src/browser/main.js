@@ -67,3 +67,8 @@ app.on('ready', function() {
     mainWindow = null;
   });
 });
+
+process.on('uncaughtException', function() {
+  console.log('\n\nUNCAUGHT ERROR\n');
+  console.log("caught from process");
+});

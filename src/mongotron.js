@@ -2,6 +2,7 @@
 
 const fileUtils = require('lib/utils/fileUtils');
 const appConfig = require('src/config/appConfig');
+const keybindings = require('lib/modules/keybindings');
 
 /**
  * @constructor Mongotron
@@ -21,23 +22,28 @@ class Mongotron {
     createAppConfigDir();
     createDbConfigFile();
     createLogFile();
+    createKeybindingsFile();
   }
 }
 
 function createConfigDir() {
-  fileUtils.createDir(appConfig.configDir);
+  fileUtils.createDirSync(appConfig.configDir);
 }
 
 function createAppConfigDir() {
-  fileUtils.createDir(appConfig.appConfigDir);
+  fileUtils.createDirSync(appConfig.appConfigDir);
 }
 
 function createDbConfigFile() {
-  fileUtils.createFile(appConfig.dbConfigPath);
+  fileUtils.createFileSync(appConfig.dbConfigPath);
 }
 
 function createLogFile() {
-  fileUtils.createFile(appConfig.logFilePath);
+  fileUtils.createFileSync(appConfig.logFilePath);
+}
+
+function createKeybindingsFile() {
+  fileUtils.createFileSync(appConfig.keybindingsPath, keybindings.defaultBindings);
 }
 
 /**

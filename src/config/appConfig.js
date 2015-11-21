@@ -24,9 +24,10 @@ var defaultSettings = {
   buildPath: 'build',
   releasePath: 'release',
   configDir: path.join(path.homedir(), '.config'),
-  appConfigDir: path.join(path.homedir(), '.config', packageJson.name.toLowerCase()),
-  logFilePath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'logs.json'),
-  dbConfigPath: path.join(path.homedir(), '.config', packageJson.name.toLowerCase(), 'dbConnections.json')
+  appConfigDir: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase())),
+  logFilePath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'logs.json'),
+  dbConfigPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'dbConnections.json'),
+  keybindingsPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'keybindings.json')
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {

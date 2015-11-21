@@ -1,11 +1,42 @@
 #settings {
   position: relative;
   .settings-sidebar {
-    width: 200px;
-    float: left;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    min-width: 15em;
+    max-width: 20em;
     ul {
       margin: 0;
       padding: 0;
+      li {
+        padding: 15px;
+        cursor: pointer;
+        &:hover {
+          background: darken(@theme-tab-pane-bg, 5%);
+        }
+      }
     }
+  }
+  .settings-content {
+    border-left: 1px solid darken(@theme-tab-pane-bg, 5%);
+    flex: 8.4;
+    flex-flow: column;
+    display: flex;
+    position: relative;
+    padding: 20px 15px;
+    .settings-panel {
+      .panel-header {
+        
+      }
+    }
+  }
+}
+#keybindings {
+  .keystroke-key {
+    border-radius: 4px;
+    border: 1px solid white;
+    padding: 4px;
+    margin-right: 4px;
   }
 }

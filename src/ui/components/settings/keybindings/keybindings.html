@@ -1,0 +1,30 @@
+<div id="keybindings" ng-controller="keybindingsCtrl">
+  <div class="panel-header">
+    <h3>Keybindings</h3>
+  </div>
+  <table class="table table-hover table-bordered">
+    <thead>
+      <td>
+        Keystroke
+      </td>
+      <td>
+        Command
+      </td>
+      <td>
+        Context
+      </td>
+    </thead>
+    <tbody>
+      <tr ng-repeat="keybinding in keybindings | orderBy : 'context'">
+        <td ng-bind-html="getHtmlForKeystroke(keybinding.keystroke)">
+        </td>
+        <td>
+          {{ keybinding.command }}
+        </td>
+        <td>
+          {{ keybinding.context }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
