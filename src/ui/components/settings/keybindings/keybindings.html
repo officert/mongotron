@@ -1,0 +1,28 @@
+<div id="keybindings" ng-controller="keybindingsCtrl">
+  KEYBINDINGS
+  <table class="table table-hover table-bordered">
+    <thead>
+      <td>
+        Keystroke
+      </td>
+      <td>
+        Command
+      </td>
+      <td>
+        Context
+      </td>
+    </thead>
+    <tbody>
+      <tr ng-repeat="keybinding in keybindings">
+        <td ng-bind-html="getHtmlForKeystroke(keybinding.keystroke)">
+        </td>
+        <td>
+          {{ keybinding.command }}
+        </td>
+        <td>
+          {{ keybinding.context }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,15 +1,20 @@
 <div id="settings" ng-controller="settingsCtrl">
   <div class="settings-sidebar">
     <ul>
-      <li>
+      <li ng-click="currentPage = 'preferences'">
         <i class="fa fa-cogs"></i> Settings
       </li>
-      <li>
+      <li ng-click="currentPage = 'keybindings'">
         <i class="fa fa-keyboard-o"></i> Keybindings
       </li>
-      <li>
+      <li ng-click="currentPage = 'themes'">
         <i class="fa fa-paint-brush"></i> Themes
       </li>
     </ul>
+  </div>
+  <div class="settings-content">
+    <div ng-if="currentPage === 'settings'" ng-include="settingsSrc"></div>
+    <div ng-if="currentPage === 'keybindings'" ng-include="keybindingsSrc"></div>
+    <div ng-if="currentPage === 'themes'" ng-include="themesSrc"></div>
   </div>
 </div>
