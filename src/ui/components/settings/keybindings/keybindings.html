@@ -1,8 +1,13 @@
 <div id="keybindings" ng-controller="keybindingsCtrl">
   <div class="panel-header">
-    <h3>Keybindings</h3>
+    <h3><i class="fa fa-keyboard-o"></i>Keybindings</h3>
   </div>
-  <table class="table table-hover table-bordered">
+  <form class="searchKeybindings" novalidate>
+    <div class="form-group">
+      <input class="form-control" type="text" ng-model="searchForm.searchQuery" placeholder="Search for Keybindings">
+    </div>
+  </form>
+  <table class="table">
     <thead>
       <td>
         Keystroke
@@ -15,7 +20,7 @@
       </td>
     </thead>
     <tbody>
-      <tr ng-repeat="keybinding in keybindings | orderBy : 'context'">
+      <tr ng-repeat="keybinding in keybindings | filter : { keystrokeSpaced : searchForm.searchQuery } | orderBy : 'context'">
         <td ng-bind-html="getHtmlForKeystroke(keybinding.keystroke)">
         </td>
         <td>

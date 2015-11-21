@@ -5,10 +5,17 @@ angular.module('app').controller('keybindingsCtrl', [
   function($scope, $timeout, $log) {
     const keybindings = require('lib/modules/keybindings');
 
+    $scope.searchForm = {
+      searchQuery: ''
+    };
+
     keybindings.list()
       .then(function(keybindings) {
         $timeout(function() {
-          $scope.keybindings = keybindings;
+          $scope.keybindings = keybindings.map(function(keybinding) {
+            keybinding.keystrokeSpaced = keybinding.keystroke ? keybinding.keystroke.replace(/-/g, ' ') : '';
+            return keybinding;
+          });
         });
       })
       .catch(function(err) {
