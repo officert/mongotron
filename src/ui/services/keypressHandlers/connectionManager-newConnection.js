@@ -1,8 +1,8 @@
-angular.module('app').factory('keypressHandler-connectionManager-newConnection', [
+angular.module('app').run([
   'keypressService',
   '$rootScope',
   function(keypressService, $rootScope) {
-    keypressService.registerHandler('connection-manager:new-connection', function() {
+    keypressService.registerCommandHandler('connection-manager:new-connection', function() {
       $rootScope.showConnections();
     });
   }
