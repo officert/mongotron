@@ -9,11 +9,12 @@ angular.module('app').factory('keypressService', [
     function KeypressService() {
       this.registeredCombos = [];
       this.listener = new $window.keypress.Listener();
+      this.currentContext = null;
 
-      keybindings.listContexts()
-        .then(function(contexts) {
+      keybindings.list()
+        .then(function(keybindings) {
           $timeout(function() {
-            console.log('contexts', contexts);
+            console.log('keybindings', keybindings);
           });
         })
         .catch(function(err) {
