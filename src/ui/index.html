@@ -73,20 +73,21 @@
   <script src="./directives/sidebar/sidebarCtrl.js"></script>
   <script src="./directives/tab-view/tab-view.js"></script>
   <script src="./directives/tab-view/tabViewCtrl.js"></script>
+  <script src="./directives/keybinding-context.js"></script>
 </head>
 
 <body class="theme-{{ themes.current }}">
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div class="app">
+  <div class="app" keybinding-context="mongotron-workspace">
     <div class="splitter" splitter position="20%" limit="240">
       <div class="sidebar-wrapper">
         <sidebar></sidebar>
       </div>
       <div class="content-wrapper">
         <div class="content">
-          <tab-view></tab-view>
+          <tab-view keybinding-context="mongotron-tab-view"></tab-view>
         </div>
       </div>
     </div>

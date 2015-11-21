@@ -9,7 +9,7 @@ angular.module('app').factory('keypressService', [
     function KeypressService() {
       this.registeredCombos = [];
       this.listener = new $window.keypress.Listener();
-      this.currentContext = null;
+      this.keybindingContext = null;
 
       keybindings.list()
         .then(function(keybindings) {
@@ -55,13 +55,21 @@ angular.module('app').factory('keypressService', [
       });
     };
 
-    KeypressService.prototype.EVENTS = {
-      CLOSE_WINDOW: 'meta w',
-      MOVE_LEFT: 'meta shift {',
-      MOVE_RIGHT: 'meta shift }',
-      OPEN_CONNECTION_MANAGER: 'meta shift o',
-      RUN_CURRENT_QUERY: 'meta enter'
+    KeypressService.prototype.changeCurrentContext = function changeCurrentContext(context) {
+      if (!context) return;
+
+      $log.debug('keybinding context changed', context);
+
+      this.keybindingContext = context;
     };
+
+    // KeypressService.prototype.EVENTS = {
+    //   CLOSE_WINDOW: 'meta w',
+    //   MOVE_LEFT: 'meta shift {',
+    //   MOVE_RIGHT: 'meta shift }',
+    //   OPEN_CONNECTION_MANAGER: 'meta shift o',
+    //   RUN_CURRENT_QUERY: 'meta enter'
+    // };
 
     return new KeypressService();
   }
@@ -78,32 +86,32 @@ angular.module('app').run([
     $rootScope.$on('$destroy', function() {
       keypressService.unregisterAllCombos();
     });
-
-    keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
-      logger.debug(keypressService.EVENTS.CLOSE_WINDOW);
-      tabCache.removeActive();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
-      logger.debug(keypressService.EVENTS.MOVE_LEFT);
-      tabCache.activatePrevious();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
-      logger.debug(keypressService.EVENTS.MOVE_RIGHT);
-      tabCache.activateNext();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
-      logger.debug(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
-      $rootScope.showConnections();
-    });
-
-    keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
-      logger.debug(keypressService.EVENTS.RUN_CURRENT_QUERY);
-      if ($rootScope.currentQuery && $rootScope.currentQuery.runQuery) {
-        $rootScope.currentQuery.runQuery();
-      }
-    });
+    //
+    // keypressService.registerCombo(keypressService.EVENTS.CLOSE_WINDOW, function() {
+    //   logger.debug(keypressService.EVENTS.CLOSE_WINDOW);
+    //   tabCache.removeActive();
+    // });
+    //
+    // keypressService.registerCombo(keypressService.EVENTS.MOVE_LEFT, function() {
+    //   logger.debug(keypressService.EVENTS.MOVE_LEFT);
+    //   tabCache.activatePrevious();
+    // });
+    //
+    // keypressService.registerCombo(keypressService.EVENTS.MOVE_RIGHT, function() {
+    //   logger.debug(keypressService.EVENTS.MOVE_RIGHT);
+    //   tabCache.activateNext();
+    // });
+    //
+    // keypressService.registerCombo(keypressService.EVENTS.OPEN_CONNECTION_MANAGER, function() {
+    //   logger.debug(keypressService.EVENTS.OPEN_CONNECTION_MANAGER);
+    //   $rootScope.showConnections();
+    // });
+    //
+    // keypressService.registerCombo(keypressService.EVENTS.RUN_CURRENT_QUERY, function() {
+    //   logger.debug(keypressService.EVENTS.RUN_CURRENT_QUERY);
+    //   if ($rootScope.currentQuery && $rootScope.currentQuery.runQuery) {
+    //     $rootScope.currentQuery.runQuery();
+    //   }
+    // });
   }
 ]);
