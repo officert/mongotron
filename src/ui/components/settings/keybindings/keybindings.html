@@ -1,5 +1,7 @@
 <div id="keybindings" ng-controller="keybindingsCtrl">
-  KEYBINDINGS
+  <div class="panel-header">
+    <h3>Keybindings</h3>
+  </div>
   <table class="table table-hover table-bordered">
     <thead>
       <td>
@@ -13,7 +15,7 @@
       </td>
     </thead>
     <tbody>
-      <tr ng-repeat="keybinding in keybindings">
+      <tr ng-repeat="keybinding in keybindings | orderBy : 'context'">
         <td ng-bind-html="getHtmlForKeystroke(keybinding.keystroke)">
         </td>
         <td>
