@@ -157,28 +157,18 @@ class ConnectionRepository {
 }
 
 function readConfigFile() {
-  return new Promise((resolve, reject) => {
-    fileUtils.readJsonFile(DB_CONNECTIONS, (err, data) => {
-      if (err) return reject(err);
-      return resolve(data);
-    });
-  });
+  return fileUtils.readJsonFile(DB_CONNECTIONS);
 }
 
 function writeConfigFile(data) {
-  return new Promise((resolve, reject) => {
-    fileUtils.writeJsonFile(DB_CONNECTIONS, data, (err, data) => {
-      if (err) return reject(err);
-      return resolve(data);
-    });
-  });
+  return fileUtils.writeJsonFile(DB_CONNECTIONS, data);
 }
 
 function getConnectionInstances() {
   return readConfigFile()
     .then((connectionConfigs) => {
       return new Promise((resolve) => {
-        return resolve(connectionConfigs.map(generateConnectionInstanceFromConfig));
+        return resolve(connectionConfigs && connectionConfigs.length ? connectionConfigs.map(generateConnectionInstanceFromConfig) : []);
       });
     });
 }
