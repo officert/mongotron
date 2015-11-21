@@ -60,8 +60,7 @@ class FileUtils {
   readJsonFile(path) {
     return new Promise((resolve, reject) => {
       jsonfile.readFile(path, (err, data) => {
-        // if (err && !(err.message && err.message === 'Unexpected end of input')) return reject(err);
-        if (err) return reject(err);
+        if (err && !(err.message && err.message === 'Unexpected end of input')) return reject(err);
         return resolve(data);
       });
     });
