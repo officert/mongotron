@@ -1,5 +1,6 @@
 #settings {
   position: relative;
+  padding-top: 15px;
   .settings-sidebar {
     padding-left: 0;
     padding-right: 0;
@@ -13,6 +14,9 @@
         padding: 15px;
         cursor: pointer;
         &:hover {
+          background: darken(@theme-tab-pane-bg, 5%);
+        }
+        &.active {
           background: darken(@theme-tab-pane-bg, 5%);
         }
         i {

@@ -1,13 +1,13 @@
-<div id="settings" ng-controller="settingsCtrl">
+<div id="settings" class="clearfix" ng-controller="settingsCtrl">
   <div class="settings-sidebar col-xs-3">
     <ul>
-      <li ng-click="currentPage = 'preferences'">
+      <li ng-click="currentPage = 'preferences'" ng-class="{ active : currentPage === 'preferences' }">
         <i class="fa fa-cogs"></i>Settings
       </li>
-      <li ng-click="currentPage = 'keybindings'">
+      <li ng-click="currentPage = 'keybindings'" ng-class="{ active : currentPage === 'keybindings' }">
         <i class="fa fa-keyboard-o"></i>Keybindings
       </li>
-      <li ng-click="currentPage = 'themes'">
+      <li ng-click="currentPage = 'themes'" ng-class="{ active : currentPage === 'themes' }">
         <i class="fa fa-paint-brush"></i>Themes
       </li>
     </ul>

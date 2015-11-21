@@ -4,7 +4,8 @@ angular.module('app').factory('menuService', [
   '$rootScope',
   '$timeout',
   'dialogService',
-  function($window, $rootScope, $timeout, dialogService) {
+  'tabCache',
+  function($window, $rootScope, $timeout, dialogService, tabCache) {
     const ipc = require('ipc');
     const shell = require('shell');
     const remote = require('remote');
@@ -89,6 +90,23 @@ angular.module('app').factory('menuService', [
               .then(function(fileNames) {
                 console.log(fileNames);
               });
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Close Tab',
+        accelerator: 'CmdOrCtrl+W',
+        click: function() {
+          $timeout(function() {
+            tabCache.removeActive();
+          });
+        }
+      }, {
+        label: 'Close All Tabs',
+        click: function() {
+          $timeout(function() {
+            tabCache.removeAll();
           });
         }
       }]

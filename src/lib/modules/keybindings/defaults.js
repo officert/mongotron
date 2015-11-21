@@ -7,7 +7,6 @@ module.exports = [{
   context: 'mongotron-tab-view',
   commands: {
     'cmd-enter': 'tab-manager:run-query',
-    'cmd-w': 'tab-manager:close-active-tab',
     'cmd-shift-{': 'tab-manager:previous-tab',
     'cmd-shift-}': 'tab-manager:next-tab',
   }
