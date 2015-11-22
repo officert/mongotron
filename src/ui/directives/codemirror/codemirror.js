@@ -37,6 +37,7 @@ angular.module('app').directive('codemirror', [
         options.extraKeys = options.extraKeys || {};
         options.tabSize = TAB.length;
         options.indentWithTabs = false;
+        options.theme = 'lesser-dark';
         options.mode = {
           name: 'javascript',
           globalVars: true
