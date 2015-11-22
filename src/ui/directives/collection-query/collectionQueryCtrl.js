@@ -229,12 +229,6 @@ angular.module('app').controller('collectionQueryCtrl', [
       var queryValue;
 
       switch (type) {
-        case QUERY_TYPES.FIND:
-        case QUERY_TYPES.INSERT_ONE:
-          queryValue = {
-            query: evalQueryValue(value)
-          };
-          break;
         case QUERY_TYPES.UPDATE_MANY:
         case QUERY_TYPES.UPDATE_ONE:
         case QUERY_TYPES.DELETE_ONE:
@@ -246,6 +240,14 @@ angular.module('app').controller('collectionQueryCtrl', [
               options: evalQueryValue(matches[2])
             };
           }
+          break;
+        default:
+          // case QUERY_TYPES.FIND:
+          // case QUERY_TYPES.INSERT_ONE:
+          // case QUERY_TYPES.AGGREGATE:
+          queryValue = {
+            query: evalQueryValue(value)
+          };
           break;
       }
 

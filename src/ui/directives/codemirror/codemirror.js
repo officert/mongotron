@@ -28,8 +28,8 @@ angular.module('app').directive('codemirror', [
         const FIND_DEFAULT = 'find({\n' + TAB + '\n})';
         const UPDATE_MANY_DEFAULT = 'updateMany({\n' + TAB + '\n}, {\n' + TAB + '$set : {\n' + TAB + '\n' + TAB + '}\n})';
         const UPDATE_ONE_DEFAULT = 'updateOne({\n' + TAB + '\n}, {\n    $set : {\n    \n    }\n})';
-        const DELETE_MANY_DEFAULT = 'deleteMany({\n' + TAB + '\n}, {\n' + TAB + '\n})';
-        const DELETE_ONE_DEFAULT = 'deleteOne({\n' + TAB + '\n}, {\n' + TAB + '\n})';
+        const DELETE_MANY_DEFAULT = 'deleteMany({\n' + TAB + '\n})';
+        const DELETE_ONE_DEFAULT = 'deleteOne({\n' + TAB + '\n})';
         const AGGREGATE_DEFAULT = 'aggregate([\n' + TAB + '\n])';
         const INSERT_ONE_DEFAULT = 'insertOne({\n' + TAB + '\n})';
 
