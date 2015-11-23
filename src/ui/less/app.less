@@ -5,6 +5,7 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  @sidenav-width: 60px;
   .splitter {
     height: 100%;
     width: 100%;
@@ -19,13 +20,37 @@
     top: 0;
     height: 100%;
     overflow-y: auto;
-    .sidebar-header {
-      .logo-wrap {
-        .logo {
-          padding: 10px 0 10px 8px;
-          margin: 0;
-          img {
-            height: 40px;
+    padding-left: @sidenav-width;
+    .sidenav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: @sidenav-width;
+      height: 100%;
+      background: @theme-sidenav-bg;
+      border-right: 1px solid @theme-sidenav-border-color;
+      ul {
+        margin: 0;
+        padding: 0;
+        li {
+          display: block;
+          padding: 20px;
+          cursor: pointer;
+          &:hover {
+          background: darken(@theme-sidenav-bg, 5%);
+          }
+        }
+      }
+    }
+    .sidebar {
+      .sidebar-header {
+        .logo-wrap {
+          .logo {
+            padding: 10px 0 10px 8px;
+            margin: 0;
+            img {
+              height: 40px;
+            }
           }
         }
       }

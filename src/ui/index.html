@@ -79,6 +79,8 @@
   <script src="./directives/collection-query/collectionQueryCtrl.js"></script>
   <script src="./directives/sidebar/sidebar.js"></script>
   <script src="./directives/sidebar/sidebarCtrl.js"></script>
+  <script src="./directives/sidenav/sidenav.js"></script>
+  <script src="./directives/sidenav/sidenavCtrl.js"></script>
   <script src="./directives/tab-view/tab-view.js"></script>
   <script src="./directives/tab-view/tabViewCtrl.js"></script>
   <script src="./directives/keybinding-context.js"></script>
@@ -91,6 +93,7 @@
   <div class="app" keybinding-context="mongotron-workspace">
     <div class="splitter" splitter position="20%" limit="240">
       <div class="sidebar-wrapper">
+        <sidenav></sidenav>
         <sidebar></sidebar>
       </div>
       <div class="content-wrapper">
