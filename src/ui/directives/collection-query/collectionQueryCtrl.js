@@ -7,11 +7,13 @@ angular.module('app').controller('collectionQueryCtrl', [
   function($scope, $timeout, $rootScope, alertService, modalService) {
     const mongoUtils = require('src/lib/utils/mongoUtils');
     const logger = require('lib/modules/logger');
+    const ObjectId = require('mongodb').ObjectId;
 
     if (!$scope.collection) throw new Error('collection is required for collection query directive');
 
     $scope.loading = false;
     $scope.queryTime = null;
+    $scope.editorHandle = {};
 
     const QUERY_TYPES = {
       FIND: 'FIND',
@@ -88,12 +90,21 @@ angular.module('app').controller('collectionQueryCtrl', [
       });
     };
 
+    $scope.autoformat = function() {
+      if ($scope.editorHandle.autoformat) {
+        $scope.editorHandle.autoformat();
+      }
+    };
+
     $scope.editorHasFocus = false;
 
     $scope.$watch('editorHasFocus', function(val) {
       if (val) {
+        //make some functions available on the root scope when the editor gets focus,
+        //used for keybindings
         $rootScope.currentQuery = {
-          runQuery: $scope.runQuery
+          runQuery: $scope.runQuery,
+          autoformat: $scope.autoformat
         };
       } else {
         $rootScope.currentQuery = null;
@@ -116,17 +127,16 @@ angular.module('app').controller('collectionQueryCtrl', [
         return;
       }
 
-      var searchQueryOptions = convertSearchQueryToJsObject($scope.form.searchQuery);
+      var result = convertSearchQueryToJsObject($scope.form.searchQuery);
 
-      if (!searchQueryOptions || !searchQueryOptions.query) {
-        $scope.error = $scope.error || 'Sorry, that is not a valid mongo query';
+      if ((!result || !result.query) || _.isError(result)) {
+        $scope.error = result && result.message ? result.message : 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
-        return;
       }
 
-      logger.debug('running query', searchQueryOptions.query, searchQueryOptions.options);
+      logger.debug('running query', result.query, result.options);
 
-      _runQuery(queryFn, searchQueryOptions.query, searchQueryOptions.options);
+      _runQuery(queryFn, result.query, result.options);
     };
 
     $scope.runQuery();
@@ -221,7 +231,7 @@ angular.module('app').controller('collectionQueryCtrl', [
         match = getRegexMatch(query, INSERT_ONE_QUERY_FULL_REGEX);
         return evalQueryValueByType(QUERY_TYPES.INSERT_ONE, match);
       } else {
-        return null;
+        return new Error('Sorry, that is not a valid mongo query');
       }
     }
 
@@ -235,35 +245,64 @@ angular.module('app').controller('collectionQueryCtrl', [
         case QUERY_TYPES.DELETE_MANY:
           var matches = value.match(QUERY_WITH_OPTIONS_REGEX);
           if (matches && matches.length > 2) {
-            queryValue = {
-              query: evalQueryValue(matches[1]),
-              options: evalQueryValue(matches[2])
-            };
+            var query = evalQueryValue(matches[1]);
+            var options = evalQueryValue(matches[2]);
+
+            if (_.isError(query)) {
+              queryValue = query;
+            } else if (_.isError(value)) {
+              queryValue = value;
+            } else {
+              queryValue = {
+                query: query,
+                options: options
+              };
+            }
+          } else {
+            queryValue = new Error('Error parsing query');
           }
           break;
         default:
           // case QUERY_TYPES.FIND:
           // case QUERY_TYPES.INSERT_ONE:
           // case QUERY_TYPES.AGGREGATE:
-          queryValue = {
-            query: evalQueryValue(value)
-          };
+          value = evalQueryValue(value);
+
+          if (_.isError(value)) {
+            queryValue = value;
+          } else {
+            queryValue = {
+              query: value
+            };
+          }
           break;
       }
 
       return queryValue;
     }
 
+    /**
+     * @method evalQueryValue - evaluates a JS expression from the Mongotron code editor
+     * @private
+     *
+     * @param {String} raw value from editor
+     */
     function evalQueryValue(rawValue) {
+      //additional variables are available in a special context when evaluating
+      var context = {
+        ObjectId: ObjectId
+      };
+
       var queryValue;
-      try {
-        // match = $scope.$eval(match);
-        queryValue = eval('(' + rawValue + ')'); // jshint ignore:line
-      } catch (err) {
-        $scope.error = err && err.message ? err.message : err;
-        $scope.loading = false;
-        queryValue = null;
+
+      with(context) { // jshint ignore:line
+        try {
+          queryValue = eval('(' + rawValue + ')'); // jshint ignore:line
+        } catch (err) {
+          queryValue = err;
+        }
       }
+
       return queryValue;
     }
 

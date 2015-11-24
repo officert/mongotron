@@ -7,11 +7,17 @@ angular.module('app').directive('codemirror', [
       require: 'ngModel',
       scope: {
         codemirror: '=',
-        hasFocus: '='
+        hasFocus: '=',
+        handle: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         var editor;
         var options = scope.codemirror || {};
+
+        scope.handle = scope.handle || {};
+        scope.handle.autoformat = function() {
+          autoFormatSelection(editor);
+        };
 
         const TAB = '  '; //2 spaces
 
@@ -118,6 +124,21 @@ angular.module('app').directive('codemirror', [
         /* -----------------------------------------------
         /* Private Helpers
         /* ----------------------------------------------- */
+
+        function autoFormatSelection(codeMirrorEditor) {
+          if (!codeMirrorEditor) return;
+
+          var totalLines = codeMirrorEditor.lineCount();
+          var totalChars = codeMirrorEditor.getValue().length;
+
+          codeMirrorEditor.autoFormatRange({
+            line: 0,
+            ch: 0
+          }, {
+            line: totalLines,
+            ch: totalChars
+          });
+        }
 
         function getFullValue(val) {
           if (val.match(FIND_QUERY)) {
