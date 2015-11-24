@@ -74,18 +74,16 @@ angular.module('app').directive('codemirror', [
           });
 
           editor.on('keyup', function(cm, event) {
-            if (!cm.state.completionActive && event.keyCode !== 13) {
-              CodeMirror.commands.autocomplete(cm, null, {
-                completeSingle: false
-              });
-            }
+            $timeout(function() {
+              showAutoComplete(cm, event);
+            });
           });
 
           editor.on('change', function() {
-            var value = editor.getValue();
-            value = value && value.trim ? value.trim() : value;
-
             $timeout(function() {
+              var value = editor.getValue();
+              value = value && value.trim ? value.trim() : value;
+
               ngModelCtrl.$setViewValue(value);
             });
           });
@@ -102,9 +100,15 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.on('focus', function() {
+          editor.on('focus', function(cm, event) {
             $timeout(function() {
               scope.hasFocus = true;
+
+              var value = editor.getValue();
+
+              if (!value) {
+                showAutoComplete(cm, event);
+              }
             });
           });
 
@@ -156,6 +160,15 @@ angular.module('app').directive('codemirror', [
           } else if (val.match(INSERT_ONE_QUERY)) {
             return INSERT_ONE_DEFAULT;
           }
+        }
+
+        function showAutoComplete(cm, event) {
+          if (cm.state.completionActive) return;
+          if (event && event.keyCode === 13) return;
+
+          CodeMirror.commands.autocomplete(cm, null, {
+            completeSingle: false
+          });
         }
       }
     };
