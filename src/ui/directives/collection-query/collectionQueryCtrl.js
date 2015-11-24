@@ -35,7 +35,7 @@ angular.module('app').controller('collectionQueryCtrl', [
     const INSERT_ONE_QUERY_FULL_REGEX = /^(?:insertOne)\(([^]+)\)/;
     //given a string '{...},{...}' this will capture the 2 objects seperately
     //used for any query that requires passing options arg
-    const QUERY_WITH_OPTIONS_REGEX = /^({[^]+}),(?:[ \n\r])({[^]+})/;
+    const QUERY_WITH_OPTIONS_REGEX = /^({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/;
 
     $scope.codeEditorOptions = {};
 
