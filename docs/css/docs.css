@@ -12239,3 +12239,7 @@ body.show-mobile-menu .mobile-menu {
   background: #161719;
   padding: 20px 0;
 }
+.bottom-container .container {
+  max-width: 970px;
+  margin: 0 auto;
+}
