@@ -1,7 +1,7 @@
 module.exports = [{
   context: 'mongotron-workspace',
   commands: {
-    'cmd-shift-n': 'connection-manager:new-connection',
+    // 'cmd-shift-n': 'connection-manager:new-connection',
   }
 }, {
   context: 'mongotron-tab-view',
