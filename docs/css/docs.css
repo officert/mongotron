@@ -9635,12 +9635,12 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 .theme-default .collection-query .collection-query-content .query-results .list-view .result,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result {
   padding: 0;
-  cursor: pointer;
 }
 .theme-default .collection-query .collection-query-content .query-results .list-view .result .result-header,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result .result-header {
   padding: 10px;
   display: block;
+  cursor: pointer;
 }
 .theme-default .collection-query .collection-query-content .query-results .list-view .result .result-body,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result .result-body {
@@ -10783,12 +10783,12 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 .theme-isotope-ui .collection-query .collection-query-content .query-results .list-view .result,
 .theme-isotope-ui .collection-query .collection-query-content .query-results .key-value-view .result {
   padding: 0;
-  cursor: pointer;
 }
 .theme-isotope-ui .collection-query .collection-query-content .query-results .list-view .result .result-header,
 .theme-isotope-ui .collection-query .collection-query-content .query-results .key-value-view .result .result-header {
   padding: 10px;
   display: block;
+  cursor: pointer;
 }
 .theme-isotope-ui .collection-query .collection-query-content .query-results .list-view .result .result-body,
 .theme-isotope-ui .collection-query .collection-query-content .query-results .key-value-view .result .result-body {
@@ -11931,12 +11931,12 @@ fieldset[disabled] .theme-atom .btn-inverse.active {
 .theme-atom .collection-query .collection-query-content .query-results .list-view .result,
 .theme-atom .collection-query .collection-query-content .query-results .key-value-view .result {
   padding: 0;
-  cursor: pointer;
 }
 .theme-atom .collection-query .collection-query-content .query-results .list-view .result .result-header,
 .theme-atom .collection-query .collection-query-content .query-results .key-value-view .result .result-header {
   padding: 10px;
   display: block;
+  cursor: pointer;
 }
 .theme-atom .collection-query .collection-query-content .query-results .list-view .result .result-body,
 .theme-atom .collection-query .collection-query-content .query-results .key-value-view .result .result-body {
