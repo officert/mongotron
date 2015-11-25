@@ -30,7 +30,7 @@ angular.module('app').controller('connectCtrl', [
 
     $scope.screens = {
       LIST: {
-        name: 'Manage Your Connections',
+        name: 'Manage Connections',
         slug: 'LIST'
       },
       ADD: {

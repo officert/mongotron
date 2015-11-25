@@ -18,43 +18,17 @@ angular.module('app').run([
   'modalService',
   'tabCache',
   function($rootScope, $log, modalService, tabCache) {
+    const pageTitle = 'Mongotron';
+
     $rootScope.themes = initThemes();
-
+    $rootScope.setTitle = setTitle;
     $rootScope.currentQuery = null;
+    $rootScope.showConnections = showConnections;
+    $rootScope.showSettings = showSettings;
 
-    $rootScope.setTitle = function(title) {
-      ipc.send('set-title', title);
-    };
+    setTitle(pageTitle);
 
-    var pageTitle = 'Mongotron';
-    $rootScope.setTitle(pageTitle);
-
-    $rootScope.showConnections = function(state, $event) {
-      if ($event) $event.preventDefault();
-
-      modalService.openConnectionManager(state)
-        .result
-        .then(function() {
-          $rootScope.setTitle(pageTitle);
-        });
-    };
-
-    $rootScope.showSettings = function($event) {
-      if ($event) $event.preventDefault();
-
-      var settingsTabName = 'Settings';
-
-      if (!tabCache.existsByName(settingsTabName)) {
-        tabCache.add({
-          type: tabCache.TYPES.PAGE,
-          iconClassName: 'fa fa-wrench',
-          name: settingsTabName,
-          src: __dirname + '/components/settings/settings.html'
-        });
-      } else {
-        tabCache.activateByName(settingsTabName);
-      }
-    };
+    showConnections();
 
     $rootScope.showLogs = function($event) {
       if ($event) $event.preventDefault();
@@ -79,6 +53,37 @@ angular.module('app').run([
         // current: 'isotope-ui',
         current: 'atom'
       };
+    }
+
+    function showConnections(state, $event) {
+      if ($event) $event.preventDefault();
+
+      modalService.openConnectionManager(state)
+        .result
+        .then(function() {
+          $rootScope.setTitle(pageTitle);
+        });
+    }
+
+    function showSettings($event) {
+      if ($event) $event.preventDefault();
+
+      var settingsTabName = 'Settings';
+
+      if (!tabCache.existsByName(settingsTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-wrench',
+          name: settingsTabName,
+          src: __dirname + '/components/settings/settings.html'
+        });
+      } else {
+        tabCache.activateByName(settingsTabName);
+      }
+    }
+
+    function setTitle(title) {
+      ipc.send('set-title', title);
     }
   }
 ]);
