@@ -153,7 +153,8 @@ angular.module('app').factory('tabCache', [
 
       switch (type) {
         case TAB_TYPES.QUERY:
-          className = 'fa fa-files-o';
+          className = '';
+          // className = 'fa fa-files-o';
           break;
         case TAB_TYPES.PAGE:
           className = 'fa fa-file-code-o';

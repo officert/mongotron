@@ -37,7 +37,25 @@
           padding: 20px;
           cursor: pointer;
           &:hover {
-          background: darken(@theme-sidenav-bg, 5%);
+            background: darken(@theme-sidenav-bg, 5%);
+          }
+          span {
+            display: block;
+            height: 12px;
+            width: 14px;
+            &.icon-server {
+              position: relative;
+              .fa {
+                position: absolute;
+                top: 0;
+                left: 0;
+                &.fa-plus-circle {
+                  top: 8px;
+                  left: 10px;
+                  font-size: 12px;
+                }
+              }
+            }
           }
         }
       }
