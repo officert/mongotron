@@ -58,21 +58,46 @@ angular.module('app').controller('connectCtrl', [
       $modalInstance.close(1);
     };
 
-    $scope.isConnected = function(connection) {
+    $scope.selectConnection = function(connection, $event) {
       if (!connection) return false;
-
-      return connectionCache.existsByName(connection.name);
-    };
-
-    $scope.connect = function(connection, $event) {
-      if (!connection) return;
       if ($event) $event.preventDefault();
 
-      if (!$scope.isConnected(connection)) {
-        connectionCache.add(connection);
-      } else {
-        connectionCache.removeById(connection.id);
+      if (connection.selected) {
+        connection.selected = false;
+        return;
       }
+
+      _.each($scope.connections, function(conn) {
+        conn.selected = false;
+      });
+
+      connection.selected = true;
+    };
+
+    $scope.connectionSelected = function() {
+      return _.any($scope.connections, function(conn) {
+        return conn.selected;
+      });
+    };
+
+    $scope.connect = function($event) {
+      if ($event) $event.preventDefault();
+
+      var activeConnection = _.findWhere($scope.connections, {
+        selected: true
+      });
+
+      if (!activeConnection) return;
+
+      // if (activeConnection.selected) {
+      //   connectionCache.add(activeConnection);
+      // } else {
+      //   // connectionCache.removeById(activeConnection.id);
+      // }
+
+      connectionCache.add(activeConnection);
+
+      $scope.close();
     };
 
     $scope.changeScreen = function(screen, connection, $event) {
