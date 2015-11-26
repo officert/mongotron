@@ -4,14 +4,7 @@
 var _ = require('underscore');
 var path = require('path-extra');
 
-// var packageJson = require('../../package.json');
-var packageJson = {
-  version: 1,
-  name: 'Mongotron',
-  repository: {
-    url: 'htts://github.com/mongotron'
-  }
-};
+var packageJson = require('../../package.json');
 
 /* =========================================================================
  * App Config Settings
@@ -19,6 +12,7 @@ var packageJson = {
 var defaultSettings = {
   version: packageJson.version,
   name: packageJson.name,
+  website: 'http://mongotron.io/',
   repository: packageJson.repository.url,
   logLevel: 'debug',
   buildPath: 'build',

@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "htts://github.com/mongotron"
+    "url": "https://github.com/mongotron"
   },
   "keywords": [
     "mongo"

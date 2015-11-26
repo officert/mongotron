@@ -211,7 +211,7 @@ angular.module('app').factory('menuService', [
       submenu: [{
         label: 'Learn More',
         click: function() {
-          shell.openExternal(appConfig.repository);
+          shell.openExternal(appConfig.website);
         }
       }]
     };
