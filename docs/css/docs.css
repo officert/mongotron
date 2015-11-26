@@ -8700,11 +8700,30 @@ input::-webkit-inner-spin-button {
 }
 .theme-default .app .sidebar-wrapper .sidenav ul li {
   display: block;
+  height: 59px;
   padding: 20px;
   cursor: pointer;
 }
 .theme-default .app .sidebar-wrapper .sidenav ul li:hover {
   background: #d9d9d9;
+}
+.theme-default .app .sidebar-wrapper .sidenav ul li span {
+  display: block;
+  height: 12px;
+  width: 14px;
+}
+.theme-default .app .sidebar-wrapper .sidenav ul li span.icon-server {
+  position: relative;
+}
+.theme-default .app .sidebar-wrapper .sidenav ul li span.icon-server .fa {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.theme-default .app .sidebar-wrapper .sidenav ul li span.icon-server .fa.fa-plus-circle {
+  top: 8px;
+  left: 10px;
+  font-size: 12px;
 }
 .theme-default .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
   padding: 10px 0 10px 8px;
@@ -8839,47 +8858,85 @@ input::-webkit-inner-spin-button {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-default #connect .modal-body .top-links {
+.theme-default #connect {
+  position: relative;
+  padding-top: 15px;
+  height: 100%;
+}
+.theme-default #connect .connect-sidebar {
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  min-width: 15em;
+  max-width: 20em;
+}
+.theme-default #connect .connect-sidebar ul {
+  margin: 0;
+  padding: 0;
+}
+.theme-default #connect .connect-sidebar ul li {
+  padding: 15px;
+  cursor: pointer;
+}
+.theme-default #connect .connect-sidebar ul li:hover {
+  background: #f5f5f5;
+}
+.theme-default #connect .connect-sidebar ul li.active {
+  background: #f5f5f5;
+}
+.theme-default #connect .connect-sidebar ul li i {
+  margin-right: 10px;
+}
+.theme-default #connect .connect-content {
+  border-left: 1px solid #f2f2f2;
+  height: 100%;
+  flex: 8.4;
+  flex-flow: column;
+  display: flex;
+  position: relative;
+  padding: 20px 15px;
+}
+.theme-default #connect .connect-content .top-links {
   padding: 5px 0 20px;
 }
-.theme-default #connect .modal-body .top-links .user-info-note {
+.theme-default #connect .connect-content .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-default #connect .modal-body .top-links .add-link {
+.theme-default #connect .connect-content .top-links .add-link {
   display: block;
 }
-.theme-default #connect .modal-body .top-links .add-link i {
+.theme-default #connect .connect-content .top-links .add-link i {
   color: #c3deea;
 }
-.theme-default #connect .modal-body .connect-server-list {
+.theme-default #connect .connect-content .connect-server-list {
   top: -100%;
   list-style: none;
   margin: 0;
   padding: 0 0 15px;
 }
-.theme-default #connect .modal-body .connect-server-list ul li {
+.theme-default #connect .connect-content .connect-server-list ul li {
   border-top: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
   position: relative;
 }
-.theme-default #connect .modal-body .connect-server-list ul li:first-child {
+.theme-default #connect .connect-content .connect-server-list ul li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-default #connect .modal-body .connect-server-list ul li:last-child {
+.theme-default #connect .connect-content .connect-server-list ul li:last-child {
   border-bottom: 1px solid #e6e6e6;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-default #connect .modal-body .connect-server-list ul li.connected .name {
+.theme-default #connect .connect-content .connect-server-list ul li.connected .name {
   padding-left: 40px;
 }
-.theme-default #connect .modal-body .connect-server-list ul li.connected .name .icon-connected {
+.theme-default #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
   left: 10px;
   color: #c3deea;
 }
-.theme-default #connect .modal-body .connect-server-list ul li a {
+.theme-default #connect .connect-content .connect-server-list ul li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -8891,13 +8948,13 @@ input::-webkit-inner-spin-button {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-default #connect .modal-body .connect-server-list ul li a:hover {
+.theme-default #connect .connect-content .connect-server-list ul li a:hover {
   background: #e6e6e6;
 }
-.theme-default #connect .modal-body .connect-server-list ul li a.name {
+.theme-default #connect .connect-content .connect-server-list ul li a.name {
   display: block;
 }
-.theme-default #connect .modal-body .connect-server-list ul li a.name .icon-connected {
+.theme-default #connect .connect-content .connect-server-list ul li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -8906,25 +8963,25 @@ input::-webkit-inner-spin-button {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-default #connect .modal-body .connect-server-list ul li .links {
+.theme-default #connect .connect-content .connect-server-list ul li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-default #connect .modal-body .connect-server-list ul li .links a {
+.theme-default #connect .connect-content .connect-server-list ul li .links a {
   float: left;
   display: inline-block;
 }
-.theme-default #connect .modal-body .connect-server-list .user-info-note {
+.theme-default #connect .connect-content .connect-server-list .user-info-note {
   padding: 20px 0;
 }
-.theme-default #connect .modal-body .server-add {
+.theme-default #connect .connect-content .server-add {
   padding: 0 0 35px;
 }
-.theme-default #connect .modal-body .server-edit {
+.theme-default #connect .connect-content .server-edit {
   padding: 0 0 35px;
 }
-.theme-default #connect .modal-body .server-remove {
+.theme-default #connect .connect-content .server-remove {
   padding: 0 0 35px;
 }
 .theme-default #connect .modal-footer p {
@@ -9036,9 +9093,6 @@ input::-webkit-inner-spin-button {
 }
 .theme-default .tab-view .tab-bar ul .tab a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-default .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
@@ -9116,6 +9170,9 @@ input::-webkit-inner-spin-button {
 .theme-default .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
+.theme-default .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
+  padding: 0;
+}
 .theme-default .ui-sortable-helper {
   background: #ffffff;
   color: #666666;
@@ -9158,9 +9215,6 @@ input::-webkit-inner-spin-button {
 }
 .theme-default .ui-sortable-helper a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-default .ui-sortable-helper a .tab-close {
   border-radius: 50%;
@@ -9848,11 +9902,30 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .app .sidebar-wrapper .sidenav ul li {
   display: block;
+  height: 59px;
   padding: 20px;
   cursor: pointer;
 }
 .theme-isotope-ui .app .sidebar-wrapper .sidenav ul li:hover {
   background: #d9d9d9;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav ul li span {
+  display: block;
+  height: 12px;
+  width: 14px;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav ul li span.icon-server {
+  position: relative;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav ul li span.icon-server .fa {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav ul li span.icon-server .fa.fa-plus-circle {
+  top: 8px;
+  left: 10px;
+  font-size: 12px;
 }
 .theme-isotope-ui .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
   padding: 10px 0 10px 8px;
@@ -9987,47 +10060,85 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-isotope-ui #connect .modal-body .top-links {
+.theme-isotope-ui #connect {
+  position: relative;
+  padding-top: 15px;
+  height: 100%;
+}
+.theme-isotope-ui #connect .connect-sidebar {
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  min-width: 15em;
+  max-width: 20em;
+}
+.theme-isotope-ui #connect .connect-sidebar ul {
+  margin: 0;
+  padding: 0;
+}
+.theme-isotope-ui #connect .connect-sidebar ul li {
+  padding: 15px;
+  cursor: pointer;
+}
+.theme-isotope-ui #connect .connect-sidebar ul li:hover {
+  background: #1f2228;
+}
+.theme-isotope-ui #connect .connect-sidebar ul li.active {
+  background: #1f2228;
+}
+.theme-isotope-ui #connect .connect-sidebar ul li i {
+  margin-right: 10px;
+}
+.theme-isotope-ui #connect .connect-content {
+  border-left: 1px solid #1d2026;
+  height: 100%;
+  flex: 8.4;
+  flex-flow: column;
+  display: flex;
+  position: relative;
+  padding: 20px 15px;
+}
+.theme-isotope-ui #connect .connect-content .top-links {
   padding: 5px 0 20px;
 }
-.theme-isotope-ui #connect .modal-body .top-links .user-info-note {
+.theme-isotope-ui #connect .connect-content .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-isotope-ui #connect .modal-body .top-links .add-link {
+.theme-isotope-ui #connect .connect-content .top-links .add-link {
   display: block;
 }
-.theme-isotope-ui #connect .modal-body .top-links .add-link i {
+.theme-isotope-ui #connect .connect-content .top-links .add-link i {
   color: #c3deea;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list {
+.theme-isotope-ui #connect .connect-content .connect-server-list {
   top: -100%;
   list-style: none;
   margin: 0;
   padding: 0 0 15px;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li {
   border-top: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
   position: relative;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li:first-child {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li:last-child {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li:last-child {
   border-bottom: 1px solid #e6e6e6;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li.connected .name {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li.connected .name {
   padding-left: 40px;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li.connected .name .icon-connected {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
   left: 10px;
   color: #c3deea;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li a {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -10039,13 +10150,13 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li a:hover {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li a:hover {
   background: #e6e6e6;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li a.name {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li a.name {
   display: block;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li a.name .icon-connected {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -10054,25 +10165,25 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li .links {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list ul li .links a {
+.theme-isotope-ui #connect .connect-content .connect-server-list ul li .links a {
   float: left;
   display: inline-block;
 }
-.theme-isotope-ui #connect .modal-body .connect-server-list .user-info-note {
+.theme-isotope-ui #connect .connect-content .connect-server-list .user-info-note {
   padding: 20px 0;
 }
-.theme-isotope-ui #connect .modal-body .server-add {
+.theme-isotope-ui #connect .connect-content .server-add {
   padding: 0 0 35px;
 }
-.theme-isotope-ui #connect .modal-body .server-edit {
+.theme-isotope-ui #connect .connect-content .server-edit {
   padding: 0 0 35px;
 }
-.theme-isotope-ui #connect .modal-body .server-remove {
+.theme-isotope-ui #connect .connect-content .server-remove {
   padding: 0 0 35px;
 }
 .theme-isotope-ui #connect .modal-footer p {
@@ -10184,9 +10295,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .tab-view .tab-bar ul .tab a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-isotope-ui .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
@@ -10264,6 +10372,9 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 .theme-isotope-ui .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
+.theme-isotope-ui .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
+  padding: 0;
+}
 .theme-isotope-ui .ui-sortable-helper {
   background: #282c34;
   color: #caced7;
@@ -10306,9 +10417,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .ui-sortable-helper a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-isotope-ui .ui-sortable-helper a .tab-close {
   border-radius: 50%;
@@ -10996,11 +11104,30 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .app .sidebar-wrapper .sidenav ul li {
   display: block;
+  height: 59px;
   padding: 20px;
   cursor: pointer;
 }
 .theme-atom .app .sidebar-wrapper .sidenav ul li:hover {
   background: #0f1011;
+}
+.theme-atom .app .sidebar-wrapper .sidenav ul li span {
+  display: block;
+  height: 12px;
+  width: 14px;
+}
+.theme-atom .app .sidebar-wrapper .sidenav ul li span.icon-server {
+  position: relative;
+}
+.theme-atom .app .sidebar-wrapper .sidenav ul li span.icon-server .fa {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.theme-atom .app .sidebar-wrapper .sidenav ul li span.icon-server .fa.fa-plus-circle {
+  top: 8px;
+  left: 10px;
+  font-size: 12px;
 }
 .theme-atom .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
   padding: 10px 0 10px 8px;
@@ -11135,47 +11262,85 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-atom #connect .modal-body .top-links {
+.theme-atom #connect {
+  position: relative;
+  padding-top: 15px;
+  height: 100%;
+}
+.theme-atom #connect .connect-sidebar {
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+  min-width: 15em;
+  max-width: 20em;
+}
+.theme-atom #connect .connect-sidebar ul {
+  margin: 0;
+  padding: 0;
+}
+.theme-atom #connect .connect-sidebar ul li {
+  padding: 15px;
+  cursor: pointer;
+}
+.theme-atom #connect .connect-sidebar ul li:hover {
+  background: #131516;
+}
+.theme-atom #connect .connect-sidebar ul li.active {
+  background: #131516;
+}
+.theme-atom #connect .connect-sidebar ul li i {
+  margin-right: 10px;
+}
+.theme-atom #connect .connect-content {
+  border-left: 1px solid #111213;
+  height: 100%;
+  flex: 8.4;
+  flex-flow: column;
+  display: flex;
+  position: relative;
+  padding: 20px 15px;
+}
+.theme-atom #connect .connect-content .top-links {
   padding: 5px 0 20px;
 }
-.theme-atom #connect .modal-body .top-links .user-info-note {
+.theme-atom #connect .connect-content .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-atom #connect .modal-body .top-links .add-link {
+.theme-atom #connect .connect-content .top-links .add-link {
   display: block;
 }
-.theme-atom #connect .modal-body .top-links .add-link i {
+.theme-atom #connect .connect-content .top-links .add-link i {
   color: #52a8ff;
 }
-.theme-atom #connect .modal-body .connect-server-list {
+.theme-atom #connect .connect-content .connect-server-list {
   top: -100%;
   list-style: none;
   margin: 0;
   padding: 0 0 15px;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li {
+.theme-atom #connect .connect-content .connect-server-list ul li {
   border-top: 1px solid #292d31;
   border-left: 1px solid #292d31;
   border-right: 1px solid #292d31;
   position: relative;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li:first-child {
+.theme-atom #connect .connect-content .connect-server-list ul li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li:last-child {
+.theme-atom #connect .connect-content .connect-server-list ul li:last-child {
   border-bottom: 1px solid #292d31;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li.connected .name {
+.theme-atom #connect .connect-content .connect-server-list ul li.connected .name {
   padding-left: 40px;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li.connected .name .icon-connected {
+.theme-atom #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
   left: 10px;
   color: #52a8ff;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li a {
+.theme-atom #connect .connect-content .connect-server-list ul li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -11187,13 +11352,13 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li a:hover {
+.theme-atom #connect .connect-content .connect-server-list ul li a:hover {
   background: #292d31;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li a.name {
+.theme-atom #connect .connect-content .connect-server-list ul li a.name {
   display: block;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li a.name .icon-connected {
+.theme-atom #connect .connect-content .connect-server-list ul li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -11202,25 +11367,25 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li .links {
+.theme-atom #connect .connect-content .connect-server-list ul li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-atom #connect .modal-body .connect-server-list ul li .links a {
+.theme-atom #connect .connect-content .connect-server-list ul li .links a {
   float: left;
   display: inline-block;
 }
-.theme-atom #connect .modal-body .connect-server-list .user-info-note {
+.theme-atom #connect .connect-content .connect-server-list .user-info-note {
   padding: 20px 0;
 }
-.theme-atom #connect .modal-body .server-add {
+.theme-atom #connect .connect-content .server-add {
   padding: 0 0 35px;
 }
-.theme-atom #connect .modal-body .server-edit {
+.theme-atom #connect .connect-content .server-edit {
   padding: 0 0 35px;
 }
-.theme-atom #connect .modal-body .server-remove {
+.theme-atom #connect .connect-content .server-remove {
   padding: 0 0 35px;
 }
 .theme-atom #connect .modal-footer p {
@@ -11332,9 +11497,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .tab-view .tab-bar ul .tab a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-atom .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
@@ -11412,6 +11574,9 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 .theme-atom .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
+.theme-atom .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
+  padding: 0;
+}
 .theme-atom .ui-sortable-helper {
   background: #1d1f21;
   color: #ffffff;
@@ -11454,9 +11619,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .ui-sortable-helper a .tab-icon {
   margin-right: 10px;
-  position: absolute;
-  left: 18px;
-  top: 14px;
 }
 .theme-atom .ui-sortable-helper a .tab-close {
   border-radius: 50%;
