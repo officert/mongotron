@@ -210,11 +210,7 @@ angular.module('app').factory('menuService', [
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
         role: 'minimize'
-      }, {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
-      }, ]
+      }]
     };
 
     var helpMenu = {
