@@ -195,16 +195,6 @@ angular.module('app').factory('menuService', [
       }, ]
     };
 
-    var windowMenu = {
-      label: 'Window',
-      role: 'window',
-      submenu: [{
-        label: 'Minimize',
-        accelerator: 'CmdOrCtrl+M',
-        role: 'minimize'
-      }]
-    };
-
     var helpMenu = {
       label: 'Help',
       role: 'help',
@@ -222,7 +212,6 @@ angular.module('app').factory('menuService', [
         fileMenu,
         editMenu,
         viewMenu,
-        windowMenu,
         helpMenu
       ];
 
