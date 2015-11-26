@@ -82,6 +82,24 @@ angular.module('app').factory('menuService', [
     var fileMenu = {
       label: 'File',
       submenu: [{
+        label: 'Connect',
+        accelerator: 'CmdOrCtrl+O',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showConnections('LIST');
+          });
+        }
+      }, {
+        label: 'New',
+        accelerator: 'CmdOrCtrl+N',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showConnections('ADD');
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: function() {
@@ -131,32 +149,6 @@ angular.module('app').factory('menuService', [
         accelerator: 'Cmd+A',
         selector: 'selectAll:'
       }]
-    };
-
-    var goMenu = {
-      label: 'Go',
-      submenu: [{
-        label: 'Connection Manager',
-        accelerator: 'CmdOrCtrl+Shift+O',
-        click: function() {
-          $timeout(function() {
-            $rootScope.showConnections('LIST');
-          });
-        }
-      }, ]
-    };
-
-    var newMenu = {
-      label: 'New',
-      submenu: [{
-        label: 'Connection',
-        accelerator: 'CmdOrCtrl+Shift+N',
-        click: function() {
-          $timeout(function() {
-            $rootScope.showConnections('ADD');
-          });
-        }
-      }, ]
     };
 
     var viewMenu = {
@@ -229,22 +221,10 @@ angular.module('app').factory('menuService', [
         mongotronMenu,
         fileMenu,
         editMenu,
-        goMenu,
-        newMenu,
         viewMenu,
         windowMenu,
         helpMenu
       ];
-
-      if (process.platform === 'darwin') {
-        // Window menu.
-        template[3].submenu.push({
-          type: 'separator'
-        }, {
-          label: 'Bring All to Front',
-          role: 'front'
-        });
-      }
 
       var menu = Menu.buildFromTemplate(template);
 
