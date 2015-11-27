@@ -72,7 +72,7 @@ angular.module('app').factory('keypressService', [
       //otherwise register the combo with a wrapper that will fire any register callbacks that match
       //the current keybindingContext
       else {
-        var callbackWrapper = function() {
+        var callbackWrapper = () => {
           var args = Array.prototype.slice.call(arguments);
 
           var callbacks = _this.registeredCombos[combo];
@@ -104,7 +104,7 @@ angular.module('app').factory('keypressService', [
     KeypressService.prototype.unregisterAllCombos = function unregisterAllCombos() {
       var _this = this;
 
-      _.each(_this.registeredCombos, function(combo) {
+      _.each(_this.registeredCombos, (combo) => {
         _this.listener.unregister_combo(combo); // jshint ignore:line
       });
     };
@@ -143,7 +143,7 @@ angular.module('app').run([
   '$rootScope',
   'keypressService',
   function($rootScope, keypressService) {
-    $rootScope.$on('$destroy', function() {
+    $rootScope.$on('$destroy', () => {
       keypressService.unregisterAllCombos();
     });
   }
