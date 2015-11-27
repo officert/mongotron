@@ -42,8 +42,8 @@
       <button class="btn btn-default" type="button" ng-click="changePage('list', null, $event)">
         Back
       </button>
-      <button class="btn btn-primary" type="button" ng-click="addConnection(addForm, $event)">
-        Create
+      <button class="btn btn-primary" type="button" ng-click="addOrUpdateConnection(addForm, $event)">
+        {{ selectedConnection ? 'Save' : 'Create' }}
       </button>
     </div>
   </div>

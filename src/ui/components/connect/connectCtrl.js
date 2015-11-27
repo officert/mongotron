@@ -11,8 +11,6 @@ angular.module('app').controller('connectCtrl', [
 
     $scope.currentPage = 'list';
 
-    $scope.selectedConnection = null;
-
     $scope.close = function() {
       $modalInstance.close(1);
     };
@@ -20,6 +18,8 @@ angular.module('app').controller('connectCtrl', [
     $scope.changePage = function(page, connection, $event) {
       if (!page) return;
       if ($event) $event.preventDefault();
+
+      $scope.selectedConnection = null;
 
       $scope.currentPage = page;
 

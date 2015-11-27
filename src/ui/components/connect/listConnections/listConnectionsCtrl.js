@@ -10,6 +10,8 @@ angular.module('app').controller('listConnectionsCtrl', [
 
     $scope.connections = [];
 
+    $scope.$parent.selectedConnection = null; //reset the parent's selected connection
+
     connectionModule.list()
       .then(function(connections) {
         $timeout(function() {
