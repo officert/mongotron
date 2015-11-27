@@ -66,15 +66,13 @@ angular.module('app').service('modalService', [
       });
     };
 
-    // function modalsExist() {
-    //   return !!$uibModalStack.getTop();
-    // }
-
     function closeAllModals() {
       $uibModalStack.dismissAll();
     }
 
     function openModal(opts) {
+      if (!opts) return;
+
       closeAllModals();
 
       return $uibModal.open(opts);
