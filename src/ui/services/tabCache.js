@@ -94,6 +94,54 @@ angular.module('app').factory('tabCache', [
       this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
+    TabCache.prototype.removeByCollection = function(collection) {
+      if (!collection) return;
+
+      var _this = this;
+
+      var tabs = _.filter(TAB_CACHE, function(tab) {
+        return tab.collection === collection;
+      });
+
+      if (!tabs || !tabs.length) return;
+
+      tabs.map(_this.remove.bind(_this));
+
+      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+    };
+
+    TabCache.prototype.removeByDatabase = function(database) {
+      if (!database) return;
+
+      var _this = this;
+
+      var tabs = _.filter(TAB_CACHE, function(tab) {
+        return tab.collection && tab.collection.database === database;
+      });
+
+      if (!tabs || !tabs.length) return;
+
+      tabs.map(_this.remove.bind(_this));
+
+      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+    };
+
+    TabCache.prototype.removeByConnectionId = function(id) {
+      if (!id) return;
+
+      var _this = this;
+
+      var tabs = _.filter(TAB_CACHE, function(tab) {
+        return tab.collection && tab.collection.connection && tab.collection.connection.id === id;
+      });
+
+      if (!tabs || !tabs.length) return;
+
+      tabs.map(_this.remove.bind(_this));
+
+      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+    };
+
     TabCache.prototype.activateById = function(id) {
       var tab = this.getById(id);
 
