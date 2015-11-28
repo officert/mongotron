@@ -20,7 +20,10 @@
     "it": true,
     "Promise": true,
     "$": true,
-    "alert": true
+    "alert": true,
+    "inject": true,
+    "expect": true,
+    "window": true
   },
   "camelcase": true,
   "bitwise": true,

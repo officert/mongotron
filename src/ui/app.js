@@ -7,7 +7,6 @@ angular.module('app', [
   'ngAnimate',
   'ui.sortable',
   'ngSanitize',
-  'duScroll',
   'ngPrettyJson',
   'autoGrowInput'
 ]);
