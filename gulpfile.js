@@ -216,7 +216,7 @@ gulp.task('serve-site', ['site-css'], function() {
 gulp.task('default', ['serve']);
 
 gulp.task('test', function(next) {
-  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', function() {
+  runSequence('jshint', 'test-int', 'test-unit', function() {
     process.exit(0);
     next();
   });
