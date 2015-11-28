@@ -65,6 +65,7 @@
   <script src="./services/modalService.js"></script>
   <script src="./services/dialogService.js"></script>
   <script src="./services/tabCache.js"></script>
+  <script src="./services/themeService.js"></script>
   <script src="./components/connect/connectCtrl.js"></script>
   <script src="./components/connect/listConnections/listConnectionsCtrl.js"></script>
   <script src="./components/connect/addConnection/addConnectionCtrl.js"></script>
@@ -87,9 +88,10 @@
   <script src="./directives/tab-view/tab-view.js"></script>
   <script src="./directives/tab-view/tabViewCtrl.js"></script>
   <script src="./directives/keybinding-context.js"></script>
+  <script src="./directives/theme-class.js"></script>
 </head>
 
-<body class="theme-{{ themes.current }}">
+<body theme-class>
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->

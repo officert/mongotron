@@ -19,7 +19,6 @@ angular.module('app').run([
   function($rootScope, $log, modalService, tabCache) {
     const pageTitle = 'Mongotron';
 
-    $rootScope.themes = initThemes();
     $rootScope.setTitle = setTitle;
     $rootScope.currentQuery = null;
     $rootScope.showConnections = showConnections;
@@ -45,14 +44,6 @@ angular.module('app').run([
         tabCache.activateByName(logsTabName);
       }
     };
-
-    function initThemes() {
-      return {
-        //current: 'default',
-        // current: 'isotope-ui',
-        current: 'atom'
-      };
-    }
 
     function showConnections(state, $event) {
       if ($event) $event.preventDefault();

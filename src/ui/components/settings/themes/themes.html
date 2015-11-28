@@ -2,4 +2,10 @@
   <div class="panel-header">
     <h3><i class="fa fa-paint-brush"></i>Themes</h3>
   </div>
+  <div class="">
+    <div class="form-group">
+      <label class="control-label">Current Theme</label>
+      <select class="form-control" ng-model="currentTheme" ng-options="theme as theme for theme in themes"></select>
+    </div>
+  </div>
 </div>
