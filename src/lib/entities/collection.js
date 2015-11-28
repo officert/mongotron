@@ -9,7 +9,7 @@ const errors = require('lib/errors');
 const PAGE_SIZE = 50;
 
 /**
- * @class Connection
+ * @class Collection
  */
 class Collection {
   /**
