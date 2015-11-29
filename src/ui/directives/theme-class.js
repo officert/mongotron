@@ -6,14 +6,14 @@ angular.module('app').directive('themeClass', [
       link: function(scope, element) {
         var currentTheme = themeService.currentTheme;
 
-        element.addClass('theme-' + currentTheme);
+        if (currentTheme) element.addClass('theme-' + currentTheme.name);
 
         themeService.on(themeService.EVENTS.THEME_CHANGED, function() {
-          element.removeClass('theme-' + currentTheme);
+          if (currentTheme) element.removeClass('theme-' + currentTheme.name);
 
           currentTheme = themeService.currentTheme;
 
-          element.addClass('theme-' + currentTheme);
+          if (currentTheme) element.addClass('theme-' + currentTheme.name);
         });
       }
     };

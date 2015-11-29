@@ -3,6 +3,7 @@
 const fileUtils = require('lib/utils/fileUtils');
 const appConfig = require('src/config/appConfig');
 const keybindings = require('lib/modules/keybindings');
+const themes = require('lib/modules/themes');
 
 /**
  * @constructor Mongotron
@@ -23,6 +24,7 @@ class Mongotron {
     createDbConfigFile();
     createLogFile();
     createKeybindingsFile();
+    createThemesFile();
   }
 }
 
@@ -44,6 +46,10 @@ function createLogFile() {
 
 function createKeybindingsFile() {
   fileUtils.createFileSync(appConfig.keybindingsPath, keybindings.defaultBindings);
+}
+
+function createThemesFile() {
+  fileUtils.createFileSync(appConfig.themesPath, themes.defaultThemes);
 }
 
 /**
