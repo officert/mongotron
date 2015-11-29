@@ -1,6 +1,5 @@
 angular.module('app').factory('tabCache', [
-  'EVENTS',
-  function(EVENTS) {
+  function() {
     const EventEmitter = require('events').EventEmitter;
     const util = require('util');
     const uuid = require('node-uuid');
@@ -16,6 +15,10 @@ angular.module('app').factory('tabCache', [
     util.inherits(TabCache, EventEmitter);
 
     TabCache.prototype.TYPES = TAB_TYPES;
+
+    TabCache.prototype.EVENTS = {
+      TAB_CACHE_CHANGED: 'TAB_CACHE_CHANGED'
+    };
 
     TabCache.prototype.add = function(tab) {
       if (!tab) return;
@@ -33,7 +36,7 @@ angular.module('app').factory('tabCache', [
 
       TAB_CACHE.push(tab);
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
       return TAB_CACHE;
     };
@@ -73,7 +76,7 @@ angular.module('app').factory('tabCache', [
         TAB_CACHE.splice(index, 1);
       }
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
       return TAB_CACHE;
     };
@@ -85,13 +88,13 @@ angular.module('app').factory('tabCache', [
 
       if (activeTab) this.remove(activeTab);
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.removeAll = function() {
       TAB_CACHE = [];
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.removeByCollection = function(collection) {
@@ -107,7 +110,7 @@ angular.module('app').factory('tabCache', [
 
       tabs.map(_this.remove.bind(_this));
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.removeByDatabase = function(database) {
@@ -123,7 +126,7 @@ angular.module('app').factory('tabCache', [
 
       tabs.map(_this.remove.bind(_this));
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.removeByConnectionId = function(id) {
@@ -139,7 +142,7 @@ angular.module('app').factory('tabCache', [
 
       tabs.map(_this.remove.bind(_this));
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.activateById = function(id) {
@@ -151,13 +154,13 @@ angular.module('app').factory('tabCache', [
 
       tab.active = true;
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.activatePrevious = function(tabIndex) {
       _activatePrevious(tabIndex);
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.activateNext = function() {
@@ -174,7 +177,7 @@ angular.module('app').factory('tabCache', [
         activeTab.active = false;
       }
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     TabCache.prototype.activateByName = function(name) {
@@ -186,14 +189,14 @@ angular.module('app').factory('tabCache', [
         _deactivateAll();
         tab.active = true;
 
-        this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
       }
     };
 
     TabCache.prototype.deactivateAll = function() {
       _deactivateAll();
 
-      this.emit(EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
     function getTabIconClasssName(type) {

@@ -4,10 +4,9 @@ angular.module('app').controller('sidebarCtrl', [
   'alertService',
   'tabCache',
   'connectionCache',
-  'EVENTS',
   'menuService',
   'modalService',
-  function($scope, $timeout, alertService, tabCache, connectionCache, EVENTS, menuService, modalService) {
+  function($scope, $timeout, alertService, tabCache, connectionCache, menuService, modalService) {
     const logger = require('lib/modules/logger');
 
     $scope.activeConnections = connectionCache.list();
@@ -16,7 +15,7 @@ angular.module('app').controller('sidebarCtrl', [
       _collapseConnection(connection);
     });
 
-    connectionCache.on(EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
       $scope.activeConnections = updatedCache;
     });
 
