@@ -1,6 +1,6 @@
 {
   "name": "Mongotron",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "mongotron",
   "main": "src/browser/main.js",
   "engine": "node 4.2.0",
@@ -16,19 +16,24 @@
     "winston": "2.1.0"
   },
   "devDependencies": {
-    "babel": "6.1.18",
-    "babel-cli": "6.1.18",
     "babel-preset-es2015": "6.1.18",
     "bower": "1.3.12",
     "electron-packager": "5.1.1",
     "electron-prebuilt": "0.35.0",
     "fontcustom": "0.0.3",
     "gulp": "3.9.0",
+    "gulp-babel": "6.1.1",
     "gulp-jshint": "1.8.4",
     "gulp-less": "1.3.6",
     "gulp-spawn-mocha": "2.2.1",
     "gulp-task-list": "0.0.1",
     "jshint-stylish": "0.4.0",
+    "karma": "0.12.24",
+    "karma-electron-launcher": "0.0.5",
+    "karma-jasmine": "0.3.5",
+    "karma-phantomjs-launcher": "0.1.4",
+    "karma-sinon": "1.0.4",
+    "karma-spec-reporter": "0.0.13",
     "run-sequence": "1.1.4",
     "shelljs": "0.5.3",
     "should": "3.1.4",
@@ -42,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "htts://github.com/mongotron"
+    "url": "https://github.com/mongotron"
   },
   "keywords": [
     "mongo"

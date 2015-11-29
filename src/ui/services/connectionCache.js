@@ -1,6 +1,5 @@
 angular.module('app').factory('connectionCache', [
-  'EVENTS',
-  function(EVENTS) {
+  function() {
     const EventEmitter = require('events').EventEmitter;
     const util = require('util');
 
@@ -8,6 +7,10 @@ angular.module('app').factory('connectionCache', [
 
     function ConnectionCache() {}
     util.inherits(ConnectionCache, EventEmitter);
+
+    ConnectionCache.prototype.EVENTS = {
+      CONNECTION_CACHE_CHANGED: 'CONNECTION_CACHE_CHANGED'
+    };
 
     ConnectionCache.prototype.findById = function(connectionId) {
       if (!connectionId) return;
@@ -22,7 +25,7 @@ angular.module('app').factory('connectionCache', [
 
       CONNECTION_CACHE.push(connection);
 
-      this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+      this.emit(this.EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
 
       return CONNECTION_CACHE;
     };
@@ -35,7 +38,7 @@ angular.module('app').factory('connectionCache', [
       if (connection) {
         connection = _.extend(connection, updates);
 
-        this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+        this.emit(this.EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
       }
 
       return CONNECTION_CACHE;
@@ -67,14 +70,14 @@ angular.module('app').factory('connectionCache', [
 
       if (index >= 0) {
         CONNECTION_CACHE.splice(index, 1);
-        this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+        this.emit(this.EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
       }
 
       return CONNECTION_CACHE;
     };
 
     ConnectionCache.prototype.removeAll = function() {
-      this.emit(EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
+      this.emit(this.EVENTS.CONNECTION_CACHE_CHANGED, CONNECTION_CACHE);
 
       CONNECTION_CACHE.length = 0;
     };

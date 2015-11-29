@@ -1,0 +1,30 @@
+<div id="connect-list" ng-controller="listConnectionsCtrl">
+  <div class="alert alert-info" ng-show="!connections.length">
+    Your don't have any connections yet. Use the <i class="fa fa-plus"></i> Create button to create new connections.
+  </div>
+  <ul class="connection-list">
+    <li ng-repeat="connection in connections" ng-class="{ 'active' : connection.selected }" ng-show="connections.length">
+      <a class="name" href="#" ng-click="selectConnection(connection, $event)">
+        <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
+      </a>
+      <span class="links">
+        <a class="edit" href="#" ng-click="changePage('add', connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
+          <i class="fa fa-pencil"></i>
+        </a>
+        <a class="remove" href="#" ng-click="changePage('remove', connection, $event)" uib-tooltip="Delete Connection" tooltip-popup-delay="600">
+          <i class="fa fa-times"></i>
+        </a>
+      </span>
+    </li>
+  </ul>
+  <div class="clearfix">
+    <div class="list-buttons pull-right">
+      <button class="btn btn-default" ng-click="close()">
+        Close
+      </button>
+      <button class="btn btn-primary" ng-click="connect($event)" ng-disabled="!connectionSelected()">
+        Connect
+      </button>
+    </div>
+  </div>
+</div>

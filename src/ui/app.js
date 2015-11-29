@@ -1,13 +1,12 @@
 'use strict';
 
-var ipc = require('ipc');
+const ipcRenderer = require('electron').ipcRenderer;
 
 angular.module('app', [
   'ui.bootstrap',
   'ngAnimate',
   'ui.sortable',
   'ngSanitize',
-  'duScroll',
   'ngPrettyJson',
   'autoGrowInput'
 ]);
@@ -18,43 +17,17 @@ angular.module('app').run([
   'modalService',
   'tabCache',
   function($rootScope, $log, modalService, tabCache) {
-    $rootScope.themes = initThemes();
+    const pageTitle = 'Mongotron';
 
+    $rootScope.setTitle = setTitle;
     $rootScope.currentQuery = null;
+    $rootScope.showConnections = showConnections;
+    $rootScope.showSettings = showSettings;
+    $rootScope.showAbout = showAbout;
 
-    $rootScope.setTitle = function(title) {
-      ipc.send('set-title', title);
-    };
+    setTitle(pageTitle);
 
-    var pageTitle = 'Mongotron';
-    $rootScope.setTitle(pageTitle);
-
-    $rootScope.showConnections = function(state, $event) {
-      if ($event) $event.preventDefault();
-
-      modalService.openConnectionManager(state)
-        .result
-        .then(function() {
-          $rootScope.setTitle(pageTitle);
-        });
-    };
-
-    $rootScope.showSettings = function($event) {
-      if ($event) $event.preventDefault();
-
-      var settingsTabName = 'Settings';
-
-      if (!tabCache.existsByName(settingsTabName)) {
-        tabCache.add({
-          type: tabCache.TYPES.PAGE,
-          iconClassName: 'fa fa-wrench',
-          name: settingsTabName,
-          src: __dirname + '/components/settings/settings.html'
-        });
-      } else {
-        tabCache.activateByName(settingsTabName);
-      }
-    };
+    showConnections();
 
     $rootScope.showLogs = function($event) {
       if ($event) $event.preventDefault();
@@ -73,12 +46,52 @@ angular.module('app').run([
       }
     };
 
-    function initThemes() {
-      return {
-        //current: 'default',
-        // current: 'isotope-ui',
-        current: 'atom'
-      };
+    function showConnections(page, $event) {
+      if ($event) $event.preventDefault();
+
+      modalService.openConnectionManager(page)
+        .result
+        .then(function() {
+          $rootScope.setTitle(pageTitle);
+        });
+    }
+
+    function showSettings($event) {
+      if ($event) $event.preventDefault();
+
+      var settingsTabName = 'Settings';
+
+      if (!tabCache.existsByName(settingsTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-cog',
+          name: settingsTabName,
+          src: __dirname + '/components/settings/settings.html'
+        });
+      } else {
+        tabCache.activateByName(settingsTabName);
+      }
+    }
+
+    function showAbout($event) {
+      if ($event) $event.preventDefault();
+
+      var aboutTabName = 'About';
+
+      if (!tabCache.existsByName(aboutTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-info-circle',
+          name: aboutTabName,
+          src: __dirname + '/components/about/about.html'
+        });
+      } else {
+        tabCache.activateByName(aboutTabName);
+      }
+    }
+
+    function setTitle(title) {
+      ipcRenderer.send('set-title', title);
     }
   }
 ]);

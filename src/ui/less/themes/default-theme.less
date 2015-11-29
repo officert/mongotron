@@ -2,25 +2,30 @@
  * Default Theme
  */
 .theme-default {
+  @blue: #51b1e8;
 
   //colors
-  @theme-brand-primary: @brand-primary;
+  @theme-brand-primary: @blue;
 
   //globals
   @theme-bg: white;
   @theme-text-color: #333;
-  @theme-border-color: lighten(@theme-bg, 10%);
+  @theme-border-color: darken(@theme-bg, 10%);
+
+  //sidenav
+  @theme-sidenav-bg: darken(@theme-bg, 3%);
+  @theme-sidenav-border-color: darken(@theme-bg, 10%);
 
   //tabs
-  @theme-tab-border-color: @gray-lighter;
-  @theme-tab-active-bg: white;
-  @theme-tab-pane-bg: white;
-  @theme-tab-active-line-bg: @theme-text-color;
+  @theme-tab-border-color: @theme-border-color;
+  @theme-tab-active-bg: darken(@theme-bg, 4%);
+  @theme-tab-pane-bg: darken(@theme-bg, 4%);
+  @theme-tab-active-line-bg: @theme-brand-primary;
 
   //server list
-  @theme-server-list-border-color: @gray-lighter;
-  @theme-server-list-hover-bg: @gray-lighter;
-  @theme-server-list-hover-color: darken(@theme-text-color, 10%);
+  @theme-server-list-border-color: @theme-border-color;
+  @theme-server-list-hover-bg: darken(@theme-bg, 3%);
+  @theme-server-list-hover-color: @theme-text-color;
 
   //query
   @theme-query-editor-color: #c5c8c6;
@@ -31,17 +36,17 @@
   @theme-query-editor-boolean-color: #de935f;
 
   //query-result-json
-  @theme-query-result-json-bg: white;
-  @theme-query-result-json-color: white;
-  @theme-query-result-json-border-color: white;
+  @theme-query-result-json-bg: @theme-bg;
+  @theme-query-result-json-color: @theme-text-color;
+  @theme-query-result-json-border-color: @theme-text-color;
   @theme-query-result-json-seprator: @theme-text-color;
   @theme-query-result-json-key: red;
-  @theme-query-result-json-string: white;
-  @theme-query-result-json-boolean: white;
+  @theme-query-result-json-string: @theme-text-color;
+  @theme-query-result-json-boolean: @theme-text-color;
 
   //query-result icons
   @theme-query-result-date-icon: red;
-  @theme-query-result-string-icon: white;
+  @theme-query-result-string-icon: @theme-text-color;
 
   //query-result-autocomplete-menu
   @theme-query-result-autocomplete-menu-bg: darken(@theme-bg, 14%);

@@ -4,8 +4,9 @@ angular.module('app').factory('menuService', [
   '$rootScope',
   '$timeout',
   'dialogService',
-  function($window, $rootScope, $timeout, dialogService) {
-    const ipc = require('ipc');
+  'tabCache',
+  function($window, $rootScope, $timeout, dialogService, tabCache) {
+    const ipcRenderer = require('electron').ipcRenderer;
     const shell = require('shell');
     const remote = require('remote');
     const Menu = remote.require('menu');
@@ -37,7 +38,11 @@ angular.module('app').factory('menuService', [
       label: appConfig.name,
       submenu: [{
         label: 'About ' + appConfig.name,
-        role: 'about'
+        click: function() {
+          $timeout(function() {
+            $rootScope.showAbout();
+          });
+        }
       }, {
         type: 'separator'
       }, {
@@ -73,7 +78,7 @@ angular.module('app').factory('menuService', [
         label: 'Quit',
         accelerator: 'Command+Q',
         click: function() {
-          ipc.send('quit');
+          ipcRenderer.send('quit');
         }
       }, ]
     };
@@ -81,6 +86,16 @@ angular.module('app').factory('menuService', [
     var fileMenu = {
       label: 'File',
       submenu: [{
+        label: 'Connect',
+        accelerator: 'CmdOrCtrl+O',
+        click: function() {
+          $timeout(function() {
+            $rootScope.showConnections();
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: function() {
@@ -89,6 +104,23 @@ angular.module('app').factory('menuService', [
               .then(function(fileNames) {
                 console.log(fileNames);
               });
+          });
+        }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Close Tab',
+        accelerator: 'CmdOrCtrl+W',
+        click: function() {
+          $timeout(function() {
+            tabCache.removeActive();
+          });
+        }
+      }, {
+        label: 'Close All Tabs',
+        click: function() {
+          $timeout(function() {
+            tabCache.removeAll();
           });
         }
       }]
@@ -113,32 +145,6 @@ angular.module('app').factory('menuService', [
         accelerator: 'Cmd+A',
         selector: 'selectAll:'
       }]
-    };
-
-    var goMenu = {
-      label: 'Go',
-      submenu: [{
-        label: 'Connection Manager',
-        accelerator: 'CmdOrCtrl+Shift+O',
-        click: function() {
-          $timeout(function() {
-            $rootScope.showConnections('LIST');
-          });
-        }
-      }, ]
-    };
-
-    var newMenu = {
-      label: 'New',
-      submenu: [{
-        label: 'Connection',
-        accelerator: 'CmdOrCtrl+Shift+N',
-        click: function() {
-          $timeout(function() {
-            $rootScope.showConnections('ADD');
-          });
-        }
-      }, ]
     };
 
     var viewMenu = {
@@ -185,27 +191,13 @@ angular.module('app').factory('menuService', [
       }, ]
     };
 
-    var windowMenu = {
-      label: 'Window',
-      role: 'window',
-      submenu: [{
-        label: 'Minimize',
-        accelerator: 'CmdOrCtrl+M',
-        role: 'minimize'
-      }, {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
-      }, ]
-    };
-
     var helpMenu = {
       label: 'Help',
       role: 'help',
       submenu: [{
         label: 'Learn More',
         click: function() {
-          shell.openExternal(appConfig.repository);
+          shell.openExternal(appConfig.website);
         }
       }]
     };
@@ -215,22 +207,9 @@ angular.module('app').factory('menuService', [
         mongotronMenu,
         fileMenu,
         editMenu,
-        goMenu,
-        newMenu,
         viewMenu,
-        windowMenu,
         helpMenu
       ];
-
-      if (process.platform === 'darwin') {
-        // Window menu.
-        template[3].submenu.push({
-          type: 'separator'
-        }, {
-          label: 'Bring All to Front',
-          role: 'front'
-        });
-      }
 
       var menu = Menu.buildFromTemplate(template);
 

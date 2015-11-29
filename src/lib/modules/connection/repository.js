@@ -247,13 +247,13 @@ function findConnectionById(connectionId, connections) {
 function createConnection(options) {
   return new Promise((resolve) => {
     var newConn = new Connection(options);
-    newConn.addDatabase({
-      id: uuid.v4(),
-      name: options.databaseName,
-      host: options.host,
-      port: options.port,
-      auth: options.auth
-    });
+    // newConn.addDatabase({
+    //   id: uuid.v4(),
+    //   name: options.databaseName,
+    //   host: options.host,
+    //   port: options.port,
+    //   auth: options.auth
+    // });
     return resolve(newConn);
   });
 }

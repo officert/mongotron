@@ -1,11 +1,13 @@
 #settings {
   position: relative;
+  padding-top: 15px;
+  height: 100%;
   .settings-sidebar {
     padding-left: 0;
     padding-right: 0;
     position: relative;
-    min-width: 15em;
-    max-width: 20em;
+    min-width: 12em;
+    max-width: 15em;
     ul {
       margin: 0;
       padding: 0;
@@ -13,7 +15,10 @@
         padding: 15px;
         cursor: pointer;
         &:hover {
-          background: darken(@theme-tab-pane-bg, 5%);
+          background: darken(@theme-tab-pane-bg, 4%);
+        }
+        &.active {
+          background: darken(@theme-tab-pane-bg, 4%);
         }
         i {
           margin-right: 10px;
@@ -23,6 +28,7 @@
   }
   .settings-content {
     border-left: 1px solid darken(@theme-tab-pane-bg, 5%);
+    height: 100%;
     flex: 8.4;
     flex-flow: column;
     display: flex;

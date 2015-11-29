@@ -6,10 +6,10 @@ var path = require('path-extra');
 
 // var packageJson = require('../../package.json');
 var packageJson = {
-  version: 1,
+  version: '1.0.0-alpha.1',
   name: 'Mongotron',
   repository: {
-    url: 'htts://github.com/mongotron'
+    url: 'https://github.com/mongotron'
   }
 };
 
@@ -19,15 +19,16 @@ var packageJson = {
 var defaultSettings = {
   version: packageJson.version,
   name: packageJson.name,
+  website: 'http://mongotron.io/',
   repository: packageJson.repository.url,
   logLevel: 'debug',
   buildPath: 'build',
   releasePath: 'release',
-  configDir: path.join(path.homedir(), '.config'),
   appConfigDir: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase())),
   logFilePath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'logs.json'),
   dbConfigPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'dbConnections.json'),
-  keybindingsPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'keybindings.json')
+  keybindingsPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'keybindings.json'),
+  themesPath: path.join(path.homedir(), '.' + (packageJson.name.toLowerCase()), 'themes.json')
 };
 
 var production = _.extend(_.extend({}, defaultSettings), {

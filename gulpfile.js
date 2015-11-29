@@ -9,6 +9,8 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
+const karma = require('karma').server;
+const babel = require('gulp-babel');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -54,37 +56,37 @@ const MOCHA_SETTINGS = {
 /**
  * List gulp tasks
  */
-gulp.task('?', function(next) {
+gulp.task('?', (next) => {
   sh.exec('gulp task-list');
   next();
 });
 
-gulp.task('clean', function(next) {
+gulp.task('clean', (next) => {
   sh.rm('-rf', appConfig.releasePath);
   sh.rm('-rf', appConfig.buildPath);
   next();
 });
 
-gulp.task('css', function() {
+gulp.task('css', () => {
   return gulp.src(SRC_DIR + '/ui/less/main.less')
     .pipe(less(LESSOPTIONS))
     .pipe(gulp.dest(SRC_DIR + '/ui/css'));
 });
 
-gulp.task('site-css', function() {
+gulp.task('site-css', () => {
   return gulp.src(DOCS_DIR + '/less/docs.less')
     .pipe(less(LESSOPTIONS))
     .pipe(gulp.dest(DOCS_DIR + '/css'));
 });
 
-gulp.task('jshint', function() {
+gulp.task('jshint', () => {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('release', ['pre-release'], function() {
+gulp.task('release', ['pre-release'], (next) => {
   var env = _.extend({}, process.env);
   env.NODE_ENV = 'production';
 
@@ -98,7 +100,7 @@ gulp.task('release', ['pre-release'], function() {
     '--arch',
     'x64',
     '--version',
-    '0.30.2',
+    '0.35.0',
     '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
     '--icon',
     RELEASE_IMAGE_ICON,
@@ -108,18 +110,17 @@ gulp.task('release', ['pre-release'], function() {
     env: env
   });
 
-  child.stdout.on('data',
-    function(data) {
-      console.log('tail output: ' + data);
-    }
-  );
+  child.stdout.on('data', (data) => {
+    console.log('tail output: ' + data);
+  });
 
-  child.on('exit', function(exitCode) {
+  child.on('exit', (exitCode) => {
     console.log('Child exited with code: ' + exitCode);
+    return next(exitCode === 1 ? new Error('Error running release task') : null);
   });
 });
 
-gulp.task('pre-release', function(next) {
+gulp.task('pre-release', (next) => {
   // Build Steps:
   //-------------------------------------
   // run build to cleanup dirs and compile less
@@ -129,37 +130,19 @@ gulp.task('pre-release', function(next) {
   runSequence('build', 'babel', 'prod-sym-links', next);
 });
 
-gulp.task('babel', function(next) {
-  var env = _.extend({}, process.env);
-  env.NODE_ENV = 'production';
-
-  var child = childProcess.spawn('./node_modules/.bin/babel', [
-    './src',
-    '--out-dir',
-    appConfig.buildPath,
-    '--extensions',
-    '.js',
-    '--ignore',
-    'src/ui/vendor/*'
-  ], {
-    env: env
-  });
-
-  child.stdout.on('data',
-    function(data) {
-      console.log('tail output: ' + data);
-    }
-  );
-
-  child.on('exit', function(exitCode) {
-    console.log('Child exited with code: ' + exitCode);
-    return next(null);
-  });
+gulp.task('babel', () => {
+  return gulp.src('./src/**/*.js')
+    .pipe(babel({
+      presets: ['es2015'],
+      ignore: 'src/ui/vendor/*',
+      
+    }))
+    .pipe(gulp.dest(appConfig.buildPath));
 });
 
-gulp.task('prod-sym-links', function(next) {
+gulp.task('prod-sym-links', (next) => {
 
-  childProcess.exec('make createProductionSymLinks', function(err, stdout, stderr) {
+  childProcess.exec('make createProductionSymLinks', (err, stdout, stderr) => {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (err !== null) {
@@ -170,9 +153,9 @@ gulp.task('prod-sym-links', function(next) {
   });
 });
 
-gulp.task('dev-sym-links', function() {
+gulp.task('dev-sym-links', () => {
 
-  childProcess.exec('make createDevelopmentSymLinks', function(error, stdout, stderr) {
+  childProcess.exec('make createDevelopmentSymLinks', (error, stdout, stderr) => {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
@@ -183,7 +166,7 @@ gulp.task('dev-sym-links', function() {
 
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);
 
-gulp.task('serve', ['build'], function(next) {
+gulp.task('serve', ['build'], (next) => {
 
   var env = _.extend({}, process.env);
   // env.NODE_ENV = 'production';
@@ -192,20 +175,18 @@ gulp.task('serve', ['build'], function(next) {
     env: env
   });
 
-  child.stdout.on('data',
-    function(data) {
-      console.log('tail output: ' + data);
-    }
-  );
+  child.stdout.on('data', (data) => {
+    console.log('tail output: ' + data);
+  });
 
-  child.on('exit', function(exitCode) {
+  child.on('exit', (exitCode) => {
     console.log('Child exited with code: ' + exitCode);
-    return next(null);
+    return next(exitCode === 1 ? new Error('Error running serve task') : null);
   });
 });
 
-gulp.task('serve-site', ['site-css'], function() {
-  gulp.watch(DOCS_DIR + '/less/*.less', function() {
+gulp.task('serve-site', ['site-css'], () => {
+  gulp.watch(DOCS_DIR + '/less/*.less', () => {
     gulp.src(DOCS_DIR + '/less/docs.less')
       .pipe(less(LESSOPTIONS))
       .pipe(gulp.dest(DOCS_DIR + '/css'));
@@ -214,21 +195,61 @@ gulp.task('serve-site', ['site-css'], function() {
 
 gulp.task('default', ['serve']);
 
-gulp.task('test', function(next) {
-  runSequence('jshint', 'test-int', 'test-unit', function() {
+gulp.task('test', (next) => {
+  runSequence('jshint', 'test-int', 'test-unit', () => {
     process.exit(0);
     next();
   });
 });
 
-gulp.task('test-int', function() {
+gulp.task('test-int', () => {
   return gulp.src('tests/integration/**/**/**-test.js')
     .pipe(mocha(MOCHA_SETTINGS));
 });
 
-gulp.task('test-unit', function() {
+gulp.task('test-unit', () => {
   return gulp.src('tests/unit/**/**/**-test.js')
     .pipe(mocha(MOCHA_SETTINGS));
+});
+
+gulp.task('test-unit-ui', (done) => {
+
+  karma.start({
+    configFile: __dirname + '/tests/ui/karma.conf.js',
+    singleRun: true,
+    files: [
+      'karma.shim.js',
+      '../../src/ui/vendor/jquery/dist/jquery.min.js',
+      '../../src/ui/vendor/toastr/toastr.min.js',
+      '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
+      '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
+      '../../src/ui/vendor/console-polyfill/index.js',
+      '../../src/ui/vendor/angular/angular.js',
+      '../../src/ui/vendor/angular-ui-sortable/sortable.js',
+      '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+      '../../src/ui/vendor/underscore/underscore.js',
+      '../../src/ui/vendor/angular-animate/angular-animate.js',
+      '../../src/ui/vendor/angular-sanitize/angular-sanitize.js',
+      '../../src/ui/vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js',
+      '../../src/ui/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
+      '../../src/ui/vendor/moment/moment.js',
+      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson.js',
+      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
+      '../../src/ui/vendor/Keypress/keypress.js',
+      '../../src/ui/vendor/codemirror/lib/codemirror.js',
+      '../../src/ui/vendor/codemirror/mode/javascript/javascript.js',
+      '../../src/ui/vendor/codemirror/addon/hint/show-hint.js',
+      '../../src/ui/vendorCustom/codemirror-formatting.js',
+      '../../src/ui/vendorCustom/mongotron-codemirror-hint.js',
+      '../../src/ui/vendor/angular-mocks/angular-mocks.js',
+      '../../src/ui/app.js',
+      '../../src/ui/components/**/*.js',
+      '../../src/ui/directives/**/*.js',
+      '../../src/ui/filters/**/*.js',
+      '../../src/ui/services/**/*.js',
+      './**/*-test.js'
+    ]
+  }, done);
 });
 
 /* =========================================================================

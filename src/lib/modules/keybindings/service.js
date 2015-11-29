@@ -12,16 +12,16 @@ const DEFAULT_KEYBINDINGS = require('./defaults');
  * @class KeybindingsService
  */
 class KeybindingsService {
+  get defaultBindings() {
+    return JSON.stringify(DEFAULT_KEYBINDINGS);
+  }
+
   /**
    * @method list
    */
   list() {
     return readKeybindingsFile()
       .then(parseKeybindingsFileData);
-  }
-
-  get defaultBindings() {
-    return JSON.stringify(DEFAULT_KEYBINDINGS);
   }
 }
 

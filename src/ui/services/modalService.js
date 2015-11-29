@@ -1,24 +1,23 @@
 angular.module('app').service('modalService', [
   '$uibModal',
-  function($uibModal) {
+  '$uibModalStack',
+  function($uibModal, $uibModalStack) {
     function ModalService() {}
 
-    ModalService.prototype.openConnectionManager = function(state) {
-      var modal = $uibModal.open({
+    ModalService.prototype.openConnectionManager = function(page) {
+      return openModal({
         templateUrl: __dirname + '/components/connect/connect.html',
         controller: 'connectCtrl',
         resolve: {
-          state: [function() {
-            return state;
+          page: [function() {
+            return page;
           }]
         }
       });
-
-      return modal;
     };
 
     ModalService.prototype.openAddDatabase = function(connection) {
-      var modal = $uibModal.open({
+      return openModal({
         templateUrl: __dirname + '/components/addDatabase/addDatabase.html',
         controller: 'addDatabaseCtrl',
         resolve: {
@@ -27,12 +26,10 @@ angular.module('app').service('modalService', [
           }]
         }
       });
-
-      return modal;
     };
 
     ModalService.prototype.openAddCollection = function(database) {
-      var modal = $uibModal.open({
+      return openModal({
         templateUrl: __dirname + '/components/addCollection/addCollection.html',
         controller: 'addCollectionCtrl',
         resolve: {
@@ -41,14 +38,12 @@ angular.module('app').service('modalService', [
           }]
         }
       });
-
-      return modal;
     };
 
     ModalService.prototype.confirm = function confirm(options) {
       if (!options) throw new Error('options is required');
 
-      var modal = $uibModal.open({
+      return openModal({
         template: '<div class="modal-body">' + options.message + '</div>' +
           '<div class="modal-footer">' +
           '<button class="btn btn-default" ng-click="cancel()">' + (options.cancelButtonMessage || 'Cancel') + '</button><button class="btn btn-primary" ng-click="ok()">' + (options.confirmButtonMessage || 'Confirm') + '</button>' +
@@ -69,17 +64,19 @@ angular.module('app').service('modalService', [
           }
         ]
       });
-
-      return modal;
     };
 
-    // function modalsExist() {
-    //   return !!$modalStack.getTop();
-    // }
-    //
-    // function closeAllModals() {
-    //   $modalStack.dismissAll();
-    // }
+    function closeAllModals() {
+      $uibModalStack.dismissAll();
+    }
+
+    function openModal(opts) {
+      if (!opts) return;
+
+      closeAllModals();
+
+      return $uibModal.open(opts);
+    }
 
     return new ModalService();
   }

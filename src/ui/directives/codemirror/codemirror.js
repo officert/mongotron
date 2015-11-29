@@ -7,11 +7,17 @@ angular.module('app').directive('codemirror', [
       require: 'ngModel',
       scope: {
         codemirror: '=',
-        hasFocus: '='
+        hasFocus: '=',
+        handle: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         var editor;
         var options = scope.codemirror || {};
+
+        scope.handle = scope.handle || {};
+        scope.handle.autoformat = function() {
+          autoFormatSelection(editor);
+        };
 
         const TAB = '  '; //2 spaces
 
@@ -28,8 +34,8 @@ angular.module('app').directive('codemirror', [
         const FIND_DEFAULT = 'find({\n' + TAB + '\n})';
         const UPDATE_MANY_DEFAULT = 'updateMany({\n' + TAB + '\n}, {\n' + TAB + '$set : {\n' + TAB + '\n' + TAB + '}\n})';
         const UPDATE_ONE_DEFAULT = 'updateOne({\n' + TAB + '\n}, {\n    $set : {\n    \n    }\n})';
-        const DELETE_MANY_DEFAULT = 'deleteMany({\n' + TAB + '\n}, {\n' + TAB + '\n})';
-        const DELETE_ONE_DEFAULT = 'deleteOne({\n' + TAB + '\n}, {\n' + TAB + '\n})';
+        const DELETE_MANY_DEFAULT = 'deleteMany({\n' + TAB + '\n})';
+        const DELETE_ONE_DEFAULT = 'deleteOne({\n' + TAB + '\n})';
         const AGGREGATE_DEFAULT = 'aggregate([\n' + TAB + '\n])';
         const INSERT_ONE_DEFAULT = 'insertOne({\n' + TAB + '\n})';
 
@@ -37,6 +43,7 @@ angular.module('app').directive('codemirror', [
         options.extraKeys = options.extraKeys || {};
         options.tabSize = TAB.length;
         options.indentWithTabs = false;
+        options.theme = 'lesser-dark';
         options.mode = {
           name: 'javascript',
           globalVars: true
@@ -67,18 +74,16 @@ angular.module('app').directive('codemirror', [
           });
 
           editor.on('keyup', function(cm, event) {
-            if (!cm.state.completionActive && event.keyCode !== 13) {
-              CodeMirror.commands.autocomplete(cm, null, {
-                completeSingle: false
-              });
-            }
+            $timeout(function() {
+              showAutoComplete(cm, event);
+            });
           });
 
           editor.on('change', function() {
-            var value = editor.getValue();
-            value = value && value.trim ? value.trim() : value;
-
             $timeout(function() {
+              var value = editor.getValue();
+              value = value && value.trim ? value.trim() : value;
+
               ngModelCtrl.$setViewValue(value);
             });
           });
@@ -95,9 +100,15 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.on('focus', function() {
+          editor.on('focus', function(cm, event) {
             $timeout(function() {
               scope.hasFocus = true;
+
+              var value = editor.getValue();
+
+              if (!value) {
+                showAutoComplete(cm, event);
+              }
             });
           });
 
@@ -118,6 +129,21 @@ angular.module('app').directive('codemirror', [
         /* Private Helpers
         /* ----------------------------------------------- */
 
+        function autoFormatSelection(codeMirrorEditor) {
+          if (!codeMirrorEditor) return;
+
+          var totalLines = codeMirrorEditor.lineCount();
+          var totalChars = codeMirrorEditor.getValue().length;
+
+          codeMirrorEditor.autoFormatRange({
+            line: 0,
+            ch: 0
+          }, {
+            line: totalLines,
+            ch: totalChars
+          });
+        }
+
         function getFullValue(val) {
           if (val.match(FIND_QUERY)) {
             return FIND_DEFAULT;
@@ -134,6 +160,15 @@ angular.module('app').directive('codemirror', [
           } else if (val.match(INSERT_ONE_QUERY)) {
             return INSERT_ONE_DEFAULT;
           }
+        }
+
+        function showAutoComplete(cm, event) {
+          if (cm.state.completionActive) return;
+          if (event && event.keyCode === 13) return;
+
+          CodeMirror.commands.autocomplete(cm, null, {
+            completeSingle: false
+          });
         }
       }
     };

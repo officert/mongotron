@@ -16,7 +16,7 @@
         </li>
       </ul>
     </div>
-    <div class="pull-right">
+    <div class="right-btns">
       <div class="query-btn-list btn-group clearfix">
         <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
         <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input>
@@ -37,99 +37,101 @@
       </div>
     </div>
   </div>
-  <form class="query-form" name="query-form" novalidate>
-    <div class="query-input">
-      <div class="query-editor" codemirror="codeEditorOptions" has-focus="editorHasFocus" ng-model="form.searchQuery">
+  <div class="collection-query-content">
+    <form class="query-form" name="query-form" novalidate>
+      <div class="query-input">
+        <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" has-focus="editorHasFocus" ng-model="form.searchQuery">
+        </div>
       </div>
+    </form>
+    <loading></loading>
+    <div class="query-error alert alert-danger" ng-show="error">
+      {{ error }}
     </div>
-  </form>
-  <loading></loading>
-  <div class="query-error alert alert-danger" ng-show="error">
-    {{ error }}
-  </div>
-  <div class="query-results">
-    <div class="query-results-inner">
-      <div class="alert alert-info" ng-show="!loading && !results.length">
-        Your search did not return any results.
-      </div>
-      <div ng-show="!loading && results.length">
-        <!-- List View -->
-        <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
-          <div class="result" ng-repeat="result in results">
-            <span class="result-header" ng-click="result.isOpen = !result.isOpen">
-              <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
-            </span>
-            <div class="result-body slide" ng-show="result.isOpen">
+    <div class="query-results">
+      <div class="query-results-inner">
+        <div class="alert alert-info" ng-show="!loading && !results.length">
+          Your search did not return any results.
+        </div>
+        <div ng-show="!loading && results.length">
+          <!-- List View -->
+          <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
+            <div class="result" ng-repeat="result in results">
+              <span class="result-header" ng-click="result.isOpen = !result.isOpen">
+                <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+              </span>
+              <div class="result-body slide" ng-show="result.isOpen">
+                <pre>{{ ::result | json }}</pre>
+              </div>
+            </div>
+          </div>
+          <!-- Raw View -->
+          <div class="raw-view" ng-if="currentView === VIEWS.RAW">
+            <div class="result" ng-repeat="result in results">
+              <ul class="menu">
+                <!-- <li>
+                  <button class="btn btn-default">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </li> -->
+                <li>
+                  <button class="btn btn-default" ng-click="deleteResult(result)">
+                    <i class="fa fa-plus rotate-45"></i>
+                  </button>
+                </li>
+              </ul>
               <pre>{{ ::result | json }}</pre>
             </div>
           </div>
-        </div>
-        <!-- Raw View -->
-        <div class="raw-view" ng-if="currentView === VIEWS.RAW">
-          <div class="result" ng-repeat="result in results">
-            <ul class="menu">
-              <li>
-                <button class="btn btn-default">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </li>
-              <li>
-                <button class="btn btn-default" ng-click="deleteResult(result)">
-                  <i class="fa fa-plus rotate-45"></i>
-                </button>
-              </li>
-            </ul>
-            <pre>{{ ::result | json }}</pre>
-          </div>
-        </div>
-        <!-- Key Value View -->
-        <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
-          <div class="top-header clearfix">
-            <span class="table-cell col-sm-3 key">
-              Key
-            </span>
-            <span class="col-sm-3 key">
-              Value
-            </span>
-            <span class="col-sm-3 key">
-              Type
-            </span>
-          </div>
-          <div class="result" ng-repeat="result in keyValueResults">
-            <ul class="menu">
-              <li>
-                <button class="btn btn-default">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </li>
-              <li>
-                <button class="btn btn-default" ng-click="deleteResult(result)">
-                  <i class="fa fa-plus rotate-45"></i>
-                </button>
-              </li>
-            </ul>
-            <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
-              <span class="key">
-                <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+          <!-- Key Value View -->
+          <div class="key-value-view" ng-if="currentView === VIEWS.KEYVALUE">
+            <div class="top-header clearfix">
+              <span class="table-cell col-sm-3 key">
+                Key
               </span>
-              <span class="key">
-                {{ ::result.length }} fields
+              <span class="col-sm-3 key">
+                Value
               </span>
-              <span class="key">
+              <span class="col-sm-3 key">
+                Type
+              </span>
+            </div>
+            <div class="result" ng-repeat="result in keyValueResults">
+              <ul class="menu">
+                <!-- <li>
+                  <button class="btn btn-default">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </li> -->
+                <li>
+                  <button class="btn btn-default" ng-click="deleteResult(result)">
+                    <i class="fa fa-plus rotate-45"></i>
+                  </button>
+                </li>
+              </ul>
+              <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
+                <span class="key">
+                  <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+                </span>
+                <span class="key">
+                  {{ ::result.length }} fields
+                </span>
+                <span class="key">
 
+                </span>
               </span>
-            </span>
-            <div class="result-body slide clearfix" ng-show="result.isOpen">
-              <div class="result-row clearfix" ng-repeat="keyvalue in result">
-                <span class="result-cell col-sm-3 key">
-                  <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
-                </span>
-                <span class="result-cell col-sm-3 value">
-                  {{ keyvalue.value }}
-                </span>
-                <span class="result-cell col-sm-3 type">
-                  {{ keyvalue.type }}
-                </span>
+              <div class="result-body slide clearfix" ng-show="result.isOpen">
+                <div class="result-row clearfix" ng-repeat="keyvalue in result">
+                  <span class="result-cell col-sm-3 key">
+                    <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+                  </span>
+                  <span class="result-cell col-sm-3 value">
+                    {{ keyvalue.value }}
+                  </span>
+                  <span class="result-cell col-sm-3 type">
+                    {{ keyvalue.type }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

@@ -1,14 +1,18 @@
 module.exports = [{
+  context: 'global',
+  commands: {
+    'cmd-shift-{': 'tab-manager:previous-tab',
+    'cmd-shift-}': 'tab-manager:next-tab',
+  }
+}, {
   context: 'mongotron-workspace',
   commands: {
-    'cmd-shift-n': 'connection-manager:new-connection',
+    // 'cmd-shift-n': 'connection-manager:new-connection',
   }
 }, {
   context: 'mongotron-tab-view',
   commands: {
     'cmd-enter': 'tab-manager:run-query',
-    'cmd-w': 'tab-manager:close-active-tab',
-    'cmd-shift-{': 'tab-manager:previous-tab',
-    'cmd-shift-}': 'tab-manager:next-tab',
+    'cmd-shift-h': 'tab-manager:autoformat'
   }
 }];

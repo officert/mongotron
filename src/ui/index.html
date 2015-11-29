@@ -10,9 +10,11 @@
   <!-- src -->
   <link rel="stylesheet" href="./css/main.css" />
   <!-- vendor -->
-  <link rel="stylesheet" href="./vendor/jquery.splitter/css/jquery.splitter.css" />
   <link rel="stylesheet" href="./vendor/toastr/toastr.css" />
   <link rel="stylesheet" href="./vendor/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" href="./vendor/codemirror/theme/elegant.css" />
+  <link rel="stylesheet" href="./vendor/codemirror/theme/lesser-dark.css" />
+  <link rel="stylesheet" href="./vendor/codemirror/theme/base16-light.css" />
   <link rel="stylesheet" href="./vendor/codemirror/addon/hint/show-hint.css" />
   <link rel="stylesheet" href="./vendor/ng-prettyjson/dist/ng-prettyjson.min.css" />
   <!-- JAVASCRIPT -->
@@ -33,9 +35,7 @@
   <script src="./vendor/underscore/underscore.js"></script>
   <script src="./vendor/angular-animate/angular-animate.js"></script>
   <script src="./vendor/angular-sanitize/angular-sanitize.js"></script>
-  <script src="./vendor/angular-scroll/angular-scroll.js"></script>
   <script src="./vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js"></script>
-  <script src="./vendor/jquery.splitter/js/jquery.splitter-0.15.0.js"></script>
   <script src="./vendor/moment/moment.js"></script>
   <script src="./vendor/ng-prettyjson/src/ng-prettyjson.js"></script>
   <script src="./vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js"></script>
@@ -43,31 +43,34 @@
   <script src="./vendor/codemirror/lib/codemirror.js"></script>
   <script src="./vendor/codemirror/mode/javascript/javascript.js"></script>
   <script src="./vendor/codemirror/addon/hint/show-hint.js"></script>
+  <script src="./vendorCustom/codemirror-formatting.js"></script>
   <script src="./vendorCustom/mongotron-codemirror-hint.js"></script>
-  <!-- <script src="./vendor/codemirror/addon/hint/javascript-hint.js"></script> -->
   <!-- src -->
   <script src="./app.js"></script>
   <script src="./filters/trim.js"></script>
   <script src="./directives/loading.js"></script>
   <script src="./directives/image-src.js"></script>
   <script src="./directives/slide-down.js"></script>
-  <script src="./directives/splitter.js"></script>
-  <script src="./services/events.js"></script>
   <script src="./services/alertService.js"></script>
   <script src="./services/connectionCache.js"></script>
   <script src="./services/keypressService.js"></script>
   <script src="./services/keypressHandlers/connectionManager-newConnection.js"></script>
   <script src="./services/keypressHandlers/tabManager-runQuery.js"></script>
-  <script src="./services/keypressHandlers/tabManager-closeActiveTab.js"></script>
+  <script src="./services/keypressHandlers/tabManager-autoformat.js"></script>
   <script src="./services/keypressHandlers/tabManager-nextTab.js"></script>
   <script src="./services/keypressHandlers/tabManager-previousTab.js"></script>
   <script src="./services/menuService.js"></script>
   <script src="./services/modalService.js"></script>
   <script src="./services/dialogService.js"></script>
   <script src="./services/tabCache.js"></script>
+  <script src="./services/themeService.js"></script>
   <script src="./components/connect/connectCtrl.js"></script>
+  <script src="./components/connect/listConnections/listConnectionsCtrl.js"></script>
+  <script src="./components/connect/addConnection/addConnectionCtrl.js"></script>
+  <script src="./components/connect/removeConnection/removeConnectionCtrl.js"></script>
   <script src="./components/addDatabase/addDatabaseCtrl.js"></script>
   <script src="./components/addCollection/addCollectionCtrl.js"></script>
+  <script src="./components/about/aboutCtrl.js"></script>
   <script src="./components/settings/settingsCtrl.js"></script>
   <script src="./components/settings/keybindings/keybindingsCtrl.js"></script>
   <script src="./components/settings/preferences/preferencesCtrl.js"></script>
@@ -79,24 +82,27 @@
   <script src="./directives/collection-query/collectionQueryCtrl.js"></script>
   <script src="./directives/sidebar/sidebar.js"></script>
   <script src="./directives/sidebar/sidebarCtrl.js"></script>
+  <script src="./directives/sidenav/sidenav.js"></script>
+  <script src="./directives/sidenav/sidenavCtrl.js"></script>
   <script src="./directives/tab-view/tab-view.js"></script>
   <script src="./directives/tab-view/tabViewCtrl.js"></script>
   <script src="./directives/keybinding-context.js"></script>
+  <script src="./directives/has-connections.js"></script>
+  <script src="./directives/theme-class.js"></script>
 </head>
 
-<body class="theme-{{ themes.current }}">
+<body theme-class>
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div class="app" keybinding-context="mongotron-workspace">
-    <div class="splitter" splitter position="20%" limit="240">
-      <div class="sidebar-wrapper">
-        <sidebar></sidebar>
-      </div>
-      <div class="content-wrapper">
-        <div class="content">
-          <tab-view keybinding-context="mongotron-tab-view"></tab-view>
-        </div>
+  <div class="app" keybinding-context="mongotron-workspace" has-connections>
+    <div class="sidebar-wrapper">
+      <sidenav></sidenav>
+      <sidebar></sidebar>
+    </div>
+    <div class="content-wrapper">
+      <div class="content">
+        <tab-view keybinding-context="mongotron-tab-view"></tab-view>
       </div>
     </div>
   </div>

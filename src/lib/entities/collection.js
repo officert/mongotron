@@ -9,7 +9,7 @@ const errors = require('lib/errors');
 const PAGE_SIZE = 50;
 
 /**
- * @class Connection
+ * @class Collection
  */
 class Collection {
   /**
@@ -28,7 +28,7 @@ class Collection {
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'test';
+    _this.name = options.name;
     _this.connection = options.connection;
     _this.database = options.database;
     _this.serverName = options.serverName;

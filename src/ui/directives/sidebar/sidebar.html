@@ -1,18 +1,11 @@
 <div class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-wrap dropdown">
-      <p class="logo">
-        <img image-src="./images/logo.png">
-      </p>
-    </div>
-  </div>
   <ul class="server-list">
     <li ng-repeat="connection in activeConnections | orderBy : 'name'">
       <span ng-click="openConnection(connection)" ng-right-click="openConnectionContextMenu(connection)">
         <i class="fa fa-server"></i> {{ connection.name }}<i class="open-icon">+</i>
       </span>
       <ul class="database-list slide" ng-show="connection.isOpen">
-        <li ng-repeat="database in connection.databases | orderBy : 'name'">
+        <li ng-repeat="database in connection.databases">
           <span class="level-2" ng-click="openDatabase(database, connection)" ng-right-click="openDatabaseContextMenu(database, connection)">
             <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon">+</i>
             <span class="loader" ng-show="database.opening">

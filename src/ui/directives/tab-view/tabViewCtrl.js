@@ -2,9 +2,8 @@ angular.module('app').controller('tabViewCtrl', [
   '$scope',
   'tabCache',
   'connectionCache',
-  'EVENTS',
   '$timeout',
-  function($scope, tabCache, connectionCache, EVENTS, $timeout) {
+  function($scope, tabCache, connectionCache, $timeout) {
     $scope.tabs = tabCache.list();
     $scope.connections = connectionCache.list();
 
@@ -38,11 +37,11 @@ angular.module('app').controller('tabViewCtrl', [
       }
     };
 
-    tabCache.on(EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {
+    tabCache.on(tabCache.EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {
       $scope.tabs = updatedCache;
     });
 
-    connectionCache.on(EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
       $scope.connections = updatedCache;
     });
 

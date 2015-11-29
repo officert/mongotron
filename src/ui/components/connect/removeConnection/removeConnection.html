@@ -1,0 +1,16 @@
+<div id="connect-remove" class="clearfix" ng-controller="removeConnectionCtrl">
+  <div class="alert alert-danger">
+    Are you sure you want to remove the connection
+    <strong>'{{ selectedConnection.name }}'</strong>?
+  </div>
+  <div class="clearfix">
+    <div class="remove-buttons pull-right">
+      <button class="btn btn-default" type="button" ng-click="changePage('list', null, $event)">
+        Back
+      </button>
+      <button class="btn btn-primary" type="button" ng-click="removeConnection(selectedConnection, $event)">
+        Remove
+      </button>
+    </div>
+  </div>
+</div>

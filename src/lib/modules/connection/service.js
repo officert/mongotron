@@ -12,10 +12,16 @@ const ALLOWED_UPDATES = [
   'port'
 ];
 
+const DEFAULT_CONNECTIONS = require('./defaults');
+
 /**
  * @class ConnectionService
  */
 class ConnectionService {
+  get defaultConnections() {
+    return JSON.stringify(DEFAULT_CONNECTIONS);
+  }
+
   /**
    * @constructor ConnectionService
    */
