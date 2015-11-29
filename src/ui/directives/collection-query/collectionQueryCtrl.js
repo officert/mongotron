@@ -132,6 +132,7 @@ angular.module('app').controller('collectionQueryCtrl', [
       if ((!result || !result.query) || _.isError(result)) {
         $scope.error = result && result.message ? result.message : 'Sorry, that is not a valid mongo query';
         $scope.loading = false;
+        return;
       }
 
       logger.debug('running query', result.query, result.options);
