@@ -76,13 +76,15 @@ angular.module('app').factory('keypressService', [
           var args = Array.prototype.slice.call(arguments);
 
           var callbacks = _this.registeredCombos[combo];
-          var registeredCallback = _.findWhere(callbacks, {
-            context: _this.keybindingContext
+          var registeredCallbacks = _.filter(callbacks, (callback) => {
+            return callback.context === _this.keybindingContext || callback.context === 'global';
           });
 
-          if (registeredCallback) {
-            registeredCallback.callback.call(args);
-            $rootScope.$apply();
+          if (registeredCallbacks && registeredCallbacks.length) {
+            _.each(registeredCallbacks, (cb) => {
+              cb.callback.call(args);
+              $rootScope.$apply();
+            });
           }
         };
 
