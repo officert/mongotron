@@ -4,7 +4,14 @@
 var _ = require('underscore');
 var path = require('path-extra');
 
-var packageJson = require('../../package.json');
+// var packageJson = require('../../package.json');
+var packageJson = {
+  version: '1.0.0-alpha.1',
+  name: 'Mongotron',
+  repository: {
+    url: 'https://github.com/mongotron'
+  }
+};
 
 /* =========================================================================
  * App Config Settings
