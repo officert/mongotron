@@ -11,11 +11,11 @@
     'insertOne'
   ];
 
-  const CONSTRUCTOR_HINTS = [
-    'ObjectId'
-  ];
+  // const CONSTRUCTOR_HINTS = [
+  //   'ObjectId'
+  // ];
 
-  const CONSTRUCTOR_REGEX = /^(?:[^]+)new ([a-zA-Z]+)(?:[^]+)$/;
+  // const CONSTRUCTOR_REGEX = /^(?:[^]+)new ([a-zA-Z]+)(?:[^]+)$/;
 
   CodeMirror.registerHelper('hint', 'javascript', function(codemirror) {
 
@@ -35,14 +35,15 @@
   });
 
   function getHintsByValue(value) {
-    var constructorMatches = value.match(CONSTRUCTOR_REGEX);
-
-    if (constructorMatches && constructorMatches.length && constructorMatches.length >= 2) {
-      return {
-        hints: CONSTRUCTOR_HINTS,
-        value: constructorMatches[1]
-      };
-    }
+    //TODO: https://regex101.com/r/uK9lU0/1
+    // var constructorMatches = value.match(CONSTRUCTOR_REGEX);
+    //
+    // if (constructorMatches && constructorMatches.length && constructorMatches.length >= 2) {
+    //   return {
+    //     hints: CONSTRUCTOR_HINTS,
+    //     value: constructorMatches[1]
+    //   };
+    // }
 
     return {
       hints: QUERY_HINTS,
