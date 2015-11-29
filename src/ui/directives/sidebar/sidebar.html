@@ -1,11 +1,4 @@
 <div class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-wrap dropdown">
-      <p class="logo">
-        <img image-src="./images/logo.png">
-      </p>
-    </div>
-  </div>
   <ul class="server-list">
     <li ng-repeat="connection in activeConnections | orderBy : 'name'">
       <span ng-click="openConnection(connection)" ng-right-click="openConnectionContextMenu(connection)">

@@ -10,7 +10,6 @@
   <!-- src -->
   <link rel="stylesheet" href="./css/main.css" />
   <!-- vendor -->
-  <link rel="stylesheet" href="./vendor/jquery.splitter/css/jquery.splitter.css" />
   <link rel="stylesheet" href="./vendor/toastr/toastr.css" />
   <link rel="stylesheet" href="./vendor/codemirror/lib/codemirror.css" />
   <link rel="stylesheet" href="./vendor/codemirror/theme/elegant.css" />
@@ -37,7 +36,6 @@
   <script src="./vendor/angular-animate/angular-animate.js"></script>
   <script src="./vendor/angular-sanitize/angular-sanitize.js"></script>
   <script src="./vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js"></script>
-  <script src="./vendor/jquery.splitter/js/jquery.splitter-0.15.0.js"></script>
   <script src="./vendor/moment/moment.js"></script>
   <script src="./vendor/ng-prettyjson/src/ng-prettyjson.js"></script>
   <script src="./vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js"></script>
@@ -53,7 +51,6 @@
   <script src="./directives/loading.js"></script>
   <script src="./directives/image-src.js"></script>
   <script src="./directives/slide-down.js"></script>
-  <script src="./directives/splitter.js"></script>
   <script src="./services/events.js"></script>
   <script src="./services/alertService.js"></script>
   <script src="./services/connectionCache.js"></script>
@@ -99,15 +96,13 @@
   <base href="/" />
   <!-- APP -->
   <div class="app" keybinding-context="mongotron-workspace">
-    <div class="splitter" splitter position="20%" limit="240">
-      <div class="sidebar-wrapper">
-        <sidenav></sidenav>
-        <sidebar></sidebar>
-      </div>
-      <div class="content-wrapper">
-        <div class="content">
-          <tab-view keybinding-context="mongotron-tab-view"></tab-view>
-        </div>
+    <div class="sidebar-wrapper">
+      <sidenav></sidenav>
+      <sidebar></sidebar>
+    </div>
+    <div class="content-wrapper">
+      <div class="content">
+        <tab-view keybinding-context="mongotron-tab-view"></tab-view>
       </div>
     </div>
   </div>

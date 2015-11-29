@@ -6,19 +6,12 @@
   width: 100%;
   overflow: hidden;
   @sidenav-width: 60px;
-  .splitter {
-    height: 100%;
-    width: 100%;
-    position: relative;
-    .vsplitter {
-      background: none;
-    }
-  }
   .sidebar-wrapper {
     position: relative;
     left: 0;
     top: 0;
     height: 100%;
+    width: 25%;
     overflow-y: auto;
     padding-left: @sidenav-width;
     .sidenav {
@@ -29,6 +22,16 @@
       height: 100%;
       background: @theme-sidenav-bg;
       border-right: 1px solid @theme-sidenav-border-color;
+      .logo {
+        padding: 10px 0 10px 8px;
+        margin: 0;
+        img {
+          height: 40px;
+          &:hover {
+            animation: fa-spin 1s infinite 2s linear;
+          }
+        }
+      }
       ul {
         margin: 0;
         padding: 0;
@@ -37,6 +40,7 @@
           height: 59px;
           padding: 20px;
           cursor: pointer;
+          .transition(.2s ease);
           &:hover {
             background: darken(@theme-sidenav-bg, 5%);
           }
@@ -62,24 +66,14 @@
       }
     }
     .sidebar {
-      .sidebar-header {
-        .logo-wrap {
-          .logo {
-            padding: 10px 0 10px 8px;
-            margin: 0;
-            img {
-              height: 40px;
-            }
-          }
-        }
-      }
+      padding-top: 50px;
     }
   }
   .content-wrapper {
     position: absolute;
     top: 0;
     right: 0;
-    width: 100%;
+    width: 75%;
     height: 100%;
     overflow-y: auto;
     .content {
