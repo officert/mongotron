@@ -2,6 +2,7 @@
 
 const fileUtils = require('lib/utils/fileUtils');
 const appConfig = require('src/config/appConfig');
+const connection = require('lib/modules/connection');
 const keybindings = require('lib/modules/keybindings');
 const themes = require('lib/modules/themes');
 
@@ -37,7 +38,7 @@ function createAppConfigDir() {
 }
 
 function createDbConfigFile() {
-  fileUtils.createFileSync(appConfig.dbConfigPath);
+  fileUtils.createFileSync(appConfig.dbConfigPath, connection.defaultConnections);
 }
 
 function createLogFile() {
