@@ -27,7 +27,7 @@ angular.module('app').run([
 
     setTitle(pageTitle);
 
-    // showConnections();
+    showConnections();
 
     $rootScope.showLogs = function($event) {
       if ($event) $event.preventDefault();
