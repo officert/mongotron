@@ -51,7 +51,6 @@
   <script src="./directives/loading.js"></script>
   <script src="./directives/image-src.js"></script>
   <script src="./directives/slide-down.js"></script>
-  <script src="./services/events.js"></script>
   <script src="./services/alertService.js"></script>
   <script src="./services/connectionCache.js"></script>
   <script src="./services/keypressService.js"></script>
@@ -88,6 +87,7 @@
   <script src="./directives/tab-view/tab-view.js"></script>
   <script src="./directives/tab-view/tabViewCtrl.js"></script>
   <script src="./directives/keybinding-context.js"></script>
+  <script src="./directives/has-connections.js"></script>
   <script src="./directives/theme-class.js"></script>
 </head>
 
@@ -95,7 +95,7 @@
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div class="app" keybinding-context="mongotron-workspace">
+  <div class="app" keybinding-context="mongotron-workspace" has-connections>
     <div class="sidebar-wrapper">
       <sidenav></sidenav>
       <sidebar></sidebar>

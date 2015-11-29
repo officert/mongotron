@@ -6,6 +6,23 @@
   width: 100%;
   overflow: hidden;
   @sidenav-width: 60px;
+  &.no-connections {
+    .sidebar-wrapper {
+      .transition-property('width');
+      .transition-duration(.35s);
+      .transition-timing-function(ease);
+      width: @sidenav-width;
+    }
+    .content-wrapper {
+      .transition-property('width');
+      .transition-duration(.35s);
+      .transition-timing-function(ease);
+      width: calc(100% ~' - ' @sidenav-width);
+      .content {
+        padding-left: 10px;
+      }
+    }
+  }
   .sidebar-wrapper {
     position: relative;
     left: 0;
