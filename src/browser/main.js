@@ -50,7 +50,7 @@ app.on('ready', function() {
 
   mainWindow.loadUrl(path.join('file://', __dirname, '../ui/index.html'));
 
-  if (appConfig.env !== 'production') mainWindow.openDevTools();
+  // if (appConfig.env !== 'production') mainWindow.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', function() {
     mainWindow.setTitle('Mongotron');
