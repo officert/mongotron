@@ -86,15 +86,7 @@ angular.module('app').factory('menuService', [
         accelerator: 'CmdOrCtrl+O',
         click: function() {
           $timeout(function() {
-            $rootScope.showConnections('LIST');
-          });
-        }
-      }, {
-        label: 'New',
-        accelerator: 'CmdOrCtrl+N',
-        click: function() {
-          $timeout(function() {
-            $rootScope.showConnections('ADD');
+            $rootScope.showConnections();
           });
         }
       }, {

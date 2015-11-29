@@ -45,10 +45,10 @@ angular.module('app').run([
       }
     };
 
-    function showConnections(state, $event) {
+    function showConnections(page, $event) {
       if ($event) $event.preventDefault();
 
-      modalService.openConnectionManager(state)
+      modalService.openConnectionManager(page)
         .result
         .then(function() {
           $rootScope.setTitle(pageTitle);

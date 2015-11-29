@@ -3,13 +3,14 @@
 angular.module('app').controller('connectCtrl', [
   '$scope',
   '$modalInstance',
-  function($scope, $modalInstance) {
+  'page',
+  function($scope, $modalInstance, page) {
     $scope.listConnectionsSrc = __dirname + '/components/connect/listConnections/listConnections.html';
     $scope.addConnectionSrc = __dirname + '/components/connect/addConnection/addConnection.html';
     $scope.editConnectionSrc = __dirname + '/components/connect/editConnection/editConnection.html';
     $scope.removeConnectionSrc = __dirname + '/components/connect/removeConnection/removeConnection.html';
 
-    $scope.currentPage = 'list';
+    $scope.currentPage = page || 'list';
 
     $scope.close = function() {
       $modalInstance.close(1);

@@ -4,13 +4,13 @@ angular.module('app').service('modalService', [
   function($uibModal, $uibModalStack) {
     function ModalService() {}
 
-    ModalService.prototype.openConnectionManager = function(state) {
+    ModalService.prototype.openConnectionManager = function(page) {
       return openModal({
         templateUrl: __dirname + '/components/connect/connect.html',
         controller: 'connectCtrl',
         resolve: {
-          state: [function() {
-            return state;
+          page: [function() {
+            return page;
           }]
         }
       });
