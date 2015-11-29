@@ -38,7 +38,11 @@ angular.module('app').factory('menuService', [
       label: appConfig.name,
       submenu: [{
         label: 'About ' + appConfig.name,
-        role: 'about'
+        click: function() {
+          $timeout(function() {
+            $rootScope.showAbout();
+          });
+        }
       }, {
         type: 'separator'
       }, {

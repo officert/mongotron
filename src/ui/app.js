@@ -23,6 +23,7 @@ angular.module('app').run([
     $rootScope.currentQuery = null;
     $rootScope.showConnections = showConnections;
     $rootScope.showSettings = showSettings;
+    $rootScope.showAbout = showAbout;
 
     setTitle(pageTitle);
 
@@ -69,6 +70,23 @@ angular.module('app').run([
         });
       } else {
         tabCache.activateByName(settingsTabName);
+      }
+    }
+
+    function showAbout($event) {
+      if ($event) $event.preventDefault();
+
+      var aboutTabName = 'About';
+
+      if (!tabCache.existsByName(aboutTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-info-circle',
+          name: aboutTabName,
+          src: __dirname + '/components/about/about.html'
+        });
+      } else {
+        tabCache.activateByName(aboutTabName);
       }
     }
 
