@@ -1,28 +1,54 @@
 (function(CodeMirror) {
   'use strict';
 
+  const QUERY_HINTS = [
+    'aggregate',
+    'find',
+    'updateOne',
+    'updateMany',
+    'deleteOne',
+    'deleteMany',
+    'insertOne'
+  ];
+
+  const CONSTRUCTOR_HINTS = [
+    'ObjectId'
+  ];
+
+  const CONSTRUCTOR_REGEX = /^(?:[^]+)new ([a-zA-Z]+)(?:[^]+)$/;
+
   CodeMirror.registerHelper('hint', 'javascript', function(codemirror) {
 
     var currentValue = codemirror.getValue();
 
+    var results = getHintsByValue(currentValue);
+
     var inner = {
       from: codemirror.getCursor(),
       to: codemirror.getCursor(),
-      list: [
-        'aggregate',
-        'find',
-        'updateOne',
-        'updateMany',
-        'deleteOne',
-        'deleteMany',
-        'insertOne'
-      ]
+      list: results.hints
     };
 
-    inner.list = filterAutoCompleteHintsByInput(currentValue, inner.list);
+    inner.list = filterAutoCompleteHintsByInput(results.value, inner.list);
 
     return inner;
   });
+
+  function getHintsByValue(value) {
+    var constructorMatches = value.match(CONSTRUCTOR_REGEX);
+
+    if (constructorMatches && constructorMatches.length && constructorMatches.length >= 2) {
+      return {
+        hints: CONSTRUCTOR_HINTS,
+        value: constructorMatches[1]
+      };
+    }
+
+    return {
+      hints: QUERY_HINTS,
+      value: value
+    };
+  }
 
   /* -----------------------------------------------
   /* Private Helpers
