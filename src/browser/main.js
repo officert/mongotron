@@ -4,7 +4,7 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');
-const ipc = require('ipc');
+const ipcMain = require('electron').ipcMain;
 const path = require('path');
 
 require('src/mongotron').init();
@@ -22,11 +22,11 @@ var mainWindow;
 
 crashReporter.start(); // Report crashes to our server.
 
-ipc.on('set-title', function(event, title) {
+ipcMain.on('set-title', function(event, title) {
   mainWindow.setTitle(title || 'Mongotron');
 });
 
-ipc.on('quit', function() {
+ipcMain.on('quit', function() {
   app.quit();
 });
 

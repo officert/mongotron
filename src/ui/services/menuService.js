@@ -6,7 +6,7 @@ angular.module('app').factory('menuService', [
   'dialogService',
   'tabCache',
   function($window, $rootScope, $timeout, dialogService, tabCache) {
-    const ipc = require('ipc');
+    const ipcRenderer = require('electron').ipcRenderer;
     const shell = require('shell');
     const remote = require('remote');
     const Menu = remote.require('menu');
@@ -78,7 +78,7 @@ angular.module('app').factory('menuService', [
         label: 'Quit',
         accelerator: 'Command+Q',
         click: function() {
-          ipc.send('quit');
+          ipcRenderer.send('quit');
         }
       }, ]
     };

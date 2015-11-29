@@ -20,17 +20,12 @@ class Mongotron {
    * @method init
    */
   init() {
-    createConfigDir();
     createAppConfigDir();
     createDbConfigFile();
     createLogFile();
     createKeybindingsFile();
     createThemesFile();
   }
-}
-
-function createConfigDir() {
-  fileUtils.createDirSync(appConfig.configDir);
 }
 
 function createAppConfigDir() {

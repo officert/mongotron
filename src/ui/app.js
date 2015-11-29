@@ -1,6 +1,6 @@
 'use strict';
 
-var ipc = require('ipc');
+const ipcRenderer = require('electron').ipcRenderer;
 
 angular.module('app', [
   'ui.bootstrap',
@@ -91,7 +91,7 @@ angular.module('app').run([
     }
 
     function setTitle(title) {
-      ipc.send('set-title', title);
+      ipcRenderer.send('set-title', title);
     }
   }
 ]);
