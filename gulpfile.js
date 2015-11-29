@@ -267,7 +267,7 @@ gulp.task('test-unit-ui', function(done) {
       '../../src/ui/directives/**/*.js',
       '../../src/ui/filters/**/*.js',
       '../../src/ui/services/**/*.js',
-      'unit/**/*-test.js'
+      './**/*-test.js'
     ]
   }, done);
 });
