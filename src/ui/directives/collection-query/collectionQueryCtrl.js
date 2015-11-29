@@ -4,7 +4,8 @@ angular.module('app').controller('collectionQueryCtrl', [
   '$rootScope',
   'alertService',
   'modalService',
-  function($scope, $timeout, $rootScope, alertService, modalService) {
+  '$window',
+  function($scope, $timeout, $rootScope, alertService, modalService, $window) {
     const mongoUtils = require('src/lib/utils/mongoUtils');
     const logger = require('lib/modules/logger');
     const ObjectId = require('mongodb').ObjectId;
@@ -289,19 +290,17 @@ angular.module('app').controller('collectionQueryCtrl', [
      * @param {String} raw value from editor
      */
     function evalQueryValue(rawValue) {
-      //additional variables are available in a special context when evaluating
       var context = {
         ObjectId: ObjectId
       };
+      context = _.extend($window, context);
 
       var queryValue;
 
-      with(context) { // jshint ignore:line
-        try {
-          queryValue = eval('(' + rawValue + ')'); // jshint ignore:line
-        } catch (err) {
-          queryValue = err;
-        }
+      try {
+        queryValue = eval.call(context, '(' + rawValue + ')'); // jshint ignore:line
+      } catch (err) {
+        queryValue = err;
       }
 
       return queryValue;

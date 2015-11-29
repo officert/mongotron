@@ -1,6 +1,6 @@
 {
   "name": "Mongotron",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha",
   "description": "mongotron",
   "main": "src/browser/main.js",
   "engine": "node 4.2.0",
