@@ -1,8 +1,11 @@
 module.exports = [{
-  name: 'default'
+  name: 'default',
+  codemirrorTheme: 'default'
 }, {
   name: 'atom',
-  active: true
+  active: true,
+  codemirrorTheme: 'lesser-dark'
 }, {
-  name: 'isotope-ui'
+  name: 'isotope-ui',
+  codemirrorTheme: 'base16-light'
 }];
