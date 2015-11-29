@@ -8669,19 +8669,33 @@ input::-webkit-inner-spin-button {
   width: 100%;
   overflow: hidden;
 }
-.theme-default .app .splitter {
-  height: 100%;
-  width: 100%;
-  position: relative;
+.theme-default .app.no-connections .sidebar-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: 60px;
 }
-.theme-default .app .splitter .vsplitter {
-  background: none;
+.theme-default .app.no-connections .content-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: calc(100%  -  60px);
+}
+.theme-default .app.no-connections .content-wrapper .content {
+  padding-left: 10px;
 }
 .theme-default .app .sidebar-wrapper {
   position: relative;
   left: 0;
   top: 0;
   height: 100%;
+  width: 25%;
   overflow-y: auto;
   padding-left: 60px;
 }
@@ -8691,8 +8705,18 @@ input::-webkit-inner-spin-button {
   left: 0;
   width: 60px;
   height: 100%;
-  background: #e6e6e6;
-  border-right: 1px solid #ffffff;
+  background: #f7f7f7;
+  border-right: 1px solid #e6e6e6;
+}
+.theme-default .app .sidebar-wrapper .sidenav .logo {
+  padding: 10px 0 10px 8px;
+  margin: 0;
+}
+.theme-default .app .sidebar-wrapper .sidenav .logo img {
+  height: 40px;
+}
+.theme-default .app .sidebar-wrapper .sidenav .logo img:hover {
+  animation: fa-spin 1s infinite 2s linear;
 }
 .theme-default .app .sidebar-wrapper .sidenav ul {
   margin: 0;
@@ -8703,9 +8727,12 @@ input::-webkit-inner-spin-button {
   height: 59px;
   padding: 20px;
   cursor: pointer;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
 }
 .theme-default .app .sidebar-wrapper .sidenav ul li:hover {
-  background: #d9d9d9;
+  background: #ebebeb;
 }
 .theme-default .app .sidebar-wrapper .sidenav ul li span {
   display: block;
@@ -8725,18 +8752,14 @@ input::-webkit-inner-spin-button {
   left: 10px;
   font-size: 12px;
 }
-.theme-default .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
-  padding: 10px 0 10px 8px;
-  margin: 0;
-}
-.theme-default .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo img {
-  height: 40px;
+.theme-default .app .sidebar-wrapper .sidebar {
+  padding-top: 50px;
 }
 .theme-default .app .content-wrapper {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
+  width: 75%;
   height: 100%;
   overflow-y: auto;
 }
@@ -8816,8 +8839,8 @@ input::-webkit-inner-spin-button {
   padding-left: 0;
   padding-right: 0;
   position: relative;
-  min-width: 15em;
-  max-width: 20em;
+  min-width: 12em;
+  max-width: 15em;
 }
 .theme-default #settings .settings-sidebar ul {
   margin: 0;
@@ -8828,16 +8851,16 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
 }
 .theme-default #settings .settings-sidebar ul li:hover {
-  background: #f5f5f5;
+  background: #ebebeb;
 }
 .theme-default #settings .settings-sidebar ul li.active {
-  background: #f5f5f5;
+  background: #ebebeb;
 }
 .theme-default #settings .settings-sidebar ul li i {
   margin-right: 10px;
 }
 .theme-default #settings .settings-content {
-  border-left: 1px solid #f2f2f2;
+  border-left: 1px solid #e8e8e8;
   height: 100%;
   flex: 8.4;
   flex-flow: column;
@@ -8847,7 +8870,7 @@ input::-webkit-inner-spin-button {
 }
 .theme-default #settings .settings-content .settings-panel .panel-header {
   margin-bottom: 15px;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #e8e8e8;
 }
 .theme-default #settings .settings-content .settings-panel .panel-header i {
   margin-right: 10px;
@@ -8858,85 +8881,51 @@ input::-webkit-inner-spin-button {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-default #connect {
-  position: relative;
-  padding-top: 15px;
-  height: 100%;
-}
-.theme-default #connect .connect-sidebar {
-  padding-left: 0;
-  padding-right: 0;
-  position: relative;
-  min-width: 15em;
-  max-width: 20em;
-}
-.theme-default #connect .connect-sidebar ul {
+.theme-default #connect .modal-header h3 {
+  font-size: 18px;
   margin: 0;
-  padding: 0;
 }
-.theme-default #connect .connect-sidebar ul li {
-  padding: 15px;
-  cursor: pointer;
-}
-.theme-default #connect .connect-sidebar ul li:hover {
-  background: #f5f5f5;
-}
-.theme-default #connect .connect-sidebar ul li.active {
-  background: #f5f5f5;
-}
-.theme-default #connect .connect-sidebar ul li i {
-  margin-right: 10px;
-}
-.theme-default #connect .connect-content {
-  border-left: 1px solid #f2f2f2;
-  height: 100%;
-  flex: 8.4;
-  flex-flow: column;
-  display: flex;
-  position: relative;
-  padding: 20px 15px;
-}
-.theme-default #connect .connect-content .top-links {
+.theme-default #connect .modal-body .top-links {
   padding: 5px 0 20px;
 }
-.theme-default #connect .connect-content .top-links .user-info-note {
+.theme-default #connect .modal-body .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-default #connect .connect-content .top-links .add-link {
+.theme-default #connect .modal-body .top-links .add-link {
   display: block;
 }
-.theme-default #connect .connect-content .top-links .add-link i {
+.theme-default #connect .modal-body .top-links .add-link i {
   color: #c3deea;
 }
-.theme-default #connect .connect-content .connect-server-list {
-  top: -100%;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 15px;
+.theme-default #connect-list {
+  padding-bottom: 15px;
 }
-.theme-default #connect .connect-content .connect-server-list ul li {
+.theme-default #connect-list .connection-list {
+  margin-bottom: 25px;
+}
+.theme-default #connect-list .connection-list li {
   border-top: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
   position: relative;
 }
-.theme-default #connect .connect-content .connect-server-list ul li:first-child {
+.theme-default #connect-list .connection-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-default #connect .connect-content .connect-server-list ul li:last-child {
+.theme-default #connect-list .connection-list li:last-child {
   border-bottom: 1px solid #e6e6e6;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-default #connect .connect-content .connect-server-list ul li.connected .name {
+.theme-default #connect-list .connection-list li.active .name {
   padding-left: 40px;
 }
-.theme-default #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
+.theme-default #connect-list .connection-list li.active .name .icon-connected {
   left: 10px;
   color: #c3deea;
 }
-.theme-default #connect .connect-content .connect-server-list ul li a {
+.theme-default #connect-list .connection-list li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -8948,13 +8937,13 @@ input::-webkit-inner-spin-button {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-default #connect .connect-content .connect-server-list ul li a:hover {
+.theme-default #connect-list .connection-list li a:hover {
   background: #e6e6e6;
 }
-.theme-default #connect .connect-content .connect-server-list ul li a.name {
+.theme-default #connect-list .connection-list li a.name {
   display: block;
 }
-.theme-default #connect .connect-content .connect-server-list ul li a.name .icon-connected {
+.theme-default #connect-list .connection-list li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -8963,30 +8952,35 @@ input::-webkit-inner-spin-button {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-default #connect .connect-content .connect-server-list ul li .links {
+.theme-default #connect-list .connection-list li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-default #connect .connect-content .connect-server-list ul li .links a {
+.theme-default #connect-list .connection-list li .links a {
   float: left;
   display: inline-block;
 }
-.theme-default #connect .connect-content .connect-server-list .user-info-note {
+.theme-default #connect-list .user-info-note {
   padding: 20px 0;
 }
-.theme-default #connect .connect-content .server-add {
-  padding: 0 0 35px;
+.theme-default #connect-add {
+  padding-bottom: 15px;
 }
-.theme-default #connect .connect-content .server-edit {
-  padding: 0 0 35px;
+.theme-default #connect-add form {
+  margin-bottom: 25px;
 }
-.theme-default #connect .connect-content .server-remove {
-  padding: 0 0 35px;
+.theme-default #connect-edit {
+  padding-bottom: 15px;
 }
-.theme-default #connect .modal-footer p {
-  padding: 0;
-  margin: 0;
+.theme-default #connect-edit form {
+  margin-bottom: 25px;
+}
+.theme-default #connect-remove {
+  padding-bottom: 15px;
+}
+.theme-default #connect-remove .alert {
+  margin-bottom: 25px;
 }
 .theme-default #collections {
   padding: 1px 0 0;
@@ -9038,7 +9032,7 @@ input::-webkit-inner-spin-button {
   content: " ";
   left: 0;
   top: 0;
-  background: #333333;
+  background: #2e6da4;
 }
 .theme-default .tab-view .tab-bar ul .sortable-placeholder::before {
   content: " ";
@@ -9051,7 +9045,7 @@ input::-webkit-inner-spin-button {
   position: relative;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-left: 8px solid #333333;
+  border-left: 8px solid #2e6da4;
 }
 .theme-default .tab-view .tab-bar ul .sortable-helper {
   display: block;
@@ -9086,7 +9080,7 @@ input::-webkit-inner-spin-button {
   width: 2px;
   height: 0;
   border-top-left-radius: 4px;
-  background: #ffffff;
+  background: #f5f5f5;
   -webkit-transition: 0.2s ease;
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
@@ -9096,14 +9090,14 @@ input::-webkit-inner-spin-button {
 }
 .theme-default .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
   right: 18px;
   top: 10px;
   cursor: pointer;
-  background: #f7f7f7;
+  background: #ededed;
   opacity: 0;
   -webkit-transition-property: 'opacity';
   transition-property: 'opacity';
@@ -9124,7 +9118,7 @@ input::-webkit-inner-spin-button {
   opacity: 1;
 }
 .theme-default .tab-view .tab-bar ul .tab.active {
-  background: #ffffff;
+  background: #f5f5f5;
   color: #666666;
   border-top-color: #ffffff;
   border-top-left-radius: 4px;
@@ -9133,13 +9127,13 @@ input::-webkit-inner-spin-button {
 .theme-default .tab-view .tab-bar ul .tab.active .tab-active-line {
   top: 1px;
   height: 100%;
-  background: #333333;
+  background: #2e6da4;
 }
 .theme-default .tab-view .tab-panes {
   position: relative;
   height: 100%;
   width: 100%;
-  border: 1px solid #ffffff;
+  border: 1px solid #e6e6e6;
 }
 .theme-default .tab-view .tab-panes .no-connections p {
   padding-top: 200px;
@@ -9152,7 +9146,7 @@ input::-webkit-inner-spin-button {
   position: absolute;
   height: 100%;
   width: 100%;
-  background: #ffffff;
+  background: #f5f5f5;
   display: none;
 }
 .theme-default .tab-view .tab-panes .tab-pane.active {
@@ -9170,11 +9164,8 @@ input::-webkit-inner-spin-button {
 .theme-default .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
-.theme-default .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
-  padding: 0;
-}
 .theme-default .ui-sortable-helper {
-  background: #ffffff;
+  background: #f5f5f5;
   color: #666666;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -9208,7 +9199,7 @@ input::-webkit-inner-spin-button {
   width: 2px;
   height: 0;
   border-top-left-radius: 4px;
-  background: #ffffff;
+  background: #f5f5f5;
   -webkit-transition: 0.2s ease;
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
@@ -9218,14 +9209,14 @@ input::-webkit-inner-spin-button {
 }
 .theme-default .ui-sortable-helper a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
   right: 18px;
   top: 10px;
   cursor: pointer;
-  background: #f7f7f7;
+  background: #ededed;
   opacity: 0;
   -webkit-transition-property: 'opacity';
   transition-property: 'opacity';
@@ -9246,7 +9237,7 @@ input::-webkit-inner-spin-button {
   opacity: 1;
 }
 .theme-default .ui-sortable-helper.active {
-  background: #ffffff;
+  background: #f5f5f5;
   color: #666666;
   border-top-color: #ffffff;
   border-top-left-radius: 4px;
@@ -9255,7 +9246,7 @@ input::-webkit-inner-spin-button {
 .theme-default .ui-sortable-helper.active .tab-active-line {
   top: 1px;
   height: 100%;
-  background: #333333;
+  background: #2e6da4;
 }
 .theme-default .btn {
   padding: 0.5em 1em 0.6em;
@@ -9297,9 +9288,9 @@ fieldset[disabled] .theme-default .btn-default.active {
 }
 .theme-default .btn-primary {
   color: #ffffff;
-  background: #c3deea;
-  border-color: #9dc9dd;
-  border-bottom-color: #77b4d0;
+  background: #2e6da4;
+  border-color: #23537c;
+  border-bottom-color: #183854;
   text-shadow: none;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -9308,9 +9299,9 @@ fieldset[disabled] .theme-default .btn-default.active {
 .theme-default .btn-primary:focus,
 .theme-default .btn-primary:active,
 .theme-default .btn-primary.active {
-  background: #9dc9dd;
+  background: #23537c;
   outline: none;
-  border-color: #77b4d0;
+  border-color: #183854;
   color: #ffffff;
 }
 .theme-default .btn-primary.disabled,
@@ -9328,7 +9319,7 @@ fieldset[disabled] .theme-default .btn-primary:active,
 .theme-default .btn-primary.disabled.active,
 .theme-default .btn-primary[disabled].active,
 fieldset[disabled] .theme-default .btn-primary.active {
-  background-color: #b0d4e3;
+  background-color: #286090;
 }
 .theme-default .btn-success {
   color: #ffffff;
@@ -9519,18 +9510,21 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   cursor: default;
   display: block;
   padding: 5px 12px;
-  border-bottom: 1px solid #eeeeee;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
+  border-bottom: 1px solid #e6e6e6;
   position: relative;
 }
 .theme-default .server-list li span i {
   margin-right: 8px;
 }
 .theme-default .server-list li span:hover {
-  background: #eeeeee;
-  color: #1a1a1a;
+  background: #f7f7f7;
+  color: #333333;
 }
 .theme-default .server-list li span:hover .loader {
-  background: #eeeeee;
+  background: #f7f7f7;
 }
 .theme-default .server-list li span .loader {
   position: absolute;
@@ -9573,7 +9567,7 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   position: absolute;
   right: 0;
   top: 0;
-  background: #ffffff;
+  background: #f5f5f5;
 }
 .theme-default .collection-query .collection-query-nav .right-btns .query-btn-list {
   margin: 0 10px 0 0;
@@ -9627,7 +9621,7 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   overflow-y: auto;
 }
 .theme-default .collection-query .collection-query-content .query-results .result {
-  border: 1px solid #ffffff;
+  border: 1px solid #333333;
   padding: 10px;
   position: relative;
   overflow: hidden;
@@ -9641,10 +9635,10 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   background: transparent;
   border: none;
   border-radius: 0;
-  color: #ffffff;
+  color: #333333;
 }
 .theme-default .collection-query .collection-query-content .query-results .result:hover {
-  border: 1px solid #ffffff;
+  border: 1px solid #808080;
 }
 .theme-default .collection-query .collection-query-content .query-results .result:hover .menu {
   top: -1px;
@@ -9660,8 +9654,8 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   top: -32px;
   right: -1px;
   border-top-right-radius: 3px;
-  border-top: 1px solid #ffffff;
-  border-right: 1px solid #ffffff;
+  border-top: 1px solid #333333;
+  border-right: 1px solid #333333;
   border-left: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
   list-style: none;
@@ -9706,11 +9700,11 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-default .collection-query .collection-query-content .query-results .list-view .result .result-body .string,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result .result-body .string {
-  color: #ffffff;
+  color: #333333;
 }
 .theme-default .collection-query .collection-query-content .query-results .list-view .result .result-body .result-row,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result .result-body .result-row {
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #666666;
 }
 .theme-default .collection-query .collection-query-content .query-results .list-view .result .result-body .result-row:hover,
 .theme-default .collection-query .collection-query-content .query-results .key-value-view .result .result-body .result-row:hover {
@@ -9871,19 +9865,33 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   width: 100%;
   overflow: hidden;
 }
-.theme-isotope-ui .app .splitter {
-  height: 100%;
-  width: 100%;
-  position: relative;
+.theme-isotope-ui .app.no-connections .sidebar-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: 60px;
 }
-.theme-isotope-ui .app .splitter .vsplitter {
-  background: none;
+.theme-isotope-ui .app.no-connections .content-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: calc(100%  -  60px);
+}
+.theme-isotope-ui .app.no-connections .content-wrapper .content {
+  padding-left: 10px;
 }
 .theme-isotope-ui .app .sidebar-wrapper {
   position: relative;
   left: 0;
   top: 0;
   height: 100%;
+  width: 25%;
   overflow-y: auto;
   padding-left: 60px;
 }
@@ -9896,6 +9904,16 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   background: #e6e6e6;
   border-right: 1px solid #ffffff;
 }
+.theme-isotope-ui .app .sidebar-wrapper .sidenav .logo {
+  padding: 10px 0 10px 8px;
+  margin: 0;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav .logo img {
+  height: 40px;
+}
+.theme-isotope-ui .app .sidebar-wrapper .sidenav .logo img:hover {
+  animation: fa-spin 1s infinite 2s linear;
+}
 .theme-isotope-ui .app .sidebar-wrapper .sidenav ul {
   margin: 0;
   padding: 0;
@@ -9905,6 +9923,9 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   height: 59px;
   padding: 20px;
   cursor: pointer;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
 }
 .theme-isotope-ui .app .sidebar-wrapper .sidenav ul li:hover {
   background: #d9d9d9;
@@ -9927,18 +9948,14 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   left: 10px;
   font-size: 12px;
 }
-.theme-isotope-ui .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
-  padding: 10px 0 10px 8px;
-  margin: 0;
-}
-.theme-isotope-ui .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo img {
-  height: 40px;
+.theme-isotope-ui .app .sidebar-wrapper .sidebar {
+  padding-top: 50px;
 }
 .theme-isotope-ui .app .content-wrapper {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
+  width: 75%;
   height: 100%;
   overflow-y: auto;
 }
@@ -10018,8 +10035,8 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   padding-left: 0;
   padding-right: 0;
   position: relative;
-  min-width: 15em;
-  max-width: 20em;
+  min-width: 12em;
+  max-width: 15em;
 }
 .theme-isotope-ui #settings .settings-sidebar ul {
   margin: 0;
@@ -10060,85 +10077,51 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-isotope-ui #connect {
-  position: relative;
-  padding-top: 15px;
-  height: 100%;
-}
-.theme-isotope-ui #connect .connect-sidebar {
-  padding-left: 0;
-  padding-right: 0;
-  position: relative;
-  min-width: 15em;
-  max-width: 20em;
-}
-.theme-isotope-ui #connect .connect-sidebar ul {
+.theme-isotope-ui #connect .modal-header h3 {
+  font-size: 18px;
   margin: 0;
-  padding: 0;
 }
-.theme-isotope-ui #connect .connect-sidebar ul li {
-  padding: 15px;
-  cursor: pointer;
-}
-.theme-isotope-ui #connect .connect-sidebar ul li:hover {
-  background: #1f2228;
-}
-.theme-isotope-ui #connect .connect-sidebar ul li.active {
-  background: #1f2228;
-}
-.theme-isotope-ui #connect .connect-sidebar ul li i {
-  margin-right: 10px;
-}
-.theme-isotope-ui #connect .connect-content {
-  border-left: 1px solid #1d2026;
-  height: 100%;
-  flex: 8.4;
-  flex-flow: column;
-  display: flex;
-  position: relative;
-  padding: 20px 15px;
-}
-.theme-isotope-ui #connect .connect-content .top-links {
+.theme-isotope-ui #connect .modal-body .top-links {
   padding: 5px 0 20px;
 }
-.theme-isotope-ui #connect .connect-content .top-links .user-info-note {
+.theme-isotope-ui #connect .modal-body .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-isotope-ui #connect .connect-content .top-links .add-link {
+.theme-isotope-ui #connect .modal-body .top-links .add-link {
   display: block;
 }
-.theme-isotope-ui #connect .connect-content .top-links .add-link i {
+.theme-isotope-ui #connect .modal-body .top-links .add-link i {
   color: #c3deea;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list {
-  top: -100%;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 15px;
+.theme-isotope-ui #connect-list {
+  padding-bottom: 15px;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li {
+.theme-isotope-ui #connect-list .connection-list {
+  margin-bottom: 25px;
+}
+.theme-isotope-ui #connect-list .connection-list li {
   border-top: 1px solid #e6e6e6;
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
   position: relative;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li:first-child {
+.theme-isotope-ui #connect-list .connection-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li:last-child {
+.theme-isotope-ui #connect-list .connection-list li:last-child {
   border-bottom: 1px solid #e6e6e6;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li.connected .name {
+.theme-isotope-ui #connect-list .connection-list li.active .name {
   padding-left: 40px;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
+.theme-isotope-ui #connect-list .connection-list li.active .name .icon-connected {
   left: 10px;
   color: #c3deea;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li a {
+.theme-isotope-ui #connect-list .connection-list li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -10150,13 +10133,13 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li a:hover {
+.theme-isotope-ui #connect-list .connection-list li a:hover {
   background: #e6e6e6;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li a.name {
+.theme-isotope-ui #connect-list .connection-list li a.name {
   display: block;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li a.name .icon-connected {
+.theme-isotope-ui #connect-list .connection-list li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -10165,30 +10148,35 @@ fieldset[disabled] .theme-default .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li .links {
+.theme-isotope-ui #connect-list .connection-list li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list ul li .links a {
+.theme-isotope-ui #connect-list .connection-list li .links a {
   float: left;
   display: inline-block;
 }
-.theme-isotope-ui #connect .connect-content .connect-server-list .user-info-note {
+.theme-isotope-ui #connect-list .user-info-note {
   padding: 20px 0;
 }
-.theme-isotope-ui #connect .connect-content .server-add {
-  padding: 0 0 35px;
+.theme-isotope-ui #connect-add {
+  padding-bottom: 15px;
 }
-.theme-isotope-ui #connect .connect-content .server-edit {
-  padding: 0 0 35px;
+.theme-isotope-ui #connect-add form {
+  margin-bottom: 25px;
 }
-.theme-isotope-ui #connect .connect-content .server-remove {
-  padding: 0 0 35px;
+.theme-isotope-ui #connect-edit {
+  padding-bottom: 15px;
 }
-.theme-isotope-ui #connect .modal-footer p {
-  padding: 0;
-  margin: 0;
+.theme-isotope-ui #connect-edit form {
+  margin-bottom: 25px;
+}
+.theme-isotope-ui #connect-remove {
+  padding-bottom: 15px;
+}
+.theme-isotope-ui #connect-remove .alert {
+  margin-bottom: 25px;
 }
 .theme-isotope-ui #collections {
   padding: 1px 0 0;
@@ -10298,7 +10286,7 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
@@ -10372,9 +10360,6 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 .theme-isotope-ui .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
-.theme-isotope-ui .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
-  padding: 0;
-}
 .theme-isotope-ui .ui-sortable-helper {
   background: #282c34;
   color: #caced7;
@@ -10420,7 +10405,7 @@ fieldset[disabled] .theme-default .btn-inverse.active {
 }
 .theme-isotope-ui .ui-sortable-helper a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
@@ -10721,6 +10706,9 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   cursor: default;
   display: block;
   padding: 5px 12px;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
   border-bottom: 1px solid transparent;
   position: relative;
 }
@@ -11073,19 +11061,33 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   width: 100%;
   overflow: hidden;
 }
-.theme-atom .app .splitter {
-  height: 100%;
-  width: 100%;
-  position: relative;
+.theme-atom .app.no-connections .sidebar-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: 60px;
 }
-.theme-atom .app .splitter .vsplitter {
-  background: none;
+.theme-atom .app.no-connections .content-wrapper {
+  -webkit-transition-property: 'width';
+  transition-property: 'width';
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+  width: calc(100%  -  60px);
+}
+.theme-atom .app.no-connections .content-wrapper .content {
+  padding-left: 10px;
 }
 .theme-atom .app .sidebar-wrapper {
   position: relative;
   left: 0;
   top: 0;
   height: 100%;
+  width: 25%;
   overflow-y: auto;
   padding-left: 60px;
 }
@@ -11098,6 +11100,16 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   background: #1b1c1e;
   border-right: 1px solid #111214;
 }
+.theme-atom .app .sidebar-wrapper .sidenav .logo {
+  padding: 10px 0 10px 8px;
+  margin: 0;
+}
+.theme-atom .app .sidebar-wrapper .sidenav .logo img {
+  height: 40px;
+}
+.theme-atom .app .sidebar-wrapper .sidenav .logo img:hover {
+  animation: fa-spin 1s infinite 2s linear;
+}
 .theme-atom .app .sidebar-wrapper .sidenav ul {
   margin: 0;
   padding: 0;
@@ -11107,6 +11119,9 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   height: 59px;
   padding: 20px;
   cursor: pointer;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
 }
 .theme-atom .app .sidebar-wrapper .sidenav ul li:hover {
   background: #0f1011;
@@ -11129,18 +11144,14 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   left: 10px;
   font-size: 12px;
 }
-.theme-atom .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo {
-  padding: 10px 0 10px 8px;
-  margin: 0;
-}
-.theme-atom .app .sidebar-wrapper .sidebar .sidebar-header .logo-wrap .logo img {
-  height: 40px;
+.theme-atom .app .sidebar-wrapper .sidebar {
+  padding-top: 50px;
 }
 .theme-atom .app .content-wrapper {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
+  width: 75%;
   height: 100%;
   overflow-y: auto;
 }
@@ -11220,8 +11231,8 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   padding-left: 0;
   padding-right: 0;
   position: relative;
-  min-width: 15em;
-  max-width: 20em;
+  min-width: 12em;
+  max-width: 15em;
 }
 .theme-atom #settings .settings-sidebar ul {
   margin: 0;
@@ -11262,85 +11273,51 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   padding: 4px;
   margin-right: 4px;
 }
-.theme-atom #connect {
-  position: relative;
-  padding-top: 15px;
-  height: 100%;
-}
-.theme-atom #connect .connect-sidebar {
-  padding-left: 0;
-  padding-right: 0;
-  position: relative;
-  min-width: 15em;
-  max-width: 20em;
-}
-.theme-atom #connect .connect-sidebar ul {
+.theme-atom #connect .modal-header h3 {
+  font-size: 18px;
   margin: 0;
-  padding: 0;
 }
-.theme-atom #connect .connect-sidebar ul li {
-  padding: 15px;
-  cursor: pointer;
-}
-.theme-atom #connect .connect-sidebar ul li:hover {
-  background: #131516;
-}
-.theme-atom #connect .connect-sidebar ul li.active {
-  background: #131516;
-}
-.theme-atom #connect .connect-sidebar ul li i {
-  margin-right: 10px;
-}
-.theme-atom #connect .connect-content {
-  border-left: 1px solid #111213;
-  height: 100%;
-  flex: 8.4;
-  flex-flow: column;
-  display: flex;
-  position: relative;
-  padding: 20px 15px;
-}
-.theme-atom #connect .connect-content .top-links {
+.theme-atom #connect .modal-body .top-links {
   padding: 5px 0 20px;
 }
-.theme-atom #connect .connect-content .top-links .user-info-note {
+.theme-atom #connect .modal-body .top-links .user-info-note {
   padding-top: 4px;
 }
-.theme-atom #connect .connect-content .top-links .add-link {
+.theme-atom #connect .modal-body .top-links .add-link {
   display: block;
 }
-.theme-atom #connect .connect-content .top-links .add-link i {
+.theme-atom #connect .modal-body .top-links .add-link i {
   color: #52a8ff;
 }
-.theme-atom #connect .connect-content .connect-server-list {
-  top: -100%;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 15px;
+.theme-atom #connect-list {
+  padding-bottom: 15px;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li {
+.theme-atom #connect-list .connection-list {
+  margin-bottom: 25px;
+}
+.theme-atom #connect-list .connection-list li {
   border-top: 1px solid #292d31;
   border-left: 1px solid #292d31;
   border-right: 1px solid #292d31;
   position: relative;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li:first-child {
+.theme-atom #connect-list .connection-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li:last-child {
+.theme-atom #connect-list .connection-list li:last-child {
   border-bottom: 1px solid #292d31;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li.connected .name {
+.theme-atom #connect-list .connection-list li.active .name {
   padding-left: 40px;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li.connected .name .icon-connected {
+.theme-atom #connect-list .connection-list li.active .name .icon-connected {
   left: 10px;
   color: #52a8ff;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li a {
+.theme-atom #connect-list .connection-list li a {
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -11352,13 +11329,13 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li a:hover {
+.theme-atom #connect-list .connection-list li a:hover {
   background: #292d31;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li a.name {
+.theme-atom #connect-list .connection-list li a.name {
   display: block;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li a.name .icon-connected {
+.theme-atom #connect-list .connection-list li a.name .icon-connected {
   position: absolute;
   top: 13px;
   left: -200px;
@@ -11367,30 +11344,35 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
   -o-transition: 0.2s ease;
   transition: 0.2s ease;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li .links {
+.theme-atom #connect-list .connection-list li .links {
   position: absolute;
   top: 0;
   right: 0;
 }
-.theme-atom #connect .connect-content .connect-server-list ul li .links a {
+.theme-atom #connect-list .connection-list li .links a {
   float: left;
   display: inline-block;
 }
-.theme-atom #connect .connect-content .connect-server-list .user-info-note {
+.theme-atom #connect-list .user-info-note {
   padding: 20px 0;
 }
-.theme-atom #connect .connect-content .server-add {
-  padding: 0 0 35px;
+.theme-atom #connect-add {
+  padding-bottom: 15px;
 }
-.theme-atom #connect .connect-content .server-edit {
-  padding: 0 0 35px;
+.theme-atom #connect-add form {
+  margin-bottom: 25px;
 }
-.theme-atom #connect .connect-content .server-remove {
-  padding: 0 0 35px;
+.theme-atom #connect-edit {
+  padding-bottom: 15px;
 }
-.theme-atom #connect .modal-footer p {
-  padding: 0;
-  margin: 0;
+.theme-atom #connect-edit form {
+  margin-bottom: 25px;
+}
+.theme-atom #connect-remove {
+  padding-bottom: 15px;
+}
+.theme-atom #connect-remove .alert {
+  margin-bottom: 25px;
 }
 .theme-atom #collections {
   padding: 1px 0 0;
@@ -11500,7 +11482,7 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .tab-view .tab-bar ul .tab a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
@@ -11574,9 +11556,6 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 .theme-atom .tab-view .tab-panes .tab-pane .tab-pane-inner.settings-tab-pane {
   padding: 0;
 }
-.theme-atom .tab-view .tab-panes .tab-pane .tab-pane-inner.connect-tab-pane {
-  padding: 0;
-}
 .theme-atom .ui-sortable-helper {
   background: #1d1f21;
   color: #ffffff;
@@ -11622,7 +11601,7 @@ fieldset[disabled] .theme-isotope-ui .btn-inverse.active {
 }
 .theme-atom .ui-sortable-helper a .tab-close {
   border-radius: 50%;
-  padding: 2.5px 4.5px 4.6px 4.3px;
+  padding: 2.5px 4.5px 5px 4.3px;
   margin-left: 10px;
   font-size: 10px;
   position: absolute;
@@ -11923,6 +11902,9 @@ fieldset[disabled] .theme-atom .btn-inverse.active {
   cursor: default;
   display: block;
   padding: 5px 12px;
+  -webkit-transition: 0.2s ease;
+  -o-transition: 0.2s ease;
+  transition: 0.2s ease;
   border-bottom: 1px solid transparent;
   position: relative;
 }
@@ -12313,14 +12295,19 @@ body.show-mobile-menu .mobile-menu {
   top: -10px;
   margin: 0;
 }
+.top-container #header .logo a:hover {
+  text-decoration: none;
+}
 .top-container #header .logo img {
   height: 50px;
 }
 .top-container #header .logo span {
-  position: absolute;
-  left: 0;
-  top: 0;
-  visibility: hidden;
+  color: white;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  position: relative;
+  top: -5px;
 }
 .top-container #header .main-nav .mobile-nav-btn {
   display: none;

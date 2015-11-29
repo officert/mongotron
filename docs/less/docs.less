@@ -96,14 +96,25 @@ body {
       position: relative;
       top: -10px;
       margin: 0;
+      a {
+        &:hover {
+          text-decoration: none;
+        }
+      }
       img {
         height: 50px;
       }
       span {
-        position: absolute;
-        left: 0;
-        top: 0;
-        visibility: hidden;
+        color: white;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: bold;
+        position: relative;
+
+        // left: 0;
+        top: -5px;
+
+        // visibility: hidden;
       }
     }
     .main-nav {
