@@ -39,6 +39,8 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.getById = function(id) {
+      if (!id) throw new Error('id is required');
+
       var tab = _.findWhere(TAB_CACHE, {
         id: id
       });
