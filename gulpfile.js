@@ -231,7 +231,6 @@ gulp.task('test-unit', () => {
 });
 
 gulp.task('test-unit-ui', (done) => {
-
   karma.start({
     configFile: __dirname + '/tests/ui/karma.conf.js',
     singleRun: true,

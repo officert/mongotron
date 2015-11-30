@@ -44,6 +44,7 @@ describe('services', function() {
           var foundTab = tabCache.getById(tab.id);
 
           expect(foundTab).toBeDefined();
+          expect(1).toEqual(2);
         });
       });
     });
