@@ -72,15 +72,17 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.remove = function(tab) {
+      if (!tab) throw new Error('tab is required');
+
       var index = TAB_CACHE.indexOf(tab);
 
       if (index >= 0) {
         _activatePrevious(index);
 
         TAB_CACHE.splice(index, 1);
-      }
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
 
       return TAB_CACHE;
     };
