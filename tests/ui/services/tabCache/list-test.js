@@ -1,6 +1,6 @@
 describe('services', function() {
   describe('tabCache', function() {
-    describe('getById', function() {
+    describe('list', function() {
       /* ------------------------------------------------------------
        * Test Suite Setup
        * ------------------------------------------------------------ */
@@ -21,29 +21,21 @@ describe('services', function() {
        * Tests
        * ------------------------------------------------------------ */
 
-      describe('when no id is passed', function() {
-        var id = null;
-
-        it('should throw an error', function() {
-          expect(function() {
-            tabCache.getById(id);
-          }).toThrow(new Error('id is required'));
-        });
-      });
-
-      describe('when id is passed', function() {
-        var tab;
-
+      describe('when nothing is passed', function() {
         beforeEach(function() {
-          tab = tabCache.add({
+          tabCache.add({
             type: tabCache.TYPES.QUERY
+          });
+          tabCache.add({
+            type: tabCache.TYPES.PAGE
           });
         });
 
-        it('should return the tab', function() {
-          var foundTab = tabCache.getById(tab.id);
+        it('should return tabs', function() {
+          var tabs = tabCache.list();
 
-          expect(foundTab).toBeDefined();
+          expect(tabs).toBeDefined();
+          expect(tabs.length).toEqual(2);
         });
       });
     });
