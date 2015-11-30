@@ -1,6 +1,6 @@
 describe('services', function() {
   describe('tabCache', function() {
-    describe('getById', function() {
+    describe('existsByName', function() {
       /* ------------------------------------------------------------
        * Test Suite Setup
        * ------------------------------------------------------------ */
@@ -21,30 +21,39 @@ describe('services', function() {
        * Tests
        * ------------------------------------------------------------ */
 
-      describe('when no id is passed', function() {
-        var id = null;
+      describe('when no name is passed', function() {
+        var name = null;
 
         it('should throw an error', function() {
           expect(function() {
-            tabCache.getById(id);
-          }).toThrow(new Error('id is required'));
+            tabCache.existsByName(name);
+          }).toThrow(new Error('name is required'));
         });
       });
 
-      describe('when id is passed', function() {
+      describe('when tab does not exist for name', function() {
+        it('should return false', function() {
+          var exists = tabCache.existsByName('foobar');
+
+          expect(exists).toEqual(false);
+        });
+      });
+
+      describe('when tab does exist for name', function() {
+        var tabName = 'Tab 1';
         var tab;
 
         beforeEach(function() {
           tab = tabCache.add({
-            type: tabCache.TYPES.QUERY,
-            name: 'Tab 1'
+            type: tabCache.TYPES.PAGE,
+            name: tabName
           });
         });
 
-        it('should return the tab', function() {
-          var foundTab = tabCache.getById(tab.id);
+        it('should return true', function() {
+          var exists = tabCache.existsByName(tabName);
 
-          expect(foundTab).toBeDefined();
+          expect(exists).toEqual(true);
         });
       });
     });

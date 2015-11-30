@@ -24,10 +24,12 @@ describe('services', function() {
       describe('when nothing is passed', function() {
         beforeEach(function() {
           tabCache.add({
-            type: tabCache.TYPES.QUERY
+            type: tabCache.TYPES.QUERY,
+            name: 'Tab 1'
           });
           tabCache.add({
-            type: tabCache.TYPES.PAGE
+            type: tabCache.TYPES.PAGE,
+            name: 'Tab 2'
           });
         });
 

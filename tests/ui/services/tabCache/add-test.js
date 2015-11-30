@@ -31,12 +31,25 @@ describe('services', function() {
         });
       });
 
+      describe('when no tab name is passed', function() {
+        var tab = {
+          name: null
+        };
+
+        it('should throw an error', function() {
+          expect(function() {
+            tabCache.add(tab);
+          }).toThrow(new Error('tab.name is required'));
+        });
+      });
+
       describe('when tab type is invalid', function() {
         var invalidType = 'FOOBAR';
         var tab;
 
         beforeEach(function() {
           tab = {
+            name: 'Tab 1',
             type: invalidType
           };
         });
@@ -54,7 +67,8 @@ describe('services', function() {
 
         beforeEach(function() {
           tab = {
-            type: tabCache.TYPES.PAGE
+            type: tabCache.TYPES.PAGE,
+            name: 'Tab 1'
           };
         });
 
@@ -72,7 +86,8 @@ describe('services', function() {
 
         beforeEach(function() {
           tab = {
-            type: tabCache.TYPES.QUERY
+            type: tabCache.TYPES.QUERY,
+            name: 'Tab 1'
           };
         });
 
@@ -89,7 +104,8 @@ describe('services', function() {
 
         beforeEach(function() {
           tab1 = tabCache.add({
-            type: tabCache.TYPES.QUERY
+            type: tabCache.TYPES.QUERY,
+            name: 'Tab 1'
           });
           tabCache.activateById(tab1.id);
 
@@ -98,7 +114,8 @@ describe('services', function() {
 
         it('should deactivate any other tabs and emit an event', function() {
           var newTab = tabCache.add({
-            type: tabCache.TYPES.QUERY
+            type: tabCache.TYPES.QUERY,
+            name: 'Tab 1'
           });
 
           newTab = tabCache.getById(newTab.id);

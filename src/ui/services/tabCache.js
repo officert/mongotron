@@ -22,6 +22,7 @@ angular.module('app').factory('tabCache', [
 
     TabCache.prototype.add = function(tab) {
       if (!tab) throw new Error('tab is required');
+      if (!tab.name) throw new Error('tab.name is required');
       if (!(tab.type in TAB_TYPES)) throw new Error(tab.type + ' is not a valid tab type');
 
       tab.id = uuid.v4();

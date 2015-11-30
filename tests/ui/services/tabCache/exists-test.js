@@ -44,7 +44,8 @@ describe('services', function() {
 
         beforeEach(function() {
           tab = tabCache.add({
-            type: tabCache.TYPES.PAGE
+            type: tabCache.TYPES.PAGE,
+            name: 'Tab 1'
           });
         });
 
@@ -52,7 +53,6 @@ describe('services', function() {
           var exists = tabCache.exists(tab);
 
           expect(exists).toEqual(true);
-          expect(1).toEqual(2);
         });
       });
     });
