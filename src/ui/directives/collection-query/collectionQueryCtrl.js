@@ -243,8 +243,6 @@ angular.module('app').controller('collectionQueryCtrl', [
       switch (type) {
         case QUERY_TYPES.UPDATE_MANY:
         case QUERY_TYPES.UPDATE_ONE:
-        case QUERY_TYPES.DELETE_ONE:
-        case QUERY_TYPES.DELETE_MANY:
           var matches = value.match(QUERY_WITH_OPTIONS_REGEX);
           if (matches && matches.length > 2) {
             var query = evalQueryValue(matches[1]);
@@ -268,6 +266,8 @@ angular.module('app').controller('collectionQueryCtrl', [
           // case QUERY_TYPES.FIND:
           // case QUERY_TYPES.INSERT_ONE:
           // case QUERY_TYPES.AGGREGATE:
+          // case QUERY_TYPES.DELETE_ONE:
+          // case QUERY_TYPES.DELETE_MANY:
           value = evalQueryValue(value);
 
           if (_.isError(value)) {
