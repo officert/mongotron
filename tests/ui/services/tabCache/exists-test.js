@@ -52,6 +52,7 @@ describe('services', function() {
           var exists = tabCache.exists(tab);
 
           expect(exists).toEqual(true);
+          expect(1).toEqual(2);
         });
       });
     });
