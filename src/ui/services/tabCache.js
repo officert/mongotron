@@ -53,12 +53,16 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.exists = function(tab) {
+      if (!tab) throw new Error('tab is required');
+
       var index = TAB_CACHE.indexOf(tab);
 
       return index >= 0 ? true : false;
     };
 
     TabCache.prototype.existsByName = function(name) {
+      if (!name) throw new Error('name is required');
+
       var tabs = _.where(TAB_CACHE, {
         name: name
       });
