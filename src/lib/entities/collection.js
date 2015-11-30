@@ -106,7 +106,6 @@ class Collection {
 
     return new Promise(function(resolve, reject) {
       if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
-      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
 
       _this._dbCollection.deleteOne({
         _id: objectId
