@@ -11,6 +11,7 @@ const _ = require('underscore');
 const childProcess = require('child_process');
 const karma = require('karma').server;
 const babel = require('gulp-babel');
+const electronPackager = require('electron-packager');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -35,7 +36,7 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'should',
   'sinon',
   'supertest'
-].join('|');
+];
 const RELEASE_IMAGE_ICON = __dirname + '/src/ui/images/logo_icon.icns';
 
 const LESSOPTIONS = {
@@ -87,37 +88,54 @@ gulp.task('jshint', () => {
 });
 
 gulp.task('release', ['pre-release'], (next) => {
-  var env = _.extend({}, process.env);
-  env.NODE_ENV = 'production';
+  electronPackager({
+    dir: '.',
+    name: appConfig.name,
+    out: appConfig.releasePath,
+    // platform: 'all',
+    // arch: 'all',
+    platform: 'darwin',
+    arch: 'x64',
+    version: '0.35.0',
+    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+      return '/node_modules/' + ignore + '($|/)';
+    }),
+    icon: RELEASE_IMAGE_ICON,
+    appPath: 'build/browser/main.js',
+    force: true
+  }, next);
 
-  var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
-    '.',
-    appConfig.name,
-    '--out',
-    appConfig.releasePath,
-    '--platform',
-    'darwin',
-    '--arch',
-    'x64',
-    '--version',
-    '0.35.0',
-    '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
-    '--icon',
-    RELEASE_IMAGE_ICON,
-    '--appPath',
-    'build/browser/main.js'
-  ], {
-    env: env
-  });
-
-  child.stdout.on('data', (data) => {
-    console.log('tail output: ' + data);
-  });
-
-  child.on('exit', (exitCode) => {
-    console.log('Child exited with code: ' + exitCode);
-    return next(exitCode === 1 ? new Error('Error running release task') : null);
-  });
+  // var env = _.extend({}, process.env);
+  // env.NODE_ENV = 'production';
+  //
+  // var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
+  //   '.',
+  //   appConfig.name,
+  //   '--out',
+  //   appConfig.releasePath,
+  //   '--platform',
+  //   'all',
+  //   '--arch',
+  //   'all',
+  //   '--version',
+  //   '0.35.0',
+  //   '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
+  //   '--icon',
+  //   RELEASE_IMAGE_ICON,
+  //   '--appPath',
+  //   'build/browser/main.js'
+  // ], {
+  //   env: env
+  // });
+  //
+  // child.stdout.on('data', (data) => {
+  //   console.log('tail output: ' + data);
+  // });
+  //
+  // child.on('exit', (exitCode) => {
+  //   console.log('Child exited with code: ' + exitCode);
+  //   return next(exitCode === 1 ? new Error('Error running release task') : null);
+  // });
 });
 
 gulp.task('pre-release', (next) => {
@@ -135,7 +153,7 @@ gulp.task('babel', () => {
     .pipe(babel({
       presets: ['es2015'],
       ignore: 'src/ui/vendor/*',
-      
+
     }))
     .pipe(gulp.dest(appConfig.buildPath));
 });
@@ -196,7 +214,7 @@ gulp.task('serve-site', ['site-css'], () => {
 gulp.task('default', ['serve']);
 
 gulp.task('test', (next) => {
-  runSequence('jshint', 'test-int', 'test-unit', () => {
+  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', () => {
     process.exit(0);
     next();
   });
