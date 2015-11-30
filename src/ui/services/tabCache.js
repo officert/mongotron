@@ -21,11 +21,8 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.add = function(tab) {
-      if (!tab) return;
-      if (!(tab.type in TAB_TYPES)) {
-        console.error(tab.type + ' is not a valid tab type');
-        return;
-      }
+      if (!tab) throw new Error('tab is required');
+      if (!(tab.type in TAB_TYPES)) throw new Error(tab.type + ' is not a valid tab type');
 
       tab.id = uuid.v4();
       tab.active = true;
@@ -38,7 +35,7 @@ angular.module('app').factory('tabCache', [
 
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
-      return TAB_CACHE;
+      return tab;
     };
 
     TabCache.prototype.getById = function(id) {
@@ -205,7 +202,6 @@ angular.module('app').factory('tabCache', [
       switch (type) {
         case TAB_TYPES.QUERY:
           className = '';
-          // className = 'fa fa-files-o';
           break;
         case TAB_TYPES.PAGE:
           className = 'fa fa-file-code-o';
