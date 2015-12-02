@@ -64,6 +64,7 @@
   <script src="./services/dialogService.js"></script>
   <script src="./services/tabCache.js"></script>
   <script src="./services/themeService.js"></script>
+  <script src="./controllers/appCtrl.js"></script>
   <script src="./components/connect/connectCtrl.js"></script>
   <script src="./components/connect/listConnections/listConnectionsCtrl.js"></script>
   <script src="./components/connect/addConnection/addConnectionCtrl.js"></script>
@@ -95,7 +96,7 @@
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div class="app" keybinding-context="mongotron-workspace" has-connections>
+  <div class="app" ng-controller="appCtrl" keybinding-context="mongotron-workspace" has-connections>
     <div class="sidebar-wrapper">
       <sidenav></sidenav>
       <sidebar></sidebar>
