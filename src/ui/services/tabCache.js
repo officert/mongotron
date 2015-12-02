@@ -196,9 +196,9 @@ angular.module('app').factory('tabCache', [
         var nextTab = (index === (TAB_CACHE.length - 1)) ? TAB_CACHE[0] : TAB_CACHE[index + 1];
         nextTab.active = true;
         activeTab.active = false;
-      }
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     TabCache.prototype.activateByName = function(name) {
