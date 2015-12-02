@@ -6,7 +6,7 @@ angular.module('app').directive('hasConnections', [
       restrict: 'A',
       link: function(scope, element) {
         element.addClass('no-connections');
-        
+
         connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
           if (updatedCache && updatedCache.length) {
             element.removeClass('no-connections');

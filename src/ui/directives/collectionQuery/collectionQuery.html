@@ -54,6 +54,7 @@
           Your search did not return any results.
         </div>
         <div ng-show="!loading && results.length">
+          <collection-query-results-view type="list" results="results"></collection-query-results-view>
           <!-- List View -->
           <div class="list-view clearfix" ng-if="currentView === VIEWS.LIST">
             <div class="result" ng-repeat="result in results">
