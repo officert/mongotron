@@ -7,7 +7,8 @@ angular.module('app').controller('appCtrl', [
   '$log',
   'modalService',
   'tabCache',
-  function($scope, $log, modalService, tabCache) {
+  'navUtils',
+  function($scope, $log, modalService, tabCache, navUtils) {
     const pageTitle = 'Mongotron';
 
     $scope.setTitle = setTitle;
@@ -40,45 +41,19 @@ angular.module('app').controller('appCtrl', [
     function showConnections(page, $event) {
       if ($event) $event.preventDefault();
 
-      modalService.openConnectionManager(page)
-        .result
-        .then(function() {
-          $scope.setTitle(pageTitle);
-        });
+      navUtils.showConnections(page);
     }
 
     function showSettings($event) {
       if ($event) $event.preventDefault();
 
-      var settingsTabName = 'Settings';
-
-      if (!tabCache.existsByName(settingsTabName)) {
-        tabCache.add({
-          type: tabCache.TYPES.PAGE,
-          iconClassName: 'fa fa-cog',
-          name: settingsTabName,
-          src: __dirname + '/components/settings/settings.html'
-        });
-      } else {
-        tabCache.activateByName(settingsTabName);
-      }
+      navUtils.showSettings();
     }
 
     function showAbout($event) {
       if ($event) $event.preventDefault();
 
-      var aboutTabName = 'About';
-
-      if (!tabCache.existsByName(aboutTabName)) {
-        tabCache.add({
-          type: tabCache.TYPES.PAGE,
-          iconClassName: 'fa fa-info-circle',
-          name: aboutTabName,
-          src: __dirname + '/components/about/about.html'
-        });
-      } else {
-        tabCache.activateByName(aboutTabName);
-      }
+      navUtils.showAbout();
     }
 
     function setTitle(title) {

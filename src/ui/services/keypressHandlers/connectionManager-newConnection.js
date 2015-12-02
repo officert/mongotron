@@ -1,9 +1,9 @@
 angular.module('app').run([
   'keypressService',
-  '$rootScope',
-  function(keypressService, $rootScope) {
+  'navUtils',
+  function(keypressService, navUtils) {
     keypressService.registerCommandHandler('connection-manager:new-connection', function() {
-      $rootScope.showConnections();
+      navUtils.showConnections();
     });
   }
 ]);
