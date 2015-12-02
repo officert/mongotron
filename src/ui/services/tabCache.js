@@ -167,12 +167,10 @@ angular.module('app').factory('tabCache', [
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
-    TabCache.prototype.activatePrevious = function(tabIndex) {
-      if (tabIndex === null || tabIndex === undefined) throw new Error('tabIndex is required');
-
+    TabCache.prototype.activatePrevious = function() {
       if (TAB_CACHE.length === 1) return;
 
-      var activeTab = index ? TAB_CACHE[tabIndex] : _.findWhere(TAB_CACHE, {
+      var activeTab = _.findWhere(TAB_CACHE, {
         active: true
       });
 
