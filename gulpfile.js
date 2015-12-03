@@ -12,6 +12,7 @@ const childProcess = require('child_process');
 const karma = require('karma').server;
 const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
+const symlink = require('gulp-symlink');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -158,28 +159,18 @@ gulp.task('babel', () => {
     .pipe(gulp.dest(appConfig.buildPath));
 });
 
-gulp.task('prod-sym-links', (next) => {
-
-  childProcess.exec('make createProductionSymLinks', (err, stdout, stderr) => {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (err !== null) {
-      console.log('exec error: ' + err);
-    }
-
-    return next(err);
-  });
+gulp.task('prod-sym-links', () => {
+  return gulp.src(['build/', 'build/lib/'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
+      force: true
+    }));
 });
 
 gulp.task('dev-sym-links', () => {
-
-  childProcess.exec('make createDevelopmentSymLinks', (error, stdout, stderr) => {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-  });
+  return gulp.src(['src/', 'src/lib/', 'tests/'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
+      force: true
+    }));
 });
 
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);

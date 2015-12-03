@@ -6,8 +6,6 @@ A Mongo DB GUI built using Electron, and Angular Js.
 
 ![screenshot](https://github.com/officert/mongotron/blob/master/docs/images/screenshot.png)
 
-Download a VERY initial release <a href="https://s3.amazonaws.com/mongotron/releases/mongotron-0.1.0.zip" target="_blank">here</a>.
-
 ## Development
 
 ### Getting Started

@@ -26,6 +26,7 @@
     "gulp-jshint": "1.8.4",
     "gulp-less": "1.3.6",
     "gulp-spawn-mocha": "2.2.1",
+    "gulp-symlink": "2.1.3",
     "gulp-task-list": "0.0.1",
     "jshint-stylish": "0.4.0",
     "karma": "0.12.24",
@@ -43,7 +44,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "postinstall": "make postinstall"
+    "postinstall": "gulp dev-sym-links"
   },
   "repository": {
     "type": "git",
