@@ -1,14 +1,18 @@
 # <a href="http://mongotron.io/" target="_blank">Mongotron</a>
 
+[![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
+
 A Mongo DB GUI built using Electron, and Angular Js.
 
-[![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
+---
 
 ![screenshot](https://github.com/officert/mongotron/blob/master/docs/images/screenshot.png)
 
-## Development
+## Table of Contents
 
-### Getting Started
+* [Quick start](#quick-start)
+
+### Quick Start
 
 1. Clone the repo
 2. Install dependencies
