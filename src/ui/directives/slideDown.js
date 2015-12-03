@@ -1,17 +1,16 @@
-angular.module('app').animation('.slide', [
-  function() {
-    var NG_HIDE_CLASS = 'ng-hide';
-    return {
-      beforeAddClass: function(element, className, done) {
-        if (className === NG_HIDE_CLASS) {
-          element.slideUp(150, done);
-        }
-      },
-      removeClass: function(element, className, done) {
-        if (className === NG_HIDE_CLASS) {
-          element.hide().slideDown(150, done);
-        }
-      }
-    };
-  }
-]);
+// angular.module('app').animation('.slide', [
+//   function() {
+//     return {
+//       beforeAddClass: function(element, className, done) {
+//         if (className === 'open') {
+//           element.slideUp(150, done);
+//         }
+//       },
+//       removeClass: function(element, className, done) {
+//         if (className === 'open') {
+//           element.hide().slideDown(150, done);
+//         }
+//       }
+//     };
+//   }
+// ]);

@@ -34,7 +34,7 @@
 
       </span>
     </span>
-    <div class="result-body slide clearfix" ng-show="result.isOpen">
+    <div class="result-body slide clearfix" ng-class="{ 'open' : result.isOpen }">
       <div class="result-row clearfix" ng-repeat="keyvalue in result">
         <span class="result-cell col-sm-3 key">
           <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
