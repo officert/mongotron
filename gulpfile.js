@@ -11,7 +11,7 @@ const _ = require('underscore');
 const childProcess = require('child_process');
 const karma = require('karma').server;
 const babel = require('gulp-babel');
-var symlink = require('gulp-symlink');
+const symlink = require('gulp-symlink');
 
 
 const appConfig = require('./src/config/appConfig');
@@ -144,12 +144,16 @@ gulp.task('babel', () => {
 
 gulp.task('prod-sym-links', () => {
   return gulp.src(['build/', 'build/lib/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib'], {force: true}));
+    .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
+      force: true
+    }));
 });
 
 gulp.task('dev-sym-links', () => {
   return gulp.src(['src/', 'src/lib/', 'tests/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {force: true}));
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
+      force: true
+    }));
 });
 
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);
