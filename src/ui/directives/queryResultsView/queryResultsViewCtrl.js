@@ -1,10 +1,10 @@
-angular.module('app').controller('collectionQueryResultsViewCtrl', [
+angular.module('app').controller('queryResultsViewCtrl', [
   '$scope',
   function($scope) {
     const mongoUtils = require('src/lib/utils/mongoUtils');
     $scope.getPropertyTypeIcon = _getPropertyTypeIcons;
 
-    if (!$scope.type) throw new Error('collection query results view - no type passed in scope');
+    if (!$scope.type) throw new Error('query results view - no type passed in scope');
     $scope.type = $scope.type.toLowerCase();
 
     $scope.keyValueResults = [];
@@ -18,8 +18,8 @@ angular.module('app').controller('collectionQueryResultsViewCtrl', [
     });
 
     function _getViewSrcByType(type) {
-      var listViewSrc = __dirname + '/directives/collectionQueryResultsView/views/listView.html';
-      var keyvalueViewSrc = __dirname + '/directives/collectionQueryResultsView/views/keyvalueView.html';
+      var listViewSrc = __dirname + '/directives/queryResultsView/views/listView.html';
+      var keyvalueViewSrc = __dirname + '/directives/queryResultsView/views/keyvalueView.html';
 
       var src;
 

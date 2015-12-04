@@ -1,4 +1,4 @@
-angular.module('app').controller('collectionQueryCtrl', [
+angular.module('app').controller('queryCtrl', [
   '$scope',
   '$timeout',
   '$rootScope',

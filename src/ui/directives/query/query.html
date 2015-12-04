@@ -1,5 +1,5 @@
-<div class="collection-query">
-  <div class="collection-query-nav clearfix">
+<div class="query">
+  <div class="query-nav clearfix">
     <div class="collection-info pull-left">
       <ul>
         <li>
@@ -37,7 +37,7 @@
       </div>
     </div>
   </div>
-  <div class="collection-query-content">
+  <div class="query-content">
     <form class="query-form" name="query-form" novalidate>
       <div class="query-input">
         <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" has-focus="editorHasFocus" ng-model="form.searchQuery">
@@ -54,11 +54,11 @@
           Your search did not return any results.
         </div>
         <div ng-show="!loading && results.length">
-          <div class="collection-query-results" ng-show="currentView === VIEWS.LIST">
-            <collection-query-results-view type="'list'" results="results" delete-result="deleteResult"></collection-query-results-view>
+          <div class="query-results" ng-show="currentView === VIEWS.LIST">
+            <query-results-view type="'list'" results="results" delete-result="deleteResult"></query-results-view>
           </div>
-          <div class="collection-query-results" ng-show="currentView === VIEWS.KEYVALUE">
-            <collection-query-results-view type="'keyvalue'" results="results" delete-result="deleteResult"></collection-query-results-view>
+          <div class="query-results" ng-show="currentView === VIEWS.KEYVALUE">
+            <query-results-view type="'keyvalue'" results="results" delete-result="deleteResult"></query-results-view>
           </div>
         </div>
       </div>
