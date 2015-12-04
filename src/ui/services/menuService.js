@@ -5,7 +5,8 @@ angular.module('app').factory('menuService', [
   '$timeout',
   'dialogService',
   'tabCache',
-  function($window, $rootScope, $timeout, dialogService, tabCache) {
+  'navUtils',
+  function($window, $rootScope, $timeout, dialogService, tabCache, navUtils) {
     const ipcRenderer = require('electron').ipcRenderer;
     const shell = require('shell');
     const remote = require('remote');
@@ -40,7 +41,7 @@ angular.module('app').factory('menuService', [
         label: 'About ' + appConfig.name,
         click: function() {
           $timeout(function() {
-            $rootScope.showAbout();
+            navUtils.showAbout();
           });
         }
       }, {
@@ -50,7 +51,7 @@ angular.module('app').factory('menuService', [
         accelerator: 'CmdOrCtrl+,',
         click: function() {
           $timeout(function() {
-            $rootScope.showSettings();
+            navUtils.showSettings();
           });
         }
       }, {
@@ -90,7 +91,7 @@ angular.module('app').factory('menuService', [
         accelerator: 'CmdOrCtrl+O',
         click: function() {
           $timeout(function() {
-            $rootScope.showConnections();
+            navUtils.showConnections();
           });
         }
       }, {

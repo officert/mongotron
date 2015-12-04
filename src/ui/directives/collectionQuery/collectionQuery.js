@@ -3,7 +3,7 @@ angular.module('app').directive('collectionQuery', [
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: __dirname + '/directives/collection-query/collectionQuery.html',
+      templateUrl: __dirname + '/directives/collectionQuery/collectionQuery.html',
       controller: 'collectionQueryCtrl',
       scope: {
         collection: '='

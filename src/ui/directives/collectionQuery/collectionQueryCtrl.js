@@ -6,7 +6,6 @@ angular.module('app').controller('collectionQueryCtrl', [
   'modalService',
   '$window',
   function($scope, $timeout, $rootScope, alertService, modalService, $window) {
-    const mongoUtils = require('src/lib/utils/mongoUtils');
     const logger = require('lib/modules/logger');
     const ObjectId = require('mongodb').ObjectId;
 
@@ -47,10 +46,10 @@ angular.module('app').controller('collectionQueryCtrl', [
     };
 
     $scope.VIEWS = {
-      RAW: 'RAW',
+      RAW: 'LIST',
       KEYVALUE: 'KEYVALUE'
     };
-    $scope.currentView = $scope.VIEWS.RAW;
+    $scope.currentView = $scope.VIEWS.LIST;
 
     $scope.getPropertyTypeIcon = function(propertyType) {
       var icon;
@@ -180,23 +179,6 @@ angular.module('app').controller('collectionQueryCtrl', [
             if (!results) return;
 
             $scope.results = results;
-
-            $scope.keyValueResults = results.map(function(result) {
-              var props = [];
-              props._id = result._id;
-
-              for (var key in result) {
-                //TODO: if it's a nested object then recurse and generate key/value for all of it's props
-                props.push({
-                  _id: result[key] ? result[key]._id : result[key],
-                  key: key,
-                  value: result[key],
-                  type: getPropertyType(result[key])
-                });
-              }
-
-              return props;
-            });
           });
         })
         .catch(function(err) {
@@ -243,8 +225,6 @@ angular.module('app').controller('collectionQueryCtrl', [
       switch (type) {
         case QUERY_TYPES.UPDATE_MANY:
         case QUERY_TYPES.UPDATE_ONE:
-        case QUERY_TYPES.DELETE_ONE:
-        case QUERY_TYPES.DELETE_MANY:
           var matches = value.match(QUERY_WITH_OPTIONS_REGEX);
           if (matches && matches.length > 2) {
             var query = evalQueryValue(matches[1]);
@@ -268,6 +248,8 @@ angular.module('app').controller('collectionQueryCtrl', [
           // case QUERY_TYPES.FIND:
           // case QUERY_TYPES.INSERT_ONE:
           // case QUERY_TYPES.AGGREGATE:
+          // case QUERY_TYPES.DELETE_ONE:
+          // case QUERY_TYPES.DELETE_MANY:
           value = evalQueryValue(value);
 
           if (_.isError(value)) {
@@ -370,15 +352,6 @@ angular.module('app').controller('collectionQueryCtrl', [
 
     function insertOneQuery(doc, options) {
       return $scope.collection.insertOne(doc, options);
-    }
-
-    function getPropertyType(property) {
-      if (_.isNumber(property)) return 'number';
-      if (_.isString(property)) return 'string';
-      if (_.isArray(property)) return 'array';
-      if (_.isDate(property)) return 'date';
-      if (_.isBoolean(property)) return 'boolean';
-      if (mongoUtils.isObjectId(property)) return 'objectId';
     }
   }
 ]);

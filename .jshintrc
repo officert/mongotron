@@ -23,7 +23,9 @@
     "alert": true,
     "inject": true,
     "expect": true,
-    "window": true
+    "window": true,
+    "should": true,
+    "spyOn": true
   },
   "camelcase": true,
   "bitwise": true,
