@@ -85,7 +85,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.results);
+      modalService.openQueryResultsExport($scope.results, $scope.collection);
     };
 
     $scope.runQuery = function runQuery() {

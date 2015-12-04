@@ -4,12 +4,20 @@
     <i class="close fa fa-plus rotate-45" ng-click="close()"></i>
   </div>
   <div class="modal-body">
-    <query-results-export results="results"></query-results-export>
+    <query-results-export results="results" handle="queryResultsExportHandle"></query-results-export>
   </div>
   <div class="modal-footer clearfix">
+    <div class="pull-left">
+      <button class="btn btn-default" type="button" ng-click="saveConfig()">
+        Save
+      </button>
+    </div>
     <div class="pull-right">
       <button class="btn btn-default" type="button" ng-click="close()">
         Cancel
+      </button>
+      <button class="btn btn-primary" type="button" ng-click="export()">
+        Export
       </button>
     </div>
   </div>

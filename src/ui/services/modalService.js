@@ -40,13 +40,16 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(results) {
+    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(results, collection) {
       return openModal({
         templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
         controller: 'queryResultsExportModalCtrl',
         resolve: {
           results: [function() {
             return results;
+          }],
+          collection: [function() {
+            return collection;
           }]
         },
         size: 'lg'

@@ -1,2 +1,21 @@
-<div class="query-export">
+<div class="query-results-export">
+  <div class="export-info clearfix">
+    <ul class="pull-left">
+      <li>
+        Exporting {{ results.length }} results
+      </li>
+    </ul>
+    <div class="pull-right">
+      <button class="btn btn-default">Use an existing export config</button>
+    </div>
+  </div>
+  <div class="key-value-pairs clearfix">
+    <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
+      <input class="form-control" type="text" ng-modal="keyValuePair.key">
+      <input class="form-control" type="text" ng-modal="keyValuePair.value">
+    </div>
+  </div>
+  <button class="btn btn-primary add-key-value-pair" ng-click="addColumn()">
+    Add Property
+  </button>
 </div>
