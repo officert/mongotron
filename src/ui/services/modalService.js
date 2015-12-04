@@ -4,7 +4,7 @@ angular.module('app').service('modalService', [
   function($uibModal, $uibModalStack) {
     function ModalService() {}
 
-    ModalService.prototype.openConnectionManager = function(page) {
+    ModalService.prototype.openConnectionManager = function openConnectionManager(page) {
       return openModal({
         templateUrl: __dirname + '/components/connect/connect.html',
         controller: 'connectCtrl',
@@ -16,7 +16,7 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openAddDatabase = function(connection) {
+    ModalService.prototype.openAddDatabase = function openAddDatabase(connection) {
       return openModal({
         templateUrl: __dirname + '/components/addDatabase/addDatabase.html',
         controller: 'addDatabaseCtrl',
@@ -28,7 +28,7 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openAddCollection = function(database) {
+    ModalService.prototype.openAddCollection = function openAddCollection(database) {
       return openModal({
         templateUrl: __dirname + '/components/addCollection/addCollection.html',
         controller: 'addCollectionCtrl',
@@ -37,6 +37,19 @@ angular.module('app').service('modalService', [
             return database;
           }]
         }
+      });
+    };
+
+    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(results) {
+      return openModal({
+        templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
+        controller: 'queryResultsExportModalCtrl',
+        resolve: {
+          results: [function() {
+            return results;
+          }]
+        },
+        size: 'lg'
       });
     };
 
@@ -62,7 +75,8 @@ angular.module('app').service('modalService', [
               $modalInstance.dismiss('cancel');
             };
           }
-        ]
+        ],
+        size: options.size
       });
     };
 
