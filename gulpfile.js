@@ -228,7 +228,6 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/vendor/toastr/toastr.min.js',
       '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
       '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
-      '../../src/ui/vendor/console-polyfill/index.js',
       '../../src/ui/vendor/angular/angular.js',
       '../../src/ui/vendor/angular-ui-sortable/sortable.js',
       '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
