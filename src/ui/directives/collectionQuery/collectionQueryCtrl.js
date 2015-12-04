@@ -51,33 +51,6 @@ angular.module('app').controller('collectionQueryCtrl', [
     };
     $scope.currentView = $scope.VIEWS.LIST;
 
-    $scope.getPropertyTypeIcon = function(propertyType) {
-      var icon;
-
-      switch (propertyType) {
-        case 'number':
-          icon = '';
-          break;
-        case 'string':
-          icon = 'fa-quote-left';
-          break;
-        case 'boolean':
-          icon = 'fa-calendar';
-          break;
-        case 'date':
-          icon = 'fa-calendar';
-          break;
-        case 'array':
-          icon = 'fa-calendar';
-          break;
-        case 'objectId':
-          icon = 'fa-cog';
-          break;
-      }
-
-      return icon;
-    };
-
     $scope.deleteResult = function(result) {
       if (!result) return;
 
