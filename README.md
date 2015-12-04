@@ -22,11 +22,7 @@ npm install
 ```shell
 bower install
 ```
-3. Create symlinks
-```shell
-make postinstall
-```
-4. Start the app
+3. Start the app
 ```shell
 gulp serve
 ```
