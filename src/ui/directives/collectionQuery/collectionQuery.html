@@ -55,10 +55,10 @@
         </div>
         <div ng-show="!loading && results.length">
           <div class="collection-query-results" ng-show="currentView === VIEWS.LIST">
-            <collection-query-results-view type="'list'" results="results"></collection-query-results-view>
+            <collection-query-results-view type="'list'" results="results" delete-result="deleteResult"></collection-query-results-view>
           </div>
           <div class="collection-query-results" ng-show="currentView === VIEWS.KEYVALUE">
-            <collection-query-results-view type="'keyvalue'" results="results"></collection-query-results-view>
+            <collection-query-results-view type="'keyvalue'" results="results" delete-result="deleteResult"></collection-query-results-view>
           </div>
         </div>
       </div>

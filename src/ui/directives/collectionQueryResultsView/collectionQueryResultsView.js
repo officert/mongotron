@@ -7,7 +7,8 @@ angular.module('app').directive('collectionQueryResultsView', [
       controller: 'collectionQueryResultsViewCtrl',
       scope: {
         type: '=',
-        results: '='
+        results: '=',
+        deleteResult: '='
       }
     };
   }
