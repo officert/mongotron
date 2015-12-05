@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').service('modalService', [
   '$uibModal',
   '$uibModalStack',
@@ -40,7 +42,7 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(results, collection) {
+    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(results, collection, query) {
       return openModal({
         templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
         controller: 'queryResultsExportModalCtrl',
@@ -50,6 +52,9 @@ angular.module('app').service('modalService', [
           }],
           collection: [function() {
             return collection;
+          }],
+          query: [function() {
+            return query;
           }]
         },
         size: 'lg'
