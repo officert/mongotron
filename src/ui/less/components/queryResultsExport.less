@@ -1,5 +1,6 @@
 .query-results-export {
-  .export-info {
+  .export-nav {
+    height: 50px;
     position: relative;
     border-bottom: 1px solid darken(@theme-query-result-export-border, 18%);
     padding-bottom: 15px;
@@ -12,9 +13,29 @@
       width: 100%;
       background: lighten(@theme-modal-content-bg, 6%);
     }
-    ul {
-      margin: 0;
-      padding: 0;
+    .right-btns {
+      position: absolute;
+      right: 0;
+      top: 0;
+      .export-btn-list {
+        margin: 0 10px 0 0;
+        padding: 0;
+        .form-control {
+          display: inline-block;
+          min-width: 60px;
+          margin-right: 5px;
+        }
+        .btn {
+          display: inline-block;
+          border-radius: @border-radius-base;
+          .number-input {
+            width: 50px;
+          }
+          &.active {
+
+          }
+        }
+      }
     }
   }
   .export-progress {

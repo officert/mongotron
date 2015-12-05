@@ -1,19 +1,22 @@
 <div class="query-results-export">
-  <div class="export-info clearfix">
+  <div class="export-nav clearfix">
     <div class="border-line"></div>
-    <!-- <ul class="pull-left">
-      <li>
-        Exporting {{ results.length }} results
-      </li>
-    </ul> -->
-    <div class="pull-right">
-      <input class="form-control" type="text" ng-model="limit">
-      <button class="btn btn-default" ng-click="handle.import()">Import Settings</button>
+    <div class="right-btns">
+      <div class="export-btn-list btn-group">
+        <input class="number-input form-control pull-left" type="number" ng-model="limit" placeholder="Limit" auto-grow-input>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm" ng-click="handle.import()">
+          <i class="fa fa-external-link-square rotate-90"></i> Import Settings
+        </button>
+        <button class="btn btn-default btn-sm" ng-click="handle.export()" ng-disabled="!keyValuePairs.length">
+          <i class="fa fa-external-link-square"></i> Export Settings
+        </button>
+      </div>
     </div>
   </div>
   <div class="export-progress progress" ng-show="loading">
     <div class="progress-bar progress-bar-info progress-bar-striped active" ng-style="{ width : '100%' }">
-      <span class="sr-only">40% Complete (success)</span>
     </div>
   </div>
   <div class="key-value-pairs clearfix" ng-hide="loading">

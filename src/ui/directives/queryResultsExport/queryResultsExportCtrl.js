@@ -22,6 +22,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
     $scope.handle.export = _export;
     $scope.handle.import = _importExportConfig;
     $scope.handle.saveConfig = _saveExportConfig;
+    $scope.handle.keyValuePairs = $scope.keyValuePairs;
 
     $scope.addColumn = function() {
       $scope.keyValuePairs.push({
@@ -119,6 +120,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
       dialogService.showOpenDialog()
         .then((paths) => {
           if (!paths || !paths.length) return;
+
+          $scope.keyValuePairs.length = 0;
 
           var parser = csv.parse();
 

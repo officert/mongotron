@@ -7,16 +7,11 @@
     <query-results-export query="query" collection="collection" handle="queryResultsExportHandle"></query-results-export>
   </div>
   <div class="modal-footer clearfix">
-    <div class="pull-left">
-      <button class="btn btn-default" type="button" ng-click="saveConfig()">
-        Save Settings
-      </button>
-    </div>
     <div class="pull-right">
       <button class="btn btn-default" type="button" ng-click="close()">
         Cancel
       </button>
-      <button class="btn btn-primary" type="button" ng-click="export()">
+      <button class="btn btn-primary" type="button" ng-click="export()" ng-disabled="!queryResultsExportHandle.keyValuePairs.length">
         Export
       </button>
     </div>
