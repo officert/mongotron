@@ -8,8 +8,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
   'alertService',
   function($scope, dialogService, $log, $timeout, alertService) {
     if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
-    if (!$scope.results) throw new Error('queryResultsExportCtrl - results is required on scope');
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
+    $scope.limit = $scope.limit || 50;
 
     const fs = require('fs');
     const csv = require('csv');
@@ -55,28 +55,29 @@ angular.module('app').controller('queryResultsExportCtrl', [
           path = _fixExportCsvPath(path);
 
           $timeout(() => {
-            $scope.exporting = true;
+            $scope.loading = true;
 
             $scope.collection.find($scope.query, {
-                stream: true
+                stream: true,
+                limit: $scope.limit
               })
               .then((stream) => {
                 stream
                   .pipe(new CsvStream(nameProps))
                   .on('error', (error) => {
-                    $scope.exporting = false;
+                    $scope.loading = false;
 
                     $log.error(error);
                   })
                   .pipe(fs.createWriteStream(path))
                   .on('error', (error) => {
-                    $scope.exporting = false;
+                    $scope.loading = false;
 
                     $log.error(error);
                   })
                   .on('finish', () => {
                     $timeout(() => {
-                      $scope.exporting = false;
+                      $scope.loading = false;
                       alertService.success('Finished exporting');
                     });
                   });
@@ -110,11 +111,11 @@ angular.module('app').controller('queryResultsExportCtrl', [
           });
 
           $timeout(() => {
-            $scope.exporting = true;
+            $scope.loading = true;
 
             fs.writeFile(path, data, (err) => {
               $timeout(() => {
-                $scope.exporting = false;
+                $scope.loading = false;
 
                 if (err) {
                   $log.error(err);
@@ -140,7 +141,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           fs.createReadStream(paths[0])
             .on('error', (error) => {
-              $scope.exporting = false;
+              $scope.loading = false;
 
               $log.error(error);
             })
@@ -154,13 +155,13 @@ angular.module('app').controller('queryResultsExportCtrl', [
               console.log(chunk);
             })
             .on('error', (error) => {
-              $scope.exporting = false;
+              $scope.loading = false;
 
               $log.error(error);
             })
             .on('finish', () => {
               $timeout(() => {
-                $scope.exporting = false;
+                $scope.loading = false;
 
                 alertService.success('Export settings imported');
               });

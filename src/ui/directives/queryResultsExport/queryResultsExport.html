@@ -1,12 +1,13 @@
 <div class="query-results-export">
   <div class="export-info clearfix">
     <div class="border-line"></div>
-    <ul class="pull-left">
+    <!-- <ul class="pull-left">
       <li>
         Exporting {{ results.length }} results
       </li>
-    </ul>
+    </ul> -->
     <div class="pull-right">
+      <input class="form-control" type="text" ng-model="limit">
       <button class="btn btn-default" ng-click="handle.import()">Import config</button>
     </div>
   </div>
