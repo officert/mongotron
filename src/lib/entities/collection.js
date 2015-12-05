@@ -70,7 +70,7 @@ class Collection {
 
       if (options.skip) dbQuery.skip(Number(options.skip));
 
-      dbQuery.limit(options.limit ? options.limit : DEFAULT_PAGE_SIZE);
+      dbQuery.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
 
       if (stream === true) {
         return resolve(dbQuery.stream());
