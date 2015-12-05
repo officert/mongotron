@@ -1,0 +1,85 @@
+/*
+ * Query
+ */
+.query {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .query-nav {
+    height: 50px;
+    position: relative;
+    .collection-info {
+      margin: 0;
+      padding: 0;
+      li {
+        margin: 0;
+        padding: 0;
+        float: left;
+        margin-right: 15px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    .right-btns {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: @theme-tab-pane-bg;
+      .query-btn-list {
+        margin: 0 10px 0 0;
+        padding: 0;
+        .form-control {
+          display: inline-block;
+          min-width: 60px;
+          margin-right: 5px;
+          background: darken(@theme-bg, 20%);
+          border-color: lighten(@theme-bg, 10%);
+          color: @theme-text-color;
+        }
+        .btn {
+          display: inline-block;
+          border-radius: @border-radius-base;
+          .number-input {
+            width: 50px;
+          }
+          &.active {
+
+          }
+        }
+      }
+    }
+  }
+  .query-content {
+    height: calc(~'100% - 50px');
+    overflow: auto;
+    .query-error {
+      margin-top: 15px;
+    }
+    .query-form {
+      max-height: 240px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      .query-input {
+        border-radius: 4px;
+        padding: 2px;
+        position: relative;
+        border: none;
+        background: @theme-query-editor-bg;
+        border-color: @theme-query-editor-border-color;
+      }
+    }
+    .query-results {
+      position: relative;
+      overflow-y: auto;
+      .query-results-inner {
+        position: relative;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+      }
+    }
+  }
+}

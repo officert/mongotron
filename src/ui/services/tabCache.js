@@ -21,11 +21,9 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.add = function(tab) {
-      if (!tab) return;
-      if (!(tab.type in TAB_TYPES)) {
-        console.error(tab.type + ' is not a valid tab type');
-        return;
-      }
+      if (!tab) throw new Error('tab is required');
+      if (!tab.name) throw new Error('tab.name is required');
+      if (!(tab.type in TAB_TYPES)) throw new Error(tab.type + ' is not a valid tab type');
 
       tab.id = uuid.v4();
       tab.active = true;
@@ -38,10 +36,12 @@ angular.module('app').factory('tabCache', [
 
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
-      return TAB_CACHE;
+      return tab;
     };
 
     TabCache.prototype.getById = function(id) {
+      if (!id) throw new Error('id is required');
+
       var tab = _.findWhere(TAB_CACHE, {
         id: id
       });
@@ -54,12 +54,16 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.exists = function(tab) {
+      if (!tab) throw new Error('tab is required');
+
       var index = TAB_CACHE.indexOf(tab);
 
       return index >= 0 ? true : false;
     };
 
     TabCache.prototype.existsByName = function(name) {
+      if (!name) throw new Error('name is required');
+
       var tabs = _.where(TAB_CACHE, {
         name: name
       });
@@ -68,15 +72,17 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.remove = function(tab) {
+      if (!tab) throw new Error('tab is required');
+
       var index = TAB_CACHE.indexOf(tab);
 
       if (index >= 0) {
-        _activatePrevious(index);
+        this.activatePrevious(index);
 
         TAB_CACHE.splice(index, 1);
-      }
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
 
       return TAB_CACHE;
     };
@@ -86,9 +92,11 @@ angular.module('app').factory('tabCache', [
         active: true
       });
 
-      if (activeTab) this.remove(activeTab);
+      if (activeTab) {
+        this.remove(activeTab);
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     TabCache.prototype.removeAll = function() {
@@ -146,6 +154,8 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.activateById = function(id) {
+      if (!id) throw new Error('id is required');
+
       var tab = this.getById(id);
 
       if (!tab) return;
@@ -157,10 +167,21 @@ angular.module('app').factory('tabCache', [
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
 
-    TabCache.prototype.activatePrevious = function(tabIndex) {
-      _activatePrevious(tabIndex);
+    TabCache.prototype.activatePrevious = function() {
+      if (TAB_CACHE.length === 1) return;
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      var activeTab = _.findWhere(TAB_CACHE, {
+        active: true
+      });
+
+      if (activeTab) {
+        var index = TAB_CACHE.indexOf(activeTab);
+        var previousTab = index === 0 ? TAB_CACHE[TAB_CACHE.length - 1] : TAB_CACHE[index - 1];
+        previousTab.active = true;
+        activeTab.active = false;
+
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     TabCache.prototype.activateNext = function() {
@@ -175,9 +196,9 @@ angular.module('app').factory('tabCache', [
         var nextTab = (index === (TAB_CACHE.length - 1)) ? TAB_CACHE[0] : TAB_CACHE[index + 1];
         nextTab.active = true;
         activeTab.active = false;
-      }
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     TabCache.prototype.activateByName = function(name) {
@@ -205,7 +226,6 @@ angular.module('app').factory('tabCache', [
       switch (type) {
         case TAB_TYPES.QUERY:
           className = '';
-          // className = 'fa fa-files-o';
           break;
         case TAB_TYPES.PAGE:
           className = 'fa fa-file-code-o';
@@ -219,21 +239,6 @@ angular.module('app').factory('tabCache', [
       _.each(TAB_CACHE, function(tab) {
         tab.active = false;
       });
-    }
-
-    function _activatePrevious(tabIndex) {
-      if (TAB_CACHE.length === 1) return;
-
-      var activeTab = index ? TAB_CACHE[tabIndex] : _.findWhere(TAB_CACHE, {
-        active: true
-      });
-
-      if (activeTab) {
-        var index = TAB_CACHE.indexOf(activeTab);
-        var previousTab = index === 0 ? TAB_CACHE[TAB_CACHE.length - 1] : TAB_CACHE[index - 1];
-        previousTab.active = true;
-        activeTab.active = false;
-      }
     }
 
     return new TabCache();

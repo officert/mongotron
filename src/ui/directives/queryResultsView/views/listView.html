@@ -1,0 +1,17 @@
+<div class="list-view">
+  <div class="result" ng-repeat="result in results">
+    <ul class="menu">
+      <!-- <li>
+        <button class="btn btn-default">
+          <i class="fa fa-pencil"></i>
+        </button>
+      </li> -->
+      <li>
+        <button class="btn btn-default" ng-click="deleteResult(result)">
+          <i class="fa fa-plus rotate-45"></i>
+        </button>
+      </li>
+    </ul>
+    <pre>{{ ::result | json }}</pre>
+  </div>
+</div>

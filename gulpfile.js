@@ -11,9 +11,9 @@ const _ = require('underscore');
 const childProcess = require('child_process');
 const karma = require('karma').server;
 const babel = require('gulp-babel');
+const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require("electron-prebuilt");
-
 
 const appConfig = require('./src/config/appConfig');
 
@@ -38,7 +38,7 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'should',
   'sinon',
   'supertest'
-].join('|');
+];
 const RELEASE_IMAGE_ICON = __dirname + '/src/ui/images/logo_icon.icns';
 
 const LESSOPTIONS = {
@@ -90,37 +90,54 @@ gulp.task('jshint', () => {
 });
 
 gulp.task('release', ['pre-release'], (next) => {
-  var env = _.extend({}, process.env);
-  env.NODE_ENV = 'production';
+  electronPackager({
+    dir: '.',
+    name: appConfig.name,
+    out: appConfig.releasePath,
+    // platform: 'all',
+    // arch: 'all',
+    platform: 'darwin',
+    arch: 'x64',
+    version: '0.35.0',
+    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+      return '/node_modules/' + ignore + '($|/)';
+    }),
+    icon: RELEASE_IMAGE_ICON,
+    appPath: 'build/browser/main.js',
+    force: true
+  }, next);
 
-  var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
-    '.',
-    appConfig.name,
-    '--out',
-    appConfig.releasePath,
-    '--platform',
-    'darwin',
-    '--arch',
-    'x64',
-    '--version',
-    '0.35.0',
-    '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
-    '--icon',
-    RELEASE_IMAGE_ICON,
-    '--appPath',
-    'build/browser/main.js'
-  ], {
-    env: env
-  });
-
-  child.stdout.on('data', (data) => {
-    console.log('tail output: ' + data);
-  });
-
-  child.on('exit', (exitCode) => {
-    console.log('Child exited with code: ' + exitCode);
-    return next(exitCode === 1 ? new Error('Error running release task') : null);
-  });
+  // var env = _.extend({}, process.env);
+  // env.NODE_ENV = 'production';
+  //
+  // var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
+  //   '.',
+  //   appConfig.name,
+  //   '--out',
+  //   appConfig.releasePath,
+  //   '--platform',
+  //   'all',
+  //   '--arch',
+  //   'all',
+  //   '--version',
+  //   '0.35.0',
+  //   '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
+  //   '--icon',
+  //   RELEASE_IMAGE_ICON,
+  //   '--appPath',
+  //   'build/browser/main.js'
+  // ], {
+  //   env: env
+  // });
+  //
+  // child.stdout.on('data', (data) => {
+  //   console.log('tail output: ' + data);
+  // });
+  //
+  // child.on('exit', (exitCode) => {
+  //   console.log('Child exited with code: ' + exitCode);
+  //   return next(exitCode === 1 ? new Error('Error running release task') : null);
+  // });
 });
 
 gulp.task('pre-release', (next) => {
@@ -189,10 +206,7 @@ gulp.task('serve-site', ['site-css'], () => {
 gulp.task('default', ['serve']);
 
 gulp.task('test', (next) => {
-  runSequence('jshint', 'test-int', 'test-unit', () => {
-    process.exit(0);
-    next();
-  });
+  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', next);
 });
 
 gulp.task('test-int', () => {
@@ -206,7 +220,6 @@ gulp.task('test-unit', () => {
 });
 
 gulp.task('test-unit-ui', (done) => {
-
   karma.start({
     configFile: __dirname + '/tests/ui/karma.conf.js',
     singleRun: true,
@@ -216,7 +229,6 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/vendor/toastr/toastr.min.js',
       '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
       '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
-      '../../src/ui/vendor/console-polyfill/index.js',
       '../../src/ui/vendor/angular/angular.js',
       '../../src/ui/vendor/angular-ui-sortable/sortable.js',
       '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',

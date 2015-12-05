@@ -28,7 +28,6 @@
   <!-- vendor -->
   <script src="./vendor/jquery-ui/jquery-ui.min.js"></script>
   <script src="./vendor/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="./vendor/console-polyfill/index.js"></script>
   <script src="./vendor/angular/angular.js"></script>
   <script src="./vendor/angular-ui-sortable/sortable.js"></script>
   <script src="./vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -49,8 +48,8 @@
   <script src="./app.js"></script>
   <script src="./filters/trim.js"></script>
   <script src="./directives/loading.js"></script>
-  <script src="./directives/image-src.js"></script>
-  <script src="./directives/slide-down.js"></script>
+  <script src="./directives/imageSrc.js"></script>
+  <script src="./directives/slideDown.js"></script>
   <script src="./services/alertService.js"></script>
   <script src="./services/connectionCache.js"></script>
   <script src="./services/keypressService.js"></script>
@@ -64,6 +63,8 @@
   <script src="./services/dialogService.js"></script>
   <script src="./services/tabCache.js"></script>
   <script src="./services/themeService.js"></script>
+  <script src="./services/navUtils.js"></script>
+  <script src="./controllers/appCtrl.js"></script>
   <script src="./components/connect/connectCtrl.js"></script>
   <script src="./components/connect/listConnections/listConnectionsCtrl.js"></script>
   <script src="./components/connect/addConnection/addConnectionCtrl.js"></script>
@@ -76,26 +77,28 @@
   <script src="./components/settings/preferences/preferencesCtrl.js"></script>
   <script src="./components/settings/themes/themesCtrl.js"></script>
   <script src="./components/logs/logsCtrl.js"></script>
-  <script src="./directives/right-click.js"></script>
+  <script src="./directives/rightClick.js"></script>
   <script src="./directives/codemirror/codemirror.js"></script>
-  <script src="./directives/collection-query/collectionQuery.js"></script>
-  <script src="./directives/collection-query/collectionQueryCtrl.js"></script>
+  <script src="./directives/query/query.js"></script>
+  <script src="./directives/query/queryCtrl.js"></script>
+  <script src="./directives/queryResultsView/queryResultsView.js"></script>
+  <script src="./directives/queryResultsView/queryResultsViewCtrl.js"></script>
   <script src="./directives/sidebar/sidebar.js"></script>
   <script src="./directives/sidebar/sidebarCtrl.js"></script>
   <script src="./directives/sidenav/sidenav.js"></script>
   <script src="./directives/sidenav/sidenavCtrl.js"></script>
-  <script src="./directives/tab-view/tab-view.js"></script>
-  <script src="./directives/tab-view/tabViewCtrl.js"></script>
-  <script src="./directives/keybinding-context.js"></script>
-  <script src="./directives/has-connections.js"></script>
-  <script src="./directives/theme-class.js"></script>
+  <script src="./directives/tabView/tabView.js"></script>
+  <script src="./directives/tabView/tabViewCtrl.js"></script>
+  <script src="./directives/keybindingContext.js"></script>
+  <script src="./directives/hasConnections.js"></script>
+  <script src="./directives/themeClass.js"></script>
 </head>
 
 <body theme-class>
   <!-- need for ngAnimate -->
   <base href="/" />
   <!-- APP -->
-  <div class="app" keybinding-context="mongotron-workspace" has-connections>
+  <div class="app" ng-controller="appCtrl" keybinding-context="mongotron-workspace" has-connections>
     <div class="sidebar-wrapper">
       <sidenav></sidenav>
       <sidebar></sidebar>

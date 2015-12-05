@@ -90,7 +90,7 @@ describe('entities', function() {
           return done(null);
         });
 
-        it('should not add nay databases to collection.databases array', function(done) {
+        it('should not add any databases to collection.databases array', function(done) {
           connection.connect(function(err) {
             should.not.exist(err);
 
