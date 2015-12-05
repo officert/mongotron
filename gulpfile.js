@@ -13,7 +13,7 @@ const karma = require('karma').server;
 const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
-const electron = require("electron-prebuilt");
+const electron = require('electron-prebuilt');
 
 const appConfig = require('./src/config/appConfig');
 
