@@ -148,10 +148,16 @@ angular.module('app').controller('queryResultsExportCtrl', [
             .on('chunk', (chunk) => {
               console.log(chunk);
             })
+            .on('data', (chunk) => {
+              console.log(chunk);
+            })
             .pipe(parser);
 
           parser
             .on('chunk', (chunk) => {
+              console.log(chunk);
+            })
+            .on('data', (chunk) => {
               console.log(chunk);
             })
             .on('error', (error) => {
