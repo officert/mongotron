@@ -5,9 +5,11 @@ angular.module('app').controller('queryResultsExportModalCtrl', [
   '$modalInstance',
   'results',
   'collection',
-  function($scope, $modalInstance, results, collection) {
+  'query',
+  function($scope, $modalInstance, results, collection, query) {
     $scope.results = results;
     $scope.collection = collection;
+    $scope.query = query;
 
     $scope.queryResultsExportHandle = {};
 
