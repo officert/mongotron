@@ -10,7 +10,12 @@
       <button class="btn btn-default">Use an existing export config</button>
     </div>
   </div>
-  <div class="key-value-pairs clearfix">
+  <div class="export-progress progress" ng-show="exporting">
+    <div class="progress-bar progress-bar-info progress-bar-striped" ng-style="{ width : '20%' }">
+      <span class="sr-only">40% Complete (success)</span>
+    </div>
+  </div>
+  <div class="key-value-pairs clearfix" ng-hide="exporting">
     <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
       <div class="menu">
         <ul>
@@ -23,15 +28,15 @@
       </div>
       <div class="form-group">
         <label class="control-label">Header</label>
-        <input class="form-control" type="text" ng-modal="keyValuePair.key">
+        <input class="form-control" type="text" ng-model="keyValuePair.key">
       </div>
       <div class="form-group">
         <label class="control-label">Property Name</label>
-        <input class="form-control" type="text" ng-modal="keyValuePair.value">
+        <input class="form-control" type="text" ng-model="keyValuePair.value">
       </div>
     </div>
+    <button class="btn btn-primary add-key-value-pair" ng-click="addColumn()">
+      Add Property
+    </button>
   </div>
-  <button class="btn btn-primary add-key-value-pair" ng-click="addColumn()">
-    Add Property
-  </button>
 </div>

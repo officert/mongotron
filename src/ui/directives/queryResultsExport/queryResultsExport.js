@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').directive('queryResultsExport', [
   function() {
     return {
@@ -8,6 +10,7 @@ angular.module('app').directive('queryResultsExport', [
       scope: {
         handle: '=',
         collection: '=',
+        query: '=',
         results: '='
       }
     };
