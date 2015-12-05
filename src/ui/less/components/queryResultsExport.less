@@ -1,0 +1,66 @@
+.query-results-export {
+  .export-nav {
+    height: 50px;
+    position: relative;
+    border-bottom: 1px solid darken(@theme-query-result-export-border, 18%);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    .border-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      width: 100%;
+      background: lighten(@theme-modal-content-bg, 6%);
+    }
+    .right-btns {
+      position: absolute;
+      right: 0;
+      top: 0;
+      .export-btn-list {
+        margin: 0 10px 0 0;
+        padding: 0;
+        .form-control {
+          display: inline-block;
+          min-width: 60px;
+          margin-right: 5px;
+        }
+        .btn {
+          display: inline-block;
+          border-radius: @border-radius-base;
+          .number-input {
+            width: 50px;
+          }
+          &.active {
+
+          }
+        }
+      }
+    }
+  }
+  .export-progress {
+    width: 100%;
+  }
+  .key-value-pairs {
+    .key-value-pair {
+      border-radius: 4px;
+      border: 1px dashed @theme-query-result-export-border;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+      overflow: hidden;
+      &:hover {
+        border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
+        .menu {
+          top: -1px;
+        }
+      }
+      .menu {
+        .btn-hover-menu();
+      }
+      .form-group {
+        padding-right: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.btn-hover-menu {
+  .transition-property('top');
+  .transition-duration(.35s);
+  .transition-timing-function(ease);
+  position: absolute;
+  top: -32px;
+  right: -1px;
+  border-top-right-radius: @border-radius-base;
+  border-top: 1px solid @theme-query-result-json-border-color;
+  border-right: 1px solid @theme-query-result-json-border-color;
+  border-left: 1px solid darken(@theme-btn-default-bg, 20%);
+  border-bottom: 1px solid darken(@theme-btn-default-bg, 20%);
+  list-style: none;
+  li {
+    float: left;
+    text-align: center;
+    cursor: pointer;
+    &:first-child {
+      .btn {
+        border-left: none;
+      }
+    }
+    &:last-child {
+      .btn {
+        border-top-right-radius: @border-radius-base;
+      }
+    }
+    .btn {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border-radius: 0;
+      border-bottom: none;
+      border-right: none;
+    }
+  }
+}

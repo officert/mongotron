@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').controller('queryCtrl', [
   '$scope',
   '$timeout',
@@ -85,7 +87,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      alert('exportResults');
+      modalService.openQueryResultsExport($scope.collection, $scope.exportQuery);
     };
 
     $scope.runQuery = function runQuery() {
@@ -107,6 +109,8 @@ angular.module('app').controller('queryCtrl', [
         $scope.loading = false;
         return;
       }
+
+      $scope.exportQuery = result.query;
 
       logger.debug('running query', result.query, result.options);
 

@@ -1,0 +1,55 @@
+<div class="query-results-export">
+  <div class="export-nav clearfix">
+    <div class="border-line"></div>
+    <div class="right-btns">
+      <div class="export-btn-list btn-group">
+        <input class="number-input form-control pull-left" type="number" ng-model="limit" placeholder="Limit" auto-grow-input>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm" ng-click="importSettings()">
+          <i class="fa fa-external-link-square rotate-90"></i> Import Settings
+        </button>
+        <button class="btn btn-default btn-sm" ng-click="exportSettings()" ng-disabled="!keyValuePairs.length">
+          <i class="fa fa-external-link-square"></i> Export Settings
+        </button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm" ng-click="clearAll()">
+          <i class="fa fa-times"></i> Clear All
+        </button>
+        <button class="btn btn-default btn-sm" ng-click="addColumn()">
+          <i class="fa fa-plus"></i> Add Column
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="export-progress progress" ng-show="loading">
+    <div class="progress-bar progress-bar-info progress-bar-striped active" ng-style="{ width : '100%' }">
+    </div>
+  </div>
+  <div class="key-value-pairs clearfix" ng-hide="loading">
+    <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
+      <div class="menu">
+        <ul>
+          <li>
+            <button class="btn btn-default" ng-click="removeColumn(keyValuePair)">
+              <i class="fa fa-plus rotate-45"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group clearfix">
+        <label class="control-label col-sm-2">Header</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" ng-model="keyValuePair.key">
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="control-label col-sm-2">Property Name</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" ng-model="keyValuePair.value">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div id="query-results-export-modal">
+  <div class="modal-header modal-header-w-icon clearfix">
+    <i class="fa fa-external-link-square"></i>&nbsp;Export query results
+    <i class="close fa fa-plus rotate-45" ng-click="close()"></i>
+  </div>
+  <div class="modal-body">
+    <query-results-export query="query" collection="collection" handle="queryResultsExportHandle"></query-results-export>
+  </div>
+  <div class="modal-footer clearfix">
+    <div class="pull-right">
+      <button class="btn btn-default" type="button" ng-click="close()">
+        Cancel
+      </button>
+      <button class="btn btn-primary" type="button" ng-click="export()" ng-disabled="!queryResultsExportHandle.keyValuePairs.length">
+        Export
+      </button>
+    </div>
+  </div>
+</div>
