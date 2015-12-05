@@ -12,12 +12,15 @@ angular.module('app').controller('queryResultsExportCtrl', [
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
 
     const fs = require('fs');
+    const csv = require('csv');
+
     const CsvStream = require('lib/utils/csvStream');
 
     $scope.keyValuePairs = [];
 
     $scope.handle = $scope.handle || {};
     $scope.handle.export = _export;
+    $scope.handle.import = _importExportConfig;
     $scope.handle.saveConfig = _saveExportConfig;
 
     $scope.addColumn = function() {
@@ -47,6 +50,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
       dialogService.showSaveDialog()
         .then((path) => {
+          if (!path) return;
+
           path = _fixExportCsvPath(path);
 
           $timeout(() => {
@@ -59,10 +64,14 @@ angular.module('app').controller('queryResultsExportCtrl', [
                 stream
                   .pipe(new CsvStream(nameProps))
                   .on('error', (error) => {
+                    $scope.exporting = false;
+
                     $log.error(error);
                   })
                   .pipe(fs.createWriteStream(path))
                   .on('error', (error) => {
+                    $scope.exporting = false;
+
                     $log.error(error);
                   })
                   .on('finish', () => {
@@ -90,6 +99,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
     function _saveExportConfig() {
       dialogService.showSaveDialog()
         .then((path) => {
+          if (!path) return;
+
           path = _fixExportCsvPath(path);
 
           let data = '';
@@ -114,6 +125,48 @@ angular.module('app').controller('queryResultsExportCtrl', [
               });
             });
           });
+        })
+        .catch((err) => {
+          $log.error(err);
+        });
+    }
+
+    function _importExportConfig() {
+      dialogService.showOpenDialog()
+        .then((paths) => {
+          if (!paths || !paths.length) return;
+
+          var parser = csv.parse();
+
+          fs.createReadStream(paths[0])
+            .on('error', (error) => {
+              $scope.exporting = false;
+
+              $log.error(error);
+            })
+            .on('chunk', (chunk) => {
+              console.log(chunk);
+            })
+            .pipe(parser);
+
+          parser
+            .on('chunk', (chunk) => {
+              console.log(chunk);
+            })
+            .on('error', (error) => {
+              $scope.exporting = false;
+
+              $log.error(error);
+            })
+            .on('finish', () => {
+              $timeout(() => {
+                $scope.exporting = false;
+
+                alertService.success('Export settings imported');
+              });
+            });
+
+          parser.end();
         })
         .catch((err) => {
           $log.error(err);

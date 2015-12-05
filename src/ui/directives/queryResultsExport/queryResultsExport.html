@@ -7,15 +7,15 @@
       </li>
     </ul>
     <div class="pull-right">
-      <button class="btn btn-default">Use an existing export config</button>
+      <button class="btn btn-default" ng-click="handle.import()">Import config</button>
     </div>
   </div>
-  <div class="export-progress progress" ng-show="exporting">
+  <div class="export-progress progress" ng-show="loading">
     <div class="progress-bar progress-bar-info progress-bar-striped active" ng-style="{ width : '100%' }">
       <span class="sr-only">40% Complete (success)</span>
     </div>
   </div>
-  <div class="key-value-pairs clearfix" ng-hide="exporting">
+  <div class="key-value-pairs clearfix" ng-hide="loading">
     <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
       <div class="menu">
         <ul>
