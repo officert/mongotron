@@ -12,6 +12,7 @@ const childProcess = require('child_process');
 const karma = require('karma').server;
 const babel = require('gulp-babel');
 const symlink = require('gulp-symlink');
+const electron = require("electron-prebuilt");
 
 
 const appConfig = require('./src/config/appConfig');
@@ -163,7 +164,7 @@ gulp.task('serve', ['build'], (next) => {
   var env = _.extend({}, process.env);
   // env.NODE_ENV = 'production';
 
-  var child = childProcess.spawn('./node_modules/.bin/electron', ['./'], {
+  var child = childProcess.spawn(electron, ['./'], {
     env: env
   });
 
