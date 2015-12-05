@@ -71,10 +71,14 @@ class Collection {
 
       dbQuery.limit(options.limit ? options.limit : DEFAULT_PAGE_SIZE);
 
-      dbQuery.toArray(function(err, docs) {
-        if (err) return reject(err);
-        return resolve(docs);
-      });
+      if (options.stream === true) {
+        return resolve(dbQuery.stream());
+      } else {
+        dbQuery.toArray(function(err, docs) {
+          if (err) return reject(err);
+          return resolve(docs);
+        });
+      }
     });
   }
 
