@@ -90,7 +90,30 @@ angular.module('app').controller('queryResultsExportCtrl', [
     function _saveExportConfig() {
       dialogService.showSaveDialog()
         .then((path) => {
-          alert(path);
+          path = _fixExportCsvPath(path);
+
+          let data = '';
+
+          _.each($scope.keyValuePairs, (kvp) => {
+            data += (kvp.key + ',' + kvp.value + '\n');
+          });
+
+          $timeout(() => {
+            $scope.exporting = true;
+
+            fs.writeFile(path, data, (err) => {
+              $timeout(() => {
+                $scope.exporting = false;
+
+                if (err) {
+                  $log.error(err);
+                  return;
+                }
+
+                alertService.success('Export settings saved to : ' + path);
+              });
+            });
+          });
         })
         .catch((err) => {
           $log.error(err);
