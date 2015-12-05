@@ -64,17 +64,9 @@ angular.module('app').controller('queryResultsExportCtrl', [
               .then((stream) => {
                 stream
                   .pipe(new CsvStream(nameProps))
-                  .on('error', (error) => {
-                    $scope.loading = false;
-
-                    $log.error(error);
-                  })
+                  .on('error', handleError)
                   .pipe(fs.createWriteStream(path))
-                  .on('error', (error) => {
-                    $scope.loading = false;
-
-                    $log.error(error);
-                  })
+                  .on('error', handleError)
                   .on('finish', () => {
                     $timeout(() => {
                       $scope.loading = false;
@@ -82,14 +74,10 @@ angular.module('app').controller('queryResultsExportCtrl', [
                     });
                   });
               })
-              .catch((error) => {
-                $log.error(error);
-              });
+              .catch(handleError);
           });
         })
-        .catch((err) => {
-          $log.error(err);
-        });
+        .catch(handleError);
     }
 
     function _fixExportCsvPath(path) {
@@ -117,19 +105,14 @@ angular.module('app').controller('queryResultsExportCtrl', [
               $timeout(() => {
                 $scope.loading = false;
 
-                if (err) {
-                  $log.error(err);
-                  return;
-                }
+                if (err) return handleError(err);
 
-                alertService.success('Export settings saved to : ' + path);
+                alertService.success('Settings saved to : ' + path);
               });
             });
           });
         })
-        .catch((err) => {
-          $log.error(err);
-        });
+        .catch(handleError);
     }
 
     function _importExportConfig() {
@@ -140,44 +123,37 @@ angular.module('app').controller('queryResultsExportCtrl', [
           var parser = csv.parse();
 
           fs.createReadStream(paths[0])
-            .on('error', (error) => {
-              $scope.loading = false;
-
-              $log.error(error);
-            })
-            .on('chunk', (chunk) => {
-              console.log(chunk);
-            })
-            .on('data', (chunk) => {
-              console.log(chunk);
-            })
+            .on('error', handleError)
             .pipe(parser);
 
           parser
-            .on('chunk', (chunk) => {
-              console.log(chunk);
-            })
             .on('data', (chunk) => {
               console.log(chunk);
-            })
-            .on('error', (error) => {
-              $scope.loading = false;
 
-              $log.error(error);
+              $timeout(() => {
+                if (chunk && chunk.length >= 2) {
+                  $scope.keyValuePairs.push({
+                    key: chunk[0],
+                    value: chunk[1]
+                  });
+                }
+              });
             })
+            .on('error', handleError)
             .on('finish', () => {
               $timeout(() => {
                 $scope.loading = false;
 
-                alertService.success('Export settings imported');
+                alertService.success('Settings imported');
               });
             });
-
-          parser.end();
         })
-        .catch((err) => {
-          $log.error(err);
-        });
+        .catch(handleError);
+    }
+
+    function handleError(error) {
+      $scope.loading = false;
+      $log.error(error);
     }
   }
 ]);
