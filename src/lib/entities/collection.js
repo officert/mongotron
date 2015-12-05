@@ -63,15 +63,16 @@ class Collection {
     return new Promise(function(resolve, reject) {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      //TODO: validate the query??
+      let stream = options.stream;
+      delete options.stream;
 
-      var dbQuery = _this._dbCollection.find(query, options);
+      let dbQuery = _this._dbCollection.find(query, options);
 
       if (options.skip) dbQuery.skip(Number(options.skip));
 
       dbQuery.limit(options.limit ? options.limit : DEFAULT_PAGE_SIZE);
 
-      if (options.stream === true) {
+      if (stream === true) {
         return resolve(dbQuery.stream());
       } else {
         dbQuery.toArray(function(err, docs) {
