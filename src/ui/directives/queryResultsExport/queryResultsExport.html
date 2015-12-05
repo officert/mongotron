@@ -6,11 +6,19 @@
         <input class="number-input form-control pull-left" type="number" ng-model="limit" placeholder="Limit" auto-grow-input>
       </div>
       <div class="btn-group">
-        <button class="btn btn-default btn-sm" ng-click="handle.import()">
+        <button class="btn btn-default btn-sm" ng-click="importSettings()">
           <i class="fa fa-external-link-square rotate-90"></i> Import Settings
         </button>
-        <button class="btn btn-default btn-sm" ng-click="handle.export()" ng-disabled="!keyValuePairs.length">
+        <button class="btn btn-default btn-sm" ng-click="exportSettings()" ng-disabled="!keyValuePairs.length">
           <i class="fa fa-external-link-square"></i> Export Settings
+        </button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-default btn-sm" ng-click="clearAll()">
+          <i class="fa fa-times"></i> Clear All
+        </button>
+        <button class="btn btn-default btn-sm" ng-click="addColumn()">
+          <i class="fa fa-plus"></i> Add Column
         </button>
       </div>
     </div>
@@ -43,8 +51,5 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-primary add-key-value-pair" ng-click="addColumn()">
-      Add Property
-    </button>
   </div>
 </div>

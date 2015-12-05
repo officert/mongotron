@@ -20,9 +20,14 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
     $scope.handle = $scope.handle || {};
     $scope.handle.export = _export;
-    $scope.handle.import = _importExportConfig;
-    $scope.handle.saveConfig = _saveExportConfig;
     $scope.handle.keyValuePairs = $scope.keyValuePairs;
+
+    $scope.importSettings = _importSettings;
+    $scope.exportSettings = _exportSettings;
+
+    $scope.clearAll = function() {
+      $scope.keyValuePairs.length = 0;
+    };
 
     $scope.addColumn = function() {
       $scope.keyValuePairs.push({
@@ -86,7 +91,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
       return path;
     }
 
-    function _saveExportConfig() {
+    function _exportSettings() {
       dialogService.showSaveDialog()
         .then((path) => {
           if (!path) return;
@@ -116,7 +121,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
         .catch(handleError);
     }
 
-    function _importExportConfig() {
+    function _importSettings() {
       dialogService.showOpenDialog()
         .then((paths) => {
           if (!paths || !paths.length) return;
