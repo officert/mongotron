@@ -16,6 +16,16 @@ angular.module('app').controller('queryResultsExportCtrl', [
       });
     };
 
+    $scope.removeColumn = function(column) {
+      if (!column) return;
+
+      var index = $scope.keyValuePairs.indexOf(column);
+
+      if (index > -1) {
+        $scope.keyValuePairs.splice(index, 1);
+      }
+    };
+
     function _export() {
       dialogService.showSaveDialog()
         .then((path) => {

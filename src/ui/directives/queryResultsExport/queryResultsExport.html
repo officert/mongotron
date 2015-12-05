@@ -1,5 +1,6 @@
 <div class="query-results-export">
   <div class="export-info clearfix">
+    <div class="border-line"></div>
     <ul class="pull-left">
       <li>
         Exporting {{ results.length }} results
@@ -11,8 +12,23 @@
   </div>
   <div class="key-value-pairs clearfix">
     <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
-      <input class="form-control" type="text" ng-modal="keyValuePair.key">
-      <input class="form-control" type="text" ng-modal="keyValuePair.value">
+      <div class="menu">
+        <ul>
+          <li>
+            <button class="btn btn-default" ng-click="removeColumn(keyValuePair)">
+              <i class="fa fa-plus rotate-45"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Header</label>
+        <input class="form-control" type="text" ng-modal="keyValuePair.key">
+      </div>
+      <div class="form-group">
+        <label class="control-label">Property Name</label>
+        <input class="form-control" type="text" ng-modal="keyValuePair.value">
+      </div>
     </div>
   </div>
   <button class="btn btn-primary add-key-value-pair" ng-click="addColumn()">
