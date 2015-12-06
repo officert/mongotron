@@ -57,7 +57,9 @@ class Collection {
 
       if (!method) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not implemented'));
 
-      // return method(query.);
+      method.call(_this, query.query, query.queryOptions)
+        .then(resolve)
+        .catch(reject);
     });
   }
 
