@@ -3,11 +3,10 @@
 const BaseQuery = require('./baseQuery');
 
 class UpdateOneQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:updateOne)\(([^]+)\)/;
-    this.extractRegex = /^({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/;
+    this.extractOptions = true;
     this.mongoMethod = 'updateOne';
   }
 }

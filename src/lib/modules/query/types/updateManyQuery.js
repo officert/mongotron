@@ -3,11 +3,10 @@
 const BaseQuery = require('./baseQuery');
 
 class UpdateManyQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:updateMany)\(([^]+)\)/;
-    this.extractRegex = /^({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/;
+    this.extractOptions = true;
     this.mongoMethod = 'updateMany';
   }
 }

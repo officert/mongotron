@@ -3,11 +3,10 @@
 const BaseQuery = require('./baseQuery');
 
 class FindQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:find)\(([^]+)\)/;
-    this.extractRegex = /^(?:find)\(([^]+)\)/;
+    this.extractOptions = false;
     this.mongoMethod = 'find';
     this.autocompleteDefault = 'find({\n  \n})'; //used by codemirror
   }

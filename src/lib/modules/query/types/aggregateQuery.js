@@ -3,13 +3,12 @@
 const BaseQuery = require('./baseQuery');
 
 class AggregateQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:aggregate)\(([^]+)\)/;
-    this.extractRegex = /^(?:aggregate)\(([^]+)\)/;
+    this.extractOptions = false;
     this.mongoMethod = 'find';
-    this.autocompleteDefault = 'find({\n  \n})'; //used by codemirror
+    this.autocompleteDefault = 'aggregate({\n  \n})'; //used by codemirror
   }
 }
 

@@ -3,12 +3,12 @@
 const BaseQuery = require('./baseQuery');
 
 class DeleteManyQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:deleteMany)\(([^]+)\)/;
-    this.extractRegex = /^(?:deleteMany)\(([^]+)\)/;
+    this.extractOptions = false;
     this.mongoMethod = 'deleteMany';
+    this.autocompleteDefault = 'deleteMany({\n  \n})'; //used by codemirror
   }
 }
 

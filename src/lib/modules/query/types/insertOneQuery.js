@@ -3,13 +3,12 @@
 const BaseQuery = require('./baseQuery');
 
 class InsertOneQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:insertOne)\(([^]+)\)/;
-    this.extractRegex = /^(?:insertOne)\(([^]+)\)/;
-    this.mongoMethod = 'find';
-    this.autocompleteDefault = 'find({\n  \n})'; //used by codemirror
+    this.extractOptions = false;
+    this.mongoMethod = 'insertOne';
+    this.autocompleteDefault = 'insertOne({\n  \n})'; //used by codemirror
   }
 }
 

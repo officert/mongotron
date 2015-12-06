@@ -3,12 +3,12 @@
 const BaseQuery = require('./baseQuery');
 
 class DeleteOneQuery extends BaseQuery {
-  constructor(rawQuery) {
-    super(rawQuery);
+  constructor() {
+    super();
 
-    this.matchRegex = /^(?:deleteOne)\(([^]+)\)/;
-    this.extractRegex = /^(?:deleteOne)\(([^]+)\)/;
+    this.extractOptions = false;
     this.mongoMethod = 'deleteOne';
+    this.autocompleteDefault = 'deleteOne({\n  \n})'; //used by codemirror
   }
 }
 
