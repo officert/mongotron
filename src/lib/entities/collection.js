@@ -2,12 +2,16 @@
 
 const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
 const Query = require('lib/modules/query/types/baseQuery');
 
 const DEFAULT_PAGE_SIZE = 50;
+
+const QUERY_TYPES = require('lib/modules/query/queryTypes');
+const VALID_QUERY_TYPES = _.keys(QUERY_TYPES);
 
 /**
  * @class Collection
@@ -38,11 +42,22 @@ class Collection {
   }
 
   execQuery(query) {
+    var _this = this;
+
     return new Promise((resolve, reject) => {
       if (!query) return reject(new Error('query is required'));
       if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
 
-      return resolve('HELLO');
+      var mongoMethod = Query.mongoMethod;
+
+      if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
+      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a support mongo method'));
+
+      var method = _this[mongoMethod];
+
+      if (!method) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not implemented'));
+
+      // return method(query.);
     });
   }
 
