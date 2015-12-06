@@ -20,6 +20,8 @@ class BaseQuery {
     let _this = this;
     options = options || {};
 
+    _this.rawQuery = rawQuery;
+
     return new Promise((resolve, reject) => {
       if (!rawQuery) return reject(new Error('baseQuery - parse() : rawQuery is required'));
 
