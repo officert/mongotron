@@ -48,6 +48,8 @@ angular.module('app').controller('tabViewCtrl', [
     $scope.activateTab = function(tab, $event) {
       if ($event) $event.preventDefault();
 
+      if ($event.button === 1) return $scope.closeTab(tab, $event);
+
       if (tab.active) return;
       else {
         tabCache.deactivateAll();
