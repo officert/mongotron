@@ -1,8 +1,8 @@
 'use strict';
 
-const VALID_QUERY_REGEX = new RegExp(/db.(a-zA-Z1-9)*.*/);
-const COLLECTION_FROM_QUERY_REGEX = /(?:db.)([a-zA-Z1-9]*)/; //extracts the collection name from a valid query
-const QUERY_TYPE_FROM_QUERY_REGEX = /(?:db.*\.)([a-zA-Z]*)/; //extracts the query type from a valid query
+const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9)*.*/);
+const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9]*)\./; //extracts the collection name from a valid query
+const QUERY_TYPE_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9]*)\.(.*)\({/; //extracts the query type from a valid query
 
 const QUERY_TYPES = require('./queryTypes');
 
@@ -20,6 +20,12 @@ class QueryService {
     return matches && matches.length <= 2 ? matches[1] : null;
   }
 
+  /**
+   * Query Factory
+   *
+   * @method createQuery
+   * @param {String} rawQuery
+   */
   createQuery(rawQuery) {
     if (!this.isValidQuery(rawQuery)) return;
 
@@ -38,7 +44,9 @@ function _getQueryTypeByQuery(query) {
 
 function _getQueryTypeByName(name) {
   var Query = QUERY_TYPES[name];
+
   if (!Query) return null;
+
   return new Query();
 }
 
