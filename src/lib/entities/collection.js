@@ -48,7 +48,7 @@ class Collection {
       if (!query) return reject(new Error('query is required'));
       if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
 
-      var mongoMethod = Query.mongoMethod;
+      var mongoMethod = query.mongoMethod;
 
       if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
       if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a support mongo method'));
