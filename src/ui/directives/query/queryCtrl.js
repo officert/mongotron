@@ -70,7 +70,7 @@ angular.module('app').controller('queryCtrl', [
       $scope.exportQuery = rawQuery; //used by the query-results-export directive
 
       if (!queryModule.isValidQuery(rawQuery)) {
-        $scope.error = 'Sorry, that is not a valid mongo query type';
+        $scope.error = 'Sorry, that is not a valid query';
         $scope.loading = false;
         return;
       }
@@ -94,6 +94,7 @@ angular.module('app').controller('queryCtrl', [
           return collection.execQuery(query);
         })
         .then((results) => {
+          $scope.loading = false;
           $scope.results = results;
         })
         .catch((error) => {
@@ -118,7 +119,7 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _getCollectionByName(name) {
-      if (!name) throw new Error('name is required');
+      if (!name) return null;
 
       return _.find($scope.collection.database.collections, function(collection) {
         return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === name.toLowerCase() ? true : false;
