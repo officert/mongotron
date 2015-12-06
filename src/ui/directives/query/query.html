@@ -50,10 +50,10 @@
     </div>
     <div class="query-results">
       <div class="query-results-inner">
-        <div class="alert alert-info" ng-show="!loading && !results.length">
+        <div class="alert alert-info" ng-show="!loading && !error && !results.length">
           Your search did not return any results.
         </div>
-        <div ng-show="!loading && results.length">
+        <div ng-show="!loading && !error && results.length">
           <div class="query-results" ng-show="currentView === VIEWS.LIST">
             <query-results-view type="'list'" results="results" delete-result="deleteResult"></query-results-view>
           </div>
