@@ -12,7 +12,7 @@ angular.module('app').controller('queryResultsViewCtrl', [
     $scope.viewSrc = _getViewSrcByType($scope.type);
 
     $scope.$watch('results', function(val) {
-      if (val) {
+      if (val && _.isArray(val)) {
         $scope.keyValueResults = _convertResultsToKeyValueResults(val);
       }
     });
