@@ -90,7 +90,9 @@ angular.module('app').controller('queryCtrl', [
       query.parse(rawQuery, {
           context: window
         })
-        .then(collection.execQuery)
+        .then(() => {
+          return collection.execQuery(query);
+        })
         .then((results) => {
           $scope.results = results;
         })
