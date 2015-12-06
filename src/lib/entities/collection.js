@@ -5,6 +5,7 @@ const Promise = require('bluebird');
 
 const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
+const Query = require('lib/modules/query/types/baseQuery');
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -34,6 +35,15 @@ class Collection {
     _this.serverName = options.serverName;
     _this.databaseName = options.databaseName;
     _this._dbCollection = database.collection(_this.name);
+  }
+
+  execQuery(query) {
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new Error('query is required'));
+      if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
+
+      return resolve('HELLO');
+    });
   }
 
   /**
