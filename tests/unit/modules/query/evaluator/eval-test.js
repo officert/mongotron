@@ -23,7 +23,7 @@ afterEach(function() {
 });
 
 describe('modules', function() {
-  describe('connection', function() {
+  describe('query', function() {
     describe('evaluator', function() {
       describe('eval', function() {
         describe('when no expression is passed', function() {
