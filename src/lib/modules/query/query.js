@@ -9,18 +9,7 @@ const parser = require('./parser');
 const QUERY_TYPES = require('./queryTypes');
 
 class Query {
-  constructor(functionName) {
-    this.rawQuery = null; //the full raw query ex. 'db.users.find({ .... })'
-
-    var queryType = QUERY_TYPES[functionName] || {};
-
-    if (!queryType) {
-      this.invalid = true;
-      this.invalidReason = functionName + ' is not a valid mongo query';
-    } else {
-      _.extend(this, queryType);
-    }
-  }
+  constructor() {}
 
   parse(rawQuery, options) {
     let _this = this;
@@ -37,7 +26,13 @@ class Query {
 
       var functionName = parser.parseFunction(rawQuery);
 
-      if (!functionName) return reject(new Error('Invalid mongo function'));
+      if (!functionName) return reject(new Error('error parsing function'));
+
+      var queryType = QUERY_TYPES[functionName];
+
+      if (!queryType) return reject(new Error(functionName + ' is not a supported query'));
+
+      _.extend(_this, queryType);
 
       let query = _parseRawQuery(rawQuery, {
         methodName: _this.mongoMethod,

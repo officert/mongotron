@@ -6,9 +6,7 @@ angular.module('app').controller('queryCtrl', [
   '$rootScope',
   'alertService',
   'modalService',
-  '$window',
-  '$log',
-  function($scope, $timeout, $rootScope, alertService, modalService, $window, $log) {
+  function($scope, $timeout, $rootScope, alertService, modalService) {
     const queryModule = require('lib/modules/query');
 
     if (!$scope.collection) throw new Error('collection is required for collection query directive');

@@ -30,18 +30,10 @@ class QueryService {
    * @param {Object} options.evalContext - context to evaluate the js express in
    */
   createQuery(rawQuery, options) {
-    var _this = this;
-
     options = options || {};
 
     return new Promise((resolve, reject) => {
-      if (!_this.isValidQuery(rawQuery)) return reject(new Error('Invalid query'));
-
-      var functionName = _this.parseFunction(rawQuery);
-
-      if (!functionName) return reject(new Error('Invalid mongo function'));
-
-      var query = new Query(functionName);
+      var query = new Query();
 
       query.parse(rawQuery, options)
         .then(resolve)
