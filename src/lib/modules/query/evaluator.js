@@ -18,7 +18,8 @@ class Evaluator {
    *
    */
   eval(expression, scope) {
-    if (!expression || !_.isString(expression)) return;
+    if (!expression) return new Error('evaluator - eval() - must pass an expression');
+    if (!_.isString(expression)) return new Error('evaluator - eval() - expression must be a string');
 
     var evalScope = {};
 
@@ -31,9 +32,7 @@ class Evaluator {
     };
 
     // Evalutate the expression with the given scope
-    // var stringScript = expression.replace(/^\#\!.*/, '');
-
-    var script = new vm.Script(expression, options);
+    var script = new vm.Script('(' + expression + ')', options);
 
     var result;
 

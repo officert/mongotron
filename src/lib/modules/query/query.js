@@ -73,7 +73,7 @@ function _parseRawQuery(rawQuery, options) {
 
     if (!rawQueryValue) return new Error('error parsing query');
 
-    rawQueryValue = ('(' + rawQueryValue + ')');
+    // rawQueryValue = ('(' + rawQueryValue + ')');
 
     query = evaluator.eval(rawQueryValue, evalScope);
 
