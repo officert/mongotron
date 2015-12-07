@@ -17,8 +17,8 @@ class QueryService {
     return parser.parseCollectionName(query);
   }
 
-  parseFunction(query) {
-    return parser.parseFunction(query);
+  parseFunctionName(query) {
+    return parser.parseFunctionName(query);
   }
 
   /**

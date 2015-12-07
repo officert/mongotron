@@ -24,7 +24,7 @@ class Query {
 
       if (!parser.isValidQuery(rawQuery)) return reject(new Error('Invalid query'));
 
-      var functionName = parser.parseFunction(rawQuery);
+      var functionName = parser.parseFunctionName(rawQuery);
 
       if (!functionName) return reject(new Error('error parsing function'));
 

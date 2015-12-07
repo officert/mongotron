@@ -13,25 +13,25 @@ class QueryParser {
   }
 
   parseCollectionName(query) {
-    if (!this.isValidQuery(query)) return;
+    if (!this.isValidQuery(query)) return null;
     var matches = query.match(COLLECTION_FROM_QUERY_REGEX);
     return matches && matches.length <= 2 ? matches[1] : null;
   }
 
-  parseFunction(query) {
-    if (!this.isValidQuery(query)) return;
+  parseFunctionName(query) {
+    if (!this.isValidQuery(query)) return null;
     var matches = query.match(FUNCTION_FROM_QUERY_REGEX);
     return matches && matches.length <= 2 ? matches[1] : null;
   }
 
   parseQuery(query) {
-    if (!this.isValidQuery(query)) return;
+    if (!this.isValidQuery(query)) return null;
 
     return _parseFullQuery(query);
   }
 
   parseOptions(query) {
-    if (!this.isValidQuery(query)) return;
+    if (!this.isValidQuery(query)) return null;
 
     var queryAndOptions = _parseQueryAndOptions(query);
 
