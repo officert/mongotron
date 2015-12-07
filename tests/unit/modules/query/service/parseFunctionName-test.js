@@ -22,7 +22,7 @@ afterEach(function() {
 describe('modules', function() {
   describe('connection', function() {
     describe('query', function() {
-      describe.only('parseFunctionName', function() {
+      describe('parseFunctionName', function() {
         describe('when no query is passed', function() {
           it('should return null', function(next) {
             var rawQuery = null;
