@@ -75,9 +75,7 @@ angular.module('app').controller('queryCtrl', [
         return;
       }
 
-      var collectionName = queryModule.getCollectionNameByQuery(rawQuery);
-
-      var collection = _getCollectionByName(collectionName);
+      var collection = _getCollectionFromRawQuery(rawQuery);
 
       if (!collection) {
         $scope.error = 'Sorry, that is not a valid collection name';
@@ -85,23 +83,24 @@ angular.module('app').controller('queryCtrl', [
         return;
       }
 
-      var query = queryModule.createQuery(rawQuery);
-
-      query.parse(rawQuery, {
-          context: window
+      queryModule.createQuery(rawQuery, {
+          evalContext: window
         })
-        .then(() => {
+        .then((query) => {
           return collection.execQuery(query);
         })
         .then((results) => {
-          $scope.loading = false;
-          $scope.results = results;
+          $timeout(() => {
+            $scope.loading = false;
+            $scope.results = results;
+          });
         })
         .catch((error) => {
-          $log.error(error);
-          $scope.error = error && error.message ? error.message : error;
-          $scope.loading = false;
-          return;
+          $timeout(() => {
+            $log.error(error);
+            $scope.error = error && error.message ? error.message : error;
+            $scope.loading = false;
+          });
         });
     }
 
@@ -118,11 +117,13 @@ angular.module('app').controller('queryCtrl', [
       });
     }
 
-    function _getCollectionByName(name) {
-      if (!name) return null;
+    function _getCollectionFromRawQuery(rawQuery) {
+      var collectionName = queryModule.parseCollectionName(rawQuery);
+
+      if (!collectionName) return null;
 
       return _.find($scope.collection.database.collections, function(collection) {
-        return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === name.toLowerCase() ? true : false;
+        return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
       });
     }
   }
