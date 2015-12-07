@@ -1,15 +1,9 @@
 'use strict';
 
-const util = require('util');
-
 const Promise = require('bluebird');
 const ObjectId = require('mongodb').ObjectId;
 
-// const logger = require('lib/modules/logger');
-// const QueryResult = require('../queryResult');
-
-const EXTRACT_QUERY_REGEX_PATTERN = '^(?:db).*.(?:%s)\\(([^]+)\\)'; //https://regex101.com/r/nM7fJ5/3
-const EXTRACT_OPTIONS_REGEX = /({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/;
+const parser = require('../parser');
 
 class BaseQuery {
   constructor() {
@@ -25,13 +19,20 @@ class BaseQuery {
     return new Promise((resolve, reject) => {
       if (!rawQuery) return reject(new Error('baseQuery - parse() : rawQuery is required'));
 
+      if (!parser.isValidQuery(rawQuery)) return reject(new Error('Invalid query'));
+
+      var functionName = parser.parseFunction(rawQuery);
+
+      if (!functionName) return reject(new Error('Invalid mongo function'));
+
       let query = _parseRawQuery(rawQuery, {
         methodName: _this.mongoMethod,
         extractOptions: _this.extractOptions,
-        evalContext: options.context || {}
+        evalContext: options.evalContext || {}
       });
 
       if (!query || !query.query) return reject(new Error('error parsing query'));
+      if (_.isError(query)) return reject(query);
 
       _this.query = query.query;
       _this.queryOptions = query.queryOptions;
@@ -39,14 +40,6 @@ class BaseQuery {
       return resolve(_this);
     });
   }
-}
-
-function _parseValueFromRawQuery(rawQuery, methodName) {
-  let regex = _getRegExpForMethodName(methodName);
-
-  let matches = regex.exec(rawQuery);
-
-  return matches && matches.length > 1 ? matches[1] : null;
 }
 
 /**
@@ -61,39 +54,35 @@ function _parseValueFromRawQuery(rawQuery, methodName) {
 function _parseRawQuery(rawQuery, options) {
   options = options || {};
 
-  let rawQueryValue = _parseValueFromRawQuery(rawQuery, options.methodName);
-
-  if (!rawQueryValue) return null;
+  var query = null;
+  var queryOptions = null;
 
   if (!options.extractOptions) {
-    let query = _evalQueryValue(rawQueryValue, options.evalContext);
+    let rawQueryValue = parser.parseQuery(rawQuery);
 
-    if (_.isError(query)) return new Error('error parsing query');
+    if (!rawQueryValue) return new Error('error parsing query');
 
-    return {
-      query: query
-    };
+    query = _evalQueryValue(rawQueryValue, options.evalContext);
+
+    if (_.isError(query)) return new Error('error evaluating query');
   } else {
-    let matches = rawQuery.match(EXTRACT_OPTIONS_REGEX);
+    let rawQueryValue = parser.parseQuery(rawQuery);
+    let rawOptionsValue = parser.parseOptions(rawQuery);
 
-    if (!matches || !matches.length || matches.length <= 2) return new Error('error parsing query');
+    if (!rawQueryValue) return new Error('error parsing query');
+    if (!rawOptionsValue) return new Error('error parsing query options');
 
-    let query = _evalQueryValue(matches[1], options.evalContext);
-    let queryOptions = _evalQueryValue(matches[2], options.evalContext);
+    query = _evalQueryValue(rawQueryValue, options.evalContext);
+    queryOptions = _evalQueryValue(rawOptionsValue, options.evalContext);
 
-    if (_.isError(query)) return new Error('error parsing query');
-    if (_.isError(queryOptions)) return new Error('error parsing query options');
-
-    return {
-      query: query,
-      queryOptions: queryOptions
-    };
+    if (_.isError(query)) return new Error('error evaluating query');
+    if (_.isError(queryOptions)) return new Error('error evaluating query');
   }
-}
 
-function _getRegExpForMethodName(methodName) {
-  var regexPattern = util.format(EXTRACT_QUERY_REGEX_PATTERN, methodName);
-  return new RegExp(regexPattern);
+  return {
+    query: query,
+    queryOptions: queryOptions
+  };
 }
 
 /**
