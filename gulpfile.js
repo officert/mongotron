@@ -233,7 +233,6 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/vendor/angular-ui-sortable/sortable.js',
       '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       '../../src/ui/vendor/underscore/underscore.js',
-      '../../src/ui/vendor/angular-animate/angular-animate.js',
       '../../src/ui/vendor/angular-sanitize/angular-sanitize.js',
       '../../src/ui/vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js',
       '../../src/ui/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
