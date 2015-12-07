@@ -1,37 +1,30 @@
 module.exports = {
   find: {
     mongoMethod: 'find',
-    extractOptions: false,
-    autocompleteDefault: 'find({\n  \n})'
+    extractOptions: false
   },
   aggregate: {
     mongoMethod: 'aggregate',
-    extractOptions: false,
-    autocompleteDefault: 'aggregate({\n  \n})'
+    extractOptions: false
   },
   deleteMany: {
     mongoMethod: 'deleteMany',
-    extractOptions: false,
-    autocompleteDefault: 'deleteMany({\n  \n})'
+    extractOptions: false
   },
   deleteOne: {
     mongoMethod: 'deleteOne',
-    extractOptions: false,
-    autocompleteDefault: 'deleteOne({\n  \n})'
+    extractOptions: false
   },
   insertOne: {
     mongoMethod: 'insertOne',
-    extractOptions: false,
-    autocompleteDefault: 'insertOne({\n  \n})'
+    extractOptions: false
   },
   updateMany: {
     mongoMethod: 'updateMany',
-    extractOptions: true,
-    autocompleteDefault: 'updateMany({\n  \n})'
+    extractOptions: true
   },
   updateOne: {
     mongoMethod: 'updateOne',
-    extractOptions: true,
-    autocompleteDefault: 'updateOne({\n  \n})'
+    extractOptions: true
   }
 };
