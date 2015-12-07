@@ -1,8 +1,8 @@
 'use strict';
 
-const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9)*.*/);
-const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9]*)[.]{0,1}/; //extracts the collection name from a valid query
-const QUERY_TYPE_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9]*)\.(.*)\({/; //extracts the query type from a valid query
+const Promise = require('bluebird');
+
+const parser = require('./parser');
 
 const QUERY_TYPES = require('./queryTypes');
 
@@ -11,13 +11,15 @@ const QUERY_TYPES = require('./queryTypes');
  */
 class QueryService {
   isValidQuery(query) {
-    return VALID_QUERY_REGEX.test(query);
+    return parser.isValidQuery(query);
   }
 
-  getCollectionNameByQuery(query) {
-    if (!this.isValidQuery(query)) return;
-    var matches = query.match(COLLECTION_FROM_QUERY_REGEX);
-    return matches && matches.length <= 2 ? matches[1] : null;
+  parseCollectionName(query) {
+    return parser.parseCollectionName(query);
+  }
+
+  parseFunction(query) {
+    return parser.parseFunction(query);
   }
 
   /**
@@ -25,29 +27,36 @@ class QueryService {
    *
    * @method createQuery
    * @param {String} rawQuery
+   * @param {Object} options
+   * @param {Object} options.evalContext - context to evaluate the js express in
    */
-  createQuery(rawQuery) {
-    if (!this.isValidQuery(rawQuery)) return;
+  createQuery(rawQuery, options) {
+    var _this = this;
 
-    var queryTypeName = _getQueryTypeByQuery(rawQuery);
+    options = options || {};
 
-    if (!queryTypeName) return null;
+    return new Promise((resolve, reject) => {
+      if (!_this.isValidQuery(rawQuery)) return reject(new Error('Invalid query'));
 
-    return _getQueryTypeByName(queryTypeName);
+      var functionName = _this.parseFunction(rawQuery);
+
+      if (!functionName) return reject(new Error('Invalid mongo function'));
+
+      var Query = _getQueryConstructorByFunctionName(functionName);
+
+      if (!Query) return reject(new Error(functionName + ' is not implemented'));
+
+      var query = new Query();
+
+      query.parse(rawQuery, options)
+        .then(resolve)
+        .catch(reject);
+    });
   }
 }
 
-function _getQueryTypeByQuery(query) {
-  var matches = query.match(QUERY_TYPE_FROM_QUERY_REGEX);
-  return matches && matches.length <= 2 ? matches[1] : null;
-}
-
-function _getQueryTypeByName(name) {
-  var Query = QUERY_TYPES[name];
-
-  if (!Query) return null;
-
-  return new Query();
+function _getQueryConstructorByFunctionName(functionName) {
+  return QUERY_TYPES[functionName];
 }
 
 /**
