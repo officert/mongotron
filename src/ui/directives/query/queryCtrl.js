@@ -81,9 +81,7 @@ angular.module('app').controller('queryCtrl', [
         return;
       }
 
-      queryModule.createQuery(rawQuery, {
-          evalContext: window
-        })
+      queryModule.createQuery(rawQuery)
         .then((query) => {
           return collection.execQuery(query);
         })

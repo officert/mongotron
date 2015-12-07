@@ -26,16 +26,12 @@ class QueryService {
    *
    * @method createQuery
    * @param {String} rawQuery
-   * @param {Object} options
-   * @param {Object} options.evalContext - context to evaluate the js express in
    */
-  createQuery(rawQuery, options) {
-    options = options || {};
-
+  createQuery(rawQuery) {
     return new Promise((resolve, reject) => {
       var query = new Query();
 
-      query.parse(rawQuery, options)
+      query.parse(rawQuery)
         .then(resolve)
         .catch(reject);
     });
