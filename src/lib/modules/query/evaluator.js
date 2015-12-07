@@ -3,7 +3,13 @@
 const _ = require('underscore');
 const vm = require('vm');
 
-class Evalutor {
+/**
+ * Based on https://github.com/pierrec/node-eval/blob/master/eval.js
+ * ref : https://nodejs.org/api/vm.html#vm_script_runinnewcontext_sandbox_options
+ *
+ * @class Evaluator
+ */
+class Evaluator {
   /**
    * @method eval - evaluate a JS expression
    *
@@ -41,4 +47,4 @@ class Evalutor {
   }
 }
 
-module.exports = new Evalutor();
+module.exports = new Evaluator();
