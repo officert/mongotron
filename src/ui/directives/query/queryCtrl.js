@@ -97,7 +97,6 @@ angular.module('app').controller('queryCtrl', [
         })
         .catch((error) => {
           $timeout(() => {
-            $log.error(error);
             $scope.error = error && error.message ? error.message : error;
             $scope.loading = false;
           });

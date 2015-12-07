@@ -2,9 +2,8 @@
 
 const Promise = require('bluebird');
 
+const Query = require('./query');
 const parser = require('./parser');
-
-const QUERY_TYPES = require('./queryTypes');
 
 /**
  * @class QueryService
@@ -42,21 +41,13 @@ class QueryService {
 
       if (!functionName) return reject(new Error('Invalid mongo function'));
 
-      var Query = _getQueryConstructorByFunctionName(functionName);
-
-      if (!Query) return reject(new Error(functionName + ' is not implemented'));
-
-      var query = new Query();
+      var query = new Query(functionName);
 
       query.parse(rawQuery, options)
         .then(resolve)
         .catch(reject);
     });
   }
-}
-
-function _getQueryConstructorByFunctionName(functionName) {
-  return QUERY_TYPES[functionName];
 }
 
 /**

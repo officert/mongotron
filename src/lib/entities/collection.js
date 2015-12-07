@@ -6,7 +6,7 @@ const _ = require('underscore');
 
 const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
-const Query = require('lib/modules/query/types/baseQuery');
+const Query = require('lib/modules/query/query');
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -51,7 +51,7 @@ class Collection {
       var mongoMethod = query.mongoMethod;
 
       if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
-      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a support mongo method'));
+      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a supported mongo method'));
 
       var method = _this[mongoMethod];
 

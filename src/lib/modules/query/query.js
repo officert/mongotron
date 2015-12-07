@@ -1,13 +1,25 @@
 'use strict';
 
+const _ = require('underscore');
 const Promise = require('bluebird');
 const ObjectId = require('mongodb').ObjectId;
 
-const parser = require('../parser');
+const parser = require('./parser');
 
-class BaseQuery {
-  constructor() {
+const QUERY_TYPES = require('./queryTypes');
+
+class Query {
+  constructor(functionName) {
     this.rawQuery = null; //the full raw query ex. 'db.users.find({ .... })'
+
+    var queryType = QUERY_TYPES[functionName] || {};
+
+    if (!queryType) {
+      this.invalid = true;
+      this.invalidReason = functionName + ' is not a valid mongo query';
+    } else {
+      _.extend(this, queryType);
+    }
   }
 
   parse(rawQuery, options) {
@@ -17,7 +29,9 @@ class BaseQuery {
     _this.rawQuery = rawQuery;
 
     return new Promise((resolve, reject) => {
-      if (!rawQuery) return reject(new Error('baseQuery - parse() : rawQuery is required'));
+      if (_this.invalid) return reject(new Error(_this.invalidReason));
+
+      if (!rawQuery) return reject(new Error('Query - parse() : rawQuery is required'));
 
       if (!parser.isValidQuery(rawQuery)) return reject(new Error('Invalid query'));
 
@@ -106,4 +120,4 @@ function _evalQueryValue(rawValue, evalContext) {
   return queryValue;
 }
 
-module.exports = BaseQuery;
+module.exports = Query;
