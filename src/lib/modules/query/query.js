@@ -4,6 +4,7 @@ const _ = require('underscore');
 const Promise = require('bluebird');
 const ObjectId = require('mongodb').ObjectId;
 
+const evaluator = require('./evaluator');
 const parser = require('./parser');
 
 const QUERY_TYPES = require('./queryTypes');
@@ -11,9 +12,8 @@ const QUERY_TYPES = require('./queryTypes');
 class Query {
   constructor() {}
 
-  parse(rawQuery, options) {
+  parse(rawQuery) {
     let _this = this;
-    options = options || {};
 
     _this.rawQuery = rawQuery;
 
@@ -36,12 +36,11 @@ class Query {
 
       let query = _parseRawQuery(rawQuery, {
         methodName: _this.mongoMethod,
-        extractOptions: _this.extractOptions,
-        evalContext: options.evalContext || {}
+        extractOptions: _this.extractOptions
       });
 
-      if (!query || !query.query) return reject(new Error('error parsing query'));
       if (_.isError(query)) return reject(query);
+      if (!query || !query.query) return reject(new Error('error parsing query'));
 
       _this.query = query.query;
       _this.queryOptions = query.queryOptions;
@@ -57,11 +56,14 @@ class Query {
  * @param {Object} options
  * @param {String} options.methodName  - name of them mongo method that is trying to be executed
  * @param {Bool} options.extractOptions - whether or not we should parse a 2nd options objects (update, updateMany)
- * @param {Object} options.evalContext - context to evalulate the js expression in
  * @returns
  */
 function _parseRawQuery(rawQuery, options) {
   options = options || {};
+
+  var evalScope = {
+    ObjectId: ObjectId
+  };
 
   var query = null;
   var queryOptions = null;
@@ -71,9 +73,11 @@ function _parseRawQuery(rawQuery, options) {
 
     if (!rawQueryValue) return new Error('error parsing query');
 
-    query = _evalQueryValue(rawQueryValue, options.evalContext);
+    rawQueryValue = ('(' + rawQueryValue + ')');
 
-    if (_.isError(query)) return new Error('error evaluating query');
+    query = evaluator.eval(rawQueryValue, evalScope);
+
+    if (_.isError(query)) return query;
   } else {
     let rawQueryValue = parser.parseQuery(rawQuery);
     let rawOptionsValue = parser.parseOptions(rawQuery);
@@ -81,38 +85,17 @@ function _parseRawQuery(rawQuery, options) {
     if (!rawQueryValue) return new Error('error parsing query');
     if (!rawOptionsValue) return new Error('error parsing query options');
 
-    query = _evalQueryValue(rawQueryValue, options.evalContext);
-    queryOptions = _evalQueryValue(rawOptionsValue, options.evalContext);
+    query = evaluator.eval(rawQueryValue, evalScope);
+    query = evaluator.eval(rawOptionsValue, evalScope);
 
-    if (_.isError(query)) return new Error('error evaluating query');
-    if (_.isError(queryOptions)) return new Error('error evaluating query');
+    if (_.isError(query)) return query;
+    if (_.isError(queryOptions)) return queryOptions;
   }
 
   return {
     query: query,
     queryOptions: queryOptions
   };
-}
-
-/**
- * @method evalQueryValue - evaluates a JS expression from the Mongotron code editor
- * @private
- *
- * @param {String} raw value from editor
- */
-function _evalQueryValue(rawValue, evalContext) {
-  evalContext = evalContext || {};
-  evalContext.ObjectId = ObjectId;
-
-  var queryValue;
-
-  try {
-    queryValue = eval.call(evalContext, '(' + rawValue + ')'); // jshint ignore:line
-  } catch (err) {
-    queryValue = err;
-  }
-
-  return queryValue;
 }
 
 module.exports = Query;
