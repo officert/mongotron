@@ -86,7 +86,7 @@ function _parseRawQuery(rawQuery, options) {
     if (!rawOptionsValue) return new Error('error parsing query options');
 
     query = evaluator.eval(rawQueryValue, evalScope);
-    query = evaluator.eval(rawOptionsValue, evalScope);
+    queryOptions = evaluator.eval(rawOptionsValue, evalScope);
 
     if (_.isError(query)) return query;
     if (_.isError(queryOptions)) return queryOptions;

@@ -4,7 +4,7 @@ const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9)*.*/);
 const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9]*)[.]{0,1}/; //extracts the collection name from a valid query
 const FUNCTION_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9]*)[.]{1}([a-zA-Z1-9]*)/; //extracts the function from a valid query
 
-const EXTRACT_FULL_QUERY_REGEX = /^(?:db).*.(?:[a-zA-Z0-9])\(([^]+)\)/; // https://regex101.com/r/nM7fJ5/7
+const EXTRACT_FULL_QUERY_REGEX = /^(?:db).*.(?:[a-zA-Z0-9])\(([^]+.*)\)/; // https://regex101.com/r/sQ9cP4/2
 const EXTRACT_QUERY_AND_OPTIONS_REGEX = /({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/; // https://regex101.com/r/nM7fJ5/8
 
 class QueryParser {
@@ -27,7 +27,10 @@ class QueryParser {
   parseQuery(query) {
     if (!this.isValidQuery(query)) return null;
 
-    return _parseFullQuery(query);
+    var queryAndOptions = _parseQueryAndOptions(query);
+    var fullQuery = _parseFullQuery(query);
+
+    return queryAndOptions && queryAndOptions.query ? queryAndOptions.query : fullQuery;
   }
 
   parseOptions(query) {

@@ -237,6 +237,7 @@ angular.module('app').controller('sidebarCtrl', [
         type: tabCache.TYPES.QUERY,
         name: collection.database.name,
         database: collection.database,
+        collection: collection,
         defaultCollection: collection.name
       };
 
