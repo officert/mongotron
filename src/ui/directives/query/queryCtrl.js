@@ -92,8 +92,6 @@ angular.module('app').controller('queryCtrl', [
       $scope.loading = true;
       $scope.error = null;
 
-      $scope.exportQuery = rawQuery; //used by the query-results-export directive
-
       $scope.changeTabName(rawQuery);
 
       if (!queryModule.isValidQuery(rawQuery)) {
@@ -114,6 +112,8 @@ angular.module('app').controller('queryCtrl', [
 
       queryModule.createQuery(rawQuery)
         .then((query) => {
+          $scope.exportQuery = query.query; //used by the query-results-export directive
+
           return collection.execQuery(query);
         })
         .then((results) => {
