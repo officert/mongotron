@@ -5,10 +5,16 @@ const Promise = require('bluebird');
 const Query = require('./query');
 const parser = require('./parser');
 
+const QUERY_TYPES = require('./queryTypes');
+
 /**
  * @class QueryService
  */
 class QueryService {
+  get QUERY_TYPES() {
+    return QUERY_TYPES;
+  }
+
   isValidQuery(query) {
     return parser.isValidQuery(query);
   }
@@ -36,6 +42,8 @@ class QueryService {
         .catch(reject);
     });
   }
+
+
 }
 
 /**
