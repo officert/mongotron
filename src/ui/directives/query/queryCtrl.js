@@ -72,7 +72,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.collection, $scope.exportQuery);
+      modalService.openQueryResultsExport($scope.currentCollection, $scope.exportQuery);
     };
 
     function _runQuery() {
@@ -98,6 +98,8 @@ angular.module('app').controller('queryCtrl', [
         $scope.loading = false;
         return;
       }
+
+      $scope.currentCollection = collection;
 
       queryModule.createQuery(rawQuery)
         .then((query) => {
