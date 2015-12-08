@@ -244,7 +244,6 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/vendor/codemirror/mode/javascript/javascript.js',
       '../../src/ui/vendor/codemirror/addon/hint/show-hint.js',
       '../../src/ui/vendorCustom/codemirror-formatting.js',
-      '../../src/ui/vendorCustom/mongotron-codemirror-hint.js',
       '../../src/ui/vendor/angular-mocks/angular-mocks.js',
       '../../src/ui/app.js',
       '../../src/ui/components/**/*.js',
