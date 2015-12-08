@@ -29,6 +29,7 @@ class QueryParser {
 
     var queryAndOptions = _parseQueryAndOptions(query);
     var fullQuery = _parseFullQuery(query);
+    fullQuery = fullQuery && fullQuery.trim ? fullQuery.trim() : fullQuery;
 
     return queryAndOptions && queryAndOptions.query ? queryAndOptions.query : (fullQuery || '{}');
   }
