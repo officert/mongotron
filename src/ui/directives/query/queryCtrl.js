@@ -138,8 +138,26 @@ angular.module('app').controller('queryCtrl', [
         confirmButtonMessage: 'Yes',
         cancelButtonMessage: 'No'
       }).result.then(function() {
-        var collection = _getCollectionFromRawQuery()
-        _runQuery(deleteByIdQuery, result._id);
+        $scope.currentCollection.deleteById(result._id)
+          .then(() => {
+            $timeout(() => {
+              alertService.success('Delete successful');
+
+              $scope.currentCollection.find()
+                .then((results) => {
+                  $scope.loading = false;
+                  $timeout(() => {
+                    $scope.results = results;
+                  });
+                });
+            });
+          })
+          .catch((error) => {
+            $timeout(() => {
+              $scope.error = error && error.message ? error.message : error;
+              $scope.loading = false;
+            });
+          });
       });
     }
 
