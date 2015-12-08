@@ -8,6 +8,7 @@ angular.module('app').controller('queryCtrl', [
   'modalService',
   function($scope, $timeout, $rootScope, alertService, modalService) {
     const queryModule = require('lib/modules/query');
+    const mongoUtils = require('src/lib/utils/mongoUtils');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
@@ -15,6 +16,13 @@ angular.module('app').controller('queryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
     $scope.editorHandle = {};
+    $scope.codeEditorOptions = {};
+
+    $scope.results = [];
+    $scope.keyValueResults = [];
+
+    $scope.deleteResult = _deleteResult;
+    $scope.getPropertyTypeIcon = _getPropertyTypeIcons;
 
     let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
       name: $scope.defaultCollection
@@ -22,17 +30,12 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    $scope.runQuery = _runQuery;
-    $scope.deleteResult = _deleteResult;
-
-    $scope.codeEditorOptions = {};
+    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
     $scope.changeTabName = function(name) {
       if (!name || !$scope.databaseTab) return;
       $scope.databaseTab.name = name;
     };
-
-    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
     $scope.changeTabName(defaultQuery);
 
@@ -42,13 +45,17 @@ angular.module('app').controller('queryCtrl', [
       limit: 50
     };
 
+    $scope.runQuery = function() {
+      _runQuery($scope.form.query);
+    };
+
     $scope.VIEWS = {
       RAW: 'LIST',
       KEYVALUE: 'KEYVALUE'
     };
     $scope.currentView = $scope.VIEWS.LIST;
 
-    _runQuery();
+    _runQuery(defaultQuery);
 
     $scope.autoformat = function() {
       if ($scope.editorHandle.autoformat) {
@@ -71,15 +78,19 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
+    $scope.$watch('results', function(val) {
+      if (val && _.isArray(val)) {
+        $scope.keyValueResults = _convertResultsToKeyValueResults(val);
+      }
+    });
+
     $scope.exportResults = function() {
       modalService.openQueryResultsExport($scope.currentCollection, $scope.exportQuery);
     };
 
-    function _runQuery() {
+    function _runQuery(rawQuery) {
       $scope.loading = true;
       $scope.error = null;
-
-      var rawQuery = $scope.form.query;
 
       $scope.exportQuery = rawQuery; //used by the query-results-export directive
 
@@ -127,8 +138,8 @@ angular.module('app').controller('queryCtrl', [
         confirmButtonMessage: 'Yes',
         cancelButtonMessage: 'No'
       }).result.then(function() {
-        //TODO: fix
-        // _runQuery(deleteByIdQuery, result._id);
+        var collection = _getCollectionFromRawQuery()
+        _runQuery(deleteByIdQuery, result._id);
       });
     }
 
@@ -140,6 +151,61 @@ angular.module('app').controller('queryCtrl', [
       return _.find($scope.database.collections, function(collection) {
         return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
       });
+    }
+
+    function _getPropertyTypeIcons(propertyType) {
+      var icon;
+
+      switch (propertyType) {
+        case 'number':
+          icon = '';
+          break;
+        case 'string':
+          icon = 'fa-quote-left';
+          break;
+        case 'boolean':
+          icon = 'fa-calendar';
+          break;
+        case 'date':
+          icon = 'fa-calendar';
+          break;
+        case 'array':
+          icon = 'fa-calendar';
+          break;
+        case 'objectId':
+          icon = 'fa-cog';
+          break;
+      }
+
+      return icon;
+    }
+
+    function _convertResultsToKeyValueResults(results) {
+      return results.map(function(result) {
+        var props = [];
+        props._id = result._id;
+
+        for (var key in result) {
+          //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+          props.push({
+            _id: result[key] ? result[key]._id : result[key],
+            key: key,
+            value: result[key],
+            type: _getPropertyType(result[key])
+          });
+        }
+
+        return props;
+      });
+    }
+
+    function _getPropertyType(property) {
+      if (_.isNumber(property)) return 'number';
+      if (_.isString(property)) return 'string';
+      if (_.isArray(property)) return 'array';
+      if (_.isDate(property)) return 'date';
+      if (_.isBoolean(property)) return 'boolean';
+      if (mongoUtils.isObjectId(property)) return 'objectId';
     }
   }
 ]);
