@@ -1,16 +1,7 @@
 (function(CodeMirror) {
   'use strict';
 
-  const _ = require('underscore');
-  const queryModule = require('lib/modules/query');
-
-  const QUERY_HINTS = _.keys(queryModule.QUERY_TYPES);
-
-  // const CONSTRUCTOR_HINTS = [
-  //   'ObjectId'
-  // ];
-
-  // const CONSTRUCTOR_REGEX = /^(?:[^]+)new ([a-zA-Z]+)(?:[^]+)$/;
+  const hinter = require('lib/modules/query/hinter');
 
   // //regexes for matching input to a mongo query type for autocomplete
   // const FIND_QUERY = /^[\s\S]*find$/;
@@ -34,7 +25,7 @@
 
     var currentValue = codemirror.getValue();
 
-    var results = getHintsByValue(currentValue);
+    var results = hinter.getHintsByValue(currentValue);
 
     var inner = {
       from: codemirror.getCursor(),
@@ -59,41 +50,24 @@
     return inner;
   });
 
-  function getFullValue(val) {
-    return val;
-    // if (val.match(FIND_QUERY)) {
-    //   return FIND_DEFAULT;
-    // } else if (val.match(UPDATE_MANY_QUERY)) {
-    //   return UPDATE_MANY_DEFAULT;
-    // } else if (val.match(UPDATE_ONE_QUERY)) {
-    //   return UPDATE_ONE_DEFAULT;
-    // } else if (val.match(DELETE_MANY_QUERY)) {
-    //   return DELETE_MANY_DEFAULT;
-    // } else if (val.match(DELETE_ONE_QUERY)) {
-    //   return DELETE_ONE_DEFAULT;
-    // } else if (val.match(AGGREGATE_QUERY)) {
-    //   return AGGREGATE_DEFAULT;
-    // } else if (val.match(INSERT_ONE_QUERY)) {
-    //   return INSERT_ONE_DEFAULT;
-    // }
-  }
-
-  function getHintsByValue(value) {
-    //TODO: https://regex101.com/r/uK9lU0/1
-    // var constructorMatches = value.match(CONSTRUCTOR_REGEX);
-    //
-    // if (constructorMatches && constructorMatches.length && constructorMatches.length >= 2) {
-    //   return {
-    //     hints: CONSTRUCTOR_HINTS,
-    //     value: constructorMatches[1]
-    //   };
-    // }
-
-    return {
-      hints: QUERY_HINTS,
-      value: value
-    };
-  }
+  // function getFullValue(val) {
+  //   return val;
+  //   // if (val.match(FIND_QUERY)) {
+  //   //   return FIND_DEFAULT;
+  //   // } else if (val.match(UPDATE_MANY_QUERY)) {
+  //   //   return UPDATE_MANY_DEFAULT;
+  //   // } else if (val.match(UPDATE_ONE_QUERY)) {
+  //   //   return UPDATE_ONE_DEFAULT;
+  //   // } else if (val.match(DELETE_MANY_QUERY)) {
+  //   //   return DELETE_MANY_DEFAULT;
+  //   // } else if (val.match(DELETE_ONE_QUERY)) {
+  //   //   return DELETE_ONE_DEFAULT;
+  //   // } else if (val.match(AGGREGATE_QUERY)) {
+  //   //   return AGGREGATE_DEFAULT;
+  //   // } else if (val.match(INSERT_ONE_QUERY)) {
+  //   //   return INSERT_ONE_DEFAULT;
+  //   // }
+  // }
 
   /* -----------------------------------------------
   /* Private Helpers
