@@ -9,19 +9,35 @@ angular.module('app').controller('queryCtrl', [
   function($scope, $timeout, $rootScope, alertService, modalService) {
     const queryModule = require('lib/modules/query');
 
-    if (!$scope.collection) throw new Error('collection is required for collection query directive');
+    if (!$scope.database) throw new Error('database is required for database query directive');
+    if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
 
     $scope.loading = false;
     $scope.queryTime = null;
     $scope.editorHandle = {};
+
+    let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
+      name: $scope.defaultCollection
+    }) : null;
+
+    defaultCollection = defaultCollection || $scope.database.collections[0];
 
     $scope.runQuery = _runQuery;
     $scope.deleteResult = _deleteResult;
 
     $scope.codeEditorOptions = {};
 
+    $scope.changeTabName = function(name) {
+      if (!name || !$scope.databaseTab) return;
+      $scope.databaseTab.name = name;
+    };
+
+    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
+
+    $scope.changeTabName(defaultQuery);
+
     $scope.form = {
-      searchQuery: 'db.' + $scope.collection.name.toLowerCase() + '.find({\n  \n})',
+      query: defaultQuery,
       skip: 0,
       limit: 50
     };
@@ -63,9 +79,11 @@ angular.module('app').controller('queryCtrl', [
       $scope.loading = true;
       $scope.error = null;
 
-      var rawQuery = $scope.form.searchQuery;
+      var rawQuery = $scope.form.query;
 
       $scope.exportQuery = rawQuery; //used by the query-results-export directive
+
+      $scope.changeTabName(rawQuery);
 
       if (!queryModule.isValidQuery(rawQuery)) {
         $scope.error = 'Sorry, that is not a valid query';
@@ -117,7 +135,7 @@ angular.module('app').controller('queryCtrl', [
 
       if (!collectionName) return null;
 
-      return _.find($scope.collection.database.collections, function(collection) {
+      return _.find($scope.database.collections, function(collection) {
         return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
       });
     }

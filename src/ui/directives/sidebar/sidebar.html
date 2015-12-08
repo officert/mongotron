@@ -22,7 +22,7 @@
               </span>
               <ul class="collection-list slide" ng-show="database.showCollections && !database.loadingCollections">
                 <li ng-repeat="collection in database.collections | orderBy : 'name'" ng-right-click="openDatabaseCollectionContextMenu(collection, database)">
-                  <span class="level-4" class="collection" ng-click="activateItem(collection, 'collection')" ng-class="{ active : collection.active }">
+                  <span class="level-4" class="collection" ng-click="activateItem(collection, 'query')" ng-class="{ active : collection.active }">
                     <i class="fa fa-files-o"></i> {{ collection.name }}
                   </span>
                 </li>
