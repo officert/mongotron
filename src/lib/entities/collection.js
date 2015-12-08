@@ -88,8 +88,6 @@ class Collection {
     options = options || {};
 
     return new Promise(function(resolve, reject) {
-      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
-
       let stream = options.stream;
       delete options.stream;
 
