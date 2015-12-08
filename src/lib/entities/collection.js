@@ -2,11 +2,16 @@
 
 const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
+const Query = require('lib/modules/query/query');
 
 const DEFAULT_PAGE_SIZE = 50;
+
+const QUERY_TYPES = require('lib/modules/query/queryTypes');
+const VALID_QUERY_TYPES = _.keys(QUERY_TYPES);
 
 /**
  * @class Collection
@@ -36,6 +41,28 @@ class Collection {
     _this._dbCollection = database.collection(_this.name);
   }
 
+  execQuery(query) {
+    var _this = this;
+
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new Error('query is required'));
+      if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
+
+      var mongoMethod = query.mongoMethod;
+
+      if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
+      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a supported mongo method'));
+
+      var method = _this[mongoMethod];
+
+      if (!method) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not implemented'));
+
+      method.call(_this, query.query, query.queryOptions)
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
   /**
    * @method insertOne
    * @param {Object} doc
@@ -61,8 +88,6 @@ class Collection {
     options = options || {};
 
     return new Promise(function(resolve, reject) {
-      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
-
       let stream = options.stream;
       delete options.stream;
 

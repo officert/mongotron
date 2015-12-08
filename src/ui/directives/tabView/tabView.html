@@ -16,8 +16,7 @@
     <div class="no-connections" ng-show="!tabs.length && !connections.length">
       <p class="center">
         You don't have any connections in your workplace yet...
-        <br>
-        Click <a href="#" ng-click="showConnections(null, $event)">here</a> to add a connection.
+        <br> Click <a href="#" ng-click="showConnections(null, $event)">here</a> to add a connection.
       </p>
     </div>
     <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" id="tab-{{ tab.value }}">
@@ -26,7 +25,7 @@
       </div>
       <!-- Query Tabs -->
       <div class="tab-pane-inner query-tab-pane" ng-if="tab.type === TAB_TYPES.QUERY">
-        <query collection="tab.collection"></query>
+        <query database="tab.database" database-tab="tab" default-collection="tab.defaultCollection"></query>
       </div>
     </div>
   </div>

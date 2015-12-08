@@ -224,19 +224,21 @@ angular.module('app').controller('sidebarCtrl', [
       $scope.currentActiveItem.active = true;
 
       switch (type) {
-        case 'collection':
-          _addQuery(item);
+        case 'query':
+          _addQueryTab(item);
           break;
       }
     };
 
-    function _addQuery(collection) {
-      if (!collection) return;
+    function _addQueryTab(collection) {
+      if (!collection || !collection.database) return;
 
       var queryTab = {
         type: tabCache.TYPES.QUERY,
-        name: collection.name,
-        collection: collection
+        name: collection.database.name,
+        database: collection.database,
+        collection: collection,
+        defaultCollection: collection.name
       };
 
       $timeout(function() {

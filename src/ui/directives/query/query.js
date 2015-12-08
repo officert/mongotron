@@ -6,7 +6,9 @@ angular.module('app').directive('query', [
       templateUrl: __dirname + '/directives/query/query.html',
       controller: 'queryCtrl',
       scope: {
-        collection: '='
+        database: '=',
+        databaseTab: '=',
+        defaultCollection: '='
       }
     };
   }

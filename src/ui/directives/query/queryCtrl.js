@@ -6,45 +6,47 @@ angular.module('app').controller('queryCtrl', [
   '$rootScope',
   'alertService',
   'modalService',
-  '$window',
-  function($scope, $timeout, $rootScope, alertService, modalService, $window) {
-    const logger = require('lib/modules/logger');
-    const ObjectId = require('mongodb').ObjectId;
+  function($scope, $timeout, $rootScope, alertService, modalService) {
+    const queryModule = require('lib/modules/query');
+    const mongoUtils = require('src/lib/utils/mongoUtils');
 
-    if (!$scope.collection) throw new Error('collection is required for collection query directive');
+    if (!$scope.database) throw new Error('database is required for database query directive');
+    if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
 
     $scope.loading = false;
     $scope.queryTime = null;
     $scope.editorHandle = {};
-
-    const QUERY_TYPES = {
-      FIND: 'FIND',
-      UPDATE_MANY: 'UPDATE_MANY',
-      UPDATE_ONE: 'UPDATE_ONE',
-      DELETE_MANY: 'DELETE_MANY',
-      DELETE_ONE: 'DELETE_ONE',
-      AGGREGATE: 'AGGREGATE',
-      INSERT_ONE: 'INSERT_ONE'
-    };
-
-    //extraction regexes to pull out a valid mongo query object, or array (aggregate)
-    const FIND_QUERY_FULL_REGEX = /^(?:find)\(([^]+)\)/;
-    const UPDATE_MANY_QUERY_FULL_REGEX = /^(?:updateMany)\(([^]+)\)/;
-    const UPDATE_ONE_QUERY_FULL_REGEX = /^(?:updateOne)\(([^]+)\)/;
-    const DELETE_MANY_QUERY_FULL_REGEX = /^(?:deleteMany)\(([^]+)\)/;
-    const DELETE_ONE_QUERY_FULL_REGEX = /^(?:deleteOne)\(([^]+)\)/;
-    const AGGREGATE_QUERY_FULL_REGEX = /^(?:aggregate)\(([^]+)\)/;
-    const INSERT_ONE_QUERY_FULL_REGEX = /^(?:insertOne)\(([^]+)\)/;
-    //given a string '{...},{...}' this will capture the 2 objects seperately
-    //used for any query that requires passing options arg
-    const QUERY_WITH_OPTIONS_REGEX = /^({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/;
-
     $scope.codeEditorOptions = {};
 
+    $scope.results = [];
+    $scope.keyValueResults = [];
+
+    $scope.deleteResult = _deleteResult;
+    $scope.getPropertyTypeIcon = _getPropertyTypeIcons;
+
+    let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
+      name: $scope.defaultCollection
+    }) : null;
+
+    defaultCollection = defaultCollection || $scope.database.collections[0];
+
+    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
+
+    $scope.changeTabName = function(name) {
+      if (!name || !$scope.databaseTab) return;
+      $scope.databaseTab.name = name;
+    };
+
+    $scope.changeTabName(defaultQuery);
+
     $scope.form = {
-      searchQuery: 'find({\n  \n})',
+      query: defaultQuery,
       skip: 0,
       limit: 50
+    };
+
+    $scope.runQuery = function() {
+      _runQuery($scope.form.query);
     };
 
     $scope.VIEWS = {
@@ -53,17 +55,7 @@ angular.module('app').controller('queryCtrl', [
     };
     $scope.currentView = $scope.VIEWS.LIST;
 
-    $scope.deleteResult = function(result) {
-      if (!result) return;
-
-      modalService.confirm({
-        message: 'Are you sure you want to delete this record?',
-        confirmButtonMessage: 'Yes',
-        cancelButtonMessage: 'No'
-      }).result.then(function() {
-        _runQuery(deleteByIdQuery, result._id);
-      });
-    };
+    _runQuery(defaultQuery);
 
     $scope.autoformat = function() {
       if ($scope.editorHandle.autoformat) {
@@ -86,249 +78,152 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
+    $scope.$watch('results', function(val) {
+      if (val && _.isArray(val)) {
+        $scope.keyValueResults = _convertResultsToKeyValueResults(val);
+      }
+    });
+
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.collection, $scope.exportQuery);
+      modalService.openQueryResultsExport($scope.currentCollection, $scope.exportQuery);
     };
 
-    $scope.runQuery = function runQuery() {
+    function _runQuery(rawQuery) {
       $scope.loading = true;
       $scope.error = null;
 
-      var queryFn = getQueryTypeFn($scope.form.searchQuery);
+      $scope.changeTabName(rawQuery);
 
-      if (!queryFn) {
-        $scope.error = 'Sorry, that is not a valid mongo query type';
+      if (!queryModule.isValidQuery(rawQuery)) {
+        $scope.error = 'Sorry, that is not a valid query';
         $scope.loading = false;
         return;
       }
 
-      var result = convertSearchQueryToJsObject($scope.form.searchQuery);
+      var collection = _getCollectionFromRawQuery(rawQuery);
 
-      if ((!result || !result.query) || _.isError(result)) {
-        $scope.error = result && result.message ? result.message : 'Sorry, that is not a valid mongo query';
+      if (!collection) {
+        $scope.error = 'Sorry, that is not a valid collection name';
         $scope.loading = false;
         return;
       }
 
-      $scope.exportQuery = result.query;
+      $scope.currentCollection = collection;
 
-      logger.debug('running query', result.query, result.options);
+      queryModule.createQuery(rawQuery)
+        .then((query) => {
+          $scope.exportQuery = query.query; //used by the query-results-export directive
 
-      _runQuery(queryFn, result.query, result.options);
-    };
-
-    $scope.runQuery();
-
-    function _runQuery(fn, query, queryOptions) {
-      var startTime = performance.now();
-
-      query = query || {};
-
-      if (fn === findQuery) {
-        queryOptions = {};
-        queryOptions.skip = $scope.form.skip;
-        queryOptions.limit = $scope.form.limit;
-      }
-
-      var promise = fn(query, queryOptions);
-
-      promise.then(function(results) {
-          var endTime = performance.now();
-
-          $timeout(function() {
-            $scope.queryTime = (endTime - startTime).toFixed(5);
-
+          return collection.execQuery(query);
+        })
+        .then((results) => {
+          $timeout(() => {
             $scope.loading = false;
-
-            if (fn === insertOneQuery || fn === deleteOneQuery || fn === deleteByIdQuery || fn === deleteManyQuery || fn === updateOneQuery || fn === updateByIdQuery || fn === updateManyQuery) {
-              var msg = '';
-
-              if (fn === insertOneQuery) msg += 'Insert ';
-              else if (fn === deleteOneQuery || fn === deleteByIdQuery || fn === deleteManyQuery) msg += 'Delete ';
-              else if (fn === updateOneQuery || fn === updateByIdQuery || fn === updateManyQuery) msg += 'Update ';
-
-              msg += 'successful...';
-
-              alertService.success(msg);
-
-              return _runQuery(findQuery);
-            }
-            if (!results) return;
-
             $scope.results = results;
           });
         })
-        .catch(function(err) {
-          $timeout(function() {
+        .catch((error) => {
+          $timeout(() => {
+            $scope.error = error && error.message ? error.message : error;
             $scope.loading = false;
-            $scope.error = err;
           });
         });
     }
 
-    function convertSearchQueryToJsObject(query) {
+    function _deleteResult(result) {
+      if (!result) return;
 
-      var match;
+      modalService.confirm({
+        message: 'Are you sure you want to delete this record?',
+        confirmButtonMessage: 'Yes',
+        cancelButtonMessage: 'No'
+      }).result.then(function() {
+        $scope.currentCollection.deleteById(result._id)
+          .then(() => {
+            $timeout(() => {
+              alertService.success('Delete successful');
 
-      if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, FIND_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.FIND, match);
-      } else if (matchesRegex(query, UPDATE_MANY_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, UPDATE_MANY_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.UPDATE_MANY, match);
-      } else if (matchesRegex(query, UPDATE_ONE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, UPDATE_ONE_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.UPDATE_ONE, match);
-      } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, DELETE_MANY_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.DELETE_MANY, match);
-      } else if (matchesRegex(query, DELETE_ONE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, DELETE_ONE_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.DELETE_ONE, match);
-      } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, AGGREGATE_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.AGGREGATE, match);
-      } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
-        match = getRegexMatch(query, INSERT_ONE_QUERY_FULL_REGEX);
-        return evalQueryValueByType(QUERY_TYPES.INSERT_ONE, match);
-      } else {
-        return new Error('Sorry, that is not a valid mongo query');
-      }
+              $scope.currentCollection.find()
+                .then((results) => {
+                  $scope.loading = false;
+                  $timeout(() => {
+                    $scope.results = results;
+                  });
+                });
+            });
+          })
+          .catch((error) => {
+            $timeout(() => {
+              $scope.error = error && error.message ? error.message : error;
+              $scope.loading = false;
+            });
+          });
+      });
     }
 
-    function evalQueryValueByType(type, value) {
-      var queryValue;
+    function _getCollectionFromRawQuery(rawQuery) {
+      var collectionName = queryModule.parseCollectionName(rawQuery);
 
-      switch (type) {
-        case QUERY_TYPES.UPDATE_MANY:
-        case QUERY_TYPES.UPDATE_ONE:
-          var matches = value.match(QUERY_WITH_OPTIONS_REGEX);
-          if (matches && matches.length > 2) {
-            var query = evalQueryValue(matches[1]);
-            var options = evalQueryValue(matches[2]);
+      if (!collectionName) return null;
 
-            if (_.isError(query)) {
-              queryValue = query;
-            } else if (_.isError(value)) {
-              queryValue = value;
-            } else {
-              queryValue = {
-                query: query,
-                options: options
-              };
-            }
-          } else {
-            queryValue = new Error('Error parsing query');
-          }
+      return _.find($scope.database.collections, function(collection) {
+        return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
+      });
+    }
+
+    function _getPropertyTypeIcons(propertyType) {
+      var icon;
+
+      switch (propertyType) {
+        case 'number':
+          icon = '';
           break;
-        default:
-          // case QUERY_TYPES.FIND:
-          // case QUERY_TYPES.INSERT_ONE:
-          // case QUERY_TYPES.AGGREGATE:
-          // case QUERY_TYPES.DELETE_ONE:
-          // case QUERY_TYPES.DELETE_MANY:
-          value = evalQueryValue(value);
-
-          if (_.isError(value)) {
-            queryValue = value;
-          } else {
-            queryValue = {
-              query: value
-            };
-          }
+        case 'string':
+          icon = 'fa-quote-left';
+          break;
+        case 'boolean':
+          icon = 'fa-calendar';
+          break;
+        case 'date':
+          icon = 'fa-calendar';
+          break;
+        case 'array':
+          icon = 'fa-calendar';
+          break;
+        case 'objectId':
+          icon = 'fa-cog';
           break;
       }
 
-      return queryValue;
+      return icon;
     }
 
-    /**
-     * @method evalQueryValue - evaluates a JS expression from the Mongotron code editor
-     * @private
-     *
-     * @param {String} raw value from editor
-     */
-    function evalQueryValue(rawValue) {
-      var context = {
-        ObjectId: ObjectId
-      };
-      context = _.extend($window, context);
+    function _convertResultsToKeyValueResults(results) {
+      return results.map(function(result) {
+        var props = [];
+        props._id = result._id;
 
-      var queryValue;
+        for (var key in result) {
+          //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+          props.push({
+            _id: result[key] ? result[key]._id : result[key],
+            key: key,
+            value: result[key],
+            type: _getPropertyType(result[key])
+          });
+        }
 
-      try {
-        queryValue = eval.call(context, '(' + rawValue + ')'); // jshint ignore:line
-      } catch (err) {
-        queryValue = err;
-      }
-
-      return queryValue;
+        return props;
+      });
     }
 
-    function getQueryTypeFn(query) {
-      if (matchesRegex(query, FIND_QUERY_FULL_REGEX)) {
-        return findQuery;
-      } else if (matchesRegex(query, UPDATE_MANY_QUERY_FULL_REGEX)) {
-        return updateManyQuery;
-      } else if (matchesRegex(query, UPDATE_ONE_QUERY_FULL_REGEX)) {
-        return updateOneQuery;
-      } else if (matchesRegex(query, DELETE_MANY_QUERY_FULL_REGEX)) {
-        return deleteManyQuery;
-      } else if (matchesRegex(query, DELETE_ONE_QUERY_FULL_REGEX)) {
-        return deleteOneQuery;
-      } else if (matchesRegex(query, AGGREGATE_QUERY_FULL_REGEX)) {
-        return aggregateQuery;
-      } else if (matchesRegex(query, INSERT_ONE_QUERY_FULL_REGEX)) {
-        return insertOneQuery;
-      } else {
-        return null;
-      }
-    }
-
-    function matchesRegex(query, regex) {
-      var match = query.match(regex);
-      return match && match.length ? true : false;
-    }
-
-    function getRegexMatch(query, regex) {
-      var matches = query.match(regex);
-      return matches && matches.length > 1 ? matches[1] : null;
-    }
-
-    function findQuery(query, options) {
-      return $scope.collection.find(query, options);
-    }
-
-    function updateManyQuery(query, updates) {
-      return $scope.collection.updateMany(query, updates);
-    }
-
-    function updateOneQuery(query, updates) {
-      return $scope.collection.updateOne(query, updates);
-    }
-
-    function updateByIdQuery(id, updates) {
-      return $scope.collection.updateById(id, updates);
-    }
-
-    function deleteManyQuery(query) {
-      return $scope.collection.deleteMany(query);
-    }
-
-    function deleteOneQuery(query) {
-      return $scope.collection.deleteOne(query);
-    }
-
-    function deleteByIdQuery(id) {
-      return $scope.collection.deleteById(id);
-    }
-
-    function aggregateQuery(aggregate) {
-      return $scope.collection.aggregate(aggregate);
-    }
-
-    function insertOneQuery(doc, options) {
-      return $scope.collection.insertOne(doc, options);
+    function _getPropertyType(property) {
+      if (_.isNumber(property)) return 'number';
+      if (_.isString(property)) return 'string';
+      if (_.isArray(property)) return 'array';
+      if (_.isDate(property)) return 'date';
+      if (_.isBoolean(property)) return 'boolean';
+      if (mongoUtils.isObjectId(property)) return 'objectId';
     }
   }
 ]);
