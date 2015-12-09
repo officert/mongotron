@@ -34,7 +34,7 @@ angular.module('app').controller('queryCtrl', [
 
     $scope.changeTabName = function(name) {
       if (!name || !$scope.databaseTab) return;
-      $scope.databaseTab.name = name;
+      $scope.databaseTab.name = name.length > 20 ? (name.substring(0, 20) + '...') : name;
     };
 
     $scope.changeTabName(defaultQuery);
