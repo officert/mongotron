@@ -110,8 +110,12 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.currentCollection = collection;
 
+      let query = null;
+
       queryModule.createQuery(rawQuery)
-        .then((query) => {
+        .then((_query) => {
+          query = _query;
+
           $scope.exportQuery = query.query; //used by the query-results-export directive
 
           return collection.execQuery(query);
@@ -121,6 +125,12 @@ angular.module('app').controller('queryCtrl', [
             $scope.loading = false;
             $scope.queryTime = result.time;
             $scope.results = result.result;
+
+            if (query.mongoMethod !== 'find') {
+              alertService.success(query.mongoMethod + ' was successful');
+
+              _runQuery('db.' + $scope.currentCollection.name + '.find()');
+            }
           });
         })
         .catch((error) => {
@@ -144,13 +154,7 @@ angular.module('app').controller('queryCtrl', [
             $timeout(() => {
               alertService.success('Delete successful');
 
-              $scope.currentCollection.find()
-                .then((results) => {
-                  $scope.loading = false;
-                  $timeout(() => {
-                    $scope.results = results;
-                  });
-                });
+              _runQuery('db.' + $scope.currentCollection.name + '.find()');
             });
           })
           .catch((error) => {
