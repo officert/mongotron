@@ -47,6 +47,7 @@ class Collection {
     return new Promise((resolve, reject) => {
       if (!query) return reject(new Error('query is required'));
       if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
+      if (!query.query) return reject(new Error('query must have a query'));
 
       var mongoMethod = query.mongoMethod;
 
@@ -57,8 +58,17 @@ class Collection {
 
       if (!method) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not implemented'));
 
+      var startTime = performance.now();
+
       method.call(_this, query.query, query.queryOptions)
-        .then(resolve)
+        .then((result) => {
+          var endTime = performance.now();
+
+          return resolve({
+            result: result,
+            time: (endTime - startTime).toFixed(5)
+          });
+        })
         .catch(reject);
     });
   }

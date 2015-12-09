@@ -116,10 +116,11 @@ angular.module('app').controller('queryCtrl', [
 
           return collection.execQuery(query);
         })
-        .then((results) => {
+        .then((result) => {
           $timeout(() => {
             $scope.loading = false;
-            $scope.results = results;
+            $scope.queryTime = result.time;
+            $scope.results = result.result;
           });
         })
         .catch((error) => {

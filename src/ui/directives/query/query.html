@@ -3,10 +3,10 @@
     <div class="collection-info pull-left">
       <ul>
         <li>
-          <i class="fa fa-server"></i> {{ ::collection.serverName }}
+          <i class="fa fa-server"></i> {{ ::currentCollection.serverName }}
         </li>
         <li>
-          <i class="fa fa-database"></i> {{ ::collection.databaseName }}
+          <i class="fa fa-database"></i> {{ ::currentCollection.databaseName }}
         </li>
         <li ng-show="queryTime">
           <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
