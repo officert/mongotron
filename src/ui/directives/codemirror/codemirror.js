@@ -53,7 +53,7 @@ angular.module('app').directive('codemirror', [
 
           editor.setOption('extraKeys', {
             Tab: function(cm) { //use spaces instead of tabs
-              var spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+              var spaces = new Array(cm.getOption('indentUnit') + 1).join(' ');
               cm.replaceSelection(spaces);
             }
           });
@@ -61,10 +61,6 @@ angular.module('app').directive('codemirror', [
           _registerEditorEvents();
 
           editor.refresh();
-
-          $timeout(function() {
-            editor.focus();
-          });
         }
 
         function _autoFormatSelection(codeMirrorEditor) {
@@ -91,7 +87,7 @@ angular.module('app').directive('codemirror', [
           });
         }
 
-        function _registerEditorEvents()  {
+        function _registerEditorEvents() {
           editor.on('keyup', function(cm, event) {
             $timeout(function() {
               _showAutoComplete(cm, event);

@@ -2,10 +2,10 @@
 
 const _ = require('underscore');
 
+const parser = require('./parser');
+
 const QUERY_TYPES = require('./queryTypes');
 const QUERY_HINTS = _.keys(QUERY_TYPES);
-
-const DB_QUERY_REGEX = /^db./;
 
 class Hinter {
   getHintsByValue(value) {
@@ -16,16 +16,22 @@ class Hinter {
     value = value.trim ? value.trim() : value;
     value = value.toLowerCase ? value.toLowerCase() : value;
 
-    if (!value || !DB_QUERY_REGEX.test(value)) {
+    let collectionName = parser.parseCollectionName(value);
+    let functionName = parser.parseFunctionName(value);
+
+    var collectionNameRegex = new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*');
+
+    if (!value || !value.startsWith('db.')) {
       hints = ['db'];
-    } else if (DB_QUERY_REGEX.test(value)) {
+    } else if (value.startsWith('db.') && (!collectionName || !collectionNameRegex.test(value))) {
       // hints = collectionNames;
-    } else {
+      hints = ['collection1', 'collection2', 'collection3'];
+    } else if (collectionName && collectionNameRegex.test(value) && functionName) {
       hints = QUERY_HINTS;
     }
 
     return {
-      hints: hints,
+      hints: hints || [],
       value: value
     };
   }
