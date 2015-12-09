@@ -17,8 +17,7 @@ angular.module('app').factory('tabCache', [
     TabCache.prototype.TYPES = TAB_TYPES;
 
     TabCache.prototype.EVENTS = {
-      TAB_CACHE_CHANGED: 'TAB_CACHE_CHANGED',
-      TAB_CACHE_NEW_TAB: 'TAB_CACHE_NEW_TAB'
+      TAB_CACHE_CHANGED: 'TAB_CACHE_CHANGED'
     };
 
     TabCache.prototype.add = function(tab) {
@@ -35,7 +34,6 @@ angular.module('app').factory('tabCache', [
 
       TAB_CACHE.push(tab);
 
-      this.emit(this.EVENTS.TAB_CACHE_NEW_TAB, tab);
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
 
       return tab;

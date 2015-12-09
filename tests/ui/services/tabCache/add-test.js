@@ -112,7 +112,7 @@ describe('services', function() {
           spyOn(tabCache, 'emit');
         });
 
-        it('should deactivate any other tabs and emit 2 events', function() {
+        it('should deactivate any other tabs and emit 1 event', function() {
           var newTab = tabCache.add({
             type: tabCache.TYPES.QUERY,
             name: 'Tab 1'
@@ -122,7 +122,7 @@ describe('services', function() {
 
           expect(tab1.active).toBe(false);
           expect(newTab.active).toBe(true);
-          expect(tabCache.emit.calls.count()).toEqual(2);
+          expect(tabCache.emit.calls.count()).toEqual(1);
         });
       });
     });

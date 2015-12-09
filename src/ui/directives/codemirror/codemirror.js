@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').directive('codemirror', [
   '$window',
   '$timeout',
@@ -11,12 +13,14 @@ angular.module('app').directive('codemirror', [
         handle: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
+        const hinter = require('lib/modules/query/hinter');
+
         var editor;
         var options = scope.codemirror || {};
 
         scope.handle = scope.handle || {};
         scope.handle.autoformat = function() {
-          autoFormatSelection(editor);
+          _autoFormatSelection(editor);
         };
 
         const TAB = '  '; //2 spaces
@@ -54,9 +58,43 @@ angular.module('app').directive('codemirror', [
             }
           });
 
+          _registerEditorEvents();
+
+          editor.refresh();
+
+          $timeout(function() {
+            editor.focus();
+          });
+        }
+
+        function _autoFormatSelection(codeMirrorEditor) {
+          if (!codeMirrorEditor) return;
+
+          var totalLines = codeMirrorEditor.lineCount();
+          var totalChars = codeMirrorEditor.getValue().length;
+
+          codeMirrorEditor.autoFormatRange({
+            line: 0,
+            ch: 0
+          }, {
+            line: totalLines,
+            ch: totalChars
+          });
+        }
+
+        function _showAutoComplete(cm, event) {
+          if (cm.state.completionActive) return;
+          if (event && event.keyCode === 13) return;
+
+          CodeMirror.commands.autocomplete(cm, null, {
+            completeSingle: false
+          });
+        }
+
+        function _registerEditorEvents()  {
           editor.on('keyup', function(cm, event) {
             $timeout(function() {
-              showAutoComplete(cm, event);
+              _showAutoComplete(cm, event);
             });
           });
 
@@ -76,7 +114,7 @@ angular.module('app').directive('codemirror', [
               var value = editor.getValue();
 
               if (!value) {
-                showAutoComplete(cm, event);
+                _showAutoComplete(cm, event);
               }
             });
           });
@@ -87,37 +125,45 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.refresh();
+          editor.on('endCompletion', function() {
+            console.log('AUTOCOMPLETE FINISHED');
 
-          $timeout(function() {
-            editor.focus();
-          });
-        }
+            var editorValue = editor.getValue();
 
-        function autoFormatSelection(codeMirrorEditor) {
-          if (!codeMirrorEditor) return;
+            console.log('editorValue', editorValue);
 
-          var totalLines = codeMirrorEditor.lineCount();
-          var totalChars = codeMirrorEditor.getValue().length;
-
-          codeMirrorEditor.autoFormatRange({
-            line: 0,
-            ch: 0
-          }, {
-            line: totalLines,
-            ch: totalChars
-          });
-        }
-
-        function showAutoComplete(cm, event) {
-          if (cm.state.completionActive) return;
-          if (event && event.keyCode === 13) return;
-
-          CodeMirror.commands.autocomplete(cm, null, {
-            completeSingle: false
+            // var value = getFullValue(editorValue);
+            //
+            // if (value) {
+            //   codemirror.setValue(value);
+            //   codemirror.setCursor(1, 4);
+            // }
           });
         }
       }
     };
   }
 ]);
+
+(() => {
+  const hinter = require('lib/modules/query/hinter');
+
+  CodeMirror.registerHelper('hint', 'javascript', function(codemirror) {
+    var currentValue = codemirror.getValue();
+
+    // var collectionNames = currentCollection && currentCollection.database ? _.pluck(currentCollection.database.collections, 'name') : [];
+
+    let results = hinter.getHintsByValue(currentValue);
+
+    let inner = {
+      from: codemirror.getCursor(),
+      to: codemirror.getCursor(),
+      list: null
+    };
+
+    inner.list = results.hints;
+    // inner.list = _filterAutoCompleteHintsByInput(results.value, results.hints) || [];
+
+    return inner;
+  });
+}());

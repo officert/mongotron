@@ -8,7 +8,7 @@ const QUERY_HINTS = _.keys(QUERY_TYPES);
 const DB_QUERY_REGEX = /^db./;
 
 class Hinter {
-  getHintsByValue(value, collectionNames) {
+  getHintsByValue(value) {
     if (!value) return [];
 
     let hints = null;
@@ -19,7 +19,7 @@ class Hinter {
     if (!value || !DB_QUERY_REGEX.test(value)) {
       hints = ['db'];
     } else if (DB_QUERY_REGEX.test(value)) {
-      hints = collectionNames;
+      // hints = collectionNames;
     } else {
       hints = QUERY_HINTS;
     }
