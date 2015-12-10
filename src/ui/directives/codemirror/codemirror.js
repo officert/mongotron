@@ -10,7 +10,8 @@ angular.module('app').directive('codemirror', [
       scope: {
         codemirror: '=',
         hasFocus: '=',
-        handle: '='
+        handle: '=',
+        customData: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         var editor;
@@ -46,6 +47,10 @@ angular.module('app').directive('codemirror', [
           editor = new $window.CodeMirror(function(editorElement) {
             element.append(editorElement);
           }, options);
+
+          _.extend(editor, {
+            customData: scope.customData
+          });
 
           element.data('CodeMirrorInstance', editor); //make the instance available from the DOM
 
@@ -120,7 +125,7 @@ angular.module('app').directive('codemirror', [
           });
 
           editor.on('endCompletion', function() {
-            console.log('AUTOCOMPLETE FINISHED');
+            console.log('AUTOCOMPLETE FINISHED', arguments);
 
             var editorValue = editor.getValue();
 
@@ -145,9 +150,15 @@ angular.module('app').directive('codemirror', [
   CodeMirror.registerHelper('hint', 'javascript', function(codemirror) {
     var currentValue = codemirror.getValue();
 
+    let customData = codemirror.customData || [];
+
+    console.log(customData);
+
     // var collectionNames = currentCollection && currentCollection.database ? _.pluck(currentCollection.database.collections, 'name') : [];
 
-    let results = hinter.getHintsByValue(currentValue);
+    let results = hinter.getHintsByValue(currentValue, {
+      collectionNames :  customData.collectionNames
+    });
 
     let inner = {
       from: codemirror.getCursor(),

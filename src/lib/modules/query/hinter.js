@@ -8,8 +8,18 @@ const QUERY_TYPES = require('./queryTypes');
 const QUERY_HINTS = _.keys(QUERY_TYPES);
 
 class Hinter {
-  getHintsByValue(value) {
+  /**
+   * Description of what this does.
+   *
+   * @method getHintsByValue
+   *
+   * @param {String} value - value to provide automcomplete hints for
+   * @param {Object} options
+   * @param {Array<String>} options.collectionNames
+   */
+  getHintsByValue(value, options) {
     if (!value) return [];
+    options = options && _.isObject(options) ? options : [];
 
     let hints = null;
 
@@ -28,7 +38,7 @@ class Hinter {
     } else if (value.startsWith('db.') && (!collectionName || !collectionNameRegex.test(value))) {
       //collection expression hints
       // hints = collectionNames;
-      hints = ['collection1', 'collection2', 'collection3'];
+      hints = options.collectionNames || [];
     } else if (collectionName && collectionNameRegex.test(value) && !collectionNamePlusFunctionRegex.test(value)) {
       //function expression hints
       hints = QUERY_HINTS;

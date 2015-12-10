@@ -17,6 +17,9 @@ angular.module('app').controller('queryCtrl', [
     $scope.queryTime = null;
     $scope.editorHandle = {};
     $scope.codeEditorOptions = {};
+    $scope.codeEditorCustomData = {
+      collectionNames: _.pluck($scope.database.collections, 'name')
+    };
 
     $scope.results = [];
     $scope.keyValueResults = [];
