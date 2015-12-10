@@ -14,6 +14,7 @@ const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
+const fs = require('fs');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -89,13 +90,11 @@ gulp.task('jshint', () => {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('release', ['pre-release'], (next) => {
+gulp.task('release-osx', ['pre-release'], (next) => {
   electronPackager({
     dir: '.',
     name: appConfig.name,
     out: appConfig.releasePath,
-    // platform: 'all',
-    // arch: 'all',
     platform: 'darwin',
     arch: 'x64',
     version: '0.35.0',
@@ -140,6 +139,57 @@ gulp.task('release', ['pre-release'], (next) => {
   // });
 });
 
+gulp.task('release-win', ['pre-release'], (next) => {
+  electronPackager({
+    dir: '.',
+    name: appConfig.name,
+    out: appConfig.releasePath,
+    platform: 'win32',
+    arch: 'all',
+    version: '0.35.0',
+    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+      return '/node_modules/' + ignore + '($|/)';
+    }),
+    icon: RELEASE_IMAGE_ICON,
+    appPath: 'build/browser/main.js',
+    force: true
+  }, next);
+});
+
+gulp.task('release-lin', ['pre-release'], (next) => {
+  electronPackager({
+    dir: '.',
+    name: appConfig.name,
+    out: appConfig.releasePath,
+    platform: 'linux',
+    arch: 'all',
+    version: '0.35.0',
+    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+      return '/node_modules/' + ignore + '($|/)';
+    }),
+    icon: RELEASE_IMAGE_ICON,
+    appPath: 'build/browser/main.js',
+    force: true
+  }, next);
+});
+
+gulp.task('release', ['pre-release'], (next) => {
+  electronPackager({
+    dir: '.',
+    name: appConfig.name,
+    out: appConfig.releasePath,
+    platform: 'all',
+    arch: 'all',
+    version: '0.35.0',
+    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+      return '/node_modules/' + ignore + '($|/)';
+    }),
+    icon: RELEASE_IMAGE_ICON,
+    appPath: 'build/browser/main.js',
+    force: true
+  }, next);
+});
+
 gulp.task('pre-release', (next) => {
   // Build Steps:
   //-------------------------------------
@@ -160,14 +210,28 @@ gulp.task('babel', () => {
     .pipe(gulp.dest(appConfig.buildPath));
 });
 
-gulp.task('prod-sym-links', () => {
+gulp.task('remove-link-src', (next) => {
+  unlink('./node_modules/src/', next);
+});
+
+gulp.task('remove-link-lib', (next) => {
+  unlink('./node_modules/lib/', next);
+});
+
+gulp.task('remove-link-tests', (next) => {
+  unlink('./node_modules/tests/', next);
+});
+
+gulp.task('remove-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests']);
+
+gulp.task('prod-sym-links', ['remove-sym-links'], () => {
   return gulp.src(['build/', 'build/lib/'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
       force: true
     }));
 });
 
-gulp.task('dev-sym-links', () => {
+gulp.task('dev-sym-links', ['remove-sym-links'], () => {
   return gulp.src(['src/', 'src/lib/', 'tests/'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
       force: true
@@ -261,4 +325,17 @@ gulp.task('test-unit-ui', (done) => {
 function _init(stream) {
   stream.setMaxListeners(0);
   return stream;
+}
+
+function unlink(symlink, next) {
+  fs.lstat(symlink, function(err, stat) {
+    if (err || !stat.isSymbolicLink()) {
+      next();
+    }
+
+    fs.unlink(symlink, function(lerr) {
+      // console.log('unlink symlink', symlink);
+      next();
+    });
+  });
 }
