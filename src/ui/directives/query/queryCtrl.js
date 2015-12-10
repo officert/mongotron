@@ -105,7 +105,7 @@ angular.module('app').controller('queryCtrl', [
 
       var collectionName = queryModule.parseCollectionName(rawQuery);
 
-      var collection = _getCollectionByNameFromRawQuery(collectionName, rawQuery);
+      var collection = _getCollectionByNameFromRawQuery(collectionName);
 
       if (!collection) {
         $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
@@ -171,7 +171,7 @@ angular.module('app').controller('queryCtrl', [
       });
     }
 
-    function _getCollectionByNameFromRawQuery(collectionName, rawQuery) {
+    function _getCollectionByNameFromRawQuery(collectionName) {
       if (!collectionName) return null;
 
       return _.find($scope.database.collections, function(collection) {
