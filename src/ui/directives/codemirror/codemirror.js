@@ -123,21 +123,6 @@ angular.module('app').directive('codemirror', [
               scope.hasFocus = false;
             });
           });
-
-          editor.on('endCompletion', function() {
-            console.log('AUTOCOMPLETE FINISHED', arguments);
-
-            var editorValue = editor.getValue();
-
-            console.log('editorValue', editorValue);
-
-            // var value = getFullValue(editorValue);
-            //
-            // if (value) {
-            //   codemirror.setValue(value);
-            //   codemirror.setCursor(1, 4);
-            // }
-          });
         }
       }
     };
@@ -152,12 +137,8 @@ angular.module('app').directive('codemirror', [
 
     let customData = codemirror.customData || [];
 
-    console.log(customData);
-
-    // var collectionNames = currentCollection && currentCollection.database ? _.pluck(currentCollection.database.collections, 'name') : [];
-
     let results = hinter.getHintsByValue(currentValue, {
-      collectionNames :  customData.collectionNames
+      collectionNames: customData.collectionNames
     });
 
     let inner = {
@@ -167,8 +148,54 @@ angular.module('app').directive('codemirror', [
     };
 
     inner.list = results.hints || [];
-    // inner.list = _filterAutoCompleteHintsByInput(results.value, results.hints) || [];
+    // inner.list = _filterAutoCompleteHintsByInput(results.value, results.hints || []) || [];
 
     return inner;
   });
+
+
+  // https://github.com/codemirror/CodeMirror/issues/3092
+  let javascriptHint = CodeMirror.hint.javascript;
+  CodeMirror.hint.javascript = function(codemirror, options) {
+    var codemirrorInstance = codemirror;
+
+    var result = javascriptHint(codemirror, options);
+
+    if (result) {
+      CodeMirror.on(result, 'pick', function(selectedHint) {
+        var currentValue = codemirrorInstance.getValue();
+
+        var previousValue = currentValue.substring(0, currentValue.indexOf(selectedHint));
+
+        var parts = previousValue.split('.');
+        parts.pop();
+        parts.push(selectedHint);
+
+        var newValue = parts.length > 1 ? parts.join('.') : parts[0];
+
+        codemirrorInstance.setValue(newValue);
+      });
+    }
+    return result;
+  };
+
+  // function _filterAutoCompleteHintsByInput(input, hints) {
+  //   if (!input) return null;
+  //   if (!hints || !hints.length) return null;
+  //
+  //   var term = $.ui.autocomplete.escapeRegex(input);
+  //
+  //   var startsWithMatcher = new RegExp('^' + term, 'i');
+  //   var startsWith = $.grep(hints, function(value) {
+  //     return startsWithMatcher.test(value.label || value.value || value);
+  //   });
+  //
+  //   var containsMatcher = new RegExp(term, 'i');
+  //   var contains = $.grep(hints, function(value) {
+  //     return $.inArray(value, startsWith) < 0 &&
+  //       containsMatcher.test(value.label || value.value || value);
+  //   });
+  //
+  //   return startsWith.concat(contains);
+  // }
 }());
