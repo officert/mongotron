@@ -129,7 +129,7 @@ angular.module('app').directive('codemirror', [
   }
 ]);
 
-(() => {
+(function() {
   const hinter = require('lib/modules/query/hinter');
 
   CodeMirror.registerHelper('hint', 'javascript', (codemirror) => {
