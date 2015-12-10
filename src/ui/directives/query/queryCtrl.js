@@ -98,15 +98,17 @@ angular.module('app').controller('queryCtrl', [
       $scope.changeTabName(rawQuery);
 
       if (!queryModule.isValidQuery(rawQuery)) {
-        $scope.error = 'Sorry, that is not a valid query';
+        $scope.error = 'Sorry, ' + rawQuery + ' is not a valid query';
         $scope.loading = false;
         return;
       }
 
-      var collection = _getCollectionFromRawQuery(rawQuery);
+      var collectionName = queryModule.parseCollectionName(rawQuery);
+
+      var collection = _getCollectionByNameFromRawQuery(collectionName, rawQuery);
 
       if (!collection) {
-        $scope.error = 'Sorry, that is not a valid collection name';
+        $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
         $scope.loading = false;
         return;
       }
@@ -169,9 +171,7 @@ angular.module('app').controller('queryCtrl', [
       });
     }
 
-    function _getCollectionFromRawQuery(rawQuery) {
-      var collectionName = queryModule.parseCollectionName(rawQuery);
-
+    function _getCollectionByNameFromRawQuery(collectionName, rawQuery) {
       if (!collectionName) return null;
 
       return _.find($scope.database.collections, function(collection) {
