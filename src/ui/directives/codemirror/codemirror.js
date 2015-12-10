@@ -155,7 +155,7 @@ angular.module('app').directive('codemirror', [
       list: null
     };
 
-    inner.list = results.hints;
+    inner.list = results.hints || [];
     // inner.list = _filterAutoCompleteHintsByInput(results.value, results.hints) || [];
 
     return inner;
