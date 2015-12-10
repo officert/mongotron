@@ -216,10 +216,12 @@ angular.module('app').factory('tabCache', [
       }
     };
 
-    TabCache.prototype.deactivateAll = function(exceptionIds) {
-      _deactivateAll(exceptionIds);
+    TabCache.prototype.deactivateAll = function() {
+      if (TAB_CACHE.length) {
+        _deactivateAll();
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     function getTabIconClasssName(type) {
@@ -237,11 +239,9 @@ angular.module('app').factory('tabCache', [
       return className;
     }
 
-    function _deactivateAll(exceptionIds) {
+    function _deactivateAll() {
       _.each(TAB_CACHE, function(tab) {
-        if (!exceptionIds || (exceptionIds && !_.contains(exceptionIds, tab.id))) {
-          tab.active = false;
-        }
+        tab.active = false;
       });
     }
 
