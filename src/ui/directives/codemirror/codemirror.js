@@ -14,8 +14,8 @@ angular.module('app').directive('codemirror', [
         customData: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
-        var editor;
-        var options = scope.codemirror || {};
+        let editor;
+        let options = scope.codemirror || {};
 
         scope.handle = scope.handle || {};
         scope.handle.autoformat = function() {
@@ -36,15 +36,15 @@ angular.module('app').directive('codemirror', [
         init();
 
         //take initial model value and set editor with it
-        ngModelCtrl.$formatters.push(function(modelValue) {
-          $timeout(function() {
+        ngModelCtrl.$formatters.push((modelValue) => {
+          $timeout(() => {
             editor.setValue(modelValue);
           });
           return modelValue;
         });
 
         function init() {
-          editor = new $window.CodeMirror(function(editorElement) {
+          editor = new $window.CodeMirror((editorElement) => {
             element.append(editorElement);
           }, options);
 
@@ -55,8 +55,8 @@ angular.module('app').directive('codemirror', [
           element.data('CodeMirrorInstance', editor); //make the instance available from the DOM
 
           editor.setOption('extraKeys', {
-            Tab: function(cm) { //use spaces instead of tabs
-              var spaces = new Array(cm.getOption('indentUnit') + 1).join(' ');
+            Tab: (cm) => { //use spaces instead of tabs
+              let spaces = new Array(cm.getOption('indentUnit') + 1).join(' ');
               cm.replaceSelection(spaces);
             }
           });
@@ -69,8 +69,8 @@ angular.module('app').directive('codemirror', [
         function _autoFormatSelection(codeMirrorEditor) {
           if (!codeMirrorEditor) return;
 
-          var totalLines = codeMirrorEditor.lineCount();
-          var totalChars = codeMirrorEditor.getValue().length;
+          let totalLines = codeMirrorEditor.lineCount();
+          let totalChars = codeMirrorEditor.getValue().length;
 
           codeMirrorEditor.autoFormatRange({
             line: 0,
@@ -91,14 +91,14 @@ angular.module('app').directive('codemirror', [
         }
 
         function _registerEditorEvents() {
-          editor.on('keyup', function(cm, event) {
-            $timeout(function() {
+          editor.on('keyup', (cm, event) => {
+            $timeout(() => {
               _showAutoComplete(cm, event);
             });
           });
 
-          editor.on('change', function() {
-            $timeout(function() {
+          editor.on('change', () => {
+            $timeout(() => {
               var value = editor.getValue();
               value = value && value.trim ? value.trim() : value;
 
@@ -106,8 +106,8 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.on('focus', function(cm, event) {
-            $timeout(function() {
+          editor.on('focus', (cm, event) => {
+            $timeout(() => {
               scope.hasFocus = true;
 
               var value = editor.getValue();
@@ -118,8 +118,8 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.on('blur', function() {
-            $timeout(function() {
+          editor.on('blur', () => {
+            $timeout(() => {
               scope.hasFocus = false;
             });
           });
@@ -132,8 +132,8 @@ angular.module('app').directive('codemirror', [
 (() => {
   const hinter = require('lib/modules/query/hinter');
 
-  CodeMirror.registerHelper('hint', 'javascript', function(codemirror) {
-    var currentValue = codemirror.getValue();
+  CodeMirror.registerHelper('hint', 'javascript', (codemirror) => {
+    let currentValue = codemirror.getValue();
 
     let customData = codemirror.customData || [];
 
@@ -156,24 +156,27 @@ angular.module('app').directive('codemirror', [
 
   // https://github.com/codemirror/CodeMirror/issues/3092
   let javascriptHint = CodeMirror.hint.javascript;
-  CodeMirror.hint.javascript = function(codemirror, options) {
-    var codemirrorInstance = codemirror;
+  CodeMirror.hint.javascript = (codemirror, options) => {
+    let codemirrorInstance = codemirror;
 
-    var result = javascriptHint(codemirror, options);
+    let result = javascriptHint(codemirror, options);
 
     if (result) {
-      CodeMirror.on(result, 'pick', function(selectedHint) {
-        var currentValue = codemirrorInstance.getValue();
+      CodeMirror.on(result, 'pick', (selectedHint) => {
+        let currentValue = codemirrorInstance.getValue();
 
-        var previousValue = currentValue.substring(0, currentValue.indexOf(selectedHint));
+        let previousValue = currentValue.substring(0, currentValue.indexOf(selectedHint));
 
-        var parts = previousValue.split('.');
+        let parts = previousValue.split('.');
         parts.pop();
         parts.push(selectedHint);
 
-        var newValue = parts.length > 1 ? parts.join('.') : parts[0];
+        let newValue = parts.length > 1 ? parts.join('.') : parts[0];
 
         codemirrorInstance.setValue(newValue);
+
+        let cursor = codemirrorInstance.getCursor();
+        codemirrorInstance.setCursor(cursor.line, cursor.ch - selectedHint.length);
       });
     }
     return result;
