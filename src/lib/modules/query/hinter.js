@@ -19,14 +19,18 @@ class Hinter {
     let collectionName = parser.parseCollectionName(value);
     let functionName = parser.parseFunctionName(value);
 
-    var collectionNameRegex = new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*');
+    var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*') : null;
+    var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[a-zA-Z0-9]*\\(') : null;
 
     if (!value || !value.startsWith('db.')) {
+      //root expression hints
       hints = ['db'];
     } else if (value.startsWith('db.') && (!collectionName || !collectionNameRegex.test(value))) {
+      //collection expression hints
       // hints = collectionNames;
       hints = ['collection1', 'collection2', 'collection3'];
-    } else if (collectionName && collectionNameRegex.test(value) && functionName) {
+    } else if (collectionName && collectionNameRegex.test(value) && !collectionNamePlusFunctionRegex.test(value)) {
+      //function expression hints
       hints = QUERY_HINTS;
     }
 

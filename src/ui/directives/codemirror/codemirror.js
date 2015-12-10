@@ -13,8 +13,6 @@ angular.module('app').directive('codemirror', [
         handle: '='
       },
       link: function(scope, element, attrs, ngModelCtrl) {
-        const hinter = require('lib/modules/query/hinter');
-
         var editor;
         var options = scope.codemirror || {};
 
