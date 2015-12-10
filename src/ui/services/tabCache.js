@@ -77,7 +77,7 @@ angular.module('app').factory('tabCache', [
       var index = TAB_CACHE.indexOf(tab);
 
       if (index >= 0) {
-        this.activatePrevious(index);
+        if (tab.active) this.activatePrevious(index);
 
         TAB_CACHE.splice(index, 1);
 
@@ -99,8 +99,10 @@ angular.module('app').factory('tabCache', [
       }
     };
 
-    TabCache.prototype.removeAll = function() {
-      TAB_CACHE = [];
+    TabCache.prototype.removeAll = function(exceptionIds) {
+      TAB_CACHE = exceptionIds && exceptionIds.length ? _.filter(TAB_CACHE, function(tab) {
+        return _.contains(exceptionIds, tab.id);
+      }) : [];
 
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
