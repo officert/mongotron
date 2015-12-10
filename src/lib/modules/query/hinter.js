@@ -17,7 +17,7 @@ class Hinter {
     value = value.toLowerCase ? value.toLowerCase() : value;
 
     let collectionName = parser.parseCollectionName(value);
-    let functionName = parser.parseFunctionName(value);
+    // let functionName = parser.parseFunctionName(value);
 
     var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*') : null;
     var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[a-zA-Z0-9]*\\(') : null;
