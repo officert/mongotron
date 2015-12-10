@@ -163,6 +163,7 @@ angular.module('app').directive('codemirror', [
 
     if (result) {
       CodeMirror.on(result, 'pick', (selectedHint) => {
+        let cursor = codemirrorInstance.getCursor();
         let currentValue = codemirrorInstance.getValue();
 
         let previousValue = currentValue.substring(0, currentValue.indexOf(selectedHint));
@@ -175,8 +176,8 @@ angular.module('app').directive('codemirror', [
 
         codemirrorInstance.setValue(newValue);
 
-        let cursor = codemirrorInstance.getCursor();
-        codemirrorInstance.setCursor(cursor.line, cursor.ch - selectedHint.length);
+        let newChar = newValue.length;
+        codemirrorInstance.setCursor(cursor.line, newChar);
       });
     }
     return result;
