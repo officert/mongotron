@@ -131,7 +131,7 @@ angular.module('app').controller('queryCtrl', [
             $scope.queryTime = result.time;
             $scope.results = result.result;
 
-            if (query.mongoMethod !== 'find') {
+            if (query.mongoMethod !== 'find' && query.mongoMethod !== 'aggregate') {
               alertService.success(query.mongoMethod + ' was successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
