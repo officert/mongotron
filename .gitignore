@@ -8,3 +8,5 @@ src/ui/css
 *.idea
 release
 build
+
+tests/config/dbConnections-test.json
