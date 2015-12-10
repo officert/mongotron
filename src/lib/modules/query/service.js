@@ -42,8 +42,6 @@ class QueryService {
         .catch(reject);
     });
   }
-
-
 }
 
 /**
