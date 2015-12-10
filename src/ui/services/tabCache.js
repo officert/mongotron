@@ -202,20 +202,22 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.activateByName = function(name) {
+      if (!name) throw new Error('name is required');
+
       var tab = _.findWhere(TAB_CACHE, {
         name: name
       });
 
       if (tab) {
-        _deactivateAll();
+        this.deactivateAll();
         tab.active = true;
 
         this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
       }
     };
 
-    TabCache.prototype.deactivateAll = function() {
-      _deactivateAll();
+    TabCache.prototype.deactivateAll = function(exceptionIds) {
+      _deactivateAll(exceptionIds);
 
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
@@ -235,9 +237,11 @@ angular.module('app').factory('tabCache', [
       return className;
     }
 
-    function _deactivateAll() {
+    function _deactivateAll(exceptionIds) {
       _.each(TAB_CACHE, function(tab) {
-        tab.active = false;
+        if (!exceptionIds || (exceptionIds && !_.contains(exceptionIds, tab.id))) {
+          tab.active = false;
+        }
       });
     }
 
