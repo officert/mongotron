@@ -49,6 +49,12 @@ angular.module('app').factory('tabCache', [
       return tab;
     };
 
+    TabCache.prototype.getActive = function() {
+      return _.findWhere(TAB_CACHE, {
+        active: true
+      });
+    };
+
     TabCache.prototype.list = function() {
       return TAB_CACHE;
     };
