@@ -21,6 +21,7 @@ angular.module('app').controller('queryCtrl', [
       collectionNames: _.pluck($scope.database.collections, 'name')
     };
 
+    $scope.currentQuery = null;
     $scope.results = [];
     $scope.keyValueResults = [];
 
@@ -88,7 +89,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.currentCollection, $scope.exportQuery);
+      modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery.query);
     };
 
     function _runQuery(rawQuery) {
@@ -115,24 +116,25 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.currentCollection = collection;
 
-      let query = null;
+      let query;
 
       queryModule.createQuery(rawQuery)
         .then((_query) => {
           query = _query;
 
-          $scope.exportQuery = query.query; //used by the query-results-export directive
-
           return collection.execQuery(query);
         })
         .then((result) => {
           $timeout(() => {
+            $scope.currentQuery = query;
             $scope.loading = false;
             $scope.queryTime = result.time;
             $scope.results = result.result;
 
-            if (query.mongoMethod !== 'find' && query.mongoMethod !== 'aggregate') {
-              alertService.success(query.mongoMethod + ' was successful');
+            if ($scope.currentQuery.mongoMethod !== 'find' &&
+              $scope.currentQuery.mongoMethod !== 'aggregate' &&
+              $scope.currentQuery.mongoMethod !== 'count') {
+              alertService.success($scope.currentQuery.mongoMethod + ' was successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
             }

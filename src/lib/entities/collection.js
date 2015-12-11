@@ -119,6 +119,25 @@ class Collection {
   }
 
   /**
+   * @method count
+   * @param {Object} query - mongo query
+   * @param {Object} [options] - mongo query options
+   */
+  count(query, options) {
+    var _this = this;
+
+    return new Promise(function(resolve, reject) {
+      if (options && options.skip) options.skip = Number(options.skip);
+      if (options && options.limit) options.limit = Number(options.limit);
+
+      _this._dbCollection.count(query, options, function(error, result) {
+        if (error) return reject(error);
+        return resolve(result);
+      });
+    });
+  }
+
+  /**
    * @method deleteMany
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options

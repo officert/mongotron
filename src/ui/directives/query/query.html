@@ -50,30 +50,35 @@
     </div>
     <div class="query-results">
       <div class="query-results-inner">
-        <div class="alert alert-info" ng-show="!loading && !error && !results.length">
+        <div class="alert alert-info" ng-if="!loading && !error && !results">
           Your search did not return any results.
         </div>
-        <div ng-show="!loading && !error && results.length">
-          <div class="query-results" ng-show="currentView === VIEWS.LIST">
+        <div ng-show="!loading && !error && results">
+          <div class="query-results" ng-if="currentView === VIEWS.LIST">
             <div class="list-view">
-              <div class="result" ng-repeat="result in results track by result._id">
-                <ul class="menu">
-                  <!-- <li>
-                    <button class="btn btn-default">
-                      <i class="fa fa-pencil"></i>
-                    </button>
-                  </li> -->
-                  <li>
-                    <button class="btn btn-default" ng-click="deleteResult(result)">
-                      <i class="fa fa-plus rotate-45"></i>
-                    </button>
-                  </li>
-                </ul>
-                <pre>{{ ::result | json }}</pre>
+              <div class="results-list" ng-if="currentQuery.mongoMethod !== 'count'">
+                <div class="result" ng-repeat="result in results track by result._id">
+                  <ul class="menu">
+                    <!-- <li>
+                      <button class="btn btn-default">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                    </li> -->
+                    <li>
+                      <button class="btn btn-default" ng-click="deleteResult(result)">
+                        <i class="fa fa-plus rotate-45"></i>
+                      </button>
+                    </li>
+                  </ul>
+                  <pre>{{ ::result | json }}</pre>
+                </div>
+              </div>
+              <div class="result-count" ng-if="currentQuery.mongoMethod === 'count'">
+                {{ results }}
               </div>
             </div>
           </div>
-          <div class="query-results" ng-show="currentView === VIEWS.KEYVALUE">
+          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE">
             <div class="key-value-view">
               <div class="top-header clearfix">
                 <span class="table-cell col-sm-3 key">
