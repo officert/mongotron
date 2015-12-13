@@ -84,7 +84,7 @@
                 <span class="table-cell col-sm-3 key">
                   Key
                 </span>
-                <span class="col-sm-3 key">
+                <span class="col-sm-6 key">
                   Value
                 </span>
                 <span class="col-sm-3 key">
@@ -106,7 +106,8 @@
                 </ul>
                 <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
                   <span class="key">
-                    <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+                    <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
+                    (#{{ $index + 1 }}) {{ ::result._id }}
                   </span>
                   <span class="key">
                     {{ ::result.length }} fields
@@ -120,7 +121,7 @@
                     <span class="result-cell col-sm-3 key">
                       <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
                     </span>
-                    <span class="result-cell col-sm-3 value">
+                    <span class="result-cell col-sm-6 value">
                       {{ keyvalue.value }}
                     </span>
                     <span class="result-cell col-sm-3 type">
