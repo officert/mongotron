@@ -44,9 +44,7 @@ angular.module('app').controller('queryCtrl', [
     $scope.changeTabName(defaultQuery);
 
     $scope.form = {
-      query: defaultQuery,
-      skip: 0,
-      limit: 50
+      query: defaultQuery
     };
 
     $scope.runQuery = function() {
