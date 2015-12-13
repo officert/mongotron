@@ -10,7 +10,7 @@
     "csv": "0.4.6",
     "jquery": "2.1.4",
     "jsonfile": "2.2.1",
-    "mongodb": "2.0.47",
+    "mongodb": "2.1.1",
     "node-uuid": "1.4.3",
     "path-extra": "3.0.0",
     "underscore": "1.8.3",
