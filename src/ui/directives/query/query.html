@@ -106,8 +106,7 @@
                 </ul>
                 <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
                   <span class="key">
-                    <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
-                    (#{{ $index + 1 }}) {{ ::result._id }}
+                    <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
                   </span>
                   <span class="key">
                     {{ ::result.length }} fields
@@ -119,7 +118,7 @@
                 <div class="result-body slide clearfix" ng-class="{ 'open' : result.isOpen }">
                   <div class="result-row clearfix" ng-repeat="keyvalue in result">
                     <span class="result-cell col-sm-3 key">
-                      <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+                      <i class="{{ keyvalue.type }} fa {{ keyvalue.icon }}"></i> {{ keyvalue.key }}
                     </span>
                     <span class="result-cell col-sm-6 value">
                       {{ keyvalue.value }}
