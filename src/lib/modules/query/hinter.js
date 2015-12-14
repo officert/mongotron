@@ -17,31 +17,42 @@ class Hinter {
    * @param {Object} options
    * @param {Array<String>} options.collectionNames
    */
-  getHintsByValue(value, options) {
-    if (!value) return [];
+  getHintsByValue(fullQuery, currentWord, options) {
+    if (!fullQuery) return [];
     options = options && _.isObject(options) ? options : [];
 
     let hints = null;
+    let value = null;
 
-    value = value.trim ? value.trim() : value;
-    value = value.toLowerCase ? value.toLowerCase() : value;
+    value = fullQuery.trim ? fullQuery.trim() : fullQuery;
+    value = fullQuery.toLowerCase ? fullQuery.toLowerCase() : fullQuery;
 
-    let collectionName = parser.parseCollectionName(value);
-    // let functionName = parser.parseFunctionName(value);
+    let collectionName = parser.parseCollectionName(fullQuery);
+    let functionName = parser.parseFunctionName(fullQuery);
 
     var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*') : null;
     var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[a-zA-Z0-9]*\\(') : null;
 
     if (!value || !value.startsWith('db.')) {
       //root expression hints
-      hints = ['db'];
+      hints = ['db.'];
     } else if (value.startsWith('db.') && (!collectionName || !collectionNameRegex.test(value))) {
       //collection expression hints
-      // hints = collectionNames;
-      hints = options.collectionNames || [];
+      hints = options.collectionNames.map(function (collection) {
+        return collection + '.';
+      }) || [];
+      value = collectionName || '';
     } else if (collectionName && collectionNameRegex.test(value) && !collectionNamePlusFunctionRegex.test(value)) {
       //function expression hints
-      hints = QUERY_HINTS;
+      hints = QUERY_HINTS.map(function (hintFunction) {
+        return hintFunction + '(';
+      });
+      value = functionName || '';
+    } else if (currentWord.length) {
+      value = currentWord;
+      hints = [
+        'ObjectId('
+      ];
     }
 
     return {
