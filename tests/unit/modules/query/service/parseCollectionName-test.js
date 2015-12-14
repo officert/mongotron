@@ -60,6 +60,20 @@ describe('modules', function() {
             return next(null);
           });
         });
+
+        describe('when valid query with underscore is passed', function() {
+          it('should return the collection name portion of the query', function(next) {
+            var expectedCollectionName = 'blah_blah';
+            var rawQuery = 'db.' + expectedCollectionName + '.foobar({})';
+
+            var collectionName = queryService.parseCollectionName(rawQuery);
+
+            should.exist(collectionName);
+            collectionName.should.equal(expectedCollectionName);
+
+            return next(null);
+          });
+        });
       });
     });
   });
