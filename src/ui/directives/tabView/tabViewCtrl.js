@@ -3,7 +3,8 @@ angular.module('app').controller('tabViewCtrl', [
   'tabCache',
   'connectionCache',
   '$timeout',
-  function($scope, tabCache, connectionCache, $timeout) {
+  'menuService',
+  function($scope, tabCache, connectionCache, $timeout, menuService) {
     $scope.tabs = tabCache.list();
     $scope.connections = connectionCache.list();
 
@@ -44,6 +45,29 @@ angular.module('app').controller('tabViewCtrl', [
     connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
       $scope.connections = updatedCache;
     });
+
+    $scope.openTabContextMenu = function(tab, $event) {
+      if (!tab) return;
+      if ($event) $event.preventDefault();
+
+      menuService.showMenu([{
+        label: 'Close Tab',
+        click: function() {
+          $timeout(function() {
+            if (tab.active) tabCache.activateNext();
+            tabCache.remove(tab);
+          });
+        }
+      }, {
+        label: 'Close Other Tabs',
+        click: function() {
+          $timeout(function() {
+            if (!tab.active) tabCache.activateById(tab.id);
+            tabCache.removeAll([tab.id]);
+          });
+        }
+      }]);
+    };
 
     $scope.activateTab = function(tab, $event) {
       if ($event) $event.preventDefault();

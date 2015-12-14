@@ -21,10 +21,17 @@ module.exports = {
   },
   updateMany: {
     mongoMethod: 'updateMany',
-    extractOptions: true
+    extractOptions: true,
+    requireOptions: true
   },
   updateOne: {
     mongoMethod: 'updateOne',
-    extractOptions: true
+    extractOptions: true,
+    requireOptions: true
+  },
+  count: {
+    mongoMethod: 'count',
+    extractOptions: true,
+    requireOptions: false
   }
 };

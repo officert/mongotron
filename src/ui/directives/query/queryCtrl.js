@@ -21,11 +21,12 @@ angular.module('app').controller('queryCtrl', [
       collectionNames: _.pluck($scope.database.collections, 'name')
     };
 
+    $scope.currentQuery = null;
     $scope.results = [];
     $scope.keyValueResults = [];
 
     $scope.deleteResult = _deleteResult;
-    $scope.getPropertyTypeIcon = _getPropertyTypeIcons;
+    $scope.getPropertyTypeIcon = _getPropertyTypeIcon;
 
     let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
       name: $scope.defaultCollection
@@ -43,9 +44,7 @@ angular.module('app').controller('queryCtrl', [
     $scope.changeTabName(defaultQuery);
 
     $scope.form = {
-      query: defaultQuery,
-      skip: 0,
-      limit: 50
+      query: defaultQuery
     };
 
     $scope.runQuery = function() {
@@ -56,7 +55,7 @@ angular.module('app').controller('queryCtrl', [
       RAW: 'LIST',
       KEYVALUE: 'KEYVALUE'
     };
-    $scope.currentView = $scope.VIEWS.LIST;
+    $scope.currentView = $scope.VIEWS.KEYVALUE;
 
     _runQuery(defaultQuery);
 
@@ -88,7 +87,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.currentCollection, $scope.exportQuery);
+      modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery.query);
     };
 
     function _runQuery(rawQuery) {
@@ -115,24 +114,25 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.currentCollection = collection;
 
-      let query = null;
+      let query;
 
       queryModule.createQuery(rawQuery)
         .then((_query) => {
           query = _query;
 
-          $scope.exportQuery = query.query; //used by the query-results-export directive
-
           return collection.execQuery(query);
         })
         .then((result) => {
           $timeout(() => {
+            $scope.currentQuery = query;
             $scope.loading = false;
             $scope.queryTime = result.time;
             $scope.results = result.result;
 
-            if (query.mongoMethod !== 'find' && query.mongoMethod !== 'aggregate') {
-              alertService.success(query.mongoMethod + ' was successful');
+            if ($scope.currentQuery.mongoMethod !== 'find' &&
+              $scope.currentQuery.mongoMethod !== 'aggregate' &&
+              $scope.currentQuery.mongoMethod !== 'count') {
+              alertService.success($scope.currentQuery.mongoMethod + ' was successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
             }
@@ -179,7 +179,7 @@ angular.module('app').controller('queryCtrl', [
       });
     }
 
-    function _getPropertyTypeIcons(propertyType) {
+    function _getPropertyTypeIcon(propertyType) {
       var icon;
 
       switch (propertyType) {
@@ -212,13 +212,18 @@ angular.module('app').controller('queryCtrl', [
         props._id = result._id;
 
         for (var key in result) {
-          //TODO: if it's a nested object then recurse and generate key/value for all of it's props
-          props.push({
+          //TODO: if it's a neested object then recurse and generate key/value for all of it's props
+
+          let newResult = {
             _id: result[key] ? result[key]._id : result[key],
             key: key,
             value: result[key],
             type: _getPropertyType(result[key])
-          });
+          };
+
+          newResult.icon = _getPropertyTypeIcon(newResult.type);
+
+          props.push(newResult);
         }
 
         return props;

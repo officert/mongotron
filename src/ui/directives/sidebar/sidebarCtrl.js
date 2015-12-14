@@ -38,9 +38,7 @@ angular.module('app').controller('sidebarCtrl', [
             tabCache.removeByConnectionId(connection.id);
           });
         }
-      }], {
-        connection: connection
-      });
+      }]);
     };
 
     $scope.openConnection = function openConnection(connection) {
@@ -100,9 +98,7 @@ angular.module('app').controller('sidebarCtrl', [
             });
           });
         }
-      }], {
-        connection: connection
-      });
+      }]);
     };
 
     $scope.openDatabaseCollectionFolderContextMenu = function openDatabaseCollectionFolderContextMenu(database, connection) {
