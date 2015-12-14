@@ -22,6 +22,20 @@ afterEach(function() {
   sandbox.restore();
 });
 
+/**
+ * Tests that the expected mongoId matches the resulting mongoId
+ * @param  {ObjectId} expected The ObjectId that's expected
+ * @param  {ObjectId} result   The ObjectId that's returned
+ * @return {[type]}          [description]
+ */
+function ensureMatchingObjectIds(expected, result) {
+  var expectedToString = expected.toString();
+  var resultToString = result.toString();
+
+  (result instanceof mongodb.ObjectId).should.equal(true);
+  resultToString.should.equal(expectedToString);
+}
+
 describe('modules', function() {
   describe('query', function() {
     describe('service', function() {
@@ -68,8 +82,8 @@ describe('modules', function() {
                 query.should.have.property('rawQuery', expectedQuery.rawQuery);
                 query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                 query.should.have.property('extractOptions', expectedQuery.extractOptions);
-                query.should.have.property('query', expectedQuery.query);
                 query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                query.should.have.property('query', query.query);
                 next();
               })
               .catch((reason) => {
@@ -77,7 +91,7 @@ describe('modules', function() {
                 next();
               });
           });
-          it('should resolve properly parse ObjectId', function(next) {
+          it('should properly parse ObjectId', function(next) {
             var rawQuery = 'db.foobar.find({ _id: ObjectId("559d3e5b8152eefd4e9bed45") })';
             var expectedQuery = {
               rawQuery: rawQuery,
@@ -94,8 +108,9 @@ describe('modules', function() {
                 query.should.have.property('rawQuery', expectedQuery.rawQuery);
                 query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                 query.should.have.property('extractOptions', expectedQuery.extractOptions);
-                query.should.have.property('query', expectedQuery.query);
                 query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                query.should.have.property('query');
+                ensureMatchingObjectIds(expectedQuery.query._id, query.query._id);
                 next();
               })
               .catch((reason) => {
