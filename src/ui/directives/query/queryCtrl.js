@@ -2,11 +2,10 @@
 
 angular.module('app').controller('queryCtrl', [
   '$scope',
-  '$timeout',
   '$rootScope',
   'alertService',
   'modalService',
-  function($scope, $timeout, $rootScope, alertService, modalService) {
+  function($scope, $rootScope, alertService, modalService) {
     const queryModule = require('lib/modules/query');
     const mongoUtils = require('src/lib/utils/mongoUtils');
 
@@ -154,14 +153,14 @@ angular.module('app').controller('queryCtrl', [
       }).result.then(function() {
         $scope.currentCollection.deleteById(result._id)
           .then(() => {
-            $timeout(() => {
+            $scope.$apply(() => {
               alertService.success('Delete successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
             });
           })
           .catch((error) => {
-            $timeout(() => {
+            $scope.$apply(() => {
               $scope.error = error && error.message ? error.message : error;
               $scope.loading = false;
             });

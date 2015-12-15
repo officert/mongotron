@@ -110,7 +110,7 @@
 
                   </span>
                 </span>
-                <div class="result-body slide clearfix" ng-class="{ 'open' : result.isOpen }">
+                <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
                   <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValueResults">
                     <span class="result-cell col-sm-3 key">
                       <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
