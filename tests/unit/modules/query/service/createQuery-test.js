@@ -4,7 +4,10 @@ require('tests/unit/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
+const _ = require('underscore');
+
 const testUtils = require('tests/utils/testUtils');
+
 require('sinon-as-promised');
 
 var queryService;
@@ -28,82 +31,171 @@ describe('modules', function() {
     describe('service', function() {
       describe('createQuery', function() {
         describe('when no query is passed', function() {
-          it('should reject', function(next) {
+          it('should reject with an error', function(next) {
             var rawQuery = null;
 
             queryService.createQuery(rawQuery)
-              .catch((reason) => {
-                should.exist(reason);
+              .catch((error) => {
+                should.exist(error);
+                should(_.isError(error)).equal(true);
+                error.message.should.equal('Query - parse() : rawQuery is required');
                 next();
               });
           });
         });
 
         describe('when invalid query is passed', function() {
-          it('should return null', function(next) {
+          it('should reject with an error', function(next) {
             var rawQuery = 'fooooobar';
 
             queryService.createQuery(rawQuery)
-              .catch((reason) => {
-                should.exist(reason);
+              .catch((error) => {
+                should.exist(error);
+                should(_.isError(error)).equal(true);
+                error.message.should.equal('Invalid query');
+                next();
+              });
+          });
+        });
+
+        describe('when query contains an unsupported function name', function() {
+          it('should reject with an error', function(next) {
+            var rawQuery = 'db.foobar.badFunction()';
+
+            queryService.createQuery(rawQuery)
+              .catch((error) => {
+                should.exist(error);
+                should(_.isError(error)).equal(true);
+                error.message.should.equal('badFunction is not a supported query');
+                next();
+              });
+          });
+        });
+
+        describe('when no options are passed to an update query', function() {
+          it('should reject with an error', function(next) {
+            var rawQuery = 'db.foobar.updateOne()';
+
+            queryService.createQuery(rawQuery)
+              .catch((error) => {
+                should.exist(error);
+                should(_.isError(error)).equal(true);
+                console.log(error);
+                error.message.should.equal('query options are required for mongo updateOne');
+                next();
+              });
+          });
+        });
+
+        describe('when no options are passed to an updateMany query', function() {
+          it('should reject with an error', function(next) {
+            var rawQuery = 'db.foobar.updateMany()';
+
+            queryService.createQuery(rawQuery)
+              .catch((error) => {
+                should.exist(error);
+                should(_.isError(error)).equal(true);
+                console.log(error);
+                error.message.should.equal('query options are required for mongo updateMany');
                 next();
               });
           });
         });
 
         describe('when valid query is passed', function() {
-          it('should resolve Query Class Object', function(next) {
-            var rawQuery = 'db.foobar.find({})';
-            var expectedQuery = {
-              rawQuery: rawQuery,
-              mongoMethod: 'find',
-              extractOptions: false,
-              query: {},
-              queryOptions: null
-            };
+          describe('find query', function() {
+            describe('empty query', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.find({})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'find',
+                  extractOptions: false,
+                  query: {},
+                  queryOptions: null
+                };
 
-            queryService.createQuery(rawQuery)
-              .then((query) => {
-                should.exist(query);
-                query.should.be.an.instanceOf(queryClass);
-                query.should.have.property('rawQuery', expectedQuery.rawQuery);
-                query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
-                query.should.have.property('extractOptions', expectedQuery.extractOptions);
-                query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                query.should.have.property('query', query.query);
-                next();
-              })
-              .catch((reason) => {
-                should.not.exist(reason);
-                next();
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    query.should.have.property('query', query.query);
+                    next();
+                  })
+                  .catch((reason) => {
+                    should.not.exist(reason);
+                    next();
+                  });
               });
+            });
+
+            describe('query containing ObjectId', function() {
+              it('should properly parse ObjectId', function(next) {
+                var rawQuery = 'db.foobar.find({ _id: ObjectId("559d3e5b8152eefd4e9bed45") })';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'find',
+                  extractOptions: false,
+                  query: {
+                    _id: mongodb.ObjectId("559d3e5b8152eefd4e9bed45")
+                  },
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    query.should.have.property('query');
+                    testUtils.compareMongoObjectIds(expectedQuery.query._id, query.query._id).should.equal(true);
+                    next();
+                  })
+                  .catch((reason) => {
+                    should.not.exist(reason);
+                    next();
+                  });
+              });
+            });
           });
-          it('should properly parse ObjectId', function(next) {
-            var rawQuery = 'db.foobar.find({ _id: ObjectId("559d3e5b8152eefd4e9bed45") })';
-            var expectedQuery = {
-              rawQuery: rawQuery,
-              mongoMethod: 'find',
-              extractOptions: false,
-              query: { _id: mongodb.ObjectId("559d3e5b8152eefd4e9bed45") },
-              queryOptions: null
-            };
 
-            queryService.createQuery(rawQuery)
-              .then((query) => {
-                should.exist(query);
-                query.should.be.an.instanceOf(queryClass);
-                query.should.have.property('rawQuery', expectedQuery.rawQuery);
-                query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
-                query.should.have.property('extractOptions', expectedQuery.extractOptions);
-                query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                query.should.have.property('query');
-                testUtils.compareMongoObjectIds(expectedQuery.query._id, query.query._id).should.equal(true);
-                next();
-              })
-              .catch((reason) => {
-                should.not.exist(reason);
-                next();
+          describe('updateMany query', function() {
+            describe('empty query', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.updateMany({},{})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'updateMany',
+                  extractOptions: true,
+                  query: {},
+                  queryOptions: {}
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    query.should.have.property('query', query.query);
+                    next();
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    should.not.exist(error);
+                    next();
+                  });
               });
+            });
           });
         });
       });
