@@ -80,7 +80,6 @@ describe('modules', function() {
               .catch((error) => {
                 should.exist(error);
                 should(_.isError(error)).equal(true);
-                console.log(error);
                 error.message.should.equal('query options are required for mongo updateOne');
                 next();
               });
@@ -95,7 +94,6 @@ describe('modules', function() {
               .catch((error) => {
                 should.exist(error);
                 should(_.isError(error)).equal(true);
-                console.log(error);
                 error.message.should.equal('query options are required for mongo updateMany');
                 next();
               });
@@ -123,7 +121,7 @@ describe('modules', function() {
                     query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                     query.should.have.property('extractOptions', expectedQuery.extractOptions);
                     query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                    query.should.have.property('query', query.query);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
                     next();
                   })
                   .catch((reason) => {
@@ -154,7 +152,7 @@ describe('modules', function() {
                     query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                     query.should.have.property('extractOptions', expectedQuery.extractOptions);
                     query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                    query.should.have.property('query');
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
                     testUtils.compareMongoObjectIds(expectedQuery.query._id, query.query._id).should.equal(true);
                     next();
                   })
@@ -186,7 +184,7 @@ describe('modules', function() {
                     query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                     query.should.have.property('extractOptions', expectedQuery.extractOptions);
                     query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                    query.should.have.property('query', query.query);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
                     next();
                   })
                   .catch((reason) => {
@@ -217,7 +215,7 @@ describe('modules', function() {
                     query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                     query.should.have.property('extractOptions', expectedQuery.extractOptions);
                     query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                    query.should.have.property('query', query.query);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
                     next();
                   })
                   .catch((reason) => {
@@ -247,12 +245,11 @@ describe('modules', function() {
                     query.should.have.property('rawQuery', expectedQuery.rawQuery);
                     query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
                     query.should.have.property('extractOptions', expectedQuery.extractOptions);
-                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
-                    query.should.have.property('query', query.query);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    should(testUtils.compareObjects(query.queryOptions, expectedQuery.queryOptions)).equal(true);
                     next();
                   })
                   .catch((error) => {
-                    console.log(error);
                     should.not.exist(error);
                     next();
                   });
