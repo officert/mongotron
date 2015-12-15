@@ -119,7 +119,7 @@
                       {{ ::keyvalue.value }}
                     </span>
                     <span class="result-cell col-sm-3 type">
-                      {{ ::keyvalue.type }}
+                      {{ ::keyvalue.type }} <span ng-if="keyvalue.results">{{ keyvalue.results | json }}</span>
                     </span>
                   </div>
                 </div>

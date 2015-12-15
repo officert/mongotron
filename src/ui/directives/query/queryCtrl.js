@@ -33,7 +33,7 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
+    let defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
     $scope.changeTabName = function(name) {
       if (!name || !$scope.databaseTab) return;
@@ -95,9 +95,9 @@ angular.module('app').controller('queryCtrl', [
         return;
       }
 
-      var collectionName = queryModule.parseCollectionName(rawQuery);
+      let collectionName = queryModule.parseCollectionName(rawQuery);
 
-      var collection = _getCollectionByNameFromRawQuery(collectionName);
+      let collection = _getCollectionByNameFromRawQuery(collectionName);
 
       if (!collection) {
         $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
@@ -177,7 +177,7 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _getPropertyTypeIcon(propertyType) {
-      var icon;
+      let icon;
 
       switch (propertyType) {
         case 'number':
@@ -214,18 +214,30 @@ angular.module('app').controller('queryCtrl', [
     function _convertResultToKeyValueResult(result) {
       if (!result) return null;
 
-      var props = [];
+      let props = [];
 
-      for (var key in result) {
+      for (let key in result) {
         //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+
+        let value = result[key];
+        let type = _getPropertyType(result[key]);
+        let icon = _getPropertyTypeIcon(type);
+        let results = null;
+
+        if (type === 'array') {
+          results = value;
+          _convertResultsToKeyValueResults(results);
+          value = 'Array[' + value.length + ']';
+        }
 
         let newResult = {
           key: key,
-          value: result[key],
-          type: _getPropertyType(result[key])
+          value: value,
+          type: type,
+          icon: icon
         };
 
-        newResult.icon = _getPropertyTypeIcon(newResult.type);
+        if (results) newResult.results = results;
 
         props.push(newResult);
       }
