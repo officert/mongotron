@@ -80,12 +80,6 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
-    $scope.$watch('results', function(val) {
-      if (val && _.isArray(val)) {
-        $scope.keyValueResults = _convertResultsToKeyValueResults(val);
-      }
-    });
-
     $scope.exportResults = function() {
       modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery.query);
     };
@@ -123,11 +117,15 @@ angular.module('app').controller('queryCtrl', [
           return collection.execQuery(query);
         })
         .then((result) => {
-          $timeout(() => {
+          $scope.$apply(() => {
             $scope.currentQuery = query;
             $scope.loading = false;
             $scope.queryTime = result.time;
             $scope.results = result.result;
+
+            if ($scope.results && _.isArray($scope.results)) {
+              $scope.keyValueResults = _convertResultsToKeyValueResults($scope.results);
+            }
 
             if ($scope.currentQuery.mongoMethod !== 'find' &&
               $scope.currentQuery.mongoMethod !== 'aggregate' &&
@@ -139,7 +137,7 @@ angular.module('app').controller('queryCtrl', [
           });
         })
         .catch((error) => {
-          $timeout(() => {
+          $scope.$apply(() => {
             $scope.error = error && error.message ? error.message : error;
             $scope.loading = false;
           });
@@ -207,27 +205,35 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _convertResultsToKeyValueResults(results) {
+      if (!results) return null;
+
       return results.map(function(result) {
-        var props = [];
-        props._id = result._id;
-
-        for (var key in result) {
-          //TODO: if it's a neested object then recurse and generate key/value for all of it's props
-
-          let newResult = {
-            _id: result[key] ? result[key]._id : result[key],
-            key: key,
-            value: result[key],
-            type: _getPropertyType(result[key])
-          };
-
-          newResult.icon = _getPropertyTypeIcon(newResult.type);
-
-          props.push(newResult);
-        }
-
-        return props;
+        return _convertResultToKeyValueResult(result);
       });
+    }
+
+    function _convertResultToKeyValueResult(result) {
+      if (!result) return null;
+
+      var props = [];
+
+      for (var key in result) {
+        //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+
+        let newResult = {
+          key: key,
+          value: result[key],
+          type: _getPropertyType(result[key])
+        };
+
+        newResult.icon = _getPropertyTypeIcon(newResult.type);
+
+        props.push(newResult);
+      }
+
+      result.keyValueResults = props;
+
+      return result;
     }
 
     function _getPropertyType(property) {
