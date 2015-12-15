@@ -222,7 +222,9 @@ gulp.task('remove-link-tests', (next) => {
   unlink('./node_modules/tests/', next);
 });
 
-gulp.task('remove-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests']);
+gulp.task('remove-sym-links', (next) => {
+  runSequence('remove-link-src', 'remove-link-lib', 'remove-link-tests', next);
+});
 
 gulp.task('prod-sym-links', ['remove-sym-links'], () => {
   return gulp.src(['build/', 'build/lib/'])
@@ -330,7 +332,7 @@ function _init(stream) {
 function unlink(symlink, next) {
   fs.lstat(symlink, function(err, stat) {
     if (err || !stat.isSymbolicLink()) {
-      next();
+      return next();
     }
 
     fs.unlink(symlink, function(lerr) {
