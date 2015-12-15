@@ -1,11 +1,11 @@
 'use strict';
 
-const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9)*.*/);
-const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9]*)[.]{0,1}/; //extracts the collection name from a valid query
-const FUNCTION_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9]*)[.]{1}([a-zA-Z1-9]*)/; //extracts the function from a valid query
+const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9_)*.*/);
+const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9_]*)[.]{0,1}/; //extracts the collection name from a valid query
+const FUNCTION_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9_]*)[.]{1}([a-zA-Z1-9]*)/; //extracts the function from a valid query
 
-const EXTRACT_FULL_QUERY_REGEX = /^(?:db).*.(?:[a-zA-Z0-9])\(([^]+.*)\)/; // https://regex101.com/r/sQ9cP4/2
-const EXTRACT_QUERY_AND_OPTIONS_REGEX = /({[^]+})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]+})/; // https://regex101.com/r/sQ9cP4/4
+const EXTRACT_FULL_QUERY_REGEX = /^(?:db)\..*\..*?\(([^]+.*)\)/; // https://regex101.com/r/dI6kY9/1
+const EXTRACT_QUERY_AND_OPTIONS_REGEX = /({[^]*})(?:[\s\n\r])*,(?:[\s\n\r])*({[^]*})/; // https://regex101.com/r/cY1hO6/1
 
 class QueryParser {
   isValidQuery(query) {

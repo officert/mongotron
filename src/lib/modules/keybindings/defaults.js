@@ -3,6 +3,7 @@ module.exports = [{
   commands: {
     'cmd-shift-{': 'tab-manager:previous-tab',
     'cmd-shift-}': 'tab-manager:next-tab',
+    'cmd-t': 'tab-manager:new-tab'
   }
 }, {
   context: 'mongotron-workspace',

@@ -40,7 +40,7 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'sinon',
   'supertest'
 ];
-const RELEASE_IMAGE_ICON = __dirname + '/src/ui/images/logo_icon.icns';
+const RELEASE_OSX_IMAGE_ICON = __dirname + '/resources/darwin/logo_icon.icns';
 
 const LESSOPTIONS = {
   compress: false
@@ -101,7 +101,7 @@ gulp.task('release-osx', ['pre-release'], (next) => {
     ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
       return '/node_modules/' + ignore + '($|/)';
     }),
-    icon: RELEASE_IMAGE_ICON,
+    icon: RELEASE_OSX_IMAGE_ICON,
     appPath: 'build/browser/main.js',
     force: true
   }, next);

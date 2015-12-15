@@ -36,7 +36,8 @@ class Query {
 
       let query = _parseRawQuery(rawQuery, {
         methodName: _this.mongoMethod,
-        extractOptions: _this.extractOptions
+        extractOptions: _this.extractOptions,
+        requireOptions: _this.requireOptions
       });
 
       if (_.isError(query)) return reject(query);
@@ -83,10 +84,10 @@ function _parseRawQuery(rawQuery, options) {
     let rawOptionsValue = parser.parseOptions(rawQuery);
 
     if (!rawQueryValue) return new Error('error parsing query');
-    if (!rawOptionsValue) return new Error('query options are required for mongo ' + options.methodName);
+    if (!rawOptionsValue && options.requireOptions) return new Error('query options are required for mongo ' + options.methodName);
 
     query = evaluator.eval(rawQueryValue, evalScope);
-    queryOptions = evaluator.eval(rawOptionsValue, evalScope);
+    if (rawOptionsValue) queryOptions = evaluator.eval(rawOptionsValue, evalScope);
 
     if (_.isError(query)) return query;
     if (_.isError(queryOptions)) return queryOptions;

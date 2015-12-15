@@ -49,6 +49,12 @@ angular.module('app').factory('tabCache', [
       return tab;
     };
 
+    TabCache.prototype.getActive = function() {
+      return _.findWhere(TAB_CACHE, {
+        active: true
+      });
+    };
+
     TabCache.prototype.list = function() {
       return TAB_CACHE;
     };
@@ -77,7 +83,7 @@ angular.module('app').factory('tabCache', [
       var index = TAB_CACHE.indexOf(tab);
 
       if (index >= 0) {
-        this.activatePrevious(index);
+        if (tab.active) this.activatePrevious(index);
 
         TAB_CACHE.splice(index, 1);
 
@@ -99,8 +105,10 @@ angular.module('app').factory('tabCache', [
       }
     };
 
-    TabCache.prototype.removeAll = function() {
-      TAB_CACHE = [];
+    TabCache.prototype.removeAll = function(exceptionIds) {
+      TAB_CACHE = exceptionIds && exceptionIds.length ? _.filter(TAB_CACHE, function(tab) {
+        return _.contains(exceptionIds, tab.id);
+      }) : [];
 
       this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
     };
@@ -202,12 +210,14 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.activateByName = function(name) {
+      if (!name) throw new Error('name is required');
+
       var tab = _.findWhere(TAB_CACHE, {
         name: name
       });
 
       if (tab) {
-        _deactivateAll();
+        this.deactivateAll();
         tab.active = true;
 
         this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
@@ -215,9 +225,11 @@ angular.module('app').factory('tabCache', [
     };
 
     TabCache.prototype.deactivateAll = function() {
-      _deactivateAll();
+      if (TAB_CACHE.length) {
+        _deactivateAll();
 
-      this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+        this.emit(this.EVENTS.TAB_CACHE_CHANGED, TAB_CACHE);
+      }
     };
 
     function getTabIconClasssName(type) {

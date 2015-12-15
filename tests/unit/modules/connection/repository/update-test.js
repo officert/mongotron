@@ -52,8 +52,6 @@ describe('modules', function() {
               .catch(function(err) {
                 should.exist(err);
 
-                console.log(err);
-
                 (err instanceof errors.InvalidArugmentError).should.equal(true);
 
                 err.message.should.equal('options is required');

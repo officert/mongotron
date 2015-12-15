@@ -18,8 +18,8 @@
     </div>
     <div class="right-btns">
       <div class="query-btn-list btn-group clearfix">
-        <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
-        <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input>
+        <!-- <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
+        <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input> -->
         <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
       </div>
       <div class="btn-group">
@@ -44,42 +44,47 @@
         </div>
       </div>
     </form>
-    <loading></loading>
-    <div class="query-error alert alert-danger" ng-show="error">
-      {{ error }}
-    </div>
     <div class="query-results">
       <div class="query-results-inner">
-        <div class="alert alert-info" ng-show="!loading && !error && !results.length">
+        <loading loading="loading"></loading>
+        <div class="query-error alert alert-danger" ng-show="!loading && error">
+          {{ error }}
+        </div>
+        <div class="alert alert-info" ng-show="!loading && !error && !results">
           Your search did not return any results.
         </div>
-        <div ng-show="!loading && !error && results.length">
-          <div class="query-results" ng-show="currentView === VIEWS.LIST">
+        <div ng-show="!loading && !error && results">
+          <div class="query-results" ng-if="currentView === VIEWS.LIST">
             <div class="list-view">
-              <div class="result" ng-repeat="result in results track by result._id">
-                <ul class="menu">
-                  <!-- <li>
-                    <button class="btn btn-default">
-                      <i class="fa fa-pencil"></i>
-                    </button>
-                  </li> -->
-                  <li>
-                    <button class="btn btn-default" ng-click="deleteResult(result)">
-                      <i class="fa fa-plus rotate-45"></i>
-                    </button>
-                  </li>
-                </ul>
-                <pre>{{ ::result | json }}</pre>
+              <div class="results-list" ng-if="currentQuery.mongoMethod !== 'count'">
+                <div class="result" ng-repeat="result in results track by result._id">
+                  <ul class="menu">
+                    <!-- <li>
+                      <button class="btn btn-default">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                    </li> -->
+                    <li>
+                      <button class="btn btn-default" ng-click="deleteResult(result)">
+                        <i class="fa fa-plus rotate-45"></i>
+                      </button>
+                    </li>
+                  </ul>
+                  <pre>{{ ::result | json }}</pre>
+                </div>
+              </div>
+              <div class="result-count" ng-if="currentQuery.mongoMethod === 'count'">
+                {{ results }}
               </div>
             </div>
           </div>
-          <div class="query-results" ng-show="currentView === VIEWS.KEYVALUE">
+          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE">
             <div class="key-value-view">
               <div class="top-header clearfix">
                 <span class="table-cell col-sm-3 key">
                   Key
                 </span>
-                <span class="col-sm-3 key">
+                <span class="col-sm-6 key">
                   Value
                 </span>
                 <span class="col-sm-3 key">
@@ -101,7 +106,7 @@
                 </ul>
                 <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
                   <span class="key">
-                    <i class="fa " ng-class="{ 'fa-chevron-right' : !status.open, 'fa-chevron-down' : status.open }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+                    <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
                   </span>
                   <span class="key">
                     {{ ::result.length }} fields
@@ -113,9 +118,9 @@
                 <div class="result-body slide clearfix" ng-class="{ 'open' : result.isOpen }">
                   <div class="result-row clearfix" ng-repeat="keyvalue in result">
                     <span class="result-cell col-sm-3 key">
-                      <i class="{{ keyvalue.type }} fa {{ ::getPropertyTypeIcon(keyvalue.type) }}"></i> {{ keyvalue.key }}
+                      <i class="{{ keyvalue.type }} fa {{ keyvalue.icon }}"></i> {{ keyvalue.key }}
                     </span>
-                    <span class="result-cell col-sm-3 value">
+                    <span class="result-cell col-sm-6 value">
                       {{ keyvalue.value }}
                     </span>
                     <span class="result-cell col-sm-3 type">

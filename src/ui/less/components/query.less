@@ -50,13 +50,13 @@
   .query-content {
     height: calc(~'100% - 50px');
     overflow: auto;
-    .query-error {
-      margin-top: 15px;
-    }
+    display: flex;
+    flex-direction: column;
     .query-form {
-      max-height: 240px;
       overflow-y: auto;
       margin-bottom: 15px;
+      flex: 0 0 auto;
+      max-height: 220px;
       .query-input {
         border-radius: 4px;
         padding: 2px;
@@ -76,6 +76,9 @@
         height: 100%;
         width: 100%;
         overflow-y: auto;
+        .query-error {
+          margin-top: 15px;
+        }
       }
     }
   }
