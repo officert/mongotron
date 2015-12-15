@@ -87,7 +87,7 @@ function _parseRawQuery(rawQuery, options) {
     if (!rawOptionsValue && options.requireOptions) return new Error('query options are required for mongo ' + options.methodName);
 
     query = evaluator.eval(rawQueryValue, evalScope);
-    if (queryOptions) queryOptions = evaluator.eval(rawOptionsValue, evalScope);
+    if (rawOptionsValue) queryOptions = evaluator.eval(rawOptionsValue, evalScope);
 
     if (_.isError(query)) return query;
     if (_.isError(queryOptions)) return queryOptions;
