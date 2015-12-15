@@ -5,7 +5,7 @@
   <ul class="connection-list">
     <li ng-repeat="connection in connections" ng-class="{ 'active' : connection.selected }" ng-show="connections.length">
       <a class="name" href="#" ng-click="selectConnection(connection, $event)" ng-dblclick="selectConnection(connection, $event);connect($event)">
-        <i class="icon-connected fa fa-check-circle-o"></i> {{ connection.name }}
+        {{ connection.name }}
       </a>
       <span class="links">
         <a class="edit" href="#" ng-click="changePage('add', connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
