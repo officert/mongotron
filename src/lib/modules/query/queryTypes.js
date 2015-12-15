@@ -31,7 +31,7 @@ module.exports = {
   },
   count: {
     mongoMethod: 'count',
-    extractOptions: true,
+    extractOptions: false,
     requireOptions: false
   }
 };

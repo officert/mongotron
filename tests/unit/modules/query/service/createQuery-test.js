@@ -166,6 +166,68 @@ describe('modules', function() {
             });
           });
 
+          describe('aggregate query', function() {
+            describe('empty query', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.aggregate({})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'aggregate',
+                  extractOptions: false,
+                  query: {},
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    query.should.have.property('query', query.query);
+                    next();
+                  })
+                  .catch((reason) => {
+                    should.not.exist(reason);
+                    next();
+                  });
+              });
+            });
+          });
+
+          describe('count query', function() {
+            describe('empty query', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.count({})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'count',
+                  extractOptions: false,
+                  query: {},
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    query.should.have.property('query', query.query);
+                    next();
+                  })
+                  .catch((reason) => {
+                    should.not.exist(reason);
+                    next();
+                  });
+              });
+            });
+          });
+
           describe('updateMany query', function() {
             describe('empty query', function() {
               it('should resolve Query Class Object', function(next) {
