@@ -82,8 +82,7 @@ angular.module('app').directive('codemirror', [
         }
 
         function _showAutoComplete(cm, event) {
-          if (cm.state.completionActive) return;
-          if (event && event.keyCode === 13) return;
+          if (event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1) return;
 
           CodeMirror.commands.autocomplete(cm, null, {
             completeSingle: false
@@ -106,14 +105,14 @@ angular.module('app').directive('codemirror', [
             });
           });
 
-          editor.on('focus', (cm, event) => {
+          editor.on('focus', (cm) => {
             $timeout(() => {
               scope.hasFocus = true;
 
               var value = editor.getValue();
 
               if (!value) {
-                _showAutoComplete(cm, event);
+                _showAutoComplete(cm);
               }
             });
           });
@@ -133,22 +132,22 @@ angular.module('app').directive('codemirror', [
   const hinter = require('lib/modules/query/hinter');
 
   CodeMirror.registerHelper('hint', 'javascript', (codemirror) => {
-    let currentValue = codemirror.getValue();
-
+    let cursor = codemirror.getCursor();
+    let currentQuery = codemirror.getValue();
+    let currentWordRange = codemirror.findWordAt(cursor);
+    let currentWord = codemirror.getRange(currentWordRange.anchor, currentWordRange.head).replace(/[^\w\s]/gi, '');
     let customData = codemirror.customData || [];
 
-    let results = hinter.getHintsByValue(currentValue, {
+    let results = hinter.getHintsByValue(currentQuery, currentWord, {
       collectionNames: customData.collectionNames
     });
 
     let inner = {
-      from: codemirror.getCursor(),
-      to: codemirror.getCursor(),
-      list: null
+      from: cursor,
+      to: cursor,
+      currentWord: currentWord,
+      list: _filterAutoCompleteHintsByInput(results.value, results.hints || []) || []
     };
-
-    inner.list = results.hints || [];
-    // inner.list = _filterAutoCompleteHintsByInput(results.value, results.hints || []) || [];
 
     return inner;
   });
@@ -165,14 +164,7 @@ angular.module('app').directive('codemirror', [
       CodeMirror.on(result, 'pick', (selectedHint) => {
         let cursor = codemirrorInstance.getCursor();
         let currentValue = codemirrorInstance.getValue();
-
-        let previousValue = currentValue.substring(0, currentValue.indexOf(selectedHint));
-
-        let parts = previousValue.split('.');
-        parts.pop();
-        parts.push(selectedHint);
-
-        let newValue = parts.length > 1 ? parts.join('.') : parts[0];
+        let newValue = currentValue.replace(result.currentWord + selectedHint, selectedHint);
 
         codemirrorInstance.setValue(newValue);
 
@@ -183,23 +175,23 @@ angular.module('app').directive('codemirror', [
     return result;
   };
 
-  // function _filterAutoCompleteHintsByInput(input, hints) {
-  //   if (!input) return null;
-  //   if (!hints || !hints.length) return null;
-  //
-  //   var term = $.ui.autocomplete.escapeRegex(input);
-  //
-  //   var startsWithMatcher = new RegExp('^' + term, 'i');
-  //   var startsWith = $.grep(hints, function(value) {
-  //     return startsWithMatcher.test(value.label || value.value || value);
-  //   });
-  //
-  //   var containsMatcher = new RegExp(term, 'i');
-  //   var contains = $.grep(hints, function(value) {
-  //     return $.inArray(value, startsWith) < 0 &&
-  //       containsMatcher.test(value.label || value.value || value);
-  //   });
-  //
-  //   return startsWith.concat(contains);
-  // }
+  function _filterAutoCompleteHintsByInput(input, hints) {
+    if (typeof input !== 'string') return null;
+    if (!hints || !hints.length) return null;
+
+    var term = $.ui.autocomplete.escapeRegex(input);
+
+    var startsWithMatcher = new RegExp('^' + term, 'i');
+    var startsWith = $.grep(hints, function(value) {
+      return startsWithMatcher.test(value.label || value.value || value);
+    });
+
+    var containsMatcher = new RegExp(term, 'i');
+    var contains = $.grep(hints, function(value) {
+      return $.inArray(value, startsWith) < 0 &&
+        containsMatcher.test(value.label || value.value || value);
+    });
+
+    return startsWith.concat(contains);
+  }
 }());

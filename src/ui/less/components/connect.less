@@ -25,27 +25,15 @@
   .connection-list {
     margin-bottom: 25px;
     li {
-      border-top: 1px solid darken(@theme-modal-content-bg, 10%);
-      border-left: 1px solid darken(@theme-modal-content-bg, 10%);
-      border-right: 1px solid darken(@theme-modal-content-bg, 10%);
+      margin: 4px;
       position: relative;
-      &:first-child {
-        border-top-left-radius: 2px;
-        border-top-right-radius: 2px;
-      }
-      &:last-child {
-        border-bottom: 1px solid darken(@theme-modal-content-bg, 10%);
-        border-bottom-left-radius: 2px;
-        border-bottom-right-radius: 2px;
-      }
+      border: 1px solid darken(@theme-modal-content-bg, 10%);
+      border-radius: 2px;
       &.active {
-        .name {
-          padding-left: 40px;
-          .icon-connected {
-            left: 10px;
-            color: @theme-modal-connected-icon-color;
-          }
-        }
+        border: 1px solid @theme-btn-primary-bg;
+        border-radius: 2px;
+        outline: none;
+        box-shadow: 0 0 10px @theme-btn-primary-bg;
       }
       a {
         overflow: hidden;
