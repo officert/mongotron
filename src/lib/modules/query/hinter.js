@@ -30,8 +30,11 @@ class Hinter {
     let collectionName = parser.parseCollectionName(fullQuery);
     let functionName = parser.parseFunctionName(fullQuery);
 
-    var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*') : null;
-    var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[a-zA-Z0-9]*\\(') : null;
+    // var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[\\s\\S]*') : null;
+    // var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+' + collectionName + '\.[a-zA-Z0-9]*\\(') : null;
+
+    var collectionNameRegex = collectionName ? new RegExp('[\\s\\S]+\.' + collectionName + '\\.[\\s\\S]*', 'i') : null;
+    var collectionNamePlusFunctionRegex = collectionName ? new RegExp('[\\s\\S]+\.' + collectionName + '\\.[a-zA-Z0-9]*\\(', 'i') : null;
 
     if (!value || !value.startsWith('db.')) {
       //root expression hints
