@@ -4,6 +4,7 @@ require('tests/unit/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
+const testUtils = require('tests/utils/testUtils');
 require('sinon-as-promised');
 
 var queryService;
@@ -21,20 +22,6 @@ before(function() {
 afterEach(function() {
   sandbox.restore();
 });
-
-/**
- * Tests that the expected mongoId matches the resulting mongoId
- * @param  {ObjectId} expected The ObjectId that's expected
- * @param  {ObjectId} result   The ObjectId that's returned
- * @return {[type]}          [description]
- */
-function ensureMatchingObjectIds(expected, result) {
-  var expectedToString = expected.toString();
-  var resultToString = result.toString();
-
-  (result instanceof mongodb.ObjectId).should.equal(true);
-  resultToString.should.equal(expectedToString);
-}
 
 describe('modules', function() {
   describe('query', function() {
@@ -110,7 +97,7 @@ describe('modules', function() {
                 query.should.have.property('extractOptions', expectedQuery.extractOptions);
                 query.should.have.property('queryOptions', expectedQuery.queryOptions);
                 query.should.have.property('query');
-                ensureMatchingObjectIds(expectedQuery.query._id, query.query._id);
+                testUtils.compareMongoObjectIds(expectedQuery.query._id, query.query._id).should.equal(true);
                 next();
               })
               .catch((reason) => {
