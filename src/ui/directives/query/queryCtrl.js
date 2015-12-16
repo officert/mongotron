@@ -51,7 +51,7 @@ angular.module('app').controller('queryCtrl', [
     };
 
     $scope.VIEWS = {
-      RAW: 'LIST',
+      TEXT: 'TEXT',
       KEYVALUE: 'KEYVALUE'
     };
     $scope.currentView = $scope.VIEWS.KEYVALUE;
@@ -223,11 +223,15 @@ angular.module('app').controller('queryCtrl', [
         let type = _getPropertyType(result[key]);
         let icon = _getPropertyTypeIcon(type);
         let results = null;
+        let keyValueResults = null;
 
         if (type === 'array') {
           results = value;
           _convertResultsToKeyValueResults(results);
           value = 'Array[' + value.length + ']';
+        } else if (type === 'object') {
+          keyValueResults = _convertResultToKeyValueResult(value);
+          value = 'Object{' + value.length + '}';
         }
 
         let newResult = {
@@ -238,6 +242,7 @@ angular.module('app').controller('queryCtrl', [
         };
 
         if (results) newResult.results = results;
+        if (keyValueResults) newResult.keyValueResults = keyValueResults;
 
         props.push(newResult);
       }

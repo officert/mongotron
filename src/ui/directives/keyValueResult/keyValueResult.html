@@ -1,0 +1,34 @@
+<div>
+  <ul class="menu">
+    <li>
+      <button class="btn btn-default" ng-click="deleteResult(result)">
+        <i class="fa fa-plus rotate-45"></i>
+      </button>
+    </li>
+  </ul>
+  <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
+    <span class="key">
+      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+    </span>
+    <span class="key">
+      {{ ::result.keyValueResults.length }} fields
+    </span>
+    <span class="key">
+
+    </span>
+  </span>
+  <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
+    <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValueResults">
+      <span class="result-cell col-sm-3 key">
+        <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
+      </span>
+      <span class="result-cell col-sm-6 value">
+        {{ ::keyvalue.value }}
+      </span>
+      <span class="result-cell col-sm-3 type">
+        {{ ::keyvalue.type }}
+        <span ng-if="keyvalue.results">{{ keyvalue.results | json }}</span>
+      </span>
+    </div>
+  </div>
+</div>
