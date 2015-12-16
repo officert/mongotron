@@ -68,16 +68,16 @@ angular.module('app').service('modalService', [
           '</div>',
         controller: [
           '$scope',
-          '$modalInstance',
-          function($scope, $modalInstance) {
+          '$uibModalInstance',
+          function($scope, $uibModalInstance) {
             $scope.message = options.confirmMessage;
 
             $scope.ok = function() {
-              $modalInstance.close(1);
+              $uibModalInstance.close(1);
             };
 
             $scope.cancel = function() {
-              $modalInstance.dismiss('cancel');
+              $uibModalInstance.dismiss('cancel');
             };
           }
         ],
