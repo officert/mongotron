@@ -2,11 +2,10 @@
 
 angular.module('app').controller('queryCtrl', [
   '$scope',
-  '$timeout',
   '$rootScope',
   'alertService',
   'modalService',
-  function($scope, $timeout, $rootScope, alertService, modalService) {
+  function($scope, $rootScope, alertService, modalService) {
     const queryModule = require('lib/modules/query');
     const mongoUtils = require('src/lib/utils/mongoUtils');
 
@@ -34,7 +33,7 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    var defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
+    let defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
     $scope.changeTabName = function(name) {
       if (!name || !$scope.databaseTab) return;
@@ -80,12 +79,6 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
-    $scope.$watch('results', function(val) {
-      if (val && _.isArray(val)) {
-        $scope.keyValueResults = _convertResultsToKeyValueResults(val);
-      }
-    });
-
     $scope.exportResults = function() {
       modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery.query);
     };
@@ -102,9 +95,9 @@ angular.module('app').controller('queryCtrl', [
         return;
       }
 
-      var collectionName = queryModule.parseCollectionName(rawQuery);
+      let collectionName = queryModule.parseCollectionName(rawQuery);
 
-      var collection = _getCollectionByNameFromRawQuery(collectionName);
+      let collection = _getCollectionByNameFromRawQuery(collectionName);
 
       if (!collection) {
         $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
@@ -123,11 +116,15 @@ angular.module('app').controller('queryCtrl', [
           return collection.execQuery(query);
         })
         .then((result) => {
-          $timeout(() => {
+          $scope.$apply(() => {
             $scope.currentQuery = query;
             $scope.loading = false;
             $scope.queryTime = result.time;
             $scope.results = result.result;
+
+            if ($scope.results && _.isArray($scope.results)) {
+              $scope.keyValueResults = _convertResultsToKeyValueResults($scope.results);
+            }
 
             if ($scope.currentQuery.mongoMethod !== 'find' &&
               $scope.currentQuery.mongoMethod !== 'aggregate' &&
@@ -139,7 +136,7 @@ angular.module('app').controller('queryCtrl', [
           });
         })
         .catch((error) => {
-          $timeout(() => {
+          $scope.$apply(() => {
             $scope.error = error && error.message ? error.message : error;
             $scope.loading = false;
           });
@@ -156,14 +153,14 @@ angular.module('app').controller('queryCtrl', [
       }).result.then(function() {
         $scope.currentCollection.deleteById(result._id)
           .then(() => {
-            $timeout(() => {
+            $scope.$apply(() => {
               alertService.success('Delete successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
             });
           })
           .catch((error) => {
-            $timeout(() => {
+            $scope.$apply(() => {
               $scope.error = error && error.message ? error.message : error;
               $scope.loading = false;
             });
@@ -180,7 +177,7 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _getPropertyTypeIcon(propertyType) {
-      var icon;
+      let icon;
 
       switch (propertyType) {
         case 'number':
@@ -207,27 +204,47 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _convertResultsToKeyValueResults(results) {
+      if (!results) return null;
+
       return results.map(function(result) {
-        var props = [];
-        props._id = result._id;
+        return _convertResultToKeyValueResult(result);
+      });
+    }
 
-        for (var key in result) {
-          //TODO: if it's a neested object then recurse and generate key/value for all of it's props
+    function _convertResultToKeyValueResult(result) {
+      if (!result) return null;
 
-          let newResult = {
-            _id: result[key] ? result[key]._id : result[key],
-            key: key,
-            value: result[key],
-            type: _getPropertyType(result[key])
-          };
+      let props = [];
 
-          newResult.icon = _getPropertyTypeIcon(newResult.type);
+      for (let key in result) {
+        //TODO: if it's a nested object then recurse and generate key/value for all of it's props
 
-          props.push(newResult);
+        let value = result[key];
+        let type = _getPropertyType(result[key]);
+        let icon = _getPropertyTypeIcon(type);
+        let results = null;
+
+        if (type === 'array') {
+          results = value;
+          _convertResultsToKeyValueResults(results);
+          value = 'Array[' + value.length + ']';
         }
 
-        return props;
-      });
+        let newResult = {
+          key: key,
+          value: value,
+          type: type,
+          icon: icon
+        };
+
+        if (results) newResult.results = results;
+
+        props.push(newResult);
+      }
+
+      result.keyValueResults = props;
+
+      return result;
     }
 
     function _getPropertyType(property) {
