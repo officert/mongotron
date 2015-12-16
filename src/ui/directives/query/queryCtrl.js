@@ -180,8 +180,11 @@ angular.module('app').controller('queryCtrl', [
       let icon;
 
       switch (propertyType) {
+        case 'null':
+          icon = 'fa-smile-o';
+          break;
         case 'number':
-          icon = '';
+          icon = 'fa-smile-o';
           break;
         case 'string':
           icon = 'fa-quote-left';
@@ -253,7 +256,8 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _getPropertyType(property) {
-      if (_.isNumber(property)) return 'number';
+      if (property === null || property === undefined) return 'null';
+      if (_.isNumber(property)) return 'number'; //TODO: split into checks for Int, Float, Double, etc..
       if (_.isString(property)) return 'string';
       if (_.isArray(property)) return 'array';
       if (_.isDate(property)) return 'date';
