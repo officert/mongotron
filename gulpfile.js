@@ -14,6 +14,7 @@ const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
+const fs = require('fs');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -39,7 +40,20 @@ const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in 
   'sinon',
   'supertest'
 ];
-const RELEASE_OSX_IMAGE_ICON = __dirname + '/resources/darwin/logo_icon.icns';
+const RELEASE_IMAGE_ICON = __dirname + '/resources/icon/logo_icon';
+const RELEASE_OSX_IMAGE_ICON = RELEASE_IMAGE_ICON + '.icns';
+const RELEASE_WIN_IMAGE_ICON = RELEASE_IMAGE_ICON + '.ico';
+const RELEASE_SETTINGS = {
+  dir: '.',
+  name: appConfig.name,
+  out: appConfig.releasePath,
+  version: '0.36.0',
+  ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
+    return '/node_modules/' + ignore + '($|/)';
+  }),
+  appPath: 'build/browser/main.js',
+  force: true
+};
 
 const LESSOPTIONS = {
   compress: false
@@ -89,23 +103,12 @@ gulp.task('jshint', () => {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('release', ['pre-release'], (next) => {
-  electronPackager({
-    dir: '.',
-    name: appConfig.name,
-    out: appConfig.releasePath,
-    // platform: 'all',
-    // arch: 'all',
+gulp.task('release-osx', ['pre-release'], (next) => {
+  electronPackager(_.extend(RELEASE_SETTINGS, {
     platform: 'darwin',
     arch: 'x64',
-    version: '0.35.0',
-    ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
-      return '/node_modules/' + ignore + '($|/)';
-    }),
     icon: RELEASE_OSX_IMAGE_ICON,
-    appPath: 'build/browser/main.js',
-    force: true
-  }, next);
+  }), next);
 
   // var env = _.extend({}, process.env);
   // env.NODE_ENV = 'production';
@@ -140,6 +143,29 @@ gulp.task('release', ['pre-release'], (next) => {
   // });
 });
 
+gulp.task('release-win', ['pre-release'], (next) => {
+  electronPackager(_.extend(RELEASE_SETTINGS, {
+    platform: 'win32',
+    arch: 'all',
+    icon: RELEASE_WIN_IMAGE_ICON,
+  }), next);
+});
+
+gulp.task('release-lin', ['pre-release'], (next) => {
+  electronPackager(_.extend(RELEASE_SETTINGS, {
+    platform: 'linux',
+    arch: 'all',
+  }), next);
+});
+
+gulp.task('release', ['pre-release'], (next) => {
+  electronPackager(_.extend(RELEASE_SETTINGS, {
+    platform: 'all',
+    arch: 'all',
+    icon: RELEASE_IMAGE_ICON,
+  }), next);
+});
+
 gulp.task('pre-release', (next) => {
   // Build Steps:
   //-------------------------------------
@@ -160,14 +186,26 @@ gulp.task('babel', () => {
     .pipe(gulp.dest(appConfig.buildPath));
 });
 
-gulp.task('prod-sym-links', () => {
+gulp.task('remove-link-src', (next) => {
+  unlink('./node_modules/src', next);
+});
+
+gulp.task('remove-link-lib', (next) => {
+  unlink('./node_modules/lib', next);
+});
+
+gulp.task('remove-link-tests', (next) => {
+  unlink('./node_modules/tests', next);
+});
+
+gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
   return gulp.src(['build/', 'build/lib/'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
       force: true
     }));
 });
 
-gulp.task('dev-sym-links', () => {
+gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests'], () => {
   return gulp.src(['src/', 'src/lib/', 'tests/'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
       force: true
@@ -261,4 +299,16 @@ gulp.task('test-unit-ui', (done) => {
 function _init(stream) {
   stream.setMaxListeners(0);
   return stream;
+}
+
+function unlink(symlink, next) {
+  fs.lstat(symlink, function(lerr, lstat) {
+    if (lerr || !lstat.isSymbolicLink()) {
+      return next();
+    }
+
+    fs.unlink(symlink, function(uerr) {
+      next();
+    });
+  });
 }
