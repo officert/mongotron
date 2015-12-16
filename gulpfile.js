@@ -304,12 +304,10 @@ function _init(stream) {
 function unlink(symlink, next) {
   fs.lstat(symlink, function(lerr, lstat) {
     if (lerr || !lstat.isSymbolicLink()) {
-      console.log('unlink err', lerr, symlink);
       return next();
     }
 
     fs.unlink(symlink, function(uerr) {
-      console.log('unlink', uerr, symlink);
       next();
     });
   });
