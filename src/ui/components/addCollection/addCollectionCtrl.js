@@ -2,13 +2,13 @@
 
 angular.module('app').controller('addCollectionCtrl', [
   '$scope',
-  '$modalInstance',
+  '$uibModalInstance',
   'database',
   'alertService',
-  function($scope, $modalInstance, database, alertService) {
+  function($scope, $uibModalInstance, database, alertService) {
 
     $scope.close = function() {
-      $modalInstance.close(1);
+      $uibModalInstance.close(1);
     };
 
     $scope.form = {};

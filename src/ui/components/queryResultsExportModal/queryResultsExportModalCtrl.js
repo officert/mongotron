@@ -2,17 +2,17 @@
 
 angular.module('app').controller('queryResultsExportModalCtrl', [
   '$scope',
-  '$modalInstance',
+  '$uibModalInstance',
   'collection',
   'query',
-  function($scope, $modalInstance, collection, query) {
+  function($scope, $uibModalInstance, collection, query) {
     $scope.collection = collection;
     $scope.query = query;
 
     $scope.queryResultsExportHandle = {};
 
     $scope.close = function() {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     $scope.export = function() {

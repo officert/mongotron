@@ -2,9 +2,9 @@
 
 angular.module('app').controller('connectCtrl', [
   '$scope',
-  '$modalInstance',
+  '$uibModalInstance',
   'page',
-  function($scope, $modalInstance, page) {
+  function($scope, $uibModalInstance, page) {
     $scope.listConnectionsSrc = __dirname + '/components/connect/listConnections/listConnections.html';
     $scope.addConnectionSrc = __dirname + '/components/connect/addConnection/addConnection.html';
     $scope.editConnectionSrc = __dirname + '/components/connect/editConnection/editConnection.html';
@@ -13,7 +13,7 @@ angular.module('app').controller('connectCtrl', [
     $scope.currentPage = page || 'list';
 
     $scope.close = function() {
-      $modalInstance.close(1);
+      $uibModalInstance.close(1);
     };
 
     $scope.changePage = function(page, connection, $event) {

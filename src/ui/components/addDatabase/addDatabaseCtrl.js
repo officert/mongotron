@@ -2,13 +2,13 @@
 
 angular.module('app').controller('addDatabaseCtrl', [
   '$scope',
-  '$modalInstance',
+  '$uibModalInstance',
   'connection',
   'alertService',
-  function($scope, $modalInstance, connection, alertService) {
+  function($scope, $uibModalInstance, connection, alertService) {
 
     $scope.close = function() {
-      $modalInstance.close(1);
+      $uibModalInstance.close(1);
     };
 
     $scope.form = {};
