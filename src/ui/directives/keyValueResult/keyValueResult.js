@@ -1,5 +1,6 @@
 angular.module('app').directive('keyValueResult', [
-  function() {
+  'recursionHelper',
+  function(recursionHelper) {
     return {
       restrict: 'E',
       replace: true,
@@ -7,6 +8,9 @@ angular.module('app').directive('keyValueResult', [
       controller: 'keyValueResultCtrl',
       scope: {
         result: '='
+      },
+      compile: function(element) {
+        return recursionHelper.compile(element);
       }
     };
   }

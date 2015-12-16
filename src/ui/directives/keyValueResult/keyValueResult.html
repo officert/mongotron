@@ -18,17 +18,21 @@
     </span>
   </span>
   <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
-    <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValueResults">
-      <span class="result-cell col-sm-3 key">
-        <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
-      </span>
-      <span class="result-cell col-sm-6 value">
-        {{ ::keyvalue.value }}
-      </span>
-      <span class="result-cell col-sm-3 type">
-        {{ ::keyvalue.type }}
-        <span ng-if="keyvalue.results">{{ keyvalue.results | json }}</span>
-      </span>
+    <div class="result-row clearfix" ng-repeat="keyvalue in ::result.__keyValueResults">
+      <div class="clearfix">
+        <span class="result-cell col-sm-3 key">
+          <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
+        </span>
+        <span class="result-cell col-sm-6 value">
+          {{ ::keyvalue.value }}
+        </span>
+        <span class="result-cell col-sm-3 type">
+          {{ ::keyvalue.type }}
+        </span>
+      </div>
+      <div class="" ng-if="keyvalue.__keyValueResults">
+        <key-value-results results="keyvalue.__keyValueResults"></key-value-results>
+      </div>
     </div>
   </div>
 </div>

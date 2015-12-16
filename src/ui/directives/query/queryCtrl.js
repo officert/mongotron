@@ -201,6 +201,9 @@ angular.module('app').controller('queryCtrl', [
         case 'objectId':
           icon = 'fa-cog';
           break;
+        case 'object':
+          icon = 'fa-smile-o';
+          break;
       }
 
       return icon;
@@ -217,40 +220,46 @@ angular.module('app').controller('queryCtrl', [
     function _convertResultToKeyValueResult(result) {
       if (!result) return null;
 
-      let props = [];
+      if (_.isString(result)) {
+        return {
+          value: result
+        };
+      } else if (_.isObject(result)) {
+        let props = [];
 
-      for (let key in result) {
-        //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+        for (let key in result) {
+          //TODO: if it's a nested object then recurse and generate key/value for all of it's props
 
-        let value = result[key];
-        let type = _getPropertyType(result[key]);
-        let icon = _getPropertyTypeIcon(type);
-        let results = null;
-        let keyValueResults = null;
+          let value = result[key];
+          let type = _getPropertyType(result[key]);
+          let icon = _getPropertyTypeIcon(type);
+          let results = null;
+          let keyValueResults = null;
 
-        if (type === 'array') {
-          results = value;
-          _convertResultsToKeyValueResults(results);
-          value = 'Array[' + value.length + ']';
-        } else if (type === 'object') {
-          keyValueResults = _convertResultToKeyValueResult(value);
-          value = 'Object{' + value.length + '}';
+          if (type === 'array') {
+            results = value;
+            _convertResultsToKeyValueResults(results);
+            value = 'Array[' + value.length + ']';
+          } else if (type === 'object') {
+            keyValueResults = _convertResultToKeyValueResult(value);
+            value = 'Object{' + _.keys(value).length + '}';
+          }
+
+          let newResult = {
+            key: key,
+            value: value,
+            type: type,
+            icon: icon
+          };
+
+          if (results) newResult.results = results;
+          if (keyValueResults) newResult.__keyValueResults = keyValueResults.__keyValueResults;
+
+          props.push(newResult);
         }
 
-        let newResult = {
-          key: key,
-          value: value,
-          type: type,
-          icon: icon
-        };
-
-        if (results) newResult.results = results;
-        if (keyValueResults) newResult.keyValueResults = keyValueResults;
-
-        props.push(newResult);
+        result.__keyValueResults = props;
       }
-
-      result.keyValueResults = props;
 
       return result;
     }
@@ -263,6 +272,7 @@ angular.module('app').controller('queryCtrl', [
       if (_.isDate(property)) return 'date';
       if (_.isBoolean(property)) return 'boolean';
       if (mongoUtils.isObjectId(property)) return 'objectId';
+      if (_.isObject(property)) return 'object';
     }
   }
 ]);
