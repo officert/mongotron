@@ -317,8 +317,8 @@ function unlink(symlink, next) {
       return next();
     }
 
-    fs.unlink(symlink, function(uerr) {
-      next();
+    fs.unlink(symlink, function() {
+      return next();
     });
   });
 }
