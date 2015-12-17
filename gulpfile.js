@@ -14,6 +14,7 @@ const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
+const fontcustom = require('fontcustom');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -80,6 +81,15 @@ gulp.task('site-css', () => {
   return gulp.src(DOCS_DIR + '/less/docs.less')
     .pipe(less(LESSOPTIONS))
     .pipe(gulp.dest(DOCS_DIR + '/css'));
+});
+
+gulp.task('fonts', function() {
+  return fontcustom({
+    path: 'resources/font-glyphs',
+    output: 'src/ui/font-glyphs',
+    noisy: true,
+    force: true
+  });
 });
 
 gulp.task('jshint', () => {
