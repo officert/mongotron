@@ -24,6 +24,19 @@ angular.module('app').controller('listConnectionsCtrl', [
         });
       });
 
+    $scope.selectAndConnect = function(connection, $event) {
+      if (!connection) return false;
+      if ($event) $event.preventDefault();
+
+      _.each($scope.connections, function(conn) {
+        conn.selected = false;
+      });
+
+      connection.selected = true;
+
+      $scope.connect();
+    };
+
     $scope.selectConnection = function(connection, $event) {
       if (!connection) return false;
       if ($event) $event.preventDefault();
