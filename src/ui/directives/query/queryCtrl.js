@@ -52,7 +52,8 @@ angular.module('app').controller('queryCtrl', [
 
     $scope.VIEWS = {
       TEXT: 'TEXT',
-      KEYVALUE: 'KEYVALUE'
+      KEYVALUE: 'KEYVALUE',
+      RAW: 'RAW'
     };
     $scope.currentView = $scope.VIEWS.KEYVALUE;
 
@@ -128,6 +129,12 @@ angular.module('app').controller('queryCtrl', [
                 //which will show up in the text view
                 return angular.copy(result);
               }));
+            }
+
+            if ($scope.currentQuery.mongoMethod === 'count') {
+              $scope.currentView = $scope.VIEWS.RAW;
+            } else if ($scope.currentView === $scope.VIEWS.RAW) {
+              $scope.currentView = $scope.VIEWS.KEYVALUE;
             }
 
             if ($scope.currentQuery.mongoMethod !== 'find' &&
