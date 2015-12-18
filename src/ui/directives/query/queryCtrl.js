@@ -124,6 +124,8 @@ angular.module('app').controller('queryCtrl', [
 
             if ($scope.results && _.isArray($scope.results)) {
               $scope.keyValueResults = _convertResultsToKeyValueResults($scope.results.map((result) => {
+                //TODO: copying the entire result set isn't ideal, problem is converting to key value adds new props
+                //which will show up in the text view
                 return angular.copy(result);
               }));
             }
