@@ -70,8 +70,45 @@
       overflow: hidden;
       &:hover {
         border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
+        .drag-handle {
+          display: block;
+        }
         .menu {
           top: -1px;
+        }
+      }
+      .drag-handle {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 15px;
+        cursor: move;
+        border-right: 1px dashed lighten(@theme-query-result-json-border-color, 30%);
+
+        // background: fade(@theme-modal-content-bg, 20%);
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        .dots {
+          display: block;
+          margin: 0 auto;
+          transform: translateY(50%);
+          position: relative;
+          top: 17%;
+          width: 9px;
+          .left-dots {
+            float: left;
+          }
+          .right-dots {
+            float: right;
+          }
+          .fa {
+            font-size: 3px;
+            display: block;
+            margin-bottom: 4px;
+            color: @theme-text-color;
+          }
         }
       }
       .menu {
