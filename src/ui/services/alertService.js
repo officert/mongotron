@@ -3,6 +3,7 @@ angular.module('app').factory('alertService', [
 
     function AlertService() {
       toastr.options.closeButton = true;
+      toastr.options.closeHtml = '<button><i class="icon-times"></i></button>';
     }
 
     AlertService.prototype.warning = function warning(message) {
