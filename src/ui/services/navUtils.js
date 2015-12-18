@@ -52,6 +52,21 @@ angular.module('app').factory('navUtils', [
       }
     };
 
+    NavUtils.prototype.showLogs = function() {
+      var logsTabName = 'Logs';
+
+      if (!tabCache.existsByName(logsTabName)) {
+        tabCache.add({
+          type: tabCache.TYPES.PAGE,
+          iconClassName: 'fa fa-info-circle',
+          name: logsTabName,
+          src: __dirname + '/components/logs/logs.html'
+        });
+      } else {
+        tabCache.activateByName(logsTabName);
+      }
+    };
+
     return new NavUtils();
   }
 ]);

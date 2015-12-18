@@ -162,7 +162,7 @@ angular.module('app').factory('menuService', [
         accelerator: 'CmdOrCtrl+L',
         click: function() {
           $timeout(function() {
-            $rootScope.showLogs();
+            navUtils.showLogs();
           });
         }
       }, {
