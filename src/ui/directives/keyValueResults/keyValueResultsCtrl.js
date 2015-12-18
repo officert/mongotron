@@ -1,5 +1,8 @@
 'use strict';
 
 angular.module('app').controller('keyValueResultsCtrl', [
-  function() {}
+  '$scope',
+  function($scope) {
+    $scope.__keyValueResults = $scope.results;
+  }
 ]);
