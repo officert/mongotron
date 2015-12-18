@@ -123,7 +123,9 @@ angular.module('app').controller('queryCtrl', [
             $scope.results = result.result;
 
             if ($scope.results && _.isArray($scope.results)) {
-              $scope.keyValueResults = _convertResultsToKeyValueResults($scope.results);
+              $scope.keyValueResults = _convertResultsToKeyValueResults($scope.results.map((result) => {
+                return angular.copy(result);
+              }));
             }
 
             if ($scope.currentQuery.mongoMethod !== 'find' &&
@@ -146,26 +148,20 @@ angular.module('app').controller('queryCtrl', [
     function _deleteResult(result) {
       if (!result) return;
 
-      modalService.confirm({
-        message: 'Are you sure you want to delete this record?',
-        confirmButtonMessage: 'Yes',
-        cancelButtonMessage: 'No'
-      }).result.then(function() {
-        $scope.currentCollection.deleteById(result._id)
-          .then(() => {
-            $scope.$apply(() => {
-              alertService.success('Delete successful');
+      modalService.openDeleteResult(result, $scope.currentCollection)
+        .then(() => {
+          $scope.$apply(() => {
+            alertService.success('Delete successful');
 
-              _runQuery('db.' + $scope.currentCollection.name + '.find()');
-            });
-          })
-          .catch((error) => {
-            $scope.$apply(() => {
-              $scope.error = error && error.message ? error.message : error;
-              $scope.loading = false;
-            });
+            _runQuery('db.' + $scope.currentCollection.name + '.find()');
           });
-      });
+        })
+        .catch((error) => {
+          $scope.$apply(() => {
+            $scope.error = error && error.message ? error.message : error;
+            $scope.loading = false;
+          });
+        });
     }
 
     function _getCollectionByNameFromRawQuery(collectionName) {

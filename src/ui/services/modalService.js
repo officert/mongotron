@@ -4,6 +4,8 @@ angular.module('app').service('modalService', [
   '$uibModal',
   '$uibModalStack',
   function($uibModal, $uibModalStack) {
+    const Promise = require('bluebird');
+
     function ModalService() {}
 
     ModalService.prototype.openConnectionManager = function openConnectionManager(page) {
@@ -82,6 +84,22 @@ angular.module('app').service('modalService', [
           }
         ],
         size: options.size
+      });
+    };
+
+    ModalService.prototype.openDeleteResult = function openDeleteResult(result, collection) {
+      var _this = this;
+
+      return new Promise((resolve, reject) => {
+        _this.confirm({
+          message: 'Are you sure you want to delete this record?',
+          confirmButtonMessage: 'Yes',
+          cancelButtonMessage: 'No'
+        }).result.then(function() {
+          collection.deleteById(result._id)
+            .then(resolve)
+            .catch(reject);
+        });
       });
     };
 

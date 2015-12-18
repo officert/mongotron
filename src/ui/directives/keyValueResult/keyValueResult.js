@@ -7,7 +7,8 @@ angular.module('app').directive('keyValueResult', [
       templateUrl: __dirname + '/directives/keyValueResult/keyValueResult.html',
       controller: 'keyValueResultCtrl',
       scope: {
-        result: '='
+        result: '=',
+        deleteResult: '='
       },
       compile: function(element) {
         return recursionHelper.compile(element);

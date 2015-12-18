@@ -6,7 +6,8 @@ angular.module('app').directive('keyValueResults', [
       templateUrl: __dirname + '/directives/keyValueResults/keyValueResults.html',
       controller: 'keyValueResultsCtrl',
       scope: {
-        results: '='
+        results: '=',
+        deleteResult: '='
       }
     };
   }
