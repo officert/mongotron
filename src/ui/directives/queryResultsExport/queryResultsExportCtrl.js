@@ -18,6 +18,24 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
     $scope.keyValuePairs = [];
 
+    $scope.sortableOptions = {
+      //http://api.jqueryui.com/sortable
+      placeholder: 'sortable-placeholder',
+      delay: 0,
+      appendTo: '.key-value-pair-wrapper',
+      revert: 50,
+      helper: function(e, item) {
+        $timeout(function() {
+          //force the element to show, race condition :(
+          item.attr('style', 'display: block !important');
+        });
+        return item.clone();
+      },
+      // helper: 'clone',
+      opacity: 1,
+      tolerance: 'intersect'
+    };
+
     $scope.handle = $scope.handle || {};
     $scope.handle.export = _export;
     $scope.handle.keyValuePairs = $scope.keyValuePairs;

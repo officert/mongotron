@@ -45,42 +45,44 @@
         button to use an existing configuration.
       </p>
     </div>
-    <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs" ng-show="keyValuePairs.length">
-      <span class="drag-handle">
-        <span class="dots clearfix">
-          <span class="left-dots">
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
-          </span>
-          <span class="right-dots">
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
-            <i class="fa fa-circle"></i>
+    <div class="key-value-pair-wrapper" ui-sortable="sortableOptions">
+      <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs" ng-show="keyValuePairs.length">
+        <span class="drag-handle">
+          <span class="dots clearfix">
+            <span class="left-dots">
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+            </span>
+            <span class="right-dots">
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+              <i class="fa fa-circle"></i>
+            </span>
           </span>
         </span>
-      </span>
-      <div class="menu">
-        <ul>
-          <li>
-            <button class="btn btn-default" ng-click="removeColumn(keyValuePair)">
-              <i class="fa fa-plus rotate-45"></i>
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div class="form-group clearfix">
-        <label class="left-col control-label col-sm-2">Header</label>
-        <div class="right-col col-sm-10">
-          <input class="form-control" type="text" ng-model="keyValuePair.key">
+        <div class="menu">
+          <ul>
+            <li>
+              <button class="btn btn-default" ng-click="removeColumn(keyValuePair)">
+                <i class="fa fa-plus rotate-45"></i>
+              </button>
+            </li>
+          </ul>
         </div>
-      </div>
-      <div class="form-group clearfix">
-        <label class="left-col control-label col-sm-2">Property Name</label>
-        <div class="right-col col-sm-10">
-          <input class="form-control" type="text" ng-model="keyValuePair.value">
+        <div class="form-group clearfix">
+          <label class="left-col control-label col-sm-2">Header</label>
+          <div class="right-col col-sm-10">
+            <input class="form-control" type="text" ng-model="keyValuePair.key">
+          </div>
+        </div>
+        <div class="form-group clearfix">
+          <label class="left-col control-label col-sm-2">Property Name</label>
+          <div class="right-col col-sm-10">
+            <input class="form-control" type="text" ng-model="keyValuePair.value">
+          </div>
         </div>
       </div>
     </div>
