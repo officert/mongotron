@@ -4,8 +4,6 @@ angular.module('app').controller('logsCtrl', [
   function($scope, $timeout) {
     const logger = require('lib/modules/logger');
 
-    $scope.setTitle('Logs');
-
     logger.list()
       .then(function(logs) {
         $timeout(function() {

@@ -1,12 +1,25 @@
+'use strict';
+
 angular.module('app').factory('navUtils', [
   'modalService',
   'tabCache',
-  function(modalService, tabCache) {
+  'utilsService',
+  function(modalService, tabCache, utilsService) {
+    const Promise = require('bluebird');
 
     function NavUtils() {}
 
     NavUtils.prototype.showConnections = function(page) {
-      return modalService.openConnectionManager(page).result;
+      utilsService.setTitle('Select a connection');
+
+      return new Promise((resolve, reject) => {
+        modalService.openConnectionManager(page).result
+          .then(resolve)
+          .catch(reject)
+          .finally(() => {
+            utilsService.setTitle('Mongotron');
+          });
+      });
     };
 
     NavUtils.prototype.showSettings = function() {

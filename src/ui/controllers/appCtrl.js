@@ -1,7 +1,5 @@
 'use strict';
 
-const ipcRenderer = require('electron').ipcRenderer;
-
 angular.module('app').controller('appCtrl', [
   '$scope',
   '$log',
@@ -9,15 +7,10 @@ angular.module('app').controller('appCtrl', [
   'tabCache',
   'navUtils',
   function($scope, $log, modalService, tabCache, navUtils) {
-    const pageTitle = 'Mongotron';
-
-    $scope.setTitle = setTitle;
     $scope.currentQuery = null;
     $scope.showConnections = showConnections;
     $scope.showSettings = showSettings;
     $scope.showAbout = showAbout;
-
-    setTitle(pageTitle);
 
     showConnections();
 
@@ -54,10 +47,6 @@ angular.module('app').controller('appCtrl', [
       if ($event) $event.preventDefault();
 
       navUtils.showAbout();
-    }
-
-    function setTitle(title) {
-      ipcRenderer.send('set-title', title);
     }
   }
 ]);

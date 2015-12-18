@@ -23,7 +23,7 @@ var mainWindow;
 crashReporter.start(); // Report crashes to our server.
 
 ipcMain.on('set-title', function(event, title) {
-  mainWindow.setTitle(title || 'Mongotron');
+  mainWindow.setTitle(title || appConfig.name);
 });
 
 ipcMain.on('quit', function() {
@@ -51,10 +51,6 @@ app.on('ready', function() {
   mainWindow.loadUrl(path.join('file://', __dirname, '../ui/index.html'));
 
   // if (appConfig.env !== 'production') mainWindow.openDevTools();
-
-  mainWindow.webContents.on('did-finish-load', function() {
-    mainWindow.setTitle('Mongotron');
-  });
 
   mainWindow.on('close', function() {
     app.quit();
