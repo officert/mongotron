@@ -1,0 +1,52 @@
+.sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: @sidenav-width;
+  height: 100%;
+  background: @theme-sidenav-bg;
+  border-right: 1px solid @theme-sidenav-border-color;
+  .logo {
+    padding: 10px 0 10px 8px;
+    margin: 0;
+    img {
+      height: 40px;
+      &:hover {
+        animation: fa-spin 1s infinite 2s linear;
+      }
+    }
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      display: block;
+      height: 59px;
+      padding: 20px;
+      cursor: pointer;
+      text-align: center;
+      .transition(.2s ease);
+      &:hover {
+        background: darken(@theme-sidenav-bg, 5%);
+      }
+      span {
+        display: block;
+        height: 12px;
+        width: 14px;
+        &.server-icon {
+          position: relative;
+          .fa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            &.fa-plus-circle {
+              top: 8px;
+              left: 10px;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

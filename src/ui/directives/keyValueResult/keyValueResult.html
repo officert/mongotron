@@ -7,13 +7,13 @@
     </li>
   </ul>
   <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
-    <span class="key">
+    <span class="key no-select">
       <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
     </span>
-    <span class="key">
+    <span class="key no-select">
       {{ ::result.keyValueResults.length }} fields
     </span>
-    <span class="key">
+    <span class="key no-select">
 
     </span>
   </span>

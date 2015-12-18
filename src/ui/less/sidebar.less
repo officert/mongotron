@@ -1,0 +1,58 @@
+.sidebar {
+  padding-top: 50px;
+  padding-bottom: 10px;
+  .server-list {
+    li {
+      cursor: default;
+      > span {
+        .open-icon {
+          position: absolute;
+          right: 0;
+          top: 2px;
+          padding: 5px 4px 5px 10px;
+          font-size: 10px;
+        }
+      }
+      span {
+        cursor: default;
+        display: block;
+        padding: 5px 12px;
+        .transition(.2s ease);
+        border-bottom: 1px solid @theme-server-list-border-color;
+        position: relative;
+        i {
+          margin-right: 8px;
+        }
+        &:hover {
+          background: @theme-server-list-hover-bg;
+          color: @theme-server-list-hover-color;
+          .loader {
+            background: @theme-server-list-hover-bg;
+          }
+        }
+        .loader {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding: 5px 0 5px 10px;
+        }
+      }
+      li {
+        span {
+          &.level-1 {
+
+          }
+          &.level-2 {
+            padding-left: 25px;
+          }
+          &.level-3 {
+            padding-left: 50px;
+          }
+          &.level-4 {
+            padding-left: 75px;
+          }
+        }
+      }
+    }
+  }
+}
