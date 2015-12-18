@@ -1,0 +1,70 @@
+{
+  "checksum": {
+    "previous": "4de704628eb4c0303e449037419c50a3745c012c2295cdcf37be16eeb60269c2",
+    "current": "4de704628eb4c0303e449037419c50a3745c012c2295cdcf37be16eeb60269c2"
+  },
+  "fonts": [
+    "src/ui/font-glyphs/fontcustom_4de704628eb4c0303e449037419c50a3.ttf",
+    "src/ui/font-glyphs/fontcustom_4de704628eb4c0303e449037419c50a3.svg",
+    "src/ui/font-glyphs/fontcustom_4de704628eb4c0303e449037419c50a3.woff",
+    "src/ui/font-glyphs/fontcustom_4de704628eb4c0303e449037419c50a3.eot"
+  ],
+  "glyphs": {
+    "left-arrow": {
+      "codepoint": 61697,
+      "source": "resources/font-glyphs/left-arrow.svg"
+    },
+    "plus": {
+      "codepoint": 61701,
+      "source": "resources/font-glyphs/plus.svg"
+    },
+    "right-arrow": {
+      "codepoint": 61696,
+      "source": "resources/font-glyphs/right-arrow.svg"
+    },
+    "server": {
+      "codepoint": 61698,
+      "source": "resources/font-glyphs/server.svg"
+    },
+    "server-plus": {
+      "codepoint": 61699,
+      "source": "resources/font-glyphs/server-plus.svg"
+    },
+    "times": {
+      "codepoint": 61700,
+      "source": "resources/font-glyphs/times.svg"
+    }
+  },
+  "options": {
+    "autowidth": false,
+    "config": false,
+    "css_selector": ".icon-{{glyph}}",
+    "debug": false,
+    "font_ascent": 448,
+    "font_descent": 64,
+    "font_design_size": 16,
+    "font_em": 512,
+    "font_name": "fontcustom",
+    "force": true,
+    "input": {
+      "templates": "resources/font-glyphs",
+      "vectors": "resources/font-glyphs"
+    },
+    "no_hash": false,
+    "output": {
+      "css": "src/ui/font-glyphs",
+      "fonts": "src/ui/font-glyphs",
+      "preview": "src/ui/font-glyphs"
+    },
+    "preprocessor_path": null,
+    "quiet": false,
+    "templates": [
+      "css",
+      "preview"
+    ]
+  },
+  "templates": [
+    "src/ui/font-glyphs/fontcustom.css",
+    "src/ui/font-glyphs/fontcustom-preview.html"
+  ]
+}
