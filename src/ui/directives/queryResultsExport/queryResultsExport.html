@@ -28,7 +28,24 @@
     </div>
   </div>
   <div class="key-value-pairs clearfix" ng-hide="loading">
-    <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs">
+    <div class="no-key-value-pairs" ng-hide="keyValuePairs.length">
+      <p class="center info">
+        You don't have any columns added to your export yet...
+      </p>
+      <p class="center">
+        Use the
+        <button class="btn btn-default btn-sm" ng-click="addColumn()"><i class="fa fa-plus"></i> Add Column</button> button to add some columns
+      </p>
+      <p class="center or">
+        or
+      </p>
+      <p class="center">
+        Use the
+        <button class="btn btn-default btn-sm" ng-click="importSettings()"><i class="fa fa-external-link-square rotate-90"></i> Import Settings</button>
+        button to use an existing configuration.
+      </p>
+    </div>
+    <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs" ng-show="keyValuePairs.length">
       <div class="menu">
         <ul>
           <li>
