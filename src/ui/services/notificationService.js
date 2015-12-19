@@ -21,34 +21,39 @@ angular.module('app').factory('notificationService', [
 
     NotificationService.prototype.TYPES = TYPES;
 
-    NotificationService.prototype.warning = function warning(message, title) {
-      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.WARNING, message, title));
+    NotificationService.prototype.warning = function warning(opts) {
+      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.WARNING, opts));
     };
 
-    NotificationService.prototype.success = function success(message, title) {
-      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.SUCCESS, message, title));
+    NotificationService.prototype.success = function success(opts) {
+      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.SUCCESS, opts));
     };
 
-    NotificationService.prototype.error = function error(message, title) {
-      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.ERROR, message, title));
+    NotificationService.prototype.error = function error(opts) {
+      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.ERROR, opts));
     };
 
-    NotificationService.prototype.info = function info(message, title) {
-      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.INFO, message, title));
+    NotificationService.prototype.info = function info(opts) {
+      this.emit(this.EVENTS.NEW_NOTIFICATION, _convertToNotification(this.TYPES.INFO, opts));
     };
 
-    function _convertToNotification(type, message, title) {
+    function _convertToNotification(type, opts) {
       let stackTrace;
 
-      if (_.isError(message)) {
-        stackTrace = message.stack;
-        message = message.message;
+      if (_.isString(opts) || _.isError(opts)) opts = {
+        message: opts
+      };
+
+      if (_.isError(opts.message)) {
+        stackTrace = opts.message.stack;
+        opts.message = opts.message.message;
       }
       return {
         type: type,
-        title: title,
-        message: message,
+        title: opts.title,
+        message: opts.message,
         stackTrace: stackTrace,
+        notimeout: opts.notimeout || false,
         icon: _getNotificationIconByType(type)
       };
     }

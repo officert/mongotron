@@ -6,7 +6,8 @@ angular.module('app').directive('notification', [
       templateUrl: __dirname + '/directives/notifications/notification.html',
       controller: 'notificationCtrl',
       scope: {
-        notification: '='
+        notification: '=',
+        removeNotification: '='
       }
     };
   }
