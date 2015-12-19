@@ -8,30 +8,30 @@
   </ul>
   <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
     <span class="key no-select">
-      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result._id }}
+      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result.original._id }}
     </span>
     <span class="key no-select">
-      {{ ::result.keyValueResults.length }} fields
+      {{ ::result.keyValues.length }} fields
     </span>
     <span class="key no-select">
 
     </span>
   </span>
   <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
-    <div class="result-row clearfix" ng-repeat="keyvalue in ::result.__keyValueResults">
+    <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValues">
       <div class="clearfix">
         <span class="result-cell col-sm-3 key">
           <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </span>
         <span class="result-cell col-sm-6 value">
-          {{ ::keyvalue.value }}
+          {{ ::keyvalue.display }}
         </span>
         <span class="result-cell col-sm-3 type">
           {{ ::keyvalue.type }}
         </span>
       </div>
-      <div class="" ng-if="keyvalue.__keyValueResults">
-        <key-value-results results="keyvalue.__keyValueResults"></key-value-results>
+      <div class="" ng-if="keyvalue.keyValues">
+        <key-value-results results="keyvalue.keyValues"></key-value-results>
       </div>
     </div>
   </div>

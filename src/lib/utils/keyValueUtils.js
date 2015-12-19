@@ -8,66 +8,60 @@ class KeyVaueUtils {
   convert(val) {
     if (val === null || val === undefined) return null;
     if (_.isArray(val)) {
-      return _convertResultsToKeyValueResults(val);
+      return _convertToKeyValueResults(val);
     } else {
       return _convertResultToKeyValueResult(val);
     }
   }
+
+  getPropertyTypeIcon(type) {
+    return _getPropertyTypeIcon(type);
+  }
 }
 
-function _convertResultsToKeyValueResults(results) {
-  if (!results) return null;
+function _convertToKeyValueResults(val) {
+  if (!val || !_.isArray(val)) return null;
 
-  return results.map(function(result) {
+  return val.map(function(result) {
     return _convertResultToKeyValueResult(result);
   });
 }
 
-function _convertResultToKeyValueResult(result) {
-  if (!result) return null;
+function _convertResultToKeyValueResult(obj) {
+  if (!obj || !_.isObject(obj)) return null;
 
-  if (_.isString(result)) {
-    return {
-      value: result
-    };
-  } else if (_.isObject(result)) {
-    let props = [];
+  let newObj = {
+    original: obj,
+    keyValues: []
+  };
 
-    for (let key in result) {
-      //TODO: if it's a nested object then recurse and generate key/value for all of it's props
+  for (let key in obj) {
+    let display = '';
+    let keyValue = {};
+    let value = obj[key];
+    let type = _getPropertyType(obj[key]);
+    let icon = _getPropertyTypeIcon(type);
 
-      let value = result[key];
-      let type = _getPropertyType(result[key]);
-      let icon = _getPropertyTypeIcon(type);
-      let results = null;
-      let keyValueResults = null;
-
-      if (type === 'array') {
-        results = value;
-        _convertResultsToKeyValueResults(results);
-        value = 'Array[' + value.length + ']';
-      } else if (type === 'object') {
-        keyValueResults = _convertResultToKeyValueResult(value);
-        value = 'Object{' + _.keys(value).length + '}';
-      }
-
-      let newResult = {
-        key: key,
-        value: value,
-        type: type,
-        icon: icon
-      };
-
-      if (results) newResult.results = results;
-      if (keyValueResults) newResult.__keyValueResults = keyValueResults.__keyValueResults;
-
-      props.push(newResult);
+    if (type === 'string') {
+      display = value;
+    } else if (type === 'objectId') {
+      display = 'ObjectId(\'' + value + '\')';
+    } else if (type === 'object') {
+      display = 'Object { ' + _.keys(value).length + ' properties }';
+    } else if (type === 'array') {
+      display = 'Array [' + _.keys(value).length + ']';
     }
 
-    result.__keyValueResults = props;
+    keyValue.display = display;
+    keyValue.key = key;
+    keyValue.value = value;
+    keyValue.type = type;
+    keyValue.icon = icon;
+
+    newObj.keyValues.push(keyValue);
   }
 
-  return result;
+  return newObj;
 }
 
 function _getPropertyType(property) {

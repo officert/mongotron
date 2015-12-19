@@ -123,11 +123,7 @@ angular.module('app').controller('queryCtrl', [
             $scope.results = result.result;
 
             if ($scope.results && _.isArray($scope.results)) {
-              $scope.keyValueResults = keyValueUtils.convert($scope.results.map((result) => {
-                //TODO: copying the entire result set isn't ideal, problem is converting to key value adds new props
-                //which will show up in the text view
-                return angular.copy(result);
-              }));
+              $scope.keyValueResults = keyValueUtils.convert($scope.results);
             }
 
             if ($scope.currentQuery.mongoMethod === 'count') {
