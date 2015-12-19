@@ -4,9 +4,9 @@ angular.module('app').controller('addConnectionCtrl', [
   '$scope',
   '$timeout',
   '$log',
-  'alertService',
+  'notificationService',
   'connectionCache',
-  function($scope, $timeout, $log, alertService, connectionCache) {
+  function($scope, $timeout, $log, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
 
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({}, $scope.selectedConnection) : {
@@ -32,12 +32,12 @@ angular.module('app').controller('addConnectionCtrl', [
           $timeout(function() {
             $scope.changePage('list');
 
-            alertService.success('Connection added');
+            notificationService.success('Connection added');
           });
         })
         .catch(function(err) {
           $timeout(function() {
-            alertService.error(err);
+            notificationService.error(err);
             $log.log(err);
           });
         });
@@ -51,12 +51,12 @@ angular.module('app').controller('addConnectionCtrl', [
 
             $scope.changePage('list');
 
-            alertService.success('Connection updated');
+            notificationService.success('Connection updated');
           });
         })
         .catch(function(err) {
           $timeout(function() {
-            alertService.error(err);
+            notificationService.error(err);
             $log.log(err);
           });
         });

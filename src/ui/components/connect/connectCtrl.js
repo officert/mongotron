@@ -4,8 +4,8 @@ angular.module('app').controller('connectCtrl', [
   '$scope',
   '$uibModalInstance',
   'page',
-  'alertService',
-  function($scope, $uibModalInstance, page, alertService) {
+  'notificationService',
+  function($scope, $uibModalInstance, page, notificationService) {
     $scope.listConnectionsSrc = __dirname + '/components/connect/listConnections/listConnections.html';
     $scope.addConnectionSrc = __dirname + '/components/connect/addConnection/addConnection.html';
     $scope.editConnectionSrc = __dirname + '/components/connect/editConnection/editConnection.html';
@@ -14,12 +14,12 @@ angular.module('app').controller('connectCtrl', [
     try {
       JSON.parse('asdlknflks.{)))))}');
     } catch (err) {
-      alertService.error(err, 'Error');
+      notificationService.error(err, 'Error');
     }
 
-    alertService.success('Yay something worked!!!!!', 'Success');
-    alertService.warning('Uh oh don\'t do that', 'Warning');
-    alertService.info('Yes do that thing', 'Info');
+    notificationService.success('Yay something worked!!!!!', 'Success');
+    notificationService.warning('Uh oh don\'t do that', 'Warning');
+    notificationService.info('Yes do that thing', 'Info');
 
     $scope.currentPage = page || 'list';
 

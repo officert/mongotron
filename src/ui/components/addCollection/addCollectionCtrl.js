@@ -4,8 +4,8 @@ angular.module('app').controller('addCollectionCtrl', [
   '$scope',
   '$uibModalInstance',
   'database',
-  'alertService',
-  function($scope, $uibModalInstance, database, alertService) {
+  'notificationService',
+  function($scope, $uibModalInstance, database, notificationService) {
 
     $scope.close = function() {
       $uibModalInstance.close(1);
@@ -20,7 +20,7 @@ angular.module('app').controller('addCollectionCtrl', [
 
       database.addCollection($scope.form);
 
-      alertService.success('New collection added');
+      notificationService.success('New collection added');
 
       $scope.close();
     };

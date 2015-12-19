@@ -4,8 +4,8 @@ angular.module('app').controller('addDatabaseCtrl', [
   '$scope',
   '$uibModalInstance',
   'connection',
-  'alertService',
-  function($scope, $uibModalInstance, connection, alertService) {
+  'notificationService',
+  function($scope, $uibModalInstance, connection, notificationService) {
 
     $scope.close = function() {
       $uibModalInstance.close(1);
@@ -20,7 +20,7 @@ angular.module('app').controller('addDatabaseCtrl', [
 
       connection.addDatabase($scope.form);
 
-      alertService.success('New database added');
+      notificationService.success('New database added');
 
       $scope.close();
     };

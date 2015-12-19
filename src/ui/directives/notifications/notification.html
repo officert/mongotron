@@ -1,0 +1,32 @@
+<div class="notification notification-{{ ::notification.type.toLowerCase() }} {{ ::notification.title ? 'has-title' : '' }}">
+  <button class="close" ng-click="::removeNotification(notification)">
+    <i class="icon-times"></i>
+  </button>
+  <div class="icon">
+    <p class="center">
+      <i class="{{ ::notification.icon }}"></i>
+    </p>
+  </div>
+  <div class="right">
+    <div class="title" ng-show="::notification.title">
+      {{ ::notification.title }}
+    </div>
+    <div class="message" ng-show="::notification.message">
+      <p class="message-text">
+        {{ ::notification.message }}
+      </p>
+      <div class="stack" ng-show="::notification.stackTrace">
+        <button class="btn no-select" ng-click="notification._showStack = !notification._showStack">
+          <i class="icon-plus"></i>
+          <span class="text">
+            <span ng-hide="notification._showStack">Show</span>
+            <span ng-show="notification._showStack">Hide</span> Stack
+          </span>
+        </button>
+        <div class="stack-message" ng-show="notification._showStack">
+          {{ ::notification.stackTrace }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

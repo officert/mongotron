@@ -1,12 +1,12 @@
 angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
-  'alertService',
+  'notificationService',
   'tabCache',
   'connectionCache',
   'menuService',
   'modalService',
-  function($scope, $timeout, alertService, tabCache, connectionCache, menuService, modalService) {
+  function($scope, $timeout, notificationService, tabCache, connectionCache, menuService, modalService) {
     const logger = require('lib/modules/logger');
 
     $scope.activeConnections = connectionCache.list();
@@ -48,7 +48,7 @@ angular.module('app').controller('sidebarCtrl', [
         connection.connect(function(err) {
           $timeout(function() {
             if (err) {
-              alertService.error(err);
+              notificationService.error(err);
               connection.isOpen = false;
             } else {
               connection.isOpen = true;
@@ -82,7 +82,7 @@ angular.module('app').controller('sidebarCtrl', [
             }).result.then(function() {
               database.drop()
                 .then(function() {
-                  alertService.success('Database dropped');
+                  notificationService.success('Database dropped');
 
                   tabCache.removeByDatabase(database);
 
@@ -93,7 +93,7 @@ angular.module('app').controller('sidebarCtrl', [
                 })
                 .catch(function(err) {
                   logger.error(err);
-                  alertService.error(err);
+                  notificationService.error(err);
                 });
             });
           });
@@ -135,7 +135,7 @@ angular.module('app').controller('sidebarCtrl', [
             }).result.then(function() {
               collection.drop()
                 .then(function() {
-                  alertService.success('Collection dropped');
+                  notificationService.success('Collection dropped');
 
                   tabCache.removeByCollection(collection);
 
@@ -146,7 +146,7 @@ angular.module('app').controller('sidebarCtrl', [
                 })
                 .catch(function(err) {
                   logger.error(err);
-                  alertService.error(err);
+                  notificationService.error(err);
                 });
             });
           });
@@ -170,7 +170,7 @@ angular.module('app').controller('sidebarCtrl', [
             database.opening = false;
 
             if (err) {
-              return alertService.error(err);
+              return notificationService.error(err);
             }
 
             database.isOpen = true;
@@ -194,7 +194,7 @@ angular.module('app').controller('sidebarCtrl', [
             database.loadingCollections = false;
 
             if (err) {
-              return alertService.error(err);
+              return notificationService.error(err);
             }
 
             database.collections = collections.map(function(collection) {

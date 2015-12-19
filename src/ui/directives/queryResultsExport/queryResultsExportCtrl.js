@@ -5,8 +5,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
   'dialogService',
   '$log',
   '$timeout',
-  'alertService',
-  function($scope, dialogService, $log, $timeout, alertService) {
+  'notificationService',
+  function($scope, dialogService, $log, $timeout, notificationService) {
     if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
     $scope.limit = $scope.limit || 50;
@@ -94,7 +94,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
                   .on('finish', () => {
                     $timeout(() => {
                       $scope.loading = false;
-                      alertService.success('Finished exporting');
+                      notificationService.success('Finished exporting');
                     });
                   });
               })
@@ -131,7 +131,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
                 if (err) return handleError(err);
 
-                alertService.success('Settings saved to : ' + path);
+                notificationService.success('Settings saved to : ' + path);
               });
             });
           });
@@ -170,7 +170,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
               $timeout(() => {
                 $scope.loading = false;
 
-                alertService.success('Settings imported');
+                notificationService.success('Settings imported');
               });
             });
         })

@@ -1,18 +1,22 @@
-.alerts-container {
-  @alert-width: 450px;
-  @alert-icon-width: 30px;
+.notifications-container {
+  @notification-width: 450px;
+  @notification-icon-width: 30px;
   position: fixed;
   top: 15px;
   right: 15px;
-  width: @alert-width;
+  width: @notification-width;
   z-index: 9999999;
-  .alert {
-    width: @alert-width;
+  .notification {
+    transition: width 1000ms ease;
+    width: @notification-width;
     position: relative;
     padding: 0;
     border: none;
     margin-bottom: 20px;
-    &.alert-info {
+    max-height: 600px;
+    overflow: hidden;
+    animation: notification-show 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.27499);
+    &.notification-info {
       .icon {
         background: @theme-brand-info;
         i {
@@ -30,7 +34,7 @@
         }
       }
     }
-    &.alert-warning {
+    &.notification-warning {
       .icon {
         background: @theme-brand-warning;
         i {
@@ -48,7 +52,7 @@
         }
       }
     }
-    &.alert-error {
+    &.notification-error {
       .icon {
         background: @theme-brand-danger;
         i {
@@ -66,7 +70,7 @@
         }
       }
     }
-    &.alert-success {
+    &.notification-success {
       .icon {
         background: @theme-brand-success;
         i {
@@ -102,7 +106,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: @alert-icon-width;
+      width: @notification-icon-width;
       height: 100%;
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
@@ -112,7 +116,7 @@
       }
     }
     .right {
-      margin-left: @alert-icon-width;
+      margin-left: @notification-icon-width;
       .title {
         border-top-right-radius: 4px;
         padding: 13px 10px 10px;
@@ -122,6 +126,7 @@
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
         padding: 10px;
+        overflow-y: auto;
         .stack {
           margin-top: 10px;
           font-size: 12px;
@@ -136,6 +141,9 @@
             }
             &:active {
               box-shadow: none;
+            }
+            .text {
+              text-decoration: underline;
             }
           }
           .stack-message {

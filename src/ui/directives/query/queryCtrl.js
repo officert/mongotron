@@ -3,9 +3,9 @@
 angular.module('app').controller('queryCtrl', [
   '$scope',
   '$rootScope',
-  'alertService',
+  'notificationService',
   'modalService',
-  function($scope, $rootScope, alertService, modalService) {
+  function($scope, $rootScope, notificationService, modalService) {
     const queryModule = require('lib/modules/query');
     const keyValueUtils = require('src/lib/utils/keyValueUtils');
 
@@ -139,7 +139,7 @@ angular.module('app').controller('queryCtrl', [
             if ($scope.currentQuery.mongoMethod !== 'find' &&
               $scope.currentQuery.mongoMethod !== 'aggregate' &&
               $scope.currentQuery.mongoMethod !== 'count') {
-              alertService.success($scope.currentQuery.mongoMethod + ' was successful');
+              notificationService.success($scope.currentQuery.mongoMethod + ' was successful');
 
               _runQuery('db.' + $scope.currentCollection.name + '.find()');
             }
@@ -159,7 +159,7 @@ angular.module('app').controller('queryCtrl', [
       modalService.openDeleteResult(result, $scope.currentCollection)
         .then(() => {
           $scope.$apply(() => {
-            alertService.success('Delete successful');
+            notificationService.success('Delete successful');
 
             _runQuery('db.' + $scope.currentCollection.name + '.find()');
           });
