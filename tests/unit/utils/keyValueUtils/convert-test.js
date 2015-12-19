@@ -22,7 +22,7 @@ afterEach(function() {
 
 describe('utils', function() {
   describe('keyValueUtils', function() {
-    describe.only('convert', function() {
+    describe('convert', function() {
       describe('when null value is passed', () => {
         it('should return null', function(next) {
           var value = null;
