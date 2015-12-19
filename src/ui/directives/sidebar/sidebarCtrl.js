@@ -48,7 +48,10 @@ angular.module('app').controller('sidebarCtrl', [
         connection.connect(function(err) {
           $timeout(function() {
             if (err) {
-              notificationService.error(err);
+              notificationService.error({
+                title: 'Error opening connection',
+                message: err
+              });
               connection.isOpen = false;
             } else {
               connection.isOpen = true;
@@ -93,7 +96,10 @@ angular.module('app').controller('sidebarCtrl', [
                 })
                 .catch(function(err) {
                   logger.error(err);
-                  notificationService.error(err);
+                  notificationService.error({
+                    title: 'Error dropping database',
+                    message: err
+                  });
                 });
             });
           });
@@ -146,7 +152,10 @@ angular.module('app').controller('sidebarCtrl', [
                 })
                 .catch(function(err) {
                   logger.error(err);
-                  notificationService.error(err);
+                  notificationService.error({
+                    title: 'Error dropping collection',
+                    message: err
+                  });
                 });
             });
           });
@@ -170,7 +179,10 @@ angular.module('app').controller('sidebarCtrl', [
             database.opening = false;
 
             if (err) {
-              return notificationService.error(err);
+              return notificationService.error({
+                title: 'Error opening database',
+                message: err
+              });
             }
 
             database.isOpen = true;
@@ -194,7 +206,10 @@ angular.module('app').controller('sidebarCtrl', [
             database.loadingCollections = false;
 
             if (err) {
-              return notificationService.error(err);
+              return notificationService.error({
+                title: 'Error opening collections',
+                message: err
+              });
             }
 
             database.collections = collections.map(function(collection) {

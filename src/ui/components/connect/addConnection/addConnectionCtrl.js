@@ -37,7 +37,10 @@ angular.module('app').controller('addConnectionCtrl', [
         })
         .catch(function(err) {
           $timeout(function() {
-            notificationService.error(err);
+            notificationService.error({
+              title: 'Error adding connection',
+              message: err
+            });
             $log.log(err);
           });
         });
@@ -56,7 +59,10 @@ angular.module('app').controller('addConnectionCtrl', [
         })
         .catch(function(err) {
           $timeout(function() {
-            notificationService.error(err);
+            notificationService.error({
+              title: 'Error updating connection',
+              message: err
+            });
             $log.log(err);
           });
         });

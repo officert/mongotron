@@ -29,7 +29,10 @@ angular.module('app').controller('removeConnectionCtrl', [
         })
         .catch(function(err) {
           $timeout(function() {
-            notificationService.error(err);
+            notificationService.error({
+              title: 'Error removing connection',
+              message: err
+            });
             console.log(err);
           });
         });
