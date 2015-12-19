@@ -1,4 +1,4 @@
-<div class="notification notification-{{ ::notification.type.toLowerCase() }} {{ ::notification.title ? 'has-title' : '' }}" ng-mouseover="clearTimer()" ng-mouseleave="setTimer()">
+<div class="notification notification-{{ ::notification.type.toLowerCase() }} {{ ::notification.title ? 'has-title' : '' }}" ng-class="{ 'notification-show' : notification.show,'notification-hide' : notification.hide }" ng-mouseover="clearTimer()" ng-mouseleave="setTimer()">
   <button class="close" ng-click="::removeNotification(notification)">
     <i class="icon-times"></i>
   </button>

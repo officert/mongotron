@@ -15,6 +15,10 @@ angular.module('app').controller('notificationCtrl', [
     $scope.setTimer = _setTimer;
     $scope.removeNotification = _removeNotification;
 
+    $timeout(() => {
+      $scope.notification.show = true;
+    });
+
     if (!$scope.notification.notimeout) {
       _setTimer();
     }
@@ -34,8 +38,13 @@ angular.module('app').controller('notificationCtrl', [
     }
 
     function _removeNotification(notification) {
-      _clearTimer();
-      removeNotificationOg(notification);
+      $timeout(() => {
+        $scope.notification.hide = true;
+        $timeout(() => {
+          _clearTimer();
+          removeNotificationOg(notification);
+        }, 200);
+      });
     }
   }
 ]);

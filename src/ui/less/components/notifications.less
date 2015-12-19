@@ -7,7 +7,6 @@
   width: @notification-width;
   z-index: 9999999;
   .notification {
-    transition: width 1000ms ease;
     width: @notification-width;
     position: relative;
     padding: 0;
@@ -15,7 +14,14 @@
     margin-bottom: 20px;
     max-height: 600px;
     overflow: hidden;
-    animation: notification-show 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.27499);
+    visibility: hidden;
+    &.notification-show {
+      visibility: visible;
+      animation: notification-show 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.27499);
+    }
+    &.notification-hide {
+      animation: notification-hide 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.27499);
+    }
     &.notification-info {
       .icon {
         background: @theme-brand-info;
@@ -159,5 +165,25 @@
         }
       }
     }
+  }
+}
+@-webkit-keyframes notification-show {
+  0% {
+    opacity: 0;
+    transform: perspective(450px) translate(0, -30px) rotateX(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(450px) translate(0, 0) rotateX(0deg);
+  }
+}
+@-webkit-keyframes notification-hide {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
   }
 }
