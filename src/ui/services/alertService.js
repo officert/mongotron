@@ -1,36 +1,78 @@
+'use strict';
+
 angular.module('app').factory('alertService', [
   function() {
+    const util = require('util');
+    const EventEmitter = require('events').EventEmitter;
 
-    function AlertService() {
-      toastr.options.closeButton = true;
-      toastr.options.closeHtml = '<button><i class="icon-times"></i></button>';
+    const TYPES = {
+      WARNING: 'WARNING',
+      SUCCESS: 'SUCCESS',
+      ERROR: 'ERROR',
+      INFO: 'INFO'
+    };
+
+    function AlertService() {}
+    util.inherits(AlertService, EventEmitter);
+
+    AlertService.prototype.EVENTS = {
+      NEW_ALERT: 'NEW_ALERT'
+    };
+
+    AlertService.prototype.TYPES = TYPES;
+
+    AlertService.prototype.warning = function warning(message, title) {
+      this.emit(this.EVENTS.NEW_ALERT, _convertToAlert(this.TYPES.WARNING, message, title));
+    };
+
+    AlertService.prototype.success = function success(message, title) {
+      this.emit(this.EVENTS.NEW_ALERT, _convertToAlert(this.TYPES.SUCCESS, message, title));
+    };
+
+    AlertService.prototype.error = function error(message, title) {
+      this.emit(this.EVENTS.NEW_ALERT, _convertToAlert(this.TYPES.ERROR, message, title));
+    };
+
+    AlertService.prototype.info = function info(message, title) {
+      this.emit(this.EVENTS.NEW_ALERT, _convertToAlert(this.TYPES.INFO, message, title));
+    };
+
+    function _convertToAlert(type, message, title) {
+      let stackTrace;
+
+      if (_.isError(message)) {
+        stackTrace = message.stack;
+        message = message.message;
+      }
+      return {
+        type: type,
+        title: title,
+        message: message,
+        stackTrace: stackTrace,
+        icon: _getAlertIconByType(type)
+      };
     }
 
-    AlertService.prototype.warning = function warning(message) {
-      toastr.warning(message);
-    };
+    function _getAlertIconByType(type) {
+      let icon = null;
 
-    AlertService.prototype.success = function success(message) {
-      toastr.success(message);
-    };
-
-    AlertService.prototype.error = function error(err) {
-      if (_.isString(err)) {
-        toastr.error(err);
-      } else if (err && err.message) {
-        toastr.error(err.message);
-      } else {
-        toastr.error('Error');
+      switch (type) {
+        case TYPES.WARNING:
+          icon = 'fa fa-flash';
+          break;
+        case TYPES.INFO:
+          icon = 'fa fa-info';
+          break;
+        case TYPES.SUCCESS:
+          icon = 'fa fa-check';
+          break;
+        case TYPES.ERROR:
+          icon = 'icon-times';
+          break;
       }
-    };
 
-    AlertService.prototype.info = function info(message) {
-      toastr.info(message);
-    };
-
-    AlertService.prototype.clear = function warning(message) {
-      toastr.clear(message);
-    };
+      return icon;
+    }
 
     return new AlertService();
   }

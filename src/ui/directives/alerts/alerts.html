@@ -1,0 +1,32 @@
+<div class="alerts-container">
+  <div class="alert alert-{{ ::alert.type.toLowerCase() }} {{ ::alert.title ? 'has-title' : '' }}" ng-repeat="alert in alerts">
+    <button class="close" ng-click="::removeAlert(alert)">
+      <i class="icon-times"></i>
+    </button>
+    <div class="icon">
+      <p class="center">
+        <i class="{{ ::alert.icon }}"></i>
+      </p>
+    </div>
+    <div class="right">
+      <div class="title" ng-show="::alert.title">
+        {{ ::alert.title }}
+      </div>
+      <div class="message" ng-show="::alert.message">
+        <p class="message-text">
+          {{ ::alert.message }}
+        </p>
+        <div class="stack" ng-show="::alert.stackTrace">
+          <button class="btn no-select" ng-click="alert._showStack = !alert._showStack">
+            <i class="icon-plus"></i>
+            <span ng-hide="alert._showStack">Show</span>
+            <span ng-show="alert._showStack">Hide</span> Stack
+          </button>
+          <div class="stack-message" ng-show="alert._showStack">
+            {{ ::alert.stackTrace }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
