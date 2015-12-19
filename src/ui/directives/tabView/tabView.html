@@ -19,7 +19,7 @@
         <br> Click <a href="#" ng-click="showConnections(null, $event)">here</a> to add a connection.
       </p>
     </div>
-    <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-if="tab.active">
+    <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{ active: tab.active }" ng-show="tab.active">
       <!-- Page Tabs -->
       <div class="tab-pane-inner {{ tab.name.toLowerCase() }}-tab-pane" ng-if="tab.type === TAB_TYPES.PAGE" ng-include="tab.src">
       </div>
