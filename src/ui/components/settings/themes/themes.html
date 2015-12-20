@@ -2,10 +2,18 @@
   <div class="panel-header">
     <h3><i class="fa fa-paint-brush"></i>Themes</h3>
   </div>
-  <div class="">
-    <div class="form-group">
+  <div class="theme-cards">
+    <!-- <div class="form-group">
       <label class="control-label">Current Theme</label>
       <select class="form-control" ng-model="currentTheme" ng-options="theme as theme.name for theme in themes"></select>
+    </div> -->
+    <div class="row">
+      <div class="col-sm-3" ng-repeat="theme in themes">
+        <div class="theme-card" ng-class="{ 'active' : theme.active }" ng-click="selectTheme(theme)" style="background: {{ theme.background }}; color: {{ theme.color }};">
+          <div class="dimmer"></div>
+          <h3 class="theme-name">{{ theme.name }}</h3>
+        </div>
+      </div>
     </div>
   </div>
 </div>
