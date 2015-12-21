@@ -111,13 +111,13 @@ function _getPropertyTypeIcon(propertyType) {
       icon = 'fa-calendar';
       break;
     case 'array':
-      icon = 'fa-calendar';
+      icon = 'icon-array';
       break;
     case 'objectId':
       icon = 'fa-cog';
       break;
     case 'object':
-      icon = 'fa-smile-o';
+      icon = 'icon-object';
       break;
   }
 
