@@ -22,7 +22,7 @@ class KeyVaueUtils {
 function _convertToKeyValueResults(val) {
   if (!val || !_.isArray(val)) return null;
 
-  return val.map(function(result) {
+  return val.map((result) => {
     return _convertResultToKeyValueResult(result);
   });
 }
@@ -48,8 +48,12 @@ function _convertResultToKeyValueResult(obj) {
       display = 'ObjectId(\'' + value + '\')';
     } else if (type === 'object') {
       display = 'Object { ' + _.keys(value).length + ' properties }';
+      let objKeyValues = _convertResultToKeyValueResult(value);
+      keyValue.keyValues = objKeyValues.keyValues;
+      keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
       display = 'Array [' + _.keys(value).length + ']';
+      _convertToKeyValueResults(value);
     }
 
     keyValue.display = display;

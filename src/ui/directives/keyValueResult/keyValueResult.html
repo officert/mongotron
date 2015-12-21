@@ -7,11 +7,16 @@
     </li>
   </ul>
   <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
+    <pre>
+      {{ result | json }}
+    </pre>
     <span class="key no-select">
-      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i> (#{{ $index + 1 }}) {{ ::result.original._id }}
+      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
+      <span>({{ $index + 1 }}) ObjectId({{ ::result.original._id }})</span>
+      <span>{{ ::result.original._id }}</span>
     </span>
     <span class="key no-select">
-      {{ ::result.keyValues.length }} fields
+      { {{ ::result.keyValues.length }} fields }
     </span>
     <span class="key no-select">
 
@@ -31,7 +36,7 @@
         </span>
       </div>
       <div class="" ng-if="keyvalue.keyValues">
-        <key-value-results results="keyvalue.keyValues"></key-value-results>
+        <key-value-result result="keyvalue"></key-value-result>
       </div>
     </div>
   </div>
