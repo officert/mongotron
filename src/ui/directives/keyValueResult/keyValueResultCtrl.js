@@ -2,14 +2,22 @@
 
 angular.module('app').controller('keyValueResultCtrl', [
   '$scope',
-  function($scope) {
+  '$timeout',
+  'menuService',
+  function($scope, $timeout, menuService) {
     if (!$scope.result) throw new Error('keyValueResult directive - result is required on scope');
-    // console.log('RESULT');
-    // console.log($scope.result);
-    //
-    // $scope.$watch('result', (val) => {
-    //   console.log('WATCH result');
-    //   console.log(val);
-    // });
+
+    $scope.openDocumentContextMenu = function(doc) {
+      if (!doc) return;
+
+      menuService.showMenu([{
+        label: 'Edit Document',
+        click: function() {
+          $timeout(function() {
+            alert('Edit Document');
+          });
+        }
+      }]);
+    };
   }
 ]);

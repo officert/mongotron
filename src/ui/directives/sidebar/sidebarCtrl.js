@@ -127,7 +127,7 @@ angular.module('app').controller('sidebarCtrl', [
         label: 'New Query',
         click: function() {
           $timeout(function() {
-            $scope.activateItem(collection, 'collection');
+            $scope.activateItem(collection, 'query');
           });
         }
       }, {
