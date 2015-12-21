@@ -40,9 +40,24 @@
   .result {
     padding: 0;
     .result-header {
-      padding: 5px;
-      display: block;
       cursor: pointer;
+      padding: 5px;
+      .result-cell {
+        &.first-cell {
+          padding-left: 0;
+        }
+      }
+    }
+    .result-sub-header {
+      cursor: pointer;
+    }
+    .result-cell {
+      padding-top: 2px;
+      padding-bottom: 2px;
+      display: inline-block;
+      i {
+        margin-right: 2px;
+      }
     }
     .result-body {
       height: 0;
@@ -60,14 +75,7 @@
       .result-row {
         border-bottom: 1px solid lighten(@theme-query-result-json-border-color, 20%);
         &:hover {
-          background: darken(@theme-query-result-json-bg, 10%);
-        }
-        .result-cell {
-          padding-top: 2px;
-          padding-bottom: 2px;
-          i {
-            margin-right: 10px;
-          }
+          background: darken(@theme-query-result-json-bg, 2%);
         }
       }
     }

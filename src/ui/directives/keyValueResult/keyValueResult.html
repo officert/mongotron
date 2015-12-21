@@ -6,36 +6,48 @@
       </button>
     </li>
   </ul>
-  <span class="result-header clearfix" ng-click="result.isOpen = !result.isOpen">
-    <pre>
-      {{ result | json }}
-    </pre>
-    <span class="key no-select">
-      <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
-      <span>({{ $index + 1 }}) ObjectId({{ ::result.original._id }})</span>
-      <span>{{ ::result.original._id }}</span>
-    </span>
-    <span class="key no-select">
-      { {{ ::result.keyValues.length }} fields }
-    </span>
-    <span class="key no-select">
-
-    </span>
-  </span>
+  <div class="clearfix" ng-click="result.isOpen = !result.isOpen">
+    <div class="no-select">
+      <div class="result-header" ng-hide="result.type === 'object'">
+        <div class="result-cell first-cell col-sm-3 no-select">
+          <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
+          <span>({{ $index + 1 }}) ObjectId({{ ::result.original._id }})</span>
+        </div>
+        <div class="result-cell col-sm-6 no-select">
+          { {{ ::result.keyValues.length }} fields }
+        </div>
+        <div class="result-cell col-sm-3 no-select">
+          {{ result.type || 'object' }}
+        </div>
+      </div>
+      <div class="result-sub-header" ng-show="result.type === 'object'">
+        <div class="result-cell col-sm-3">
+          <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
+          <span>{{ ::result.key }}</span>
+        </div>
+        <div class="result-cell col-sm-6">
+          {{ ::result.display }}
+        </div>
+        <div class="result-cell col-sm-3">
+          {{ ::result.type }}
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
     <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValues">
-      <div class="clearfix">
-        <span class="result-cell col-sm-3 key">
+      <div class="clearfix" ng-hide="keyvalue.keyValues.length">
+        <div class="result-cell first-cell col-sm-3">
           <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
-        </span>
-        <span class="result-cell col-sm-6 value">
+        </div>
+        <div class="result-cell col-sm-6">
           {{ ::keyvalue.display }}
-        </span>
-        <span class="result-cell col-sm-3 type">
+        </div>
+        <div class="result-cell col-sm-3">
           {{ ::keyvalue.type }}
-        </span>
+        </div>
       </div>
-      <div class="" ng-if="keyvalue.keyValues">
+      <div class="" ng-show="keyvalue.keyValues">
         <key-value-result result="keyvalue"></key-value-result>
       </div>
     </div>
