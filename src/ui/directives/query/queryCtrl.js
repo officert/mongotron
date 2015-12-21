@@ -80,7 +80,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = function() {
-      modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery.query);
+      modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery);
     };
 
     function _runQuery(rawQuery) {
