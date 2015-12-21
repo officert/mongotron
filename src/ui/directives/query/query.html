@@ -52,7 +52,7 @@
         <div class="query-error alert alert-danger" ng-show="!loading && error">
           {{ error }}
         </div>
-        <div class="alert alert-info" ng-show="!loading && !error && !results">
+        <div class="alert alert-info" ng-show="!loading && !error && (!results || !results.length)">
           Your search did not return any results.
         </div>
         <div ng-show="!loading && !error && results">
