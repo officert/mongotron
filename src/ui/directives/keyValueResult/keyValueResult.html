@@ -11,7 +11,7 @@
       <div class="result-header" ng-hide="result.type === 'object' || result.type === 'array'">
         <div class="result-cell first-cell col-sm-3 no-select">
           <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
-          <span>({{ $index + 1 }}) ObjectId({{ ::result.original._id }})</span>
+          <span>({{ $index + 1 }}) ObjectId( {{ ::result.original._id }} )</span>
         </div>
         <div class="result-cell col-sm-6 no-select">
           { {{ ::result.keyValues.length }} fields }
