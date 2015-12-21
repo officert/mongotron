@@ -36,6 +36,11 @@ npm install -g gulp
 gulp serve
 ```
 
+### Tests
+```shell
+gulp test
+```
+
 ###Troubleshooting
 
 ####electron command not found
