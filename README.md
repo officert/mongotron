@@ -22,7 +22,11 @@ npm install
 ```shell
 bower install
 ```
-3. Start the app
+3. Install gulp globally
+```shell
+npm install -g gulp
+```
+4. Start the app
 ```shell
 gulp serve
 ```
@@ -39,5 +43,5 @@ gulp release
 ```
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/officert/mongotron/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/officert/mongotron/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
