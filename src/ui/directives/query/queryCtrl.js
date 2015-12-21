@@ -123,8 +123,6 @@ angular.module('app').controller('queryCtrl', [
             $scope.results = result.result;
 
             if ($scope.results && _.isArray($scope.results)) {
-              console.log('CONVERTING RESULTS');
-              console.log($scope.results);
               $scope.keyValueResults = keyValueUtils.convert($scope.results);
             }
 

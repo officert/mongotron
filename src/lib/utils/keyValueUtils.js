@@ -42,8 +42,14 @@ function _convertResultToKeyValueResult(obj) {
     let type = _getPropertyType(obj[key]);
     let icon = _getPropertyTypeIcon(type);
 
-    if (type === 'string') {
+    if (type === 'string' || type === 'number') {
       display = value;
+    } else if (type === 'boolean') {
+      display = value.toString();
+    } else if (type === 'date') {
+      display = value.toISOString();
+    } else if (type === 'null') {
+      display = 'null';
     } else if (type === 'objectId') {
       display = 'ObjectId(\'' + value + '\')';
     } else if (type === 'object') {
@@ -53,7 +59,7 @@ function _convertResultToKeyValueResult(obj) {
       keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
       display = 'Array [' + _.keys(value).length + ']';
-      _convertToKeyValueResults(value);
+      // _convertToKeyValueResults(value);
     }
 
     keyValue.display = display;
@@ -70,11 +76,11 @@ function _convertResultToKeyValueResult(obj) {
 
 function _getPropertyType(property) {
   if (property === null || property === undefined) return 'null';
+  if (_.isBoolean(property)) return 'boolean';
   if (_.isNumber(property)) return 'number'; //TODO: split into checks for Int, Float, Double, etc..
   if (_.isString(property)) return 'string';
   if (_.isArray(property)) return 'array';
   if (_.isDate(property)) return 'date';
-  if (_.isBoolean(property)) return 'boolean';
   if (mongoUtils.isObjectId(property)) return 'objectId';
   if (_.isObject(property)) return 'object';
 }
