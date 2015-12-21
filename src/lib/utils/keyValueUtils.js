@@ -59,7 +59,9 @@ function _convertResultToKeyValueResult(obj) {
       keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
       display = 'Array [' + _.keys(value).length + ']';
-      // _convertToKeyValueResults(value);
+      let objKeyValues = _convertResultToKeyValueResult(value);
+      keyValue.keyValues = objKeyValues.keyValues;
+      keyValue.original = objKeyValues.original;
     }
 
     keyValue.display = display;
@@ -67,6 +69,10 @@ function _convertResultToKeyValueResult(obj) {
     keyValue.value = value;
     keyValue.type = type;
     keyValue.icon = icon;
+
+    if (_.isArray(obj)) {
+      display = key;
+    }
 
     newObj.keyValues.push(keyValue);
   }
