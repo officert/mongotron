@@ -4,17 +4,18 @@ angular.module('app').controller('keyValueResultCtrl', [
   '$scope',
   '$timeout',
   'menuService',
-  function($scope, $timeout, menuService) {
+  'modalService',
+  function($scope, $timeout, menuService, modalService) {
     if (!$scope.result) throw new Error('keyValueResult directive - result is required on scope');
 
-    $scope.openDocumentContextMenu = function(doc) {
-      if (!doc) return;
-
+    $scope.openDocumentContextMenu = function() {
       menuService.showMenu([{
         label: 'Edit Document',
         click: function() {
           $timeout(function() {
-            alert('Edit Document');
+            modalService.openEditDocument({
+              // collection: $scope.collection
+            });
           });
         }
       }]);

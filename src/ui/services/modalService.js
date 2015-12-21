@@ -103,6 +103,18 @@ angular.module('app').service('modalService', [
       });
     };
 
+    ModalService.prototype.openEditDocument = function openEditDocument(collection) {
+      return openModal({
+        templateUrl: __dirname + '/components/editDocument/editDocument.html',
+        controller: 'editDocumentCtrl',
+        resolve: {
+          collection: [function() {
+            return collection;
+          }]
+        }
+      });
+    };
+
     function closeAllModals() {
       $uibModalStack.dismissAll();
     }
