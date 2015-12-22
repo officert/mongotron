@@ -13,12 +13,15 @@
       width: 100%;
       background: lighten(@theme-modal-content-bg, 6%);
     }
-    .right-btns {
-      position: absolute;
-      right: 0;
-      top: 0;
-      .export-btn-list {
+    .btns {
+      .btn-group {
         margin-right: 10px;
+        &.first {
+          margin-left: 0;
+        }
+      }
+      .export-btn-list {
+        margin-left: 0;
         padding: 0;
         .form-control {
           display: inline-block;
@@ -35,31 +38,15 @@
           }
         }
       }
-      .btn-group {
-        margin-right: 10px;
-        &.last {
-          margin-right: 0;
-        }
-      }
     }
   }
   .export-progress {
     width: 100%;
   }
   .key-value-pairs {
-    .no-key-value-pairs {
-      padding: 20px 0 40px;
-      p {
-        margin-bottom: 20px;
-        &.info {
-          margin-bottom: 60px;
-        }
-        &.or {
-          font-style: italic;
-          font-size: 18px;
-          color: darken(@theme-text-color, 10%);
-        }
-      }
+    .alert {
+      max-width: 500px;
+      margin: 0 auto;
     }
     .key-value-pair {
       border-radius: 4px;

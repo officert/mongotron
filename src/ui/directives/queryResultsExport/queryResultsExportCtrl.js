@@ -15,7 +15,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
     if ($scope.query.mongoMethod !== 'find' && $scope.query.mongoMethod !== 'aggregate') throw new Error('queryResultsExport directive - query type can only be find or aggregate query');
 
-    $scope.limit = $scope.limit || 50;
+    $scope.limit = null;
 
     const fs = require('fs');
     const csv = require('csv');
@@ -89,7 +89,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
             $scope.query.queryOptions = {
               stream: true,
-              limit: $scope.limit
+              limit: $scope.limit || 50
             };
 
             $scope.collection.execQuery($scope.query)
