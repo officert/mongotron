@@ -35,13 +35,15 @@
 .key-value-view {
   .query-result-view();
   .top-header {
-    padding: 10px;
+    .table-cell {
+      padding: 2px 5px;
+    }
   }
   .result {
     padding: 0;
     .result-header {
       cursor: pointer;
-      padding: 5px;
+      padding: 2px 5px;
       .result-cell {
         &.first-cell {
           padding-left: 0;
@@ -52,8 +54,7 @@
       cursor: pointer;
     }
     .result-cell {
-      padding-top: 2px;
-      padding-bottom: 2px;
+      padding: 2px 5px;
       display: inline-block;
       i {
         margin-right: 2px;
@@ -76,6 +77,9 @@
         border-bottom: 1px solid lighten(@theme-query-result-json-border-color, 20%);
         &:hover {
           background: darken(@theme-query-result-json-bg, 2%);
+        }
+        &:last-child {
+          border-bottom: none;
         }
       }
     }
