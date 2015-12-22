@@ -1,6 +1,7 @@
 # <a href="http://mongotron.io/" target="_blank">Mongotron</a>
 
 [![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/officert/mongotron)
 
 A Mongo DB GUI built using Electron, and Angular Js.
 
