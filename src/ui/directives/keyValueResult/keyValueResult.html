@@ -35,7 +35,7 @@
   </div>
   <div class="result-body clearfix level-{{ level }}" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
     <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValues">
-      <div class="clearfix" ng-hide="keyvalue.keyValues.length">
+      <div class="clearfix" ng-hide="keyvalue.keyValues">
         <div class="result-cell first-cell col-sm-3" ng-style="{ 'padding-left' : ((level * 15) + 'px') }">
           <i class="fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </div>
