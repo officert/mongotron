@@ -1,18 +1,34 @@
 {
   "checksum": {
-    "previous": "c0df96686dc37621b57df687a9d386df606f56c290cb25d974ab1bf90a6293c0",
-    "current": "c0df96686dc37621b57df687a9d386df606f56c290cb25d974ab1bf90a6293c0"
+    "previous": "edc67e213096f98b61fd5bf747886101eb78529c5671146e21747d9f424b09f8",
+    "current": "edc67e213096f98b61fd5bf747886101eb78529c5671146e21747d9f424b09f8"
   },
   "fonts": [
-    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.ttf",
-    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.svg",
-    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.woff",
-    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.eot"
+    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.ttf",
+    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.svg",
+    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.woff",
+    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.eot"
   ],
   "glyphs": {
     "array": {
       "codepoint": 61702,
       "source": "resources/font-glyphs/array.svg"
+    },
+    "chevron-down": {
+      "codepoint": 61707,
+      "source": "resources/font-glyphs/chevron-down.svg"
+    },
+    "chevron-left": {
+      "codepoint": 61705,
+      "source": "resources/font-glyphs/chevron-left.svg"
+    },
+    "chevron-right": {
+      "codepoint": 61706,
+      "source": "resources/font-glyphs/chevron-right.svg"
+    },
+    "chevron-up": {
+      "codepoint": 61708,
+      "source": "resources/font-glyphs/chevron-up.svg"
     },
     "left-arrow": {
       "codepoint": 61697,

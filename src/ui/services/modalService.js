@@ -92,7 +92,7 @@ angular.module('app').service('modalService', [
 
       return new Promise((resolve, reject) => {
         _this.confirm({
-          message: 'Are you sure you want to delete this record?',
+          message: 'Are you sure you want to delete this document?',
           confirmButtonMessage: 'Yes',
           cancelButtonMessage: 'No'
         }).result.then(function() {
