@@ -1,11 +1,11 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <!--
-2015-12-21: Created with FontForge (http://fontforge.org)
+2015-12-22: Created with FontForge (http://fontforge.org)
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20141127 at Mon Dec 21 15:35:21 2015
+Created by FontForge 20141127 at Tue Dec 22 16:22:15 2015
  By Tim Officer
 Copyright (c) 2015, Tim Officer
 </metadata>
@@ -22,7 +22,7 @@ Copyright (c) 2015, Tim Officer
     bbox="5.90723 -58.0928 506.093 442.093"
     underline-thickness="25.6"
     underline-position="-51.2"
-    unicode-range="U+0020-F107"
+    unicode-range="U+0020-F108"
   />
     <missing-glyph />
     <glyph glyph-name="space" unicode=" " horiz-adv-x="200" 
@@ -68,5 +68,7 @@ d="M39.3848 -24.6152v433.23h39.3848v-433.23h-39.3848zM433.23 -24.6152v433.23h39.
 M315.077 -24.6152v39.3848h118.153v-39.3848h-118.153z" />
     <glyph glyph-name="uniF104" unicode="&#xf104;" 
 d="M174.381 192l-136.032 136.032l81.6191 81.6191l136.032 -136.032l136.032 136.032l81.6191 -81.6191l-136.032 -136.032l136.032 -136.032l-81.6191 -81.6191l-136.032 136.032l-136.032 -136.032l-81.6191 81.6191z" />
+    <glyph glyph-name="uniF108" unicode="&#xf108;" 
+d="M5.90723 134.893v114.215h500.186v-114.215h-500.186z" />
   </font>
 </defs></svg>

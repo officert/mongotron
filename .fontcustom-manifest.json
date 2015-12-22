@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "46bd79b0b6c30445cd7e0f6815aec731f602eb4565ca132796fa66c54998a5c9",
-    "current": "46bd79b0b6c30445cd7e0f6815aec731f602eb4565ca132796fa66c54998a5c9"
+    "previous": "c0df96686dc37621b57df687a9d386df606f56c290cb25d974ab1bf90a6293c0",
+    "current": "c0df96686dc37621b57df687a9d386df606f56c290cb25d974ab1bf90a6293c0"
   },
   "fonts": [
-    "src/ui/font-glyphs/fontcustom_46bd79b0b6c30445cd7e0f6815aec731.ttf",
-    "src/ui/font-glyphs/fontcustom_46bd79b0b6c30445cd7e0f6815aec731.svg",
-    "src/ui/font-glyphs/fontcustom_46bd79b0b6c30445cd7e0f6815aec731.woff",
-    "src/ui/font-glyphs/fontcustom_46bd79b0b6c30445cd7e0f6815aec731.eot"
+    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.ttf",
+    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.svg",
+    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.woff",
+    "src/ui/font-glyphs/fontcustom_c0df96686dc37621b57df687a9d386df.eot"
   ],
   "glyphs": {
     "array": {
@@ -17,6 +17,10 @@
     "left-arrow": {
       "codepoint": 61697,
       "source": "resources/font-glyphs/left-arrow.svg"
+    },
+    "minus": {
+      "codepoint": 61704,
+      "source": "resources/font-glyphs/minus.svg"
     },
     "object": {
       "codepoint": 61703,
