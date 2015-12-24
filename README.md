@@ -22,7 +22,7 @@ A Mongo DB GUI built using Electron, and Angular Js.
 npm install
 ```
 ```shell
-bower install
+./node_modules/.bin/bower install
 ```
 
 * Install gulp globally
