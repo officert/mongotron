@@ -14106,6 +14106,38 @@ body.show-mobile-menu .mobile-menu {
   border-right: none;
   background: #161719;
 }
+#producthunt {
+  display: none;
+  background: #da552f;
+  border-top: 3px solid white;
+  border-bottom: 2px solid white;
+}
+#producthunt .container {
+  max-width: 970px;
+  margin: 0 auto;
+}
+#producthunt img {
+  max-height: 200px;
+  margin: 0 auto;
+}
+#producthunt .text {
+  padding-top: 40px;
+  color: white;
+}
+#producthunt .text h2 {
+  margin-bottom: 20px;
+}
+#producthunt .text .cta {
+  margin-top: 16px;
+}
+#producthunt .text .cta i {
+  font-size: 20px;
+  margin-right: 5px;
+}
+#producthunt .text .cta span {
+  position: relative;
+  top: -1px;
+}
 .top-container {
   background-repeat: repeat-x;
   background-image: -webkit-linear-gradient(-20deg, #183854, #161719);
