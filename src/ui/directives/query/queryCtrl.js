@@ -84,7 +84,7 @@ angular.module('app').controller('queryCtrl', [
     };
 
     $scope.collapseAll = function() {
-      $rootScope.$broadcast('collapse');
+      $scope.$broadcast('collapse');
     };
 
     function _runQuery(rawQuery) {
