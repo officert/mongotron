@@ -15,6 +15,10 @@ angular.module('app').controller('keyValueResultCtrl', [
 
     console.log('level', $scope.level);
 
+    $scope.$on('collapse', function() {
+      $scope.result.isOpen = false;
+    });
+
     $scope.openDocumentContextMenu = function(doc) {
       if (!doc) return;
 
