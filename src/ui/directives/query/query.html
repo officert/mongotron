@@ -31,8 +31,7 @@
         tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentQuery.mongoMethod === 'count' || currentView === VIEWS.TEXT" uib-tooltip="Collapse All" tooltip-placement="bottom"
-                tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentQuery.mongoMethod === 'count' || currentView === VIEWS.TEXT" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-compress"></i>
         </button>
       </div>
@@ -56,10 +55,10 @@
         <div class="query-error alert alert-danger" ng-show="!loading && error">
           {{ error }}
         </div>
-        <div class="alert alert-info" ng-show="!loading && !error && (!results || !results.length)">
+        <div class="alert alert-info" ng-show="!loading && !error && (!results || !results.length) && currentQuery.mongoMethod !== 'count'">
           Your search did not return any results.
         </div>
-        <div ng-show="!loading && !error && results">
+        <div ng-show="!loading && !error && (results !== null && results !== undefined)">
           <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="results">
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT">
