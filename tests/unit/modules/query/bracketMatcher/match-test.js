@@ -49,6 +49,32 @@ describe('modules', function() {
           });
         });
 
+        describe('when string contains only an closing bracket', function() {
+          it('should return an empty array', function(next) {
+            var str = 'foo : "bar" }';
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(0);
+
+            return next(null);
+          });
+        });
+
+        describe('when string contains no brackets', function() {
+          it('should return an empty array', function(next) {
+            var str = 'foo : "bar"';
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(0);
+
+            return next(null);
+          });
+        });
+
         describe('when string contains a single object with a single property', function() {
           it('should return an array with 1 value equal to the string', function(next) {
             var str = '{ foo : "bar" }';
@@ -58,6 +84,37 @@ describe('modules', function() {
             should.exist(parts);
             should(parts.length).equal(1);
             should(parts[0]).equal(str);
+
+            return next(null);
+          });
+        });
+
+        describe('when string contains a single object with a string property that contains brackets', function() {
+          it('should exclude any brackets in the string property and return an array with 1 value equal to the string', function(next) {
+            var str = '{ foo : "bar}{" } }';
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(1);
+            should(parts[0]).equal(str);
+
+            return next(null);
+          });
+        });
+
+        describe('when string contains 2 objects with a string property that contains brackets', function() {
+          it('should exclude any brackets in the string property and return an array with 1 value equal to the string', function(next) {
+            var str1 = '{ foo : "bar}{" } }';
+            var str2 = '{ barr : "fooo}{" } }';
+            var str = str1 + ', ' + str2;
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(2);
+            should(parts[0]).equal(str1);
+            should(parts[1]).equal(str2);
 
             return next(null);
           });
