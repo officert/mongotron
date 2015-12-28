@@ -19,16 +19,19 @@ class BracketMatcher {
 
       let curr = str[i];
 
+      //ignore the opening bracket if we're in a single or double quote string
       if (curr === '{' && (openSingleQuoteStringCount === 0 && openDoubleQuoteStringCount === 0)) {
         openBracketCount++;
       }
 
-      if (curr === "'") {
+      //ignore the single quote if we're inside a double quote string
+      if (curr === "'" && openDoubleQuoteStringCount === 0) {
         if (openSingleQuoteStringCount === 1) openSingleQuoteStringCount = 0;
         else openSingleQuoteStringCount = 1;
       }
 
-      if (curr === '"') {
+      //ignore the double quote if we're inside a single quote string
+      if (curr === '"' && openSingleQuoteStringCount === 0) {
         if (openDoubleQuoteStringCount === 1) openDoubleQuoteStringCount = 0;
         else openDoubleQuoteStringCount = 1;
       }
@@ -37,6 +40,7 @@ class BracketMatcher {
         parts[currentPartsCount] = parts[currentPartsCount] ? (parts[currentPartsCount] + curr) : curr;
       }
 
+      //ignore the closing bracket if we're in a single or double quote string
       if (curr === '}' && (openSingleQuoteStringCount === 0 && openDoubleQuoteStringCount === 0)) {
         openBracketCount--;
 

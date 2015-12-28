@@ -207,6 +207,40 @@ describe('modules', function() {
           });
         });
 
+        describe('when string contains 2 objects with a single quote string property that contains double quotes', function() {
+          it('should ignore any double quotes in the string property and return an array with 2 values equal to the first and second object', function(next) {
+            var str1 = "{ foo : '\"}}' }";
+            var str2 = "{ foo : 'bar' }";
+            var str = str1 + ',' + str2;
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(2);
+            should(parts[0]).equal(str1);
+            should(parts[1]).equal(str2);
+
+            return next(null);
+          });
+        });
+
+        describe('when string contains 2 objects with a double quote string property that contains single quotes', function() {
+          it('should ignore any single quotes in the string property and return an array with 2 values equal to the first and second object', function(next) {
+            var str1 = '{ foo : "\'}}" }';
+            var str2 = "{ foo : 'bar' }";
+            var str = str1 + ',' + str2;
+
+            var parts = bracketMatcher.match(str);
+
+            should.exist(parts);
+            should(parts.length).equal(2);
+            should(parts[0]).equal(str1);
+            should(parts[1]).equal(str2);
+
+            return next(null);
+          });
+        });
+
         describe('when string contains 2 objects each with nested objects', function() {
           it('should return an array with 2 values equal to the first and second object', function(next) {
             var str1 = '{ person : { name : "John Doe", address : { street : "Foobar Lane", city : "Ardvark" } } }';
