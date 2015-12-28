@@ -12,6 +12,7 @@
     "mongodb": "2.1.1",
     "node-uuid": "1.4.7",
     "path-extra": "3.0.0",
+    "tunnel-ssh": "3.0.0-alpha",
     "underscore": "1.8.3",
     "winston": "2.1.1"
   },
