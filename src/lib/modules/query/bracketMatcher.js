@@ -19,11 +19,11 @@ class BracketMatcher {
 
       let curr = str[i];
 
-      if (curr === '{') {
+      if (curr === '{' && (openSingleQuoteStringCount === 0 && openDoubleQuoteStringCount === 0)) {
         openBracketCount++;
       }
 
-      if (curr === '\'') {
+      if (curr === "'") {
         if (openSingleQuoteStringCount === 1) openSingleQuoteStringCount = 0;
         else openSingleQuoteStringCount = 1;
       }
@@ -44,7 +44,14 @@ class BracketMatcher {
           currentPartsCount++;
         }
       }
+
+      // console.log('parts', parts);
+      // console.log('openBracketCount', openBracketCount);
+      // console.log('openSingleQuoteStringCount', openSingleQuoteStringCount);
+      // console.log('openDoubleQuoteStringCount', openDoubleQuoteStringCount);
     }
+
+    // console.log('openBracketCount', openBracketCount);
 
     return parts;
   }
