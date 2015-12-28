@@ -95,8 +95,6 @@ describe('modules', function() {
 
             var parts = bracketMatcher.match(str);
 
-            console.log('parts', parts);
-
             should.exist(parts);
             should(parts.length).equal(1);
             should(parts[0]).equal('{ foo : "bar" }');
@@ -104,22 +102,6 @@ describe('modules', function() {
             return next(null);
           });
         });
-
-        // describe('when string contains a single object with a single property and contains characters after the last bracket', function() {
-        //   it('should return an array with 1 value and exclude any characters after the final bracket', function(next) {
-        //     var str = 'db.releases.insertOne({  "upload_url": "https://uploads.github.com/repos/officert/mongotron/releases/2333311/assets{?name,label}"  })';
-        //
-        //     var parts = bracketMatcher.match(str);
-        //
-        //     console.log('parts', parts);
-        //
-        //     should.exist(parts);
-        //     should(parts.length).equal(1);
-        //     should(parts[0]).equal('{  "upload_url": "https://uploads.github.com/repos/officert/mongotron/releases/2333311/assets{?name,label}"  }');
-        //
-        //     return next(null);
-        //   });
-        // });
 
         describe('when string contains a single object with a string property that contains brackets', function() {
           it('should exclude any brackets in the string property and return an array with 1 value equal to the string', function(next) {
