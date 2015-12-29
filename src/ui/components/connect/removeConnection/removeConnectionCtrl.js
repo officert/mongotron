@@ -3,10 +3,9 @@
 angular.module('app').controller('removeConnectionCtrl', [
   '$scope',
   '$timeout',
-  '$log',
   'notificationService',
   'connectionCache',
-  function($scope, $timeout, $log, notificationService, connectionCache) {
+  function($scope, $timeout, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
 
     $scope.removeConnection = function(connection, $event) {
@@ -14,8 +13,8 @@ angular.module('app').controller('removeConnectionCtrl', [
       if ($event) $event.preventDefault();
 
       connectionModule.delete(connection.id)
-        .then(function() {
-          $timeout(function() {
+        .then(() => {
+          $timeout(() => {
             connectionCache.removeById(connection.id);
 
             $scope.changePage('list');
@@ -23,13 +22,12 @@ angular.module('app').controller('removeConnectionCtrl', [
             notificationService.success('Connection removed');
           });
         })
-        .catch(function(err) {
-          $timeout(function() {
+        .catch((err) => {
+          $timeout(() => {
             notificationService.error({
               title: 'Error removing connection',
               message: err
             });
-            console.log(err);
           });
         });
     };
