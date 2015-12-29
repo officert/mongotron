@@ -16,10 +16,6 @@ angular.module('app').controller('removeConnectionCtrl', [
       connectionModule.delete(connection.id)
         .then(function() {
           $timeout(function() {
-            var index = $scope.connections.indexOf(connection);
-
-            if (index >= 0) $scope.connections.splice(index, 1);
-
             connectionCache.removeById(connection.id);
 
             $scope.changePage('list');
