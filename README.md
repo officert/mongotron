@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/officert/mongotron.svg?branch=master)](https://travis-ci.org/officert/mongotron)
 [![Join the chat at https://gitter.im/officert/mongotron](https://badges.gitter.im/officert/mongotron.svg)](https://gitter.im/officert/mongotron?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Coverage Status](https://coveralls.io/repos/officert/mongotron/badge.svg?branch=master&service=github)](https://coveralls.io/github/officert/mongotron?branch=master)
 
 A Mongo DB GUI built using Electron, and Angular Js.
 
