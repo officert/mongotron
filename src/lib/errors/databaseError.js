@@ -1,21 +1,15 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-const util = require('util');
+'use strict';
 
 const AbstractError = require('./abstractError');
 
 /*
- * @constructor DatabaseError
+ * @class DatabaseError
  */
-var DatabaseError = function() {
-  AbstractError.apply(this, arguments);
-};
-util.inherits(DatabaseError, AbstractError);
-DatabaseError.prototype.name = 'Database Error';
+class DatabaseError extends AbstractError {
+  constructor(message) {
+    super(message);
+    this.name = 'Database Error';
+  }
+}
 
-/*
- * @exports
- *
- */
 module.exports = DatabaseError;

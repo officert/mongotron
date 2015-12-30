@@ -1,21 +1,15 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-const util = require('util');
+'use strict';
 
 const AbstractError = require('./abstractError');
 
 /*
- * @constructor ConnectionError
+ * @class ConnectionError
  */
-var ConnectionError = function() {
-  AbstractError.apply(this, arguments);
-};
-util.inherits(ConnectionError, AbstractError);
-ConnectionError.prototype.name = 'Connection Error';
+class ConnectionError extends AbstractError {
+  constructor(message) {
+    super(message);
+    this.name = 'Connection Error';
+  }
+}
 
-/*
- * @exports
- *
- */
 module.exports = ConnectionError;
