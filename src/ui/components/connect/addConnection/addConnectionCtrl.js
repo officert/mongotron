@@ -9,11 +9,12 @@ angular.module('app').controller('addConnectionCtrl', [
   function($scope, $timeout, $log, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
 
-    $scope.currentSubPage = 'connection';
+    $scope.currentSubPage = 'server';
 
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({}, $scope.selectedConnection) : {
       auth: {}
     };
+
     $scope.addConnectionFormSubmitted = false;
 
     $scope.addOrUpdateConnection = function(addConnectionForm) {
