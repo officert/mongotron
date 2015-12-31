@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
@@ -25,15 +27,15 @@ angular.module('app').controller('sidebarCtrl', [
 
       menuService.showMenu([{
         label: 'New Database',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             modalService.openAddDatabase(connection);
           });
         }
       }, {
         label: 'Disconnect',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             connectionCache.removeById(connection.id);
             tabCache.removeByConnectionId(connection.id);
           });
@@ -45,8 +47,8 @@ angular.module('app').controller('sidebarCtrl', [
       if (!connection) return;
 
       if (!connection.isOpen) {
-        connection.connect(function(err) {
-          $timeout(function() {
+        connection.connect((err) => {
+          $timeout(() => {
             if (err) {
               notificationService.error({
                 title: 'Error opening connection',
@@ -69,22 +71,22 @@ angular.module('app').controller('sidebarCtrl', [
 
       menuService.showMenu([{
         label: 'New Collection',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             modalService.openAddCollection(database);
           });
         }
       }, {
         label: 'Drop Database',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             modalService.confirm({
               message: 'Are you sure you want to drop this collection?',
               confirmButtonMessage: 'Yes',
               cancelButtonMessage: 'No'
-            }).result.then(function() {
+            }).result.then(() => {
               database.drop()
-                .then(function() {
+                .then(() => {
                   notificationService.success('Database dropped');
 
                   tabCache.removeByDatabase(database);
@@ -94,7 +96,7 @@ angular.module('app').controller('sidebarCtrl', [
                     connection.databases.splice(index, 1);
                   }
                 })
-                .catch(function(err) {
+                .catch((err) => {
                   logger.error(err);
                   notificationService.error({
                     title: 'Error dropping database',
@@ -112,8 +114,8 @@ angular.module('app').controller('sidebarCtrl', [
 
       menuService.showMenu([{
         label: 'New Collection',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             modalService.openAddCollection(database);
           });
         }
@@ -125,22 +127,22 @@ angular.module('app').controller('sidebarCtrl', [
 
       menuService.showMenu([{
         label: 'New Query',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             $scope.activateItem(collection, 'query');
           });
         }
       }, {
         label: 'Drop Collection',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             modalService.confirm({
               message: 'Are you sure you want to drop this collection?',
               confirmButtonMessage: 'Yes',
               cancelButtonMessage: 'No'
-            }).result.then(function() {
+            }).result.then(() => {
               collection.drop()
-                .then(function() {
+                .then(() => {
                   notificationService.success('Collection dropped');
 
                   tabCache.removeByCollection(collection);
@@ -168,14 +170,14 @@ angular.module('app').controller('sidebarCtrl', [
 
       if (!database.isOpen) {
         if (connection) { //collapse other databases with the same connection
-          _.each(connection.databases, function(database) {
+          _.each(connection.databases, (database) => {
             _collapseDatabase(database);
           });
         }
 
         database.opening = true;
-        database.open(function(err) {
-          $timeout(function() {
+        database.open((err) => {
+          $timeout(() => {
             database.opening = false;
 
             if (err) {
@@ -202,7 +204,7 @@ angular.module('app').controller('sidebarCtrl', [
       if (!database.collections || !database.collections.length) {
         database.loadingCollections = true;
         database.listCollections(function(err, collections) {
-          $timeout(function() {
+          $timeout(() => {
             database.loadingCollections = false;
 
             if (err) {
@@ -252,7 +254,7 @@ angular.module('app').controller('sidebarCtrl', [
         defaultCollection: collection.name
       };
 
-      $timeout(function() {
+      $timeout(() => {
         tabCache.add(queryTab);
       });
     }
