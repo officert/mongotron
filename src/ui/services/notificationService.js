@@ -44,7 +44,7 @@ angular.module('app').factory('notificationService', [
         message: opts
       };
 
-      if (_.isError(opts.message)) {
+      if (_.isError(opts.message) || (opts.message instanceof Error)) {
         stackTrace = opts.message.stack;
         opts.message = opts.message.message;
       }
