@@ -214,12 +214,12 @@ function convertConnectionInstanceIntoConfig(connection) {
     port: connection.port,
     databases: connection.databases ? connection.databases.map((database) => {
       var db = {
+        id: database.id || uuid.v4(),
         name: database.name
       };
 
       if (database.auth) {
         db.auth = {
-          id: database.id || uuid.v4(),
           username: database.auth.username,
           password: database.auth.password
         };
@@ -249,13 +249,23 @@ function createConnection(options) {
     var newConn = new Connection(options);
 
     if (options.databaseName) {
-      newConn.addDatabase({
+      let newDb = {
         id: uuid.v4(),
         name: options.databaseName,
         host: options.host,
         port: options.port,
         auth: options.auth
-      });
+      };
+
+      if (options.auth) {
+        if (options.auth.username || options.auth.password) {
+          newDb.auth = {};
+          newDb.auth.username = options.auth.username;
+          newDb.auth.password = options.auth.password;
+        }
+      }
+
+      newConn.addDatabase(newDb);
     }
 
     return resolve(newConn);

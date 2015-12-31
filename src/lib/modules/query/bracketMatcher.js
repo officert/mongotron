@@ -12,9 +12,6 @@ class BracketMatcher {
     let openSingleQuoteStringCount = 0;
     let openDoubleQuoteStringCount = 0;
 
-    //TODO: handle single quote inside doubles quotes
-    //TODO: handle double quote inside single quotes
-
     for (let i = 0; i < str.length; i++) {
 
       let curr = str[i];
@@ -48,14 +45,7 @@ class BracketMatcher {
           currentPartsCount++;
         }
       }
-
-      // console.log('parts', parts);
-      // console.log('openBracketCount', openBracketCount);
-      // console.log('openSingleQuoteStringCount', openSingleQuoteStringCount);
-      // console.log('openDoubleQuoteStringCount', openDoubleQuoteStringCount);
     }
-
-    // console.log('openBracketCount', openBracketCount);
 
     return parts;
   }

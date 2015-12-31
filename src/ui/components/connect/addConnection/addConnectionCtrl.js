@@ -11,9 +11,23 @@ angular.module('app').controller('addConnectionCtrl', [
 
     $scope.currentSubPage = 'server';
 
-    $scope.addConnectionForm = $scope.selectedConnection ? _.extend({}, $scope.selectedConnection) : {
+    $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
+      databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
+    }, $scope.selectedConnection) : {
       auth: {}
     };
+
+    if ($scope.selectedConnection && $scope.addConnectionForm.databaseName) {
+      $scope.addConnectionForm.enableAuth = true;
+    }
+
+    if ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) {
+      $scope.addConnectionForm.auth = $scope.selectedConnection.databases[0].auth;
+    }
+
+    if ($scope.selectedConnection && $scope.selectedConnection.ssh && $scope.selectedConnection.ssh.host) {
+      $scope.addConnectionForm.enableSSH = true;
+    }
 
     $scope.addConnectionFormSubmitted = false;
 
@@ -21,6 +35,11 @@ angular.module('app').controller('addConnectionCtrl', [
       $scope.addConnectionFormSubmitted = true;
 
       if (!addConnectionForm.$valid) return;
+
+      if ($scope.addConnectionForm.enableAuth === false) {
+        $scope.addConnectionForm.databaseName = null;
+        $scope.addConnectionForm.auth = null;
+      }
 
       if ($scope.selectedConnection) {
         $scope.editConnection();

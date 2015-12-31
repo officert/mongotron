@@ -49,7 +49,7 @@ class Database {
     _this._dbConnection.open(function(err) {
       if (err) return next(new errors.DatabaseError(err));
 
-      if (_this.auth) {
+      if (_this.auth && _this.auth.username && _this.auth.password) {
         _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
           if (err) return next(new errors.DatabaseError(err));
 

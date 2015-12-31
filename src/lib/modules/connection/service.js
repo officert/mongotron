@@ -9,7 +9,9 @@ const connectionRepository = require('./repository');
 const ALLOWED_UPDATES = [
   'name',
   'host',
-  'port'
+  'port',
+  'auth',
+  'databaseName'
 ];
 
 const DEFAULT_CONNECTIONS = require('./defaults');
@@ -44,7 +46,9 @@ class ConnectionService {
       if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
       if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
 
-      if (options.port < 0 || options.port > 65535) return reject(new errors.InvalidArugmentError('port number must be between 0 and 65535'));
+      if (options.host !== 'localhost' && !options.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
+
+      if (options.port < 0 || options.port > 65535) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
 
       return connectionRepository.existsByName(options.name)
         .then(function(exists) {
@@ -73,14 +77,38 @@ class ConnectionService {
    * @param {String} id - id of the connection to update
    */
   update(id, options) {
+    let _this = this;
+
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
       if (!options) return reject(new errors.InvalidArugmentError('options is required'));
 
       options = _.pick(options, ALLOWED_UPDATES);
 
-      connectionRepository.update(id, options)
-        .then(resolve)
+      _this.findById(id)
+        .then((connection) => {
+          if (!connection) return reject(new errors.ObjectNotFoundError('Connection not found'));
+
+          if (options.databaseName || (options.auth && (options.auth.username || options.auth.password))) {
+            if (connection.databases && connection.databases.length) {
+              let db = connection.databases[0];
+              if (options.auth && options) {
+                db.auth = options.auth;
+              }
+              db.name = options.databaseName || db.name;
+
+              options.databases = [connection.databases[0]];
+            } else {
+              // connection.addDatabase({
+              //
+              // });
+            }
+          }
+
+          connectionRepository.update(id, options)
+            .then(resolve)
+            .catch(reject);
+        })
         .catch(reject);
     });
   }
