@@ -1,7 +1,5 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-//errors
+'use strict';
+
 const AbstractError = require('./abstractError');
 const ConnectionError = require('./connectionError');
 const DatabaseError = require('./databaseError');

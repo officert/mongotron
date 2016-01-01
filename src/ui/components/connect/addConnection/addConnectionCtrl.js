@@ -9,15 +9,35 @@ angular.module('app').controller('addConnectionCtrl', [
   function($scope, $timeout, $log, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
 
-    $scope.addConnectionForm = $scope.selectedConnection ? _.extend({}, $scope.selectedConnection) : {
+    $scope.currentSubPage = 'server';
+
+    $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
+      databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
+    }, $scope.selectedConnection) : {
       auth: {}
     };
+
+    if ($scope.selectedConnection && ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length)) {
+      $scope.addConnectionForm.auth = $scope.selectedConnection.databases[0].auth;
+    }
+
+    $scope.$watch('addConnectionForm.host', function(val) {
+      if (val === 'localhost') {
+        $scope.addConnectionForm.databaseName = null;
+      }
+    });
+
     $scope.addConnectionFormSubmitted = false;
 
     $scope.addOrUpdateConnection = function(addConnectionForm) {
       $scope.addConnectionFormSubmitted = true;
 
       if (!addConnectionForm.$valid) return;
+
+      if ($scope.addConnectionForm.enableAuth === false) {
+        $scope.addConnectionForm.databaseName = null;
+        $scope.addConnectionForm.auth = null;
+      }
 
       if ($scope.selectedConnection) {
         $scope.editConnection();

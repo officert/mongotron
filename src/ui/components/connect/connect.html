@@ -6,13 +6,6 @@
     <i class="close icon-times" ng-click="close()"></i>
   </div>
   <div class="modal-body">
-    <div class="clearfix top-links">
-      <div class="pull-right">
-        <a href="#" class="add-link" ng-click="changePage('add', null, $event)">
-          <i class="icon-plus"></i> Create
-        </a>
-      </div>
-    </div>
     <div class="connect-panel" ng-if="currentPage === 'list'" ng-include="listConnectionsSrc"></div>
     <div class="connect-panel" ng-if="currentPage === 'add'" ng-include="addConnectionSrc"></div>
     <div class="connect-panel" ng-if="currentPage === 'edit'" ng-include="editConnectionSrc"></div>

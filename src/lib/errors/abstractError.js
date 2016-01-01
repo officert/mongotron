@@ -1,31 +1,15 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-const util = require('util');
+'use strict';
 
 /*
- * @constructor AbstractError
+ * @class AbstractError
  */
-var AbstractError = function(errorType, constr) {
-  Error.captureStackTrace(this, constr || this);
+class AbstractError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'Abstract Error';
+    this.message = message;
+    Error.captureStackTrace(this, this.constructor.name);
+  }
+}
 
-  var isMessage = (typeof errorType === 'string');
-  this.message = isMessage ? errorType : errorType.message;
-};
-util.inherits(AbstractError, Error);
-
-AbstractError.prototype.name = 'Abstract Error';
-
-AbstractError.prototype.toString = function() {
-  return String(this.message);
-};
-
-AbstractError.prototype.getMessage = function() {
-  return this.message;
-};
-
-/*
- * @exports
- *
- */
 module.exports = AbstractError;

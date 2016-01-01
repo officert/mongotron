@@ -1,4 +1,11 @@
 <div id="connect-list" ng-controller="listConnectionsCtrl">
+  <div class="clearfix top-links">
+    <div class="pull-right">
+      <a href="#" class="add-link" ng-click="changePage('add', null, $event)">
+        <i class="icon-plus"></i> Create
+      </a>
+    </div>
+  </div>
   <loading loading="loading"></loading>
   <div class="alert alert-info" ng-show="!connections.length && !loading">
     Your don't have any connections yet. Use the <i class="fa fa-plus"></i> Create button to create new connections.
