@@ -216,8 +216,8 @@ gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
 });
 
 gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests'], () => {
-  return gulp.src(['src/', 'src/lib/', 'tests/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
+  return gulp.src(['src/', 'src/lib/', 'tests/', 'package.json'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests', './node_modules/package.json'], {
       force: true
     }));
 });
