@@ -85,6 +85,9 @@ class ConnectionService {
 
       options = _.pick(options, ALLOWED_UPDATES);
 
+      if (options.auth && options.auth.username && !options.auth.password) return reject(new errors.InvalidArugmentError('password is required for authentication'));
+      if (options.auth && options.auth.password && !options.auth.username) return reject(new errors.InvalidArugmentError('username is required for authentication'));
+
       _this.findById(id)
         .then((connection) => {
           if (!connection) return reject(new errors.ObjectNotFoundError('Connection not found'));
