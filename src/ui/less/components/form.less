@@ -1,3 +1,10 @@
+.form-group {
+  &.has-error {
+    .control-label {
+      color: @theme-brand-danger;
+    }
+  }
+}
 .form-control {
   padding: 0.3em 1em;
   box-shadow: none;
@@ -8,5 +15,11 @@
     outline: none;
     border-color: @brand-primary;
     box-shadow: none;
+  }
+  &::-webkit-input-placeholder {
+    color: darken(@theme-input-color, 47%);
+  }
+  &[disabled] {
+    background: @theme-input-disabled-bg;
   }
 }

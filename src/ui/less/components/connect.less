@@ -15,15 +15,19 @@
     }
     .add-link {
       display: block;
+      color: @theme-brand-primary;
+      &:hover {
+        color: darken(@theme-brand-primary, 10%);
+      }
       i {
-        color: @theme-modal-close-icon-color;
+        font-size: 12px;
       }
     }
   }
   .connection-list {
     margin-bottom: 25px;
     li {
-      margin: 4px;
+      margin: 4px 0;
       position: relative;
       border: 1px solid darken(@theme-modal-content-bg, 10%);
       border-radius: 2px;
@@ -87,6 +91,17 @@
       li {
         display: inline-block;
         cursor: pointer;
+        &.active {
+          a {
+            border-bottom-color: @theme-modal-content-bg;
+          }
+        }
+        a {
+          background: transparent;
+          &:hover {
+            color: @theme-text-color;
+          }
+        }
       }
     }
   }

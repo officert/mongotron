@@ -17,17 +17,15 @@ angular.module('app').controller('addConnectionCtrl', [
       auth: {}
     };
 
-    if ($scope.selectedConnection && $scope.addConnectionForm.databaseName) {
-      $scope.addConnectionForm.enableAuth = true;
-    }
-
-    if ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) {
+    if ($scope.selectedConnection && ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length)) {
       $scope.addConnectionForm.auth = $scope.selectedConnection.databases[0].auth;
     }
 
-    if ($scope.selectedConnection && $scope.selectedConnection.ssh && $scope.selectedConnection.ssh.host) {
-      $scope.addConnectionForm.enableSSH = true;
-    }
+    $scope.$watch('addConnectionForm.host', function(val) {
+      if (val === 'localhost') {
+        $scope.addConnectionForm.databaseName = null;
+      }
+    });
 
     $scope.addConnectionFormSubmitted = false;
 
