@@ -40,11 +40,11 @@ angular.module('app').factory('notificationService', [
     function _convertToNotification(type, opts) {
       let stackTrace;
 
-      if (_.isString(opts) || _.isError(opts)) opts = {
+      if (_.isString(opts) || _.isError(opts) || (opts instanceof Error)) opts = {
         message: opts
       };
 
-      if (_.isError(opts.message)) {
+      if (_.isError(opts.message) || (opts.message instanceof Error)) {
         stackTrace = opts.message.stack;
         opts.message = opts.message.message;
       }
