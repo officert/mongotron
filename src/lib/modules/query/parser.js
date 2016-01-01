@@ -3,8 +3,8 @@
 const bracketMatcher = require('./bracketMatcher');
 
 const VALID_QUERY_REGEX = new RegExp(/db\.(a-zA-Z1-9_)*.*/);
-const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9_]*)[.]{0,1}/; //extracts the collection name from a valid query
-const FUNCTION_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9_]*)[.]{1}([a-zA-Z1-9]*)/; //extracts the function from a valid query
+const COLLECTION_FROM_QUERY_REGEX = /(?:db\.)([a-zA-Z1-9_-]*)[.]{0,1}/; //extracts the collection name from a valid query
+const FUNCTION_FROM_QUERY_REGEX = /(?:db\.)(?:[a-zA-Z1-9_-]*)[.]{1}([a-zA-Z1-9]*)/; //extracts the function from a valid query
 
 class QueryParser {
   isValidQuery(query) {
