@@ -39,7 +39,7 @@ angular.module('app').controller('addConnectionCtrl', [
         $scope.addConnectionForm.auth = null;
       }
 
-      if ($scope.selectedConnection) {
+      if ($scope.selectedConnection && $scope.selectedConnection.id) {
         $scope.editConnection();
       } else {
         $scope.addConnection();

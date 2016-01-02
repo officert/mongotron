@@ -45,6 +45,16 @@ angular.module('app').controller('listConnectionsCtrl', [
       connection.selected = true;
     };
 
+    $scope.copyConnection = function(connection, $event) {
+      if (!connection) return false;
+      if ($event) $event.preventDefault();
+
+      let newConnection = _.clone(connection);
+      delete newConnection.id;
+
+      $scope.changePage('add', newConnection);
+    };
+
     $scope.connectionSelected = function() {
       return _.any($scope.connections, (conn) => {
         return conn.selected;
