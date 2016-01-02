@@ -47,19 +47,7 @@ angular.module('app').controller('sidebarCtrl', [
       if (!connection) return;
 
       if (!connection.isOpen) {
-        connection.connect((err) => {
-          $timeout(() => {
-            if (err) {
-              notificationService.error({
-                title: 'Error opening connection',
-                message: err
-              });
-              connection.isOpen = false;
-            } else {
-              connection.isOpen = true;
-            }
-          });
-        });
+        connection.isOpen = true;
       } else {
         _collapseConnection(connection);
       }

@@ -5,7 +5,8 @@ angular.module('app').controller('listConnectionsCtrl', [
   '$timeout',
   '$log',
   'connectionCache',
-  function($scope, $timeout, $log, connectionCache) {
+  'notificationService',
+  function($scope, $timeout, $log, connectionCache, notificationService) {
     const connectionModule = require('lib/modules/connection');
 
     $scope.connections = [];
@@ -70,9 +71,22 @@ angular.module('app').controller('listConnectionsCtrl', [
 
       if (!activeConnection) return;
 
-      connectionCache.add(activeConnection);
+      activeConnection.connect()
+        .then(() => {
+          $timeout(() => {
+            connectionCache.add(activeConnection);
 
-      $scope.close();
+            $scope.close();
+          });
+        })
+        .catch((err) => {
+          $timeout(() => {
+            notificationService.error({
+              title: 'Error opening connection',
+              message: err
+            });
+          });
+        });
     };
 
     function _listConnections() {

@@ -2,6 +2,7 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
+const MongoClient = require('mongodb').MongoClient;
 const util = require('util');
 const _ = require('underscore');
 
@@ -33,13 +34,25 @@ class Connection {
 
   /**
    * @method connect
-   * @param {Function} next - callback function
    */
-  connect(next) {
+  connect() {
     var _this = this;
 
-    if (_this.host === 'localhost') getDbsForLocalhostConnection(_this, next);
-    else return next(null);
+    return new Promise((resolve, reject) => {
+      let client = new MongoClient();
+
+      let connectionString = _getConnectionString(_this);
+
+      client.connect(connectionString, (err) => {
+        if (err) return reject(err);
+
+        if (_this.host === 'localhost') {
+          _getDbsForLocalhostConnection(_this, () => {
+            return resolve(null);
+          });
+        } else return resolve(null);
+      });
+    });
   }
 
   /**
@@ -74,10 +87,10 @@ class Connection {
 }
 
 /**
- * @function getDbsForLocalhostConnection
+ * @function _getDbsForLocalhostConnection
  * @param {Function} next - callback function
  */
-function getDbsForLocalhostConnection(connection, next) {
+function _getDbsForLocalhostConnection(connection, next) {
   if (!connection) return next(new Error('connection is required'));
   if (!next) return next(new Error('next is required'));
   if (connection.host !== 'localhost') return next(new Error('cannot get local dbs for non localhost connection'));
@@ -107,6 +120,23 @@ function getDbsForLocalhostConnection(connection, next) {
       return next(null);
     });
   });
+}
+
+function _getConnectionString(connection) {
+  if (!connection) return null;
+
+  let db = (connection.databases && connection.databases.length) ? connection.databases[0] : null;
+  let auth = '';
+
+  if (db) {
+    auth = (db.auth && db.auth.username && db.auth.password) ? auth += (db.auth.username + ':' + db.auth.password + '@') : '';
+  }
+
+  let connectionString = 'mongodb://' + auth + connection.host + ':' + connection.port;
+
+  if (db) connectionString += ('/' + db.name);
+
+  return connectionString;
 }
 
 /**
