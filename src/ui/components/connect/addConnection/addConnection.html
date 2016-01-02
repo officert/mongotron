@@ -62,6 +62,10 @@
     </div>
   </form>
   <div class="clearfix">
+    <div class="pull-left">
+      <button class="btn btn-default btn-icon-left" type="button" ng-click="testConnection($event)" ng-bs-animated-button="" is-submitting="isTestingConnection" result="testConnectionResult" options="testConnectionBtnOptions">
+      </button>
+    </div>
     <div class="add-buttons pull-right">
       <button class="btn btn-default" type="button" ng-click="changePage('list', null, $event)">
         Back
