@@ -11,7 +11,7 @@
     Your don't have any connections yet. Use the <i class="fa fa-plus"></i> Create button to create new connections.
   </div>
   <ul class="connection-list">
-    <li ng-repeat="connection in connections" ng-class="{ 'active' : connection.selected }" ng-show="connections.length && !loading">
+    <li ng-repeat="connection in connections | orderBy : name" ng-class="{ 'active' : connection.selected }" ng-show="connections.length && !loading">
       <a class="name" href="#" ng-click="selectConnection(connection, $event)" ng-dblclick="selectAndConnect(connection, $event)">
         {{ connection.name }}
       </a>
