@@ -3,7 +3,9 @@
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const MongoClient = require('mongodb').MongoClient;
+const Promise = require('bluebird');
 const util = require('util');
+const uuid = require('node-uuid');
 const _ = require('underscore');
 
 const Database = require('lib/entities/database');
@@ -26,10 +28,30 @@ class Connection {
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'local';
-    _this.host = options.host || 'localhost';
-    _this.port = options.port || 27017;
+    _this.name = options.name;
+    _this.host = options.host;
+    _this.port = options.port;
     _this.databases = [];
+
+    if (options.databaseName) {
+      let newDb = {
+        id: uuid.v4(),
+        name: options.databaseName,
+        host: options.host,
+        port: options.port,
+        auth: options.auth
+      };
+
+      if (options.auth) {
+        if (options.auth.username || options.auth.password) {
+          newDb.auth = {};
+          newDb.auth.username = options.auth.username;
+          newDb.auth.password = options.auth.password;
+        }
+      }
+
+      _this.addDatabase(newDb);
+    }
   }
 
   /**
@@ -44,7 +66,7 @@ class Connection {
       let connectionString = _getConnectionString(_this);
 
       client.connect(connectionString, (err) => {
-        if (err) return reject(err);
+        if (err) return reject(new errors.ConnectionError(err.message));
 
         if (_this.host === 'localhost') {
           _getDbsForLocalhostConnection(_this, () => {
