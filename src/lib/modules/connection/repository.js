@@ -248,26 +248,6 @@ function createConnection(options) {
   return new Promise((resolve) => {
     var newConn = new Connection(options);
 
-    if (options.databaseName) {
-      let newDb = {
-        id: uuid.v4(),
-        name: options.databaseName,
-        host: options.host,
-        port: options.port,
-        auth: options.auth
-      };
-
-      if (options.auth) {
-        if (options.auth.username || options.auth.password) {
-          newDb.auth = {};
-          newDb.auth.username = options.auth.username;
-          newDb.auth.password = options.auth.password;
-        }
-      }
-
-      newConn.addDatabase(newDb);
-    }
-
     return resolve(newConn);
   });
 }
