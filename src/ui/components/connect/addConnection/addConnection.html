@@ -17,6 +17,15 @@
           <input class="form-control" ng-model="addConnectionForm.name" name="name" type="text" required>
         </div>
       </div>
+      <hr>
+      <div class="form-group">
+        <label class="col-sm-4 control-label">Is this a Replica Set?</label>
+        <div class="col-sm-8">
+          <button class="btn btn-sm btn-default" ng-click="addConnectionForm.replicaSet = !addConnectionForm.replicaSet">
+            {{ addConnectionForm.replicaSet ? 'Yes' : 'No' }}
+          </button>
+        </div>
+      </div>
       <div class="form-group" ng-class="{ 'has-error' : !addForm.host.$valid && addConnectionFormSubmitted }">
         <label class="col-sm-4 control-label">Server Host</label>
         <div class="col-sm-8">
@@ -29,6 +38,7 @@
           <input class="form-control" ng-model="addConnectionForm.port" name="port" type="text" required placeholder="27017">
         </div>
       </div>
+      <hr>
       <div class="form-group" ng-class="{ 'has-error' : !addForm.databaseName.$valid && addConnectionFormSubmitted }">
         <label class="col-sm-4 control-label">Database Name</label>
         <div class="col-sm-8">
