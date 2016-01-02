@@ -29,15 +29,15 @@ describe('modules', function() {
               .resolves([]);
           });
 
-          it('should return a new connection with default properties', function(next) {
+          it('should return a new connection with undefined properties', function(next) {
             connectionRepository.create({})
-              .then(function(connection) {
+              .then((connection) => {
                 should.exist(connection);
 
                 connection.should.have.property('id');
-                connection.should.have.property('name', 'local');
-                connection.should.have.property('host', 'localhost');
-                connection.should.have.property('port', 27017);
+                connection.should.have.property('name', undefined);
+                connection.should.have.property('host', undefined);
+                connection.should.have.property('port', undefined);
 
               }).done(next);
           });
