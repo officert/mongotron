@@ -2,6 +2,7 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
+const MongoReplSet = require('mongodb').replSet;
 const Promise = require('bluebird');
 
 const Collection = require('lib/entities/collection');
@@ -37,7 +38,21 @@ class Database {
 
     _this.collections = [];
 
-    _this._dbConnection = new MongoDb(_this.name, new MongoServer(_this.host, _this.port));
+    let replicaSet = null;
+
+    if (_this.replicaSet && _this.replicaSet.name && (_this.replicaSet.sets && _this.replicaSet.sets.length)) {
+      let sets = [];
+
+      _.each(_this.replicaSet.sets, (set) => {
+        sets.push(new MongoServer(set.host, set.port));
+      });
+
+      replicaSet = new MongoReplSet(sets, {
+        rs_name: _this.replicaSet.name // jshint ignore:line
+      });
+    }
+
+    _this._dbConnection = new MongoDb(_this.name, replicaSet ? replicaSet : new MongoServer(_this.host, _this.port));
   }
 
   /**
