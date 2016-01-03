@@ -18,14 +18,12 @@
         </div>
       </div>
       <hr>
-      <!-- <div class="form-group">
+      <div class="form-group">
         <label class="col-sm-4 control-label">Is this a Replica Set?</label>
         <div class="col-sm-8">
-          <button class="btn btn-sm btn-default" ng-click="addConnectionForm.replicaSet = !addConnectionForm.replicaSet">
-            {{ addConnectionForm.replicaSet ? 'Yes' : 'No' }}
-          </button>
+          <btn-boolean ng-model="addConnectionForm.replicaSet" true-value="'Yes'" false-value="'No'"></btn-boolean>
         </div>
-      </div> -->
+      </div>
       <div class="form-group" ng-class="{ 'has-error' : !addForm.host.$valid && addConnectionFormSubmitted }">
         <label class="col-sm-4 control-label">Server Host</label>
         <div class="col-sm-8">
