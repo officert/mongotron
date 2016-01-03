@@ -2,6 +2,7 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
+const Promise = require('bluebird');
 
 const Collection = require('lib/entities/collection');
 const errors = require('lib/errors');
@@ -43,47 +44,52 @@ class Database {
    * @method open
    * @param {Function} next - callback function
    */
-  open(next) {
+  open() {
     var _this = this;
 
-    _this._dbConnection.open(function(err) {
-      if (err) return next(new errors.DatabaseError(err));
+    return new Promise((resolve, reject) => {
+      _this._dbConnection.open((err) => {
+        if (err) return reject(new errors.DatabaseError(err.message));
 
-      if (_this.auth && _this.auth.username && _this.auth.password) {
-        _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
-          if (err) return next(new errors.DatabaseError(err.message));
+        return resolve(null);
 
-          return next(null);
-        });
-      } else {
-        return next(null);
-      }
+        // if (_this.auth && _this.auth.username && _this.auth.password) {
+        //   _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
+        //     if (err) return reject(new errors.DatabaseError(err.message));
+        //
+        //     return resolve(null);
+        //   });
+        // } else {
+        //   return resolve(null);
+        // }
+      });
     });
   }
 
   /**
    * @method listCollections
-   * @param {Function} next - callback function
    */
-  listCollections(next) {
+  listCollections() {
     var _this = this;
 
-    if (!_this.open) return next(new Error('Database is not open'));
+    return new Promise((resolve, reject) => {
+      if (!_this.open) return reject(new Error('Database is not open'));
 
-    if (_this.collections && _this.collections.length) {
-      return next(null, _this.collections);
-    }
+      if (_this.collections && _this.collections.length) {
+        return resolve(_this.collections);
+      }
 
-    _this._dbConnection.collections(function(err, collections) {
-      if (err) return next(new errors.DatabaseError(err));
+      _this._dbConnection.collections((err, collections) => {
+        if (err) return reject(new errors.DatabaseError(err.message));
 
-      _.each(collections, function(collection) {
-        _this.addCollection({
-          name: collection.collectionName
+        _.each(collections, (collection) => {
+          _this.addCollection({
+            name: collection.collectionName
+          });
         });
-      });
 
-      return next(null, _this.collections);
+        return resolve(_this.collections);
+      });
     });
   }
 
@@ -127,7 +133,6 @@ class Database {
       });
     });
   }
-
 }
 
 /**

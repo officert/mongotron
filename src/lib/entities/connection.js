@@ -65,7 +65,7 @@ class Connection {
 
       let connectionString = _getConnectionString(_this);
 
-      client.connect(connectionString, (err) => {
+      client.connect(connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
 
         if (_this.host === 'localhost') {
