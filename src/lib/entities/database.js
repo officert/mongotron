@@ -51,17 +51,15 @@ class Database {
       _this._dbConnection.open((err) => {
         if (err) return reject(new errors.DatabaseError(err.message));
 
-        return resolve(null);
+        if (_this.auth && _this.auth.username && _this.auth.password) {
+          _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
+            if (err) return reject(new errors.DatabaseError(err.message));
 
-        // if (_this.auth && _this.auth.username && _this.auth.password) {
-        //   _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
-        //     if (err) return reject(new errors.DatabaseError(err.message));
-        //
-        //     return resolve(null);
-        //   });
-        // } else {
-        //   return resolve(null);
-        // }
+            return resolve(null);
+          });
+        } else {
+          return resolve(null);
+        }
       });
     });
   }
