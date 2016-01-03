@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').directive('replicaSet', [
   function() {
     return {
@@ -11,17 +13,36 @@ angular.module('app').directive('replicaSet', [
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         scope.replicaSet = {
-          set: [{
+          sets: [{
             host: '',
             port: ''
           }]
+        };
+
+        scope.addSet = function($event) {
+          if ($event) $event.preventDefault();
+
+          scope.replicaSet.sets.push({
+            host: '',
+            port: ''
+          });
+        };
+
+        scope.removeSet = function(set) {
+          if (!set) return;
+
+          let index = scope.replicaSet.sets.indexOf(set);
+
+          if (index < 0) return;
+
+          scope.replicaSet.sets.splice(index, 1);
         };
 
         //take initial model value and set editor with it
         ngModelCtrl.$formatters.push((modelValue) => {
           if (modelValue) {
             scope.replicaSet = modelValue;
-            scope.replicaSet.set = scope.replicaSet.set || [];
+            scope.replicaSet.sets = scope.replicaSet.sets || [];
           }
 
           return modelValue;

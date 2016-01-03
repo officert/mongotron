@@ -123,10 +123,39 @@
   }
   .replica-set {
     .replica-set-pair {
+      position: relative;
+      overflow: hidden;
       border-radius: 4px;
-      padding: 5px 0;
+      padding: 5px 5px 5px 0;
       background: darken(@theme-modal-content-bg, 10%);
       margin-bottom: 15px;
+      border: 1px solid transparent;
+      &:hover {
+        border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
+        .menu {
+          top: -1px;
+        }
+      }
+      .menu {
+        .btn-hover-menu();
+      }
+      .form-group {
+        margin-bottom: 0;
+        &:first-child {
+          margin-bottom: 15px;
+        }
+      }
+    }
+    .add-link {
+      display: block;
+      cursor: pointer;
+      color: @theme-brand-primary;
+      &:hover {
+        color: darken(@theme-brand-primary, 10%);
+      }
+      i {
+        font-size: 12px;
+      }
     }
   }
 }
