@@ -178,7 +178,8 @@ function generateConnectionInstanceFromConfig(connectionConfig) {
     id: connectionConfig.id || uuid.v4(),
     name: connectionConfig.name,
     host: connectionConfig.host,
-    port: connectionConfig.port
+    port: connectionConfig.port,
+    replicaSet: connectionConfig.replicaSet
   });
 
   _.each(connectionConfig.databases, (databaseConfig) => {
@@ -212,6 +213,7 @@ function convertConnectionInstanceIntoConfig(connection) {
     name: connection.name,
     host: connection.host,
     port: connection.port,
+    replicaSet: connection.replicaSet,
     databases: connection.databases ? connection.databases.map((database) => {
       var db = {
         id: database.id || uuid.v4(),

@@ -20,8 +20,11 @@ class Connection {
    *
    * @param {Object} options
    * @param {String} options.name
-   * @param {String} options.host
-   * @param {String} options.port
+   * @param {String} [options.host]
+   * @param {String} [options.port]
+   * @param {Object} [options.replicaSet]
+   * @param {String} [options.replicaSet.name]
+   * @param {Array<Object>} [options.replicaSet.sets]
    */
   constructor(options) {
     options = options || {};
@@ -31,6 +34,7 @@ class Connection {
     _this.name = options.name;
     _this.host = options.host;
     _this.port = options.port;
+    _this.replicaSet = options.replicaSet;
     _this.databases = [];
 
     if (options.databaseName) {
@@ -42,12 +46,10 @@ class Connection {
         auth: options.auth
       };
 
-      if (options.auth) {
-        if (options.auth.username || options.auth.password) {
-          newDb.auth = {};
-          newDb.auth.username = options.auth.username;
-          newDb.auth.password = options.auth.password;
-        }
+      if (options.auth && (options.auth.username || options.auth.password)) {
+        newDb.auth = {};
+        newDb.auth.username = options.auth.username;
+        newDb.auth.password = options.auth.password;
       }
 
       _this.addDatabase(newDb);
@@ -153,6 +155,8 @@ function _getConnectionString(connection) {
   if (db) {
     auth = (db.auth && db.auth.username && db.auth.password) ? auth += (db.auth.username + ':' + db.auth.password + '@') : '';
   }
+
+  //TODO: check for repl set
 
   let connectionString = 'mongodb://' + auth + connection.host + ':' + connection.port;
 

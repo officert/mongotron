@@ -43,8 +43,14 @@ class ConnectionService {
     return new Promise((resolve, reject) => {
       if (!options) return reject(new errors.InvalidArugmentError('options is required'));
       if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
-      if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
-      if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
+      if (!options.replicaSet) {
+        if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
+        if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
+      }
+      if (options.replicaSet) {
+        if (!options.replicaSet.name) return reject(new errors.InvalidArugmentError('options.replicaSet.name is required'));
+        if (!options.replicaSet.sets || !options.replicaSet.sets.length) return reject(new errors.InvalidArugmentError('options.replicaSet.sets is required'));
+      }
 
       if (options.host !== 'localhost' && !options.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
 
