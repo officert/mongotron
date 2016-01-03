@@ -101,16 +101,29 @@
     ul {
       margin: 0;
       padding: 0;
+      border-bottom-color: darken(@theme-modal-content-bg, 10%);
       li {
         display: inline-block;
         cursor: pointer;
-        &.active {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border: 1px solid transparent;
+        margin-right: 2px;
+        &.active,
+        &:hover {
+          border-color: darken(@theme-modal-content-bg, 10%);
           a {
-            border-bottom-color: @theme-modal-content-bg;
+            border-top-color: lighten(@theme-modal-content-bg, 10%);
+            border-right-color: lighten(@theme-modal-content-bg, 10%);
           }
         }
+        &.active {
+          border-bottom-color: @theme-modal-content-bg;
+        }
         a {
+          margin: 0;
           background: transparent;
+          border: 1px solid transparent;
           &:hover {
             color: @theme-text-color;
           }
@@ -127,9 +140,9 @@
       overflow: hidden;
       border-radius: 4px;
       padding: 5px 5px 5px 0;
+      border: 1px solid darken(@theme-modal-content-bg, 14%);
       background: darken(@theme-modal-content-bg, 10%);
       margin-bottom: 15px;
-      border: 1px solid transparent;
       &:hover {
         border: 1px solid lighten(@theme-query-result-json-border-color, 30%);
         .menu {
