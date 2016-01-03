@@ -23,7 +23,9 @@ angular.module('app').directive('btnBoolean', [
           return modelValue;
         });
 
-        //ngModelCtrl.$setViewValue(value);
+        scope.$watch('checked', (val) => {
+          ngModelCtrl.$setViewValue(val);
+        });
       }
     };
   }
