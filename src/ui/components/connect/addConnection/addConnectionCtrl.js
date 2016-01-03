@@ -38,6 +38,10 @@ angular.module('app').controller('addConnectionCtrl', [
       $scope.addConnectionForm.auth = $scope.selectedConnection.databases[0].auth;
     }
 
+    if ($scope.selectedConnection && $scope.selectedConnection.replicaSet && $scope.selectedConnection.replicaSet.name) {
+      $scope.addConnectionForm.enableReplicaSet = true;
+    }
+
     $scope.$watch('addConnectionForm.host', function(val) {
       if (val === 'localhost') {
         $scope.addConnectionForm.databaseName = null;
