@@ -152,15 +152,34 @@ function _getConnectionString(connection) {
   let db = (connection.databases && connection.databases.length) ? connection.databases[0] : null;
   let auth = '';
 
-  if (db) {
-    auth = (db.auth && db.auth.username && db.auth.password) ? auth += (db.auth.username + ':' + db.auth.password + '@') : '';
+  if (db && db.auth && db.auth.username && db.auth.password) {
+    auth += (db.auth.username + ':' + db.auth.password + '@');
   }
 
-  //TODO: check for repl set
+  let connectionString = 'mongodb://';
+  let hasReplSet = false;
 
-  let connectionString = 'mongodb://' + auth + connection.host + ':' + connection.port;
+  if (connection && connection.replicaSet && connection.replicaSet.name && (connection.replicaSet.sets && connection.replicaSet.sets.length)) {
+    hasReplSet = true;
+
+    connectionString += auth;
+
+    for (let i = 0; i < connection.replicaSet.sets.length; i++) {
+      let set = connection.replicaSet.sets[i];
+
+      connectionString += set.host + ':' + set.port;
+
+      if (i < (connection.replicaSet.sets.length - 1)) {
+        connectionString += ',';
+      }
+    }
+  } else {
+    connectionString += auth + connection.host + ':' + connection.port;
+  }
 
   if (db) connectionString += ('/' + db.name);
+
+  if (hasReplSet) connectionString += '?replicaSet=' + connection.replicaSet.name;
 
   return connectionString;
 }
