@@ -11,7 +11,7 @@
     "buffer": "3.6.0",
     "csv": "0.4.6",
     "jsonfile": "2.2.3",
-    "mongodb": "2.1.1",
+    "mongodb": "2.1.2",
     "node-uuid": "1.4.7",
     "path-extra": "3.0.0",
     "tunnel-ssh": "3.0.0-alpha",
