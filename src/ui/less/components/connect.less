@@ -44,11 +44,33 @@
       position: relative;
       border: 1px solid darken(@theme-modal-content-bg, 10%);
       border-radius: 2px;
+      position: relative;
       &.active {
         border: 1px solid @theme-btn-primary-bg;
         border-radius: 2px;
         outline: none;
         box-shadow: 0 0 10px @theme-btn-primary-bg;
+      }
+      &.connecting {
+        .connection-connecting {
+          opacity: 0.5;
+          z-index: 1;
+        }
+      }
+      .connection-connecting {
+        .transition(.2s ease);
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: darken(@theme-modal-content-bg, 35%);
+        opacity: 0;
+        i {
+          position: relative;
+          top: 30%;
+        }
       }
       a {
         overflow: hidden;

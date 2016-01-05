@@ -71,13 +71,19 @@ angular.module('app').controller('listConnectionsCtrl', [
 
       if (!activeConnection) return;
 
+      activeConnection.connecting = true;
+
+      let startTime = performance.now();
+
       activeConnection.connect()
         .then(() => {
+          var ellapsed = (performance.now() - startTime).toFixed(5);
+
           $timeout(() => {
             connectionCache.add(activeConnection);
 
             $scope.close();
-          });
+          }, (ellapsed >= 1000 ? 0 : 1000));
         })
         .catch(() => {
           $timeout(() => {
@@ -87,6 +93,13 @@ angular.module('app').controller('listConnectionsCtrl', [
                 // message: err
             });
           });
+        })
+        .finally(() => {
+          var ellapsed = (performance.now() - startTime).toFixed(5);
+
+          $timeout(() => {
+            activeConnection.connecting = false;
+          }, (ellapsed >= 1000 ? 0 : 1000));
         });
     };
 

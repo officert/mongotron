@@ -116,7 +116,7 @@ angular.module('app').controller('addConnectionCtrl', [
 
       let newConnection = new Connection($scope.addConnectionForm);
 
-      var startTime = performance.now();
+      let startTime = performance.now();
 
       newConnection.connect()
         .then(() => {
