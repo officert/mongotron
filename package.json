@@ -48,7 +48,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "postinstall": "gulp dev-sym-links"
+    "postinstall": "./node_modules/.bin/bower install && gulp dev-sym-links"
   },
   "repository": {
     "type": "git",
