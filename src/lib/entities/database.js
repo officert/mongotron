@@ -2,7 +2,7 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
-const MongoReplSet = require('mongodb').replSet;
+// const MongoReplSet = require('mongodb').replSet;
 const Promise = require('bluebird');
 
 const Collection = require('lib/entities/collection');
@@ -28,31 +28,21 @@ class Database {
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'test'; //TODO: validate name doesn't contain spaces
-    _this.host = options.host || 'localhost';
-    _this.port = options.port || 27017;
-    _this.auth = options.auth || null;
+    _this.name = options.name; //TODO: validate name doesn't contain spaces
+    _this.host = options.host;
+    _this.port = options.port;
+    _this.auth = options.auth;
     _this.connection = options.connection;
 
     _this.isOpen = false;
 
     _this.collections = [];
 
-    let replicaSet = null;
-
-    if (_this.replicaSet && _this.replicaSet.name && (_this.replicaSet.sets && _this.replicaSet.sets.length)) {
-      let sets = [];
-
-      _.each(_this.replicaSet.sets, (set) => {
-        sets.push(new MongoServer(set.host, set.port));
-      });
-
-      replicaSet = new MongoReplSet(sets, {
-        rs_name: _this.replicaSet.name // jshint ignore:line
-      });
+    if (_this.host === 'localhost') {
+      _this._dbConnection = new MongoDb(_this.name, new MongoServer(_this.host, _this.port));
+    } else {
+      _this._dbConnection = null; //this is set by the parent connection once we've connect to it
     }
-
-    _this._dbConnection = new MongoDb(_this.name, replicaSet ? replicaSet : new MongoServer(_this.host, _this.port));
   }
 
   /**
@@ -63,19 +53,16 @@ class Database {
     var _this = this;
 
     return new Promise((resolve, reject) => {
-      _this._dbConnection.open((err) => {
-        if (err) return reject(new errors.DatabaseError(err.message));
+      if (_this.host === 'localhost') {
+        _this._dbConnection.open((err) => {
+          if (err) return reject(new errors.DatabaseError(err.message));
 
-        if (_this.auth && _this.auth.username && _this.auth.password) {
-          _this._dbConnection.authenticate(_this.auth.username, _this.auth.password, function(err) {
-            if (err) return reject(new errors.DatabaseError(err.message));
-
-            return resolve(null);
-          });
-        } else {
           return resolve(null);
-        }
-      });
+        });
+      } else {
+        //if it not a local database we'll already be connected
+        return resolve(null);
+      }
     });
   }
 
