@@ -79,11 +79,12 @@ angular.module('app').controller('listConnectionsCtrl', [
             $scope.close();
           });
         })
-        .catch((err) => {
+        .catch(() => {
           $timeout(() => {
             notificationService.error({
-              title: 'Error opening connection',
-              message: err
+              title: 'Error connecting',
+              message: 'Error connecting to your database. Verify your connection settings are correct.'
+                // message: err
             });
           });
         });
