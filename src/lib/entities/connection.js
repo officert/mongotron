@@ -8,6 +8,7 @@ const util = require('util');
 const uuid = require('node-uuid');
 const _ = require('underscore');
 
+const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
@@ -75,7 +76,14 @@ class Connection {
             return resolve(null);
           });
         } else {
-          _this.databases[0]._dbConnection = database;
+          let db = _this.databases && _this.databases.length ? _this.databases[0] : null;
+
+          if (!db) {
+            logger.warn('connection - connect() - connection does not have a database');
+            return resolve(null);
+          }
+
+          db._dbConnection = database;
 
           return resolve(null);
         }
