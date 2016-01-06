@@ -2,7 +2,6 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
-// const MongoReplSet = require('mongodb').replSet;
 const Promise = require('bluebird');
 
 const Collection = require('lib/entities/collection');
@@ -53,6 +52,8 @@ class Database {
     var _this = this;
 
     return new Promise((resolve, reject) => {
+      //TODO: need to do some research and see if connecting to a database
+      //over and over like this is a performance issue or causes memory leaks
       if (_this.host === 'localhost') {
         _this._dbConnection.open((err) => {
           if (err) return reject(new errors.DatabaseError(err.message));
@@ -60,8 +61,18 @@ class Database {
           return resolve(null);
         });
       } else {
-        //if it not a local database we'll already be connected
-        return resolve(null);
+        _this.connection.connect()
+          .then((database) => {
+            if (!database) {
+              return reject(new Error('error connecting to database'));
+            } else {
+              _this._dbConnection = database;
+            }
+            return resolve(null);
+          })
+          .catch((err) => {
+            if (err) return reject(new errors.DatabaseError(err.message));
+          });
       }
     });
   }

@@ -13,8 +13,6 @@ angular.module('app').controller('keyValueResultCtrl', [
       $scope.level = 1;
     }
 
-    console.log('level', $scope.level);
-
     $scope.$on('collapse', function() {
       $scope.result.isOpen = false;
     });
