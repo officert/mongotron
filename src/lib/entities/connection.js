@@ -57,6 +57,13 @@ class Connection {
     }
   }
 
+  get connectionString() {
+    if (!this._connectionString) {
+      this._connectionString = _getConnectionString(this);
+    }
+    return this._connectionString;
+  }
+
   /**
    * @method connect
    */
@@ -64,28 +71,25 @@ class Connection {
     var _this = this;
 
     return new Promise((resolve, reject) => {
+      logger.log('Connecting to ' + _this.name + ' server @ ' + _this.connectionString + '...');
+
       let client = new MongoClient();
 
-      let connectionString = _getConnectionString(_this);
+      if (!_this.connectionString) {
+        return reject(new Error('connecting does have a connection string'));
+      }
 
-      client.connect(connectionString, (err, database) => {
+      client.connect(_this.connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
+
+        logger.log('Connected to ' + _this.name + ' server @ ' + _this.connectionString);
 
         if (_this.host === 'localhost') {
           _getDbsForLocalhostConnection(_this, () => {
             return resolve(null);
           });
         } else {
-          let db = _this.databases && _this.databases.length ? _this.databases[0] : null;
-
-          if (!db) {
-            logger.warn('connection - connect() - connection does not have a database');
-            return resolve(null);
-          }
-
-          db._dbConnection = database;
-
-          return resolve(null);
+          return resolve(database);
         }
       });
     });
