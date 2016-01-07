@@ -92,6 +92,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
               limit: $scope.limit || 50
             };
 
+            let startTime = performance.now();
+
             $scope.collection.execQuery($scope.query)
               .then((results) => {
                 results.result
@@ -100,10 +102,12 @@ angular.module('app').controller('queryResultsExportCtrl', [
                   .pipe(fs.createWriteStream(path))
                   .on('error', handleError)
                   .on('finish', () => {
+                    let ellapsed = (performance.now() - startTime).toFixed(5);
+
                     $timeout(() => {
                       $scope.loading = false;
                       notificationService.success('Finished exporting');
-                    });
+                    }, (ellapsed >= 1000 ? 0 : 1000));
                   });
               })
               .catch(handleError);

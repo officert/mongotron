@@ -71,21 +71,35 @@ angular.module('app').controller('listConnectionsCtrl', [
 
       if (!activeConnection) return;
 
+      activeConnection.connecting = true;
+
+      let startTime = performance.now();
+
       activeConnection.connect()
         .then(() => {
+          var ellapsed = (performance.now() - startTime).toFixed(5);
+
           $timeout(() => {
             connectionCache.add(activeConnection);
 
             $scope.close();
-          });
+          }, (ellapsed >= 1000 ? 0 : 1000));
         })
-        .catch((err) => {
+        .catch(() => {
           $timeout(() => {
             notificationService.error({
-              title: 'Error opening connection',
-              message: err
+              title: 'Error connecting',
+              message: 'Error connecting to your database. Verify your connection settings are correct.'
+                // message: err
             });
           });
+        })
+        .finally(() => {
+          var ellapsed = (performance.now() - startTime).toFixed(5);
+
+          $timeout(() => {
+            activeConnection.connecting = false;
+          }, (ellapsed >= 1000 ? 0 : 1000));
         });
     };
 

@@ -30,11 +30,16 @@ angular.module('app').controller('addConnectionCtrl', [
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
       databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
     }, $scope.selectedConnection) : {
-      auth: {}
+      auth: {},
+      enableReplicaSet: false
     };
 
     if ($scope.selectedConnection && ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length)) {
       $scope.addConnectionForm.auth = $scope.selectedConnection.databases[0].auth;
+    }
+
+    if ($scope.selectedConnection && $scope.selectedConnection.replicaSet && $scope.selectedConnection.replicaSet.name) {
+      $scope.addConnectionForm.enableReplicaSet = true;
     }
 
     $scope.$watch('addConnectionForm.host', function(val) {
@@ -64,15 +69,15 @@ angular.module('app').controller('addConnectionCtrl', [
 
     $scope.addConnection = function() {
       connectionModule.create($scope.addConnectionForm)
-        .then(function() {
-          $timeout(function() {
+        .then(() => {
+          $timeout(() => {
             $scope.changePage('list');
 
             notificationService.success('Connection added');
           });
         })
-        .catch(function(err) {
-          $timeout(function() {
+        .catch((err) => {
+          $timeout(() => {
             notificationService.error({
               title: 'Error adding connection',
               message: err
@@ -84,8 +89,8 @@ angular.module('app').controller('addConnectionCtrl', [
 
     $scope.editConnection = function() {
       connectionModule.update($scope.addConnectionForm.id, $scope.addConnectionForm)
-        .then(function(connection) {
-          $timeout(function() {
+        .then((connection) => {
+          $timeout(() => {
             connectionCache.updateById($scope.addConnectionForm.id, connection);
 
             $scope.changePage('list');
@@ -93,8 +98,8 @@ angular.module('app').controller('addConnectionCtrl', [
             notificationService.success('Connection updated');
           });
         })
-        .catch(function(err) {
-          $timeout(function() {
+        .catch((err) => {
+          $timeout(() => {
             notificationService.error({
               title: 'Error updating connection',
               message: err
@@ -111,7 +116,7 @@ angular.module('app').controller('addConnectionCtrl', [
 
       let newConnection = new Connection($scope.addConnectionForm);
 
-      var startTime = performance.now();
+      let startTime = performance.now();
 
       newConnection.connect()
         .then(() => {

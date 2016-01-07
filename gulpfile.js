@@ -1,6 +1,5 @@
-/* =========================================================================
- * Dependencies
- * ========================================================================= */
+'use strict';
+
 const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
@@ -221,8 +220,10 @@ gulp.task('serve-site', ['site-css'], () => {
 
 gulp.task('default', ['serve']);
 
-gulp.task('test', (next) => {
-  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', next);
+gulp.task('test', () => {
+  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', () => {
+    process.exit(0);
+  });
 });
 
 gulp.task('test-int', () => {

@@ -164,20 +164,26 @@ angular.module('app').controller('sidebarCtrl', [
         }
 
         database.opening = true;
-        database.open((err) => {
-          $timeout(() => {
-            database.opening = false;
 
-            if (err) {
-              return notificationService.error({
+        database.open()
+          .then(() => {
+            $timeout(() => {
+              database.isOpen = true;
+            });
+          })
+          .catch((err) => {
+            $timeout(() => {
+              notificationService.error({
                 title: 'Error opening database',
                 message: err
               });
-            }
-
-            database.isOpen = true;
+            });
+          })
+          .finally(() => {
+            $timeout(() => {
+              database.opening = false;
+            });
           });
-        });
       } else {
         _collapseDatabase(database);
       }
@@ -191,25 +197,30 @@ angular.module('app').controller('sidebarCtrl', [
 
       if (!database.collections || !database.collections.length) {
         database.loadingCollections = true;
-        database.listCollections(function(err, collections) {
-          $timeout(() => {
-            database.loadingCollections = false;
-
-            if (err) {
-              return notificationService.error({
+        database.listCollections()
+          .then((collections) => {
+            $timeout(() => {
+              database.collections = collections.map((collection) => {
+                collection.databaseName = database.name;
+                collection.databaseHost = database.host;
+                collection.databasePort = database.port;
+                return collection;
+              });
+            });
+          })
+          .catch((err) => {
+            $timeout(() => {
+              notificationService.error({
                 title: 'Error opening collections',
                 message: err
               });
-            }
-
-            database.collections = collections.map(function(collection) {
-              collection.databaseName = database.name;
-              collection.databaseHost = database.host;
-              collection.databasePort = database.port;
-              return collection;
+            });
+          })
+          .finally(() => {
+            $timeout(() => {
+              database.loadingCollections = false;
             });
           });
-        });
       }
 
       database.showCollections = !database.showCollections;

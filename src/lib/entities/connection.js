@@ -8,6 +8,7 @@ const util = require('util');
 const uuid = require('node-uuid');
 const _ = require('underscore');
 
+const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
@@ -20,8 +21,11 @@ class Connection {
    *
    * @param {Object} options
    * @param {String} options.name
-   * @param {String} options.host
-   * @param {String} options.port
+   * @param {String} [options.host]
+   * @param {String} [options.port]
+   * @param {Object} [options.replicaSet]
+   * @param {String} [options.replicaSet.name]
+   * @param {Array<Object>} [options.replicaSet.sets]
    */
   constructor(options) {
     options = options || {};
@@ -31,6 +35,7 @@ class Connection {
     _this.name = options.name;
     _this.host = options.host;
     _this.port = options.port;
+    _this.replicaSet = options.replicaSet;
     _this.databases = [];
 
     if (options.databaseName) {
@@ -42,16 +47,21 @@ class Connection {
         auth: options.auth
       };
 
-      if (options.auth) {
-        if (options.auth.username || options.auth.password) {
-          newDb.auth = {};
-          newDb.auth.username = options.auth.username;
-          newDb.auth.password = options.auth.password;
-        }
+      if (options.auth && (options.auth.username || options.auth.password)) {
+        newDb.auth = {};
+        newDb.auth.username = options.auth.username;
+        newDb.auth.password = options.auth.password;
       }
 
       _this.addDatabase(newDb);
     }
+  }
+
+  get connectionString() {
+    if (!this._connectionString) {
+      this._connectionString = _getConnectionString(this);
+    }
+    return this._connectionString;
   }
 
   /**
@@ -61,18 +71,26 @@ class Connection {
     var _this = this;
 
     return new Promise((resolve, reject) => {
+      logger.log('Connecting to ' + _this.name + ' server @ ' + _this.connectionString + '...');
+
       let client = new MongoClient();
 
-      let connectionString = _getConnectionString(_this);
+      if (!_this.connectionString) {
+        return reject(new Error('connecting does have a connection string'));
+      }
 
-      client.connect(connectionString, (err) => {
+      client.connect(_this.connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
+
+        logger.log('Connected to ' + _this.name + ' server @ ' + _this.connectionString);
 
         if (_this.host === 'localhost') {
           _getDbsForLocalhostConnection(_this, () => {
             return resolve(null);
           });
-        } else return resolve(null);
+        } else {
+          return resolve(database);
+        }
       });
     });
   }
@@ -150,13 +168,34 @@ function _getConnectionString(connection) {
   let db = (connection.databases && connection.databases.length) ? connection.databases[0] : null;
   let auth = '';
 
-  if (db) {
-    auth = (db.auth && db.auth.username && db.auth.password) ? auth += (db.auth.username + ':' + db.auth.password + '@') : '';
+  if (db && db.auth && db.auth.username && db.auth.password) {
+    auth += (db.auth.username + ':' + db.auth.password + '@');
   }
 
-  let connectionString = 'mongodb://' + auth + connection.host + ':' + connection.port;
+  let connectionString = 'mongodb://';
+  let hasReplSet = false;
+
+  if (connection && connection.replicaSet && connection.replicaSet.name && (connection.replicaSet.sets && connection.replicaSet.sets.length)) {
+    hasReplSet = true;
+
+    connectionString += auth;
+
+    for (let i = 0; i < connection.replicaSet.sets.length; i++) {
+      let set = connection.replicaSet.sets[i];
+
+      connectionString += set.host + ':' + set.port;
+
+      if (i < (connection.replicaSet.sets.length - 1)) {
+        connectionString += ',';
+      }
+    }
+  } else {
+    connectionString += auth + connection.host + ':' + connection.port;
+  }
 
   if (db) connectionString += ('/' + db.name);
+
+  if (hasReplSet) connectionString += '?replicaSet=' + connection.replicaSet.name;
 
   return connectionString;
 }

@@ -5,7 +5,7 @@ angular.module('app').run([
     keypressService.registerCommandHandler('tab-manager:new-tab', function() {
       var activeTab = tabCache.getActive();
 
-      if (activeTab) {
+      if (activeTab && activeTab.type !== tabCache.TYPES.PAGE) {
         var newTab = {};
         newTab.name = activeTab.name;
         newTab.type = activeTab.type;
