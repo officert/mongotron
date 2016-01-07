@@ -1,21 +1,13 @@
 'use strict';
 
 const Promise = require('bluebird');
-const _ = require('underscore');
 
+const logger = require('lib/modules/logger');
 const errors = require('lib/errors');
 const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
 
 const DEFAULT_CONNECTIONS = require('./defaults');
-
-const ALLOWED_UPDATES = [
-  'name',
-  'host',
-  'port',
-  'auth',
-  'databaseName'
-];
 
 /**
  * @class ConnectionService
@@ -81,47 +73,50 @@ class ConnectionService {
    * @method update
    * @param {String} id - id of the connection to update
    */
-  update(id, options) {
-    //map it to a new object so nothing unexpected can be passed in and saved
-    // let newConnection = {
-    //   name: options.name,
-    //   host: options.host,
-    //   port: options.port,
-    //   databaseName: options.databaseName,
-    //   replicaSet: options.replicaSet
-    // };
+  update(id, updates) {
     let _this = this;
+    let connection;
 
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
-      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
-
-      options = _.pick(options, ALLOWED_UPDATES);
-
-      if (options.auth && options.auth.username && !options.auth.password) return reject(new errors.InvalidArugmentError('password is required for authentication'));
-      if (options.auth && options.auth.password && !options.auth.username) return reject(new errors.InvalidArugmentError('username is required for authentication'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
 
       _this.findById(id)
-        .then((connection) => {
+        .then((_connection) => {
+          connection = _connection;
           if (!connection) return reject(new errors.ObjectNotFoundError('Connection not found'));
+          return connectionValidator.validateUpdate(updates, connection);
+        })
+        .then(() => {
+          if ('name' in updates) connection.name = updates.name;
 
-          if (options.databaseName || (options.auth && (options.auth.username || options.auth.password))) {
-            if (connection.databases && connection.databases.length) {
-              let db = connection.databases[0];
-              if (options.auth && options) {
-                db.auth = options.auth;
-              }
-              db.name = options.databaseName || db.name;
-
-              options.databases = [connection.databases[0]];
-            } else {
-              // connection.addDatabase({
-              //
-              // });
+          if (connection.host !== 'localhost') {
+            let db = connection.databases ? connection.databases[0] : null;
+            if (!db) logger.warn('connection service - update() - remove connection has no db');
+            else {
+              if ('auth' in updates) db.auth = updates.auth;
             }
           }
 
-          connectionRepository.update(id, options)
+          if ('replicaSet' in updates) connection.replicaSet = updates.replicaSet;
+
+          // if (newConnection.databaseName || (newConnection.auth && (newConnection.auth.username || newConnection.auth.password))) {
+          //   if (connection.databases && connection.databases.length) {
+          //     let db = connection.databases[0];
+          //     if (newConnection.auth && newConnection) {
+          //       db.auth = newConnection.auth;
+          //     }
+          //     db.name = newConnection.databaseName || db.name;
+          //
+          //     newConnection.databases = [connection.databases[0]];
+          //   } else {
+          //     // connection.addDatabase({
+          //     //
+          //     // });
+          //   }
+          // }
+
+          connectionRepository.update(id, connection)
             .then(resolve)
             .catch(reject);
         })

@@ -2,18 +2,13 @@
 
 const Promise = require('bluebird');
 
+const logger = require('lib/modules/logger');
 const errors = require('lib/errors');
 
 class ConnectionValidator {
   validateCreate(newConnection) {
     return new Promise((resolve, reject) => {
       if (!newConnection.name) return reject(new errors.InvalidArugmentError('connection.name is required'));
-
-      if (!newConnection.replicaSet) {
-        if (!newConnection.host) return reject(new errors.InvalidArugmentError('newConnection.host is required'));
-        if (!newConnection.port) return reject(new errors.InvalidArugmentError('newConnection.port is required'));
-        if (newConnection.port < 0 || newConnection.port > 65535) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
-      }
 
       if (newConnection.replicaSet) {
         if (!newConnection.replicaSet.name) return reject(new errors.InvalidArugmentError('newConnection.replicaSet.name is required'));
@@ -27,10 +22,13 @@ class ConnectionValidator {
         }
       }
 
-      if (newConnection.host === 'localhost') {
-        delete newConnection.databaseName;
-        delete newConnection.auth;
-      } else {
+      if (!newConnection.replicaSet) {
+        if (!newConnection.host) return reject(new errors.InvalidArugmentError('newConnection.host is required'));
+        if (!newConnection.port) return reject(new errors.InvalidArugmentError('newConnection.port is required'));
+        if (newConnection.port < 0 || newConnection.port > 65535) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
+      }
+
+      if (newConnection.host !== 'localhost') {
         if (!newConnection.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
       }
 
@@ -47,11 +45,31 @@ class ConnectionValidator {
     });
   }
 
-  validateUpdate(connection) {
+  validateUpdate(newConnection, existingConnection) {
     return new Promise((resolve, reject) => {
+      if (existingConnection.host !== 'localhost') {
+        let db = existingConnection.databases ? existingConnection.databases[0] : null;
+
+        if (!db) logger.warn('validator - validateUpdate() - connection has no db');
+        else {
+          if (newConnection.auth && (newConnection.auth.username || newConnection.auth.password)) {
+            if (newConnection.auth.password && (!newConnection.auth.username && (!db.auth || !db.auth.username))) return reject(new errors.InvalidArugmentError('auth.username is required'));
+            if (newConnection.auth.username && (!newConnection.auth.password && (!db.auth || !db.auth.password))) return reject(new errors.InvalidArugmentError('auth.password is required'));
+            newConnection.auth = {
+              username: newConnection.auth.username || db.auth.username,
+              password: newConnection.auth.password || db.auth.password
+            };
+          }
+        }
+      }
+
+      if (newConnection.replicaSet) {
+        
+      }
 
       _baseValidate({
-          connection
+          connection: newConnection,
+          existingConnection: existingConnection
         })
         .then(resolve)
         .catch(reject);
@@ -61,8 +79,14 @@ class ConnectionValidator {
 
 function _baseValidate(options) {
   let connection = options.connection;
+  // let existingConnection = options.updates;
 
   return new Promise((resolve) => {
+    if (connection.host === 'localhost') {
+      delete connection.databaseName;
+      delete connection.auth;
+    }
+
     if (connection.replicaSet) {
       connection.replicaSet = {
         name: connection.replicaSet.name,
@@ -74,6 +98,7 @@ function _baseValidate(options) {
         })
       };
     }
+
     return resolve(connection);
   });
 }
