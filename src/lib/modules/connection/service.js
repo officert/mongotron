@@ -62,7 +62,7 @@ class ConnectionService {
           });
         })
         .then(() => {
-          return connectionRepository.create(options);
+          return connectionRepository.create(newConnection);
         })
         .then(resolve)
         .catch(reject);

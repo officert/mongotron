@@ -27,7 +27,11 @@ class ConnectionValidator {
         }
       }
 
-      if (newConnection.host !== 'localhost' && !newConnection.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
+      if (newConnection.host === 'localhost') {
+        delete newConnection.databaseName;
+      } else {
+        if (!newConnection.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
+      }
 
       _baseValidate({
           connection: newConnection
