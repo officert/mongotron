@@ -7,6 +7,8 @@ const errors = require('lib/errors');
 const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
 
+const DEFAULT_CONNECTIONS = require('./defaults');
+
 const ALLOWED_UPDATES = [
   'name',
   'host',
@@ -14,8 +16,6 @@ const ALLOWED_UPDATES = [
   'auth',
   'databaseName'
 ];
-
-const DEFAULT_CONNECTIONS = require('./defaults');
 
 /**
  * @class ConnectionService
@@ -47,7 +47,8 @@ class ConnectionService {
       host: options.host,
       port: options.port,
       databaseName: options.databaseName,
-      replicaSet: options.replicaSet
+      replicaSet: options.replicaSet,
+      auth: options.auth
     };
 
     return new Promise((resolve, reject) => {
@@ -81,6 +82,14 @@ class ConnectionService {
    * @param {String} id - id of the connection to update
    */
   update(id, options) {
+    //map it to a new object so nothing unexpected can be passed in and saved
+    // let newConnection = {
+    //   name: options.name,
+    //   host: options.host,
+    //   port: options.port,
+    //   databaseName: options.databaseName,
+    //   replicaSet: options.replicaSet
+    // };
     let _this = this;
 
     return new Promise((resolve, reject) => {

@@ -215,7 +215,128 @@ describe('modules', () => {
         });
       });
 
+      describe('when auth is passed but no username is passed', () => {
+        it('should return an error', (next) => {
+          connectionService.create({
+              name: '123',
+              host: 'foobar',
+              port: 12345,
+              databaseName: 'FOOBAR',
+              auth: {
+                username: null
+              }
+            })
+            .catch((err) => {
+              should.exist(err);
+              err.message.should.equal('auth.username is required');
+            })
+            .done(next);
+        });
+      });
+
+      describe('when auth is passed but no password is passed', () => {
+        it('should return an error', (next) => {
+          connectionService.create({
+              name: '123',
+              host: 'foobar',
+              port: 12345,
+              databaseName: 'FOOBAR',
+              auth: {
+                username: 'FOOBAR',
+                password: null
+              }
+            })
+            .catch((err) => {
+              should.exist(err);
+              err.message.should.equal('auth.password is required');
+            })
+            .done(next);
+        });
+      });
+
       describe('when all required data is passed', () => {
+        describe('and has authentication and is localhost', () => {
+          let newConnectionData = {
+            name: '123',
+            host: 'localhost',
+            port: 27017,
+            auth: {
+              username: 'username',
+              password: 'password'
+            }
+          };
+          let newConnection;
+
+          after((done) => {
+            connectionService.delete(newConnection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should save and return the new connection and ignore the auth', (next) => {
+            connectionService.create(newConnectionData)
+              .then((_newConnection) => {
+                newConnection = _newConnection;
+
+                should.exist(newConnection);
+
+                newConnection.name.should.equal(newConnectionData.name);
+                newConnection.host.should.equal(newConnectionData.host);
+                newConnection.port.should.equal(newConnectionData.port);
+                should.not.exist(newConnection.auth);
+                should.exist(newConnection.databases);
+                newConnection.databases.length.should.equal(0);
+
+                return next(null);
+              });
+          });
+        });
+
+        describe('and has authentication and is not localhost', () => {
+          let newConnectionData = {
+            name: '123',
+            databaseName: 'foobar',
+            host: 'foobar.com',
+            port: 27017,
+            auth: {
+              username: 'username',
+              password: 'password'
+            }
+          };
+          let newConnection;
+
+          after((done) => {
+            connectionService.delete(newConnection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should save and return the new connection and save the auth', (next) => {
+            connectionService.create(newConnectionData)
+              .then((_newConnection) => {
+                newConnection = _newConnection;
+
+                should.exist(newConnection);
+
+                newConnection.name.should.equal(newConnectionData.name);
+                newConnection.host.should.equal(newConnectionData.host);
+                newConnection.port.should.equal(newConnectionData.port);
+                should.exist(newConnection.databases);
+                newConnection.databases.length.should.equal(1);
+                newConnection.databases[0].name.should.equal(newConnectionData.databaseName);
+                should.exist(newConnection.databases[0].auth);
+                newConnection.databases[0].auth.username.should.equal(newConnectionData.auth.username);
+                newConnection.databases[0].auth.password.should.equal(newConnectionData.auth.password);
+
+                return next(null);
+              });
+          });
+        });
+
         describe('and host is localhost', () => {
           let newConnectionData = {
             name: '123',

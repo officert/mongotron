@@ -29,8 +29,14 @@ class ConnectionValidator {
 
       if (newConnection.host === 'localhost') {
         delete newConnection.databaseName;
+        delete newConnection.auth;
       } else {
         if (!newConnection.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
+      }
+
+      if (newConnection.auth) {
+        if (!newConnection.auth.username) return reject(new errors.InvalidArugmentError('auth.username is required'));
+        if (!newConnection.auth.password) return reject(new errors.InvalidArugmentError('auth.password is required'));
       }
 
       _baseValidate({
