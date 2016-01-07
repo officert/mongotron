@@ -222,7 +222,7 @@ gulp.task('default', ['serve']);
 
 gulp.task('test', () => {
   runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', () => {
-    process.exit(1);
+    process.exit(0);
   });
 });
 
