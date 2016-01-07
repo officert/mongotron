@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const _ = require('underscore');
 
 const errors = require('lib/errors');
+const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
 
 const ALLOWED_UPDATES = [
@@ -40,49 +41,27 @@ class ConnectionService {
    * @method create
    */
   create(options) {
+    //map it to a new object so nothing unexpected can be passed in and saved
+    let newConnection = {
+      name: options.name,
+      host: options.host,
+      port: options.port,
+      databaseName: options.databaseName,
+      replicaSet: options.replicaSet
+    };
+
     return new Promise((resolve, reject) => {
-      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
-      if (!options.name) return reject(new errors.InvalidArugmentError('options.name is required'));
-
-      if (!options.replicaSet) {
-        if (!options.host) return reject(new errors.InvalidArugmentError('options.host is required'));
-        if (!options.port) return reject(new errors.InvalidArugmentError('options.port is required'));
-        if (options.port < 0 || options.port > 65535) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
-      }
-
-      if (options.replicaSet) {
-        if (!options.replicaSet.name) return reject(new errors.InvalidArugmentError('options.replicaSet.name is required'));
-        if (!options.replicaSet.sets || !options.replicaSet.sets.length) return reject(new errors.InvalidArugmentError('options.replicaSet.sets is required'));
-        for (let i = 0; i < options.replicaSet.sets.length; i++) {
-          let set = options.replicaSet.sets[i];
-
-          if (!set.host) return reject(new errors.InvalidArugmentError('options.replicaSet.sets[' + i + '].host is required'));
-          if (!set.port) return reject(new errors.InvalidArugmentError('options.replicaSet.sets[' + i + '].port is required'));
-          if (set.port < 0 || set.port > 65535) return reject(new errors.InvalidArugmentError('options.replicaSet.sets[' + i + '].port number must be between 0 and 65535.'));
-        }
-      }
-
-      if (options.host !== 'localhost' && !options.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
-
-      return connectionRepository.existsByName(options.name)
-        .then(function(exists) {
+      connectionValidator.validateCreate(newConnection)
+        .then(() => {
+          return connectionRepository.existsByName(newConnection.name);
+        })
+        .then((exists) => {
           return new Promise((resolve, reject) => {
-            if (exists) return reject(new errors.InvalidArugmentError('Sorry, connection names must be unique.'));
+            if (exists) return reject(new errors.InvalidArugmentError('Sorry, connection names must be unique'));
             return resolve(null);
           });
         })
         .then(() => {
-          if (options.replicaSet) {
-            options.replicaSet = {
-              name: options.replicaSet.name,
-              sets: options.replicaSet.sets.map((set) => {
-                return {
-                  host: set.host,
-                  port: set.port
-                };
-              })
-            };
-          }
           return connectionRepository.create(options);
         })
         .then(resolve)
