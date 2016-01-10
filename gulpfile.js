@@ -25,19 +25,33 @@ require('gulp-task-list')(gulp);
  * ========================================================================= */
 const SRC_DIR = 'src';
 const DOCS_DIR = 'docs';
-const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
+//any npm packages that should not be included in the release
+const RELEASE_IGNORE_PKGS = [
+  'babel-preset-es2015',
+  'bower',
   'electron-packager',
   'electron-prebuilt',
-  'gulp|gulp-jshint',
+  'fontcustom',
+  'gulp',
+  'gulp-babel',
+  'gulp-jshint',
   'gulp-less',
-  'gulp-mocha',
+  'gulp-spawn-mocha',
+  'gulp-symlink',
   'gulp-task-list',
+  'jasmine-core',
+  'jshint',
   'jshint-stylish',
+  'karma',
+  'karma-electron-launcher',
+  'karma-jasmine',
+  'karma-sinon',
+  'karma-spec-reporter',
   'run-sequence',
-  'bower',
-  'babel',
+  'shelljs',
   'should',
   'sinon',
+  'sinon-as-promised',
   'supertest'
 ];
 const RELEASE_IMAGE_ICON = __dirname + '/resources/icon/logo_icon';
