@@ -63,7 +63,7 @@ class ConnectionValidator {
       }
 
       if (data.replicaSet) {
-
+        
       }
 
       _baseValidate({

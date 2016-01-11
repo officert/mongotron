@@ -84,7 +84,6 @@ class ConnectionService {
       _this.findById(id)
         .then((_connection) => {
           connection = _connection;
-          if (!connection) return reject(new errors.ObjectNotFoundError('Connection not found'));
           return connectionValidator.validateUpdate(updates, connection);
         })
         .then(() => {
