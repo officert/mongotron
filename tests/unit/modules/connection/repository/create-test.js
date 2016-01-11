@@ -68,7 +68,7 @@ describe('modules', function() {
               })
               .then(function(_connection) {
                 connection = _connection;
-                
+
                 should.exist(connection);
 
                 connection.should.have.property('name', name);

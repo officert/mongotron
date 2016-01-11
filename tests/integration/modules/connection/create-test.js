@@ -46,7 +46,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.host is required');
+              err.message.should.equal('data.host is required');
               return next(null);
             });
         });
@@ -62,7 +62,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.port is required');
+              err.message.should.equal('data.port is required');
               return next(null);
             });
         });
@@ -95,7 +95,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.name is required');
+              err.message.should.equal('data.replicaSet.name is required');
               return next(null);
             });
         });
@@ -113,7 +113,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.sets is required');
+              err.message.should.equal('data.replicaSet.sets is required');
               return next(null);
             });
         });
@@ -131,7 +131,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.sets is required');
+              err.message.should.equal('data.replicaSet.sets is required');
               return next(null);
             });
         });
@@ -151,7 +151,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.sets[0].host is required');
+              err.message.should.equal('data.replicaSet.sets[0].host is required');
               return next(null);
             });
         });
@@ -172,7 +172,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.sets[0].port is required');
+              err.message.should.equal('data.replicaSet.sets[0].port is required');
               return next(null);
             });
         });
@@ -193,7 +193,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('newConnection.replicaSet.sets[0].port number must be between 0 and 65535.');
+              err.message.should.equal('data.replicaSet.sets[0].port number must be between 0 and 65535.');
             })
             .done(next);
         });

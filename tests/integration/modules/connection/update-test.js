@@ -61,6 +61,44 @@ describe('modules', () => {
         });
       });
 
+      describe('when port is invalid', () => {
+        let connection;
+        let updates = {
+          port: 999999
+        };
+
+        before((done) => {
+          connectionService.create({
+              name: 'Connection 1',
+              host: 'foobar.com',
+              port: 12345,
+              databaseName: 'db'
+            })
+            .then((newConnection) => {
+              connection = newConnection;
+              return done(null);
+            })
+            .catch(done);
+        });
+
+        after((done) => {
+          connectionService.delete(connection.id)
+            .then(() => {
+              return done(null);
+            })
+            .catch(done);
+        });
+
+        it('should return an error', (next) => {
+          connectionService.update(connection.id, updates)
+            .catch((err) => {
+              should.exist(err);
+              err.message.should.equal('Port number must be between 0 and 65535.');
+            })
+            .done(next);
+        });
+      });
+
       describe('when auth.username is updated but no password is passed and existing connection has no password', () => {
         let connection;
         let updates = {
