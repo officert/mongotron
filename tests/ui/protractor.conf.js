@@ -13,8 +13,8 @@ module.exports.config = {
   baseUrl: 'http://localhost:' + appConfig.PORT + '/',
   framework: 'jasmine2',
   // troubleshoot: true,
-  seleniumAddress: 'http://localhost:4444/wd/hub',
-  seleniumServerJar: '../node_modules/selenium/lib/runner/selenium-server-standalone-2.20.0.jar',
+  // seleniumAddress: 'http://localhost:4444/wd/hub',
+  // seleniumServerJar: '../node_modules/selenium/lib/runner/selenium-server-standalone-2.20.0.jar',
   // capabilities: {
   //   browserName: 'phantomjs',
   //   version: '',

@@ -2,12 +2,12 @@
   <ul class="server-list">
     <li ng-repeat="connection in activeConnections | orderBy : 'name'">
       <span class="no-select" ng-click="openConnection(connection)" ng-right-click="openConnectionContextMenu(connection)">
-        <i class="icon-server"></i> {{ connection.name }}<i class="open-icon icon-plus"></i>
+        <i class="icon-server"></i> {{ connection.name }}<i class="open-icon" ng-class="{ 'icon-minus' : connection.isOpen, 'icon-plus' : !connection.isOpen }"></i>
       </span>
       <ul class="database-list slide" ng-show="connection.isOpen">
         <li ng-repeat="database in connection.databases">
           <span class="level-2 no-select" ng-click="openDatabase(database, connection)" ng-right-click="openDatabaseContextMenu(database, connection)">
-            <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon icon-plus"></i>
+            <i class="fa fa-database"></i> {{ database.name }}<i class="open-icon" ng-class="{ 'icon-minus' : database.isOpen, 'icon-plus' : !database.isOpen }"></i>
             <span class="loader" ng-show="database.opening">
               <i class="fa fa-cog fa-spin"></i>
             </span>
@@ -15,7 +15,7 @@
           <ul class="collection-list slide" ng-show="database.isOpen">
             <li>
               <span class="level-3 no-select" ng-click="openCollections(database)" ng-right-click="openDatabaseCollectionFolderContextMenu(database, connection)">
-                <i class="fa fa-folder-o"></i> Collections<i class="open-icon icon-plus"></i>
+                <i class="fa " ng-class="{ 'fa-folder-o' : !database.showCollections, 'fa-folder-open-o' : database.showCollections }"></i> Collections<i class="open-icon" ng-class="{ 'icon-minus' : database.showCollections, 'icon-plus' : !database.showCollections }"></i>
                 <span class="loader" ng-show="database.loadingCollections">
                   <i class="fa fa-cog fa-spin"></i>
                 </span>

@@ -32,9 +32,16 @@ class Evaluator {
     };
 
     // Evalutate the expression with the given scope
-    var script = new vm.Script('(' + expression + ')', options);
-
+    var script;
     var result;
+
+    try {
+      script = new vm.Script('(' + expression + ')', options);
+    } catch (err) {
+      result = err;
+    }
+
+    if (result) return result;
 
     try {
       result = script.runInNewContext(evalScope, options);

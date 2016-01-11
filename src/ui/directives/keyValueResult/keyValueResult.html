@@ -1,44 +1,43 @@
 <div ng-right-click="openDocumentContextMenu(result)">
-  <ul class="menu">
+  <ul class="menu" ng-if="topLevel">
     <li>
-      <button class="btn btn-default" ng-click="deleteResult(result)">
+      <button class="btn btn-default" ng-click="deleteResult(result.original)">
         <i class="fa fa-plus rotate-45"></i>
       </button>
     </li>
   </ul>
   <div class="clearfix" ng-click="result.isOpen = !result.isOpen">
-    <div class="no-select">
-      <div class="result-header" ng-hide="result.type === 'object' || result.type === 'array'">
-        <div class="result-cell first-cell col-sm-3 no-select">
-          <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
-          <span>({{ $index + 1 }}) ObjectId( {{ ::result.original._id }} )</span>
-        </div>
-        <div class="result-cell col-sm-6 no-select">
-          { {{ ::result.keyValues.length }} fields }
-        </div>
-        <div class="result-cell col-sm-3 no-select">
-          {{ result.type || 'object' }}
-        </div>
+    <div class="result-header clearfix" ng-hide="result.type === 'object' || result.type === 'array'">
+      <div class="result-cell first-cell col-sm-3">
+        <i class="" ng-class="{ 'icon-chevron-right' : !result.isOpen, 'icon-chevron-down' : result.isOpen }"></i>
+        <span>({{ result.__index + 1 }}) {{ ::result.original._id }}</span>
       </div>
-      <div class="result-sub-header" ng-show="result.type === 'object' || result.type === 'array'">
-        <div class="result-cell col-sm-3">
-          <i class="fa " ng-class="{ 'fa-chevron-right' : !result.isOpen, 'fa-chevron-down' : result.isOpen }"></i>
-          <span>{{ ::result.key }}</span>
-        </div>
-        <div class="result-cell col-sm-6">
-          {{ ::result.display }}
-        </div>
-        <div class="result-cell col-sm-3">
-          {{ ::result.type }}
-        </div>
+      <div class="result-cell col-sm-6">
+        { {{ ::result.keyValues.length }} fields }
+      </div>
+      <div class="result-cell col-sm-3">
+        {{ result.type || 'object' }}
+      </div>
+    </div>
+    <div class="result-sub-header clearfix" ng-show="result.type === 'object' || result.type === 'array'">
+      <div class="result-cell col-sm-3" ng-style="{ 'padding-left' : (((level - 1) * 15) + 'px') }">
+        <i class="" ng-class="{ 'icon-chevron-right' : !result.isOpen, 'icon-chevron-down' : result.isOpen }"></i>
+        <i class="fa {{ ::result.icon }}"></i>
+        <span>{{ ::result.key }}</span>
+      </div>
+      <div class="result-cell col-sm-6">
+        {{ ::result.display }}
+      </div>
+      <div class="result-cell col-sm-3">
+        {{ ::result.type }}
       </div>
     </div>
   </div>
-  <div class="result-body clearfix" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
+  <div class="result-body clearfix level-{{ level }}" ng-if="result.isOpen" ng-class="{ 'open' : result.isOpen }">
     <div class="result-row clearfix" ng-repeat="keyvalue in ::result.keyValues">
-      <div class="clearfix" ng-hide="keyvalue.keyValues.length">
-        <div class="result-cell first-cell col-sm-3">
-          <i class="{{ ::keyvalue.type }} fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
+      <div class="clearfix" ng-hide="keyvalue.keyValues">
+        <div class="result-cell first-cell col-sm-3" ng-style="{ 'padding-left' : ((level * 15) + 'px') }">
+          <i class="fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </div>
         <div class="result-cell col-sm-6">
           {{ ::keyvalue.display }}
@@ -47,8 +46,8 @@
           {{ ::keyvalue.type }}
         </div>
       </div>
-      <div class="" ng-show="keyvalue.keyValues">
-        <key-value-result result="keyvalue"></key-value-result>
+      <div ng-show="keyvalue.keyValues">
+        <key-value-result result="keyvalue" delete-result="deleteResult" top-level="false"></key-value-result>
       </div>
     </div>
   </div>

@@ -1,6 +1,5 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
+'use strict';
+
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');

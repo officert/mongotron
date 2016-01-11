@@ -178,7 +178,8 @@ function generateConnectionInstanceFromConfig(connectionConfig) {
     id: connectionConfig.id || uuid.v4(),
     name: connectionConfig.name,
     host: connectionConfig.host,
-    port: connectionConfig.port
+    port: connectionConfig.port,
+    replicaSet: connectionConfig.replicaSet
   });
 
   _.each(connectionConfig.databases, (databaseConfig) => {
@@ -212,14 +213,15 @@ function convertConnectionInstanceIntoConfig(connection) {
     name: connection.name,
     host: connection.host,
     port: connection.port,
+    replicaSet: connection.replicaSet,
     databases: connection.databases ? connection.databases.map((database) => {
       var db = {
+        id: database.id || uuid.v4(),
         name: database.name
       };
 
       if (database.auth) {
         db.auth = {
-          id: database.id || uuid.v4(),
           username: database.auth.username,
           password: database.auth.password
         };
@@ -247,16 +249,6 @@ function findConnectionById(connectionId, connections) {
 function createConnection(options) {
   return new Promise((resolve) => {
     var newConn = new Connection(options);
-
-    if (options.databaseName) {
-      newConn.addDatabase({
-        id: uuid.v4(),
-        name: options.databaseName,
-        host: options.host,
-        port: options.port,
-        auth: options.auth
-      });
-    }
 
     return resolve(newConn);
   });

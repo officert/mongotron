@@ -23,6 +23,7 @@
     &:active,
     &.active {
       background-color: darken(@background, 5%);
+
       // border-color: darken(@background, 2%);
     }
   }
@@ -52,4 +53,30 @@
 }
 .btn-inverse {
   .pretty-buttons(white, #474949);
+}
+.btn-icon-left {
+  .icons {
+    margin-right: 10px;
+  }
+}
+.btn-icon-right {
+  .icons {
+    margin-left: 10px;
+  }
+}
+.btn-boolean {
+  .btn {
+    margin: 0;
+    display: inline-block;
+    float: left;
+    &:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: none;
+    }
+    &:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
 }

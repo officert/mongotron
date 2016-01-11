@@ -2,9 +2,13 @@
 
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
+const MongoClient = require('mongodb').MongoClient;
+const Promise = require('bluebird');
 const util = require('util');
+const uuid = require('node-uuid');
 const _ = require('underscore');
 
+const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
@@ -17,29 +21,78 @@ class Connection {
    *
    * @param {Object} options
    * @param {String} options.name
-   * @param {String} options.host
-   * @param {String} options.port
+   * @param {String} [options.host]
+   * @param {String} [options.port]
+   * @param {Object} [options.replicaSet]
+   * @param {String} [options.replicaSet.name]
+   * @param {Array<Object>} [options.replicaSet.sets]
    */
   constructor(options) {
     options = options || {};
 
     var _this = this;
     _this.id = options.id;
-    _this.name = options.name || 'local';
-    _this.host = options.host || 'localhost';
-    _this.port = options.port || 27017;
+    _this.name = options.name;
+    _this.host = options.host;
+    _this.port = options.port;
+    _this.replicaSet = options.replicaSet;
     _this.databases = [];
+
+    if (options.databaseName) {
+      let newDb = {
+        id: uuid.v4(),
+        name: options.databaseName,
+        host: options.host,
+        port: options.port,
+        auth: options.auth
+      };
+
+      if (options.auth && (options.auth.username || options.auth.password)) {
+        newDb.auth = {};
+        newDb.auth.username = options.auth.username;
+        newDb.auth.password = options.auth.password;
+      }
+
+      _this.addDatabase(newDb);
+    }
+  }
+
+  get connectionString() {
+    if (!this._connectionString) {
+      this._connectionString = _getConnectionString(this);
+    }
+    return this._connectionString;
   }
 
   /**
    * @method connect
-   * @param {Function} next - callback function
    */
-  connect(next) {
+  connect() {
     var _this = this;
 
-    if (_this.host === 'localhost') getDbsForLocalhostConnection(_this, next);
-    else return next(null);
+    return new Promise((resolve, reject) => {
+      logger.log('Connecting to ' + _this.name + ' server @ ' + _this.connectionString + '...');
+
+      let client = new MongoClient();
+
+      if (!_this.connectionString) {
+        return reject(new Error('connecting does have a connection string'));
+      }
+
+      client.connect(_this.connectionString, (err, database) => {
+        if (err) return reject(new errors.ConnectionError(err.message));
+
+        logger.log('Connected to ' + _this.name + ' server @ ' + _this.connectionString);
+
+        if (_this.host === 'localhost') {
+          _getDbsForLocalhostConnection(_this, () => {
+            return resolve(null);
+          });
+        } else {
+          return resolve(database);
+        }
+      });
+    });
   }
 
   /**
@@ -74,10 +127,10 @@ class Connection {
 }
 
 /**
- * @function getDbsForLocalhostConnection
+ * @function _getDbsForLocalhostConnection
  * @param {Function} next - callback function
  */
-function getDbsForLocalhostConnection(connection, next) {
+function _getDbsForLocalhostConnection(connection, next) {
   if (!connection) return next(new Error('connection is required'));
   if (!next) return next(new Error('next is required'));
   if (connection.host !== 'localhost') return next(new Error('cannot get local dbs for non localhost connection'));
@@ -107,6 +160,44 @@ function getDbsForLocalhostConnection(connection, next) {
       return next(null);
     });
   });
+}
+
+function _getConnectionString(connection) {
+  if (!connection) return null;
+
+  let db = (connection.databases && connection.databases.length) ? connection.databases[0] : null;
+  let auth = '';
+
+  if (db && db.auth && db.auth.username && db.auth.password) {
+    auth += (db.auth.username + ':' + db.auth.password + '@');
+  }
+
+  let connectionString = 'mongodb://';
+  let hasReplSet = false;
+
+  if (connection && connection.replicaSet && connection.replicaSet.name && (connection.replicaSet.sets && connection.replicaSet.sets.length)) {
+    hasReplSet = true;
+
+    connectionString += auth;
+
+    for (let i = 0; i < connection.replicaSet.sets.length; i++) {
+      let set = connection.replicaSet.sets[i];
+
+      connectionString += set.host + ':' + set.port;
+
+      if (i < (connection.replicaSet.sets.length - 1)) {
+        connectionString += ',';
+      }
+    }
+  } else {
+    connectionString += auth + connection.host + ':' + connection.port;
+  }
+
+  if (db) connectionString += ('/' + db.name);
+
+  if (hasReplSet) connectionString += '?replicaSet=' + connection.replicaSet.name;
+
+  return connectionString;
 }
 
 /**

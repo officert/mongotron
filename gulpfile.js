@@ -1,6 +1,5 @@
-/* =========================================================================
- * Dependencies
- * ========================================================================= */
+'use strict';
+
 const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
@@ -119,38 +118,6 @@ gulp.task('release-osx', ['pre-release'], (next) => {
     arch: 'x64',
     icon: RELEASE_OSX_IMAGE_ICON,
   }), next);
-
-  // var env = _.extend({}, process.env);
-  // env.NODE_ENV = 'production';
-  //
-  // var child = childProcess.spawn('./node_modules/.bin/electron-packager', [
-  //   '.',
-  //   appConfig.name,
-  //   '--out',
-  //   appConfig.releasePath,
-  //   '--platform',
-  //   'all',
-  //   '--arch',
-  //   'all',
-  //   '--version',
-  //   '0.35.0',
-  //   '--ignore', ('node_modules/(' + RELEASE_IGNORE_PKGS + ')'),
-  //   '--icon',
-  //   RELEASE_IMAGE_ICON,
-  //   '--appPath',
-  //   'build/browser/main.js'
-  // ], {
-  //   env: env
-  // });
-  //
-  // child.stdout.on('data', (data) => {
-  //   console.log('tail output: ' + data);
-  // });
-  //
-  // child.on('exit', (exitCode) => {
-  //   console.log('Child exited with code: ' + exitCode);
-  //   return next(exitCode === 1 ? new Error('Error running release task') : null);
-  // });
 });
 
 gulp.task('release-win', ['pre-release'], (next) => {
@@ -216,8 +183,8 @@ gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
 });
 
 gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests'], () => {
-  return gulp.src(['src/', 'src/lib/', 'tests/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests'], {
+  return gulp.src(['src/', 'src/lib/', 'tests/', 'package.json'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests', './node_modules/package.json'], {
       force: true
     }));
 });
@@ -253,8 +220,10 @@ gulp.task('serve-site', ['site-css'], () => {
 
 gulp.task('default', ['serve']);
 
-gulp.task('test', (next) => {
-  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', next);
+gulp.task('test', () => {
+  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', () => {
+    process.exit(0);
+  });
 });
 
 gulp.task('test-int', () => {
@@ -292,6 +261,7 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/vendor/codemirror/mode/javascript/javascript.js',
       '../../src/ui/vendor/codemirror/addon/hint/show-hint.js',
       '../../src/ui/vendorCustom/codemirror-formatting.js',
+      '../../src/ui/vendorCustom/ng-bs-animated-button.js',
       '../../src/ui/vendor/angular-mocks/angular-mocks.js',
       '../../src/ui/app.js',
       '../../src/ui/components/**/*.js',

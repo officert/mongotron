@@ -1,21 +1,15 @@
-/* ------------------------------------------------
- * Dependencies
- * ------------------------------------------------ */
-const util = require('util');
+'use strict';
 
 const AbstractError = require('./abstractError');
 
 /*
- * @constructor ObjectNotFoundError
+ * @class ObjectNotFoundError
  */
- var ObjectNotFoundError = function() {
-   AbstractError.apply(this, arguments);
- };
-util.inherits(ObjectNotFoundError, AbstractError);
-ObjectNotFoundError.prototype.name = 'Object Not Found Error';
+class ObjectNotFoundError extends AbstractError {
+  constructor(message) {
+    super(message);
+    this.name = 'Object Not Found Error';
+  }
+}
 
-/*
- * @exports
- *
- */
 module.exports = ObjectNotFoundError;

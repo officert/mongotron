@@ -1,15 +1,30 @@
 <div id="connect-list" ng-controller="listConnectionsCtrl">
-  <div class="alert alert-info" ng-show="!connections.length">
+  <div class="clearfix top-links">
+    <div class="pull-right">
+      <a href="#" class="add-link" ng-click="changePage('add', null, $event)">
+        <i class="icon-plus"></i> Create
+      </a>
+    </div>
+  </div>
+  <hr>
+  <loading loading="loading"></loading>
+  <div class="alert alert-info" ng-show="!connections.length && !loading">
     Your don't have any connections yet. Use the <i class="fa fa-plus"></i> Create button to create new connections.
   </div>
   <ul class="connection-list">
-    <li ng-repeat="connection in connections" ng-class="{ 'active' : connection.selected }" ng-show="connections.length">
+    <li ng-repeat="connection in connections | orderBy : 'name'" ng-class="{ 'active' : connection.selected, 'connecting' : connection.connecting }" ng-show="connections.length && !loading">
+      <span class="connection-connecting center">
+        <i class="fa fa-spin fa-cog"></i>
+      </span>
       <a class="name" href="#" ng-click="selectConnection(connection, $event)" ng-dblclick="selectAndConnect(connection, $event)">
         {{ connection.name }}
       </a>
       <span class="links">
         <a class="edit" href="#" ng-click="changePage('add', connection, $event)" uib-tooltip="Edit Connection" tooltip-popup-delay="600">
           <i class="fa fa-pencil"></i>
+        </a>
+        <a class="copy" href="#" ng-click="copyConnection(connection, $event)" uib-tooltip="Copy Connection" tooltip-popup-delay="600">
+          <i class="fa fa-files-o"></i>
         </a>
         <a class="remove" href="#" ng-click="changePage('remove', connection, $event)" uib-tooltip="Delete Connection" tooltip-popup-delay="600">
           <i class="icon-times"></i>

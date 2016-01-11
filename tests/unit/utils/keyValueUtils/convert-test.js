@@ -91,7 +91,7 @@ describe('utils', function() {
         });
       });
 
-      describe.only('when value is an object that contains a nested object property', () => {
+      describe('when value is an object that contains a nested object property', () => {
         it('should return an object', function(next) {
           var value = {
             key1: {

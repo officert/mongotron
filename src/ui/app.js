@@ -2,5 +2,6 @@ angular.module('app', [
   'ui.bootstrap',
   'ui.sortable',
   'ngSanitize',
-  'autoGrowInput'
+  'autoGrowInput',
+  'ng-bs-animated-button'
 ]);

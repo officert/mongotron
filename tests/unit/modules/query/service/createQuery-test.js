@@ -256,6 +256,166 @@ describe('modules', function() {
               });
             });
           });
+
+          describe('insertOne query', () => {
+            describe('empty query', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.insertOne({})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'insertOne',
+                  extractOptions: false,
+                  query: {},
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    next();
+                  })
+                  .catch((error) => {
+                    should.not.exist(error);
+                    next();
+                  });
+              });
+            });
+
+            describe('query with a single property', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.insertOne({\nname:"John Doe"})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'insertOne',
+                  extractOptions: false,
+                  query: {
+                    name: 'John Doe'
+                  },
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    next();
+                  })
+                  .catch((error) => {
+                    should.not.exist(error);
+                    next();
+                  });
+              });
+            });
+
+            describe('query with a nested object property', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.insertOne({\nperson:{ name : "John Doe" }})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'insertOne',
+                  extractOptions: false,
+                  query: {
+                    person: {
+                      name: 'John Doe'
+                    }
+                  },
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    next();
+                  })
+                  .catch((error) => {
+                    should.not.exist(error);
+                    next();
+                  });
+              });
+            });
+
+            describe('query with a nested array property', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.insertOne({\nnumbers:[1,2,3,4,5]})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'insertOne',
+                  extractOptions: false,
+                  query: {
+                    numbers: [1, 2, 3, 4, 5]
+                  },
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    next();
+                  })
+                  .catch((error) => {
+                    should.not.exist(error);
+                    next();
+                  });
+              });
+            });
+
+            describe('query with a nested array property containing a single object', function() {
+              it('should resolve Query Class Object', function(next) {
+                var rawQuery = 'db.foobar.insertOne({\npeople:[{ name : "John Doe" }]})';
+                var expectedQuery = {
+                  rawQuery: rawQuery,
+                  mongoMethod: 'insertOne',
+                  extractOptions: false,
+                  query: {
+                    people: [{
+                      name: 'John Doe'
+                    }]
+                  },
+                  queryOptions: null
+                };
+
+                queryService.createQuery(rawQuery)
+                  .then((query) => {
+                    should.exist(query);
+                    query.should.be.an.instanceOf(queryClass);
+                    query.should.have.property('rawQuery', expectedQuery.rawQuery);
+                    query.should.have.property('mongoMethod', expectedQuery.mongoMethod);
+                    query.should.have.property('extractOptions', expectedQuery.extractOptions);
+                    should(testUtils.compareObjects(query.query, expectedQuery.query)).equal(true);
+                    query.should.have.property('queryOptions', expectedQuery.queryOptions);
+                    next();
+                  })
+                  .catch((error) => {
+                    should.not.exist(error);
+                    next();
+                  });
+              });
+            });
+
+          });
         });
       });
     });

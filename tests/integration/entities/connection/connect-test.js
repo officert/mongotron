@@ -4,6 +4,7 @@ require('tests/unit/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
+require('sinon-as-promised');
 
 var Connection;
 var sandbox;
@@ -38,16 +39,16 @@ describe('entities', function() {
             return done(null);
           });
 
-          it('should return a Connection Error', function(done) {
-            connection.connect(function(err) {
-              should.exist(err);
+          it('should return a Connection Error', function(next) {
+            connection.connect()
+              .catch((err) => {
+                should.exist(err);
 
-              (err instanceof errors.ConnectionError).should.equal(true);
+                (err instanceof errors.ConnectionError).should.equal(true);
 
-              err.message.should.equal('An error occured when trying to connect to localhost');
-
-              return done(null);
-            });
+                err.message.should.equal('connect ECONNREFUSED 127.0.0.1:10000');
+              })
+              .done(next);
           });
         });
 
@@ -65,39 +66,15 @@ describe('entities', function() {
           });
 
           it('should add databases to collection.databases array', function(done) {
-            connection.connect(function(err) {
-              should.not.exist(err);
+            connection.connect()
+              .then((err) => {
+                should.not.exist(err);
 
-              should.exist(connection.databases);
-              connection.databases.length.should.be.greaterThan(0);
+                should.exist(connection.databases);
+                connection.databases.length.should.be.greaterThan(0);
 
-              return done(null);
-            });
-          });
-        });
-      });
-
-      describe('when host is not localhost', function() {
-        var connection;
-
-        before(function(done) {
-          connection = new Connection({
-            name: 'Test Connection',
-            host: 'foobarhost',
-            port: 92833
-          });
-
-          return done(null);
-        });
-
-        it('should not add any databases to collection.databases array', function(done) {
-          connection.connect(function(err) {
-            should.not.exist(err);
-
-            should.exist(connection.databases);
-            connection.databases.length.should.equal(0);
-
-            return done(null);
+                return done(null);
+              });
           });
         });
       });

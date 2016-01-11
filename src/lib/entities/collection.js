@@ -203,14 +203,23 @@ class Collection {
     return new Promise(function(resolve, reject) {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      options.limit = 50;
+      let stream = options.stream;
+      delete options.stream;
 
-      //TODO: validate the query??
+      let dbQuery = _this._dbCollection.aggregate(query, options);
 
-      _this._dbCollection.aggregate(query, options).toArray(function(err, result) {
-        if (err) return reject(err);
-        return resolve(result);
-      });
+      if (options.skip) dbQuery.skip(Number(options.skip));
+
+      dbQuery.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
+
+      if (stream === true) {
+        return resolve(dbQuery.stream());
+      } else {
+        dbQuery.toArray(function(err, docs) {
+          if (err) return reject(err);
+          return resolve(docs);
+        });
+      }
     });
   }
 

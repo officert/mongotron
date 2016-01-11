@@ -6,13 +6,13 @@ const should = require('should');
 const sinon = require('sinon');
 require('sinon-as-promised');
 
-var queryService;
+var parser;
 var sandbox;
 
 before(function() {
   sandbox = sinon.sandbox.create();
 
-  queryService = require('lib/modules/query');
+  parser = require('lib/modules/query/parser');
 });
 
 afterEach(function() {
@@ -21,13 +21,13 @@ afterEach(function() {
 
 describe('modules', function() {
   describe('query', function() {
-    describe('service', function() {
+    describe('parser', function() {
       describe('parseFunctionName', function() {
         describe('when no query is passed', function() {
           it('should return null', function(next) {
             var rawQuery = null;
 
-            var functionName = queryService.parseFunctionName(rawQuery);
+            var functionName = parser.parseFunctionName(rawQuery);
 
             should.not.exist(functionName);
 
@@ -39,7 +39,7 @@ describe('modules', function() {
           it('should return null', function(next) {
             var rawQuery = 'fooooobar';
 
-            var functionName = queryService.parseFunctionName(rawQuery);
+            var functionName = parser.parseFunctionName(rawQuery);
 
             should.not.exist(functionName);
 
@@ -52,7 +52,7 @@ describe('modules', function() {
             var expectedFunctionName = 'blah';
             var rawQuery = 'db.foobar.' + expectedFunctionName + '({})';
 
-            var functionName = queryService.parseFunctionName(rawQuery);
+            var functionName = parser.parseFunctionName(rawQuery);
 
             should.exist(functionName);
             functionName.should.equal(expectedFunctionName);

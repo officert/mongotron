@@ -20,6 +20,7 @@
 
   //form inputs
   @theme-input-bg: darken(@theme-bg, 20%);
+  @theme-input-disabled-bg: lighten(@theme-bg, 12%);
   @theme-input-border-color: lighten(@theme-bg, 10%);
   @theme-input-color: @theme-text-color;
 
@@ -42,8 +43,8 @@
   @theme-server-list-hover-color: @theme-text-color;
 
   //query
-  @theme-query-editor-color: #c5c8c6;
-  @theme-query-editor-bg: #c5c8c6;
+  @theme-query-editor-color: #444;
+  @theme-query-editor-bg: @theme-bg;
   @theme-query-editor-border-color: lighten(@theme-bg, 10%);
   @theme-query-editor-input-bg: @theme-bg; //query edit skip + take input bg
   @theme-query-editor-string-color: #b5bd68;
@@ -55,7 +56,7 @@
   //query-result-json
   @theme-query-result-json-bg: @theme-bg;
   @theme-query-result-json-color: @theme-text-color;
-  @theme-query-result-json-border-color: @theme-text-color;
+  @theme-query-result-json-border-color: #e6e6e6;
   @theme-query-result-json-seprator: @theme-text-color;
   @theme-query-result-json-key: red;
   @theme-query-result-json-string: @theme-text-color;
@@ -84,7 +85,6 @@
   @theme-modal-content-bg: white;
   @theme-modal-header-bg: white;
   @theme-modal-footer-bg: white;
-  @theme-modal-close-icon-color: @brand-primary;
   @theme-modal-connected-icon-color: @brand-primary;
 
   //user info note

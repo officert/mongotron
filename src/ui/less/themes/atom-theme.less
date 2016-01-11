@@ -9,7 +9,7 @@
   @theme-brand-success: #5cb85c;
   @theme-brand-info: #5bc0de;
   @theme-brand-warning: #f0ad4e;
-  @theme-brand-danger: #d9534f;
+  @theme-brand-danger: #E6332E;
 
   //globals
   @theme-bg: #161719;
@@ -17,7 +17,8 @@
   @theme-border-color: lighten(@theme-bg, 10%);
 
   //form inputs
-  @theme-input-bg: darken(@theme-bg, 20%);
+  @theme-input-bg: darken(@theme-bg, 5%);
+  @theme-input-disabled-bg: lighten(@theme-bg, 12%);
   @theme-input-border-color: lighten(@theme-bg, 10%);
   @theme-input-color: @theme-text-color;
 
@@ -29,7 +30,7 @@
   @theme-tab-border-color: transparent;
   @theme-tab-active-bg: #1d1f21;
   @theme-tab-pane-bg: #1d1f21;
-  @theme-tab-active-line-bg: @atom-blue;
+  @theme-tab-active-line-bg: @theme-brand-primary;
 
   //toaster message
   @theme-toast-border-radius: 4px;
@@ -82,11 +83,10 @@
   @theme-modal-content-bg: #41464c;
   @theme-modal-header-bg: #2c3033;
   @theme-modal-footer-bg: #2c3033;
-  @theme-modal-close-icon-color: @atom-blue;
-  @theme-modal-connected-icon-color: @atom-blue;
+  @theme-modal-connected-icon-color: @theme-brand-primary;
 
   //user info note
-  @theme-user-info-note-dot-color: @atom-blue;
+  @theme-user-info-note-dot-color: @theme-brand-primary;
 
   //init mixin
   .theme();

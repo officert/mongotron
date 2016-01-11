@@ -2,7 +2,7 @@
 <html lang="en" ng-app="app">
 
 <head>
-  <title></title>
+  <title>Mongotron - Cross platform MongoDB management</title>
   <meta charset="utf-8" />
   <meta name="fragment" content="!">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,33 @@
   <meta name="title" content="Mongotron">
   <meta name="description" content="Mongotron is a new GUI for Mongo DB built using Electron and Angular JS">
   <link rel="stylesheet" href="./docs/css/docs.css" />
+  <link rel="shortcut icon" type="image/png" href="resources/icon/favicon.ico" />
 </head>
 
 <body>
+  <div id="producthunt">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <p class="center">
+            <img class="img-responsive" src="docs/images/producthunt.png" alt="Product Hunt">
+          </p>
+        </div>
+        <div class="col-sm-8 text">
+          <h2 class="center">Welcome Product Hunters!</h2>
+          <p class="center">
+            Interested in contributing to our open-source project?
+          </p>
+          <p class="center">
+            <a href="https://github.com/officert/mongotron" class="cta btn btn-default">
+              <i class="fa fa-github"></i>
+              <span>Check us out on github!</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="top-container">
     <div class="container">
       <header id="header" class="clearfix">
@@ -32,7 +56,7 @@
                 <a href="https://github.com/officert/mongotron#quick-start">Getting Started</a>
               </li>
               <li>
-                <a href="https://github.com/officert/mongotron">Github</a>
+                <a href="https://github.com/officert/mongotron">GitHub</a>
               </li>
               <li>
                 <a class="btn btn-sm btn-primary" href="https://github.com/officert/mongotron/releases">Download</a>
@@ -43,7 +67,7 @@
       </header>
       <div class="banner">
         <h2 class="center">
-          MongoDB management made easy
+          Cross platform MongoDB management
         </h2>
         <p class="center">
           Open Source, built using Electron and Angular JS
@@ -68,17 +92,18 @@
     <div class="container">
       <footer id="footer">
         <div id="disqus_thread"></div>
-          <script>
+        <script>
           (function() { // DON'T EDIT BELOW THIS LINE
-          var d = document, s = d.createElement('script');
+            var d = document,
+              s = d.createElement('script');
 
-          s.src = '//mongotron.disqus.com/embed.js';
+            s.src = '//mongotron.disqus.com/embed.js';
 
-          s.setAttribute('data-timestamp', +new Date());
-          (d.head || d.body).appendChild(s);
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
           })();
-          </script>
-          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
       </footer>
     </div>
   </div>
@@ -91,7 +116,7 @@
         <a href="https://github.com/officert/mongotron#quick-start">Getting Started</a>
       </li>
       <li>
-        <a href="https://github.com/officert/mongotron" >Github</a>
+        <a href="https://github.com/officert/mongotron">Github</a>
       </li>
       <li>
         <a href="https://github.com/officert/mongotron">Download</a>
@@ -101,10 +126,17 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="./docs/js/docs.js"></script>
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     ga('create', 'UA-70298846-1', 'auto');
     ga('send', 'pageview');
   </script>

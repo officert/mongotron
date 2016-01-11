@@ -6,13 +6,13 @@ const should = require('should');
 const sinon = require('sinon');
 require('sinon-as-promised');
 
-var queryService;
+var parser;
 var sandbox;
 
 before(function() {
   sandbox = sinon.sandbox.create();
 
-  queryService = require('lib/modules/query');
+  parser = require('lib/modules/query/parser');
 });
 
 afterEach(function() {
@@ -21,13 +21,13 @@ afterEach(function() {
 
 describe('modules', function() {
   describe('query', function() {
-    describe('service', function() {
+    describe('parser', function() {
       describe('isValidQuery', function() {
         describe('when no query is passed', function() {
           it('should return false', function(next) {
             var rawQuery = null;
 
-            var isValid = queryService.isValidQuery(rawQuery);
+            var isValid = parser.isValidQuery(rawQuery);
 
             isValid.should.equal(false);
 
@@ -39,7 +39,7 @@ describe('modules', function() {
           it('should return false', function(next) {
             var rawQuery = 'fooooobar';
 
-            var isValid = queryService.isValidQuery(rawQuery);
+            var isValid = parser.isValidQuery(rawQuery);
 
             isValid.should.equal(false);
 
@@ -51,7 +51,7 @@ describe('modules', function() {
           it('should return true', function(next) {
             var rawQuery = 'db.foobar.foobar';
 
-            var isValid = queryService.isValidQuery(rawQuery);
+            var isValid = parser.isValidQuery(rawQuery);
 
             isValid.should.equal(true);
 

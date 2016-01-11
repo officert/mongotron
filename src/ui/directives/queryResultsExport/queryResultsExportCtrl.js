@@ -7,9 +7,15 @@ angular.module('app').controller('queryResultsExportCtrl', [
   '$timeout',
   'notificationService',
   function($scope, dialogService, $log, $timeout, notificationService) {
+    const Query = require('lib/modules/query/query');
+
     if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
-    $scope.limit = $scope.limit || 50;
+    if (!($scope.query instanceof Query)) throw new Error('queryResultsExport directive - $scope.query must be an instance of Query');
+
+    if ($scope.query.mongoMethod !== 'find' && $scope.query.mongoMethod !== 'aggregate') throw new Error('queryResultsExport directive - query type can only be find or aggregate query');
+
+    $scope.limit = null;
 
     const fs = require('fs');
     const csv = require('csv');
@@ -81,21 +87,27 @@ angular.module('app').controller('queryResultsExportCtrl', [
           $timeout(() => {
             $scope.loading = true;
 
-            $scope.collection.find($scope.query, {
-                stream: true,
-                limit: $scope.limit
-              })
-              .then((stream) => {
-                stream
+            $scope.query.queryOptions = {
+              stream: true,
+              limit: $scope.limit || 50
+            };
+
+            let startTime = performance.now();
+
+            $scope.collection.execQuery($scope.query)
+              .then((results) => {
+                results.result
                   .pipe(new CsvStream(nameProps))
                   .on('error', handleError)
                   .pipe(fs.createWriteStream(path))
                   .on('error', handleError)
                   .on('finish', () => {
+                    let ellapsed = (performance.now() - startTime).toFixed(5);
+
                     $timeout(() => {
                       $scope.loading = false;
                       notificationService.success('Finished exporting');
-                    });
+                    }, (ellapsed >= 1000 ? 0 : 1000));
                   });
               })
               .catch(handleError);

@@ -8,7 +8,9 @@ angular.module('app').directive('keyValueResult', [
       controller: 'keyValueResultCtrl',
       scope: {
         result: '=',
-        deleteResult: '='
+        deleteResult: '=',
+        topLevel: '@',
+        level: '@'
       },
       compile: function(element) {
         return recursionHelper.compile(element);
