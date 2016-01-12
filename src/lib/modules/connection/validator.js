@@ -63,7 +63,7 @@ class ConnectionValidator {
       if (data.host && data.host !== 'localhost' && !data.databaseName && !db) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
 
       if (data.replicaSet) {
-
+        if (!data.replicaSet.name && !existingConnection.replicaSet) return reject(new errors.InvalidArugmentError('data.replicaSet.name is required'));
       }
 
       _baseValidate({
