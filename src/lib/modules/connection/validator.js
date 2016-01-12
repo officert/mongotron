@@ -20,9 +20,7 @@ class ConnectionValidator {
           if (!set.port) return reject(new errors.InvalidArugmentError('data.replicaSet.sets[' + i + '].port is required'));
           if (set.port < 0 || set.port > 65535) return reject(new errors.InvalidArugmentError('data.replicaSet.sets[' + i + '].port number must be between 0 and 65535.'));
         }
-      }
-
-      if (!data.replicaSet) {
+      } else {
         if (!data.host) return reject(new errors.InvalidArugmentError('data.host is required'));
         if (!data.port) return reject(new errors.InvalidArugmentError('data.port is required'));
       }
@@ -30,6 +28,10 @@ class ConnectionValidator {
       if (data.auth) {
         if (!data.auth.username) return reject(new errors.InvalidArugmentError('auth.username is required'));
         if (!data.auth.password) return reject(new errors.InvalidArugmentError('auth.password is required'));
+      }
+
+      if (data.host !== 'localhost') {
+        if (!data.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
       }
 
       _baseValidate({
@@ -42,9 +44,9 @@ class ConnectionValidator {
 
   validateUpdate(data, existingConnection) {
     return new Promise((resolve, reject) => {
-      if (existingConnection.host !== 'localhost') {
-        let db = existingConnection.databases ? existingConnection.databases[0] : null;
+      let db = existingConnection.databases ? existingConnection.databases[0] : null;
 
+      if (existingConnection.host !== 'localhost') {
         if (!db) logger.warn('validator - validateUpdate() - connection has no db');
         else {
           if (data.auth && (data.auth.username || data.auth.password)) {
@@ -57,6 +59,8 @@ class ConnectionValidator {
           }
         }
       }
+
+      if (data.host && data.host !== 'localhost' && !data.databaseName && !db) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
 
       if (data.replicaSet) {
 
@@ -96,10 +100,6 @@ function _baseValidate(options) {
 
     if (!data.replicaSet) {
       if (data.port && (data.port < 0 || data.port > 65535)) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
-    }
-
-    if (data.host && data.host !== 'localhost') {
-      if (!data.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
     }
 
     return resolve(data);
