@@ -179,6 +179,43 @@ describe('modules', () => {
         });
       });
 
+      describe('when host is changed to non localhost but no databaseName is passed', () => {
+        let connection;
+        let updates = {
+          host: 'foobar.com'
+        };
+
+        before((done) => {
+          connectionService.create({
+              name: 'Connection 1',
+              host: 'localhost',
+              port: 27017
+            })
+            .then((newConnection) => {
+              connection = newConnection;
+              return done(null);
+            })
+            .catch(done);
+        });
+
+        after((done) => {
+          connectionService.delete(connection.id)
+            .then(() => {
+              return done(null);
+            })
+            .catch(done);
+        });
+
+        it('should return an error', (next) => {
+          connectionService.update(connection.id, updates)
+            .catch((err) => {
+              should.exist(err);
+              err.message.should.equal('database is required when connecting to a remote server.');
+            })
+            .done(next);
+        });
+      });
+
       describe('when all required data is passed', () => {
         describe('when name is updated', () => {
           let connection;

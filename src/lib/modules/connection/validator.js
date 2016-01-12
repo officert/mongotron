@@ -27,10 +27,6 @@ class ConnectionValidator {
         if (!data.port) return reject(new errors.InvalidArugmentError('data.port is required'));
       }
 
-      if (data.host !== 'localhost') {
-        if (!data.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
-      }
-
       if (data.auth) {
         if (!data.auth.username) return reject(new errors.InvalidArugmentError('auth.username is required'));
         if (!data.auth.password) return reject(new errors.InvalidArugmentError('auth.password is required'));
@@ -63,7 +59,7 @@ class ConnectionValidator {
       }
 
       if (data.replicaSet) {
-        
+
       }
 
       _baseValidate({
@@ -100,6 +96,10 @@ function _baseValidate(options) {
 
     if (!data.replicaSet) {
       if (data.port && (data.port < 0 || data.port > 65535)) return reject(new errors.InvalidArugmentError('Port number must be between 0 and 65535.'));
+    }
+
+    if (data.host && data.host !== 'localhost') {
+      if (!data.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
     }
 
     return resolve(data);
