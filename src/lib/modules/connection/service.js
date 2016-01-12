@@ -1,7 +1,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const _ = require('underscore');
 
 const logger = require('lib/modules/logger');
 const errors = require('lib/errors');
@@ -9,14 +8,6 @@ const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
 
 const DEFAULT_CONNECTIONS = require('./defaults');
-const ALLOWED_UPDATES = [
-  'name',
-  'databaseName',
-  'host',
-  'port',
-  'auth',
-  'replicaSet'
-];
 
 /**
  * @class ConnectionService
@@ -118,9 +109,33 @@ class ConnectionService {
 
 function _applyConnectionUpdatesPreValidation(connection, updates) {
   return new Promise((resolve) => {
-    updates = _.pick(updates, ALLOWED_UPDATES);
-
-    connection = _.extend(connection, updates);
+    if ('name' in updates) connection.name = updates.name;
+    if ('host' in updates) {
+      connection.host = updates.host;
+      delete connection.replicaSet;
+    }
+    if ('port' in updates) connection.port = updates.port;
+    if ('databaseName' in updates) connection.databaseName = updates.databaseName;
+    if ('auth' in updates) {
+      if (!updates.auth) delete connection.auth; //null or undefined so remove it
+      else if (connection.auth) {
+        if ('username' in updates.auth) connection.auth.username = updates.auth.username;
+        if ('password' in updates.auth) connection.auth.password = updates.auth.password;
+      } else {
+        connection.auth = updates.auth;
+      }
+    }
+    if ('replicaSet' in updates) {
+      if (!updates.replicaSet) delete connection.replicaSet; //null or undefined so remove it
+      else if (connection.replicaSet) {
+        delete connection.host;
+        delete connection.port;
+        if ('name' in updates.replicaSet) connection.replicaSet.name = updates.replicaSet.name;
+        if ('sets' in updates.replicaSet) connection.replicaSet.sets = updates.replicaSet.sets;
+      } else {
+        connection.replicaSet = updates.replicaSet;
+      }
+    }
 
     if (connection.host !== 'localhost') {
       let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
@@ -128,15 +143,19 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
       if (!db) logger.warn('connection service - _applyConnectionUpdates() - connection has no database');
       else {
         if (!connection.databaseName) connection.databaseName = db.name;
-        let auth = db.auth || {};
+        let auth = db.auth;
         connection.auth = connection.auth || auth;
-        connection.auth.username = connection.auth.username || (auth ? auth.username : null);
-        connection.auth.password = connection.auth.password || (auth ? auth.password : null);
+        // connection.host = db.host;
+        // connection.port = db.port;
+        if (connection.auth) {
+          connection.auth.username = connection.auth.username || (auth ? auth.username : null);
+          connection.auth.password = connection.auth.password || (auth ? auth.password : null);
+        }
       }
     }
 
-    console.log('pre updates', updates);
-    console.log('pre updated connection', connection);
+    // console.log('pre updates', updates);
+    // console.log('pre updated connection', connection);
 
     return resolve(connection);
   });
@@ -145,8 +164,8 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
 function _applyConnectionUpdatesPostValidation(connection, updates) {
   return new Promise((resolve) => {
 
-    console.log('post updates', updates);
-    console.log('post updated connection', connection);
+    // console.log('post updates', updates);
+    // console.log('post updated connection', connection);
 
     let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
 
