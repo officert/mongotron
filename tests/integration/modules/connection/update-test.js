@@ -380,7 +380,46 @@ describe('modules', () => {
           });
         });
 
-        describe('when host is updated', () => {
+        describe('when host is updated to local host', () => {
+          let connection;
+          let updates = {
+            host: 'localhost'
+          };
+
+          before((done) => {
+            connectionService.create({
+                name: 'Connection 1',
+                host: 'newhost.com',
+                port: 20102,
+                databaseName: 'foobar'
+              })
+              .then((newConnection) => {
+                connection = newConnection;
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          after((done) => {
+            connectionService.delete(connection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should update the host and return the connection', (next) => {
+            connectionService.update(connection.id, updates)
+              .then((updatedConnection) => {
+                should.exist(updatedConnection);
+                updatedConnection.host.should.equal(updates.host);
+                should.not.exist(updatedConnection.databases);
+              })
+              .done(next);
+          });
+        });
+
+        describe('when host is updated to remote host', () => {
           let connection;
           let updates = {
             host: 'newhost.com',
@@ -413,6 +452,127 @@ describe('modules', () => {
               .then((updatedConnection) => {
                 should.exist(updatedConnection);
                 updatedConnection.host.should.equal(updates.host);
+                should.exist(updatedConnection.databases);
+                should.exist(updatedConnection.databases[0]);
+                updatedConnection.databases[0].host.should.equal(updates.host);
+              })
+              .done(next);
+          });
+        });
+
+        describe('when port is updated and host is local host', () => {
+          let connection;
+          let updates = {
+            port: 29877
+          };
+
+          before((done) => {
+            connectionService.create({
+                name: 'Connection 1',
+                host: 'localhost',
+                port: 12345
+              })
+              .then((newConnection) => {
+                connection = newConnection;
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          after((done) => {
+            connectionService.delete(connection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should update the port and return the connection', (next) => {
+            connectionService.update(connection.id, updates)
+              .then((updatedConnection) => {
+                should.exist(updatedConnection);
+                updatedConnection.port.should.equal(updates.port);
+              })
+              .done(next);
+          });
+        });
+
+        describe('when port is updated and host is remote host', () => {
+          let connection;
+          let updates = {
+            port: 29877,
+          };
+
+          before((done) => {
+            connectionService.create({
+                name: 'Connection 1',
+                host: 'remote1.com',
+                port: 12345,
+                databaseName: 'foobar'
+              })
+              .then((newConnection) => {
+                connection = newConnection;
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          after((done) => {
+            connectionService.delete(connection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should update the port and return the connection', (next) => {
+            connectionService.update(connection.id, updates)
+              .then((updatedConnection) => {
+                should.exist(updatedConnection);
+                updatedConnection.port.should.equal(updates.port);
+                should.exist(updatedConnection.databases);
+                should.exist(updatedConnection.databases[0]);
+                updatedConnection.databases[0].port.should.equal(updates.port);
+              })
+              .done(next);
+          });
+        });
+
+        describe('when databaseName is updated', () => {
+          let connection;
+          let updates = {
+            databaseName: 'newdbname'
+          };
+
+          before((done) => {
+            connectionService.create({
+                name: 'Connection 1',
+                host: 'remove.com',
+                port: 12345,
+                databaseName: 'olddbname'
+              })
+              .then((newConnection) => {
+                connection = newConnection;
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          after((done) => {
+            connectionService.delete(connection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should update the database name and return the connection', (next) => {
+            connectionService.update(connection.id, updates)
+              .then((updatedConnection) => {
+                should.exist(updatedConnection);
+                should.exist(updatedConnection.databases);
+                should.exist(updatedConnection.databases[0]);
+                updatedConnection.databases[0].name.should.equal(updates.databaseName);
               })
               .done(next);
           });
@@ -669,7 +829,6 @@ describe('modules', () => {
         describe('when replicaSet is removed', () => {
           let connection;
           let updates = {
-            host: 'localhost',
             replicaSet: null
           };
 
@@ -713,7 +872,7 @@ describe('modules', () => {
           });
         });
 
-        describe('when host is updated and existing connecting has a replicaSet', () => {
+        describe('when host is updated and existing connection has a replicaSet', () => {
           let connection;
           let updates = {
             host: 'foobar.com'
@@ -754,6 +913,8 @@ describe('modules', () => {
                 should.exist(updatedConnection);
                 updatedConnection.host.should.equal(updates.host);
                 should.not.exist(updatedConnection.replicaSet);
+                should.exist(updatedConnection.databases[0]);
+                updatedConnection.databases[0].host.should.equal(updates.host);
               })
               .done(next);
           });

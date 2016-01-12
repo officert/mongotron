@@ -113,6 +113,9 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
     if ('host' in updates) {
       connection.host = updates.host;
       delete connection.replicaSet;
+      if (updates.host === 'localhost') {
+        delete connection.databases;
+      }
     }
     if ('port' in updates) connection.port = updates.port;
     if ('databaseName' in updates) connection.databaseName = updates.databaseName;
@@ -145,8 +148,6 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
         if (!connection.databaseName) connection.databaseName = db.name;
         let auth = db.auth;
         connection.auth = connection.auth || auth;
-        // connection.host = db.host;
-        // connection.port = db.port;
         if (connection.auth) {
           connection.auth.username = connection.auth.username || (auth ? auth.username : null);
           connection.auth.password = connection.auth.password || (auth ? auth.password : null);
@@ -164,9 +165,6 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
 function _applyConnectionUpdatesPostValidation(connection, updates) {
   return new Promise((resolve) => {
 
-    // console.log('post updates', updates);
-    // console.log('post updated connection', connection);
-
     let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
 
     if (db) {
@@ -175,7 +173,22 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
         db.auth.username = updates.auth.username || db.auth.username;
         db.auth.password = updates.auth.password || db.auth.password;
       }
+      if ('databaseName' in updates) {
+        db.name = updates.databaseName;
+      }
+      if ('host' in updates) db.host = updates.host;
+      if ('port' in updates) db.port = updates.port;
+    } else {
+      if ('host' in updates && updates.host !== 'localhost') {
+        connection.addDatabase({
+          host: updates.host,
+          port: updates.port
+        });
+      }
     }
+
+    // console.log('post updates', updates);
+    // console.log('post updated connection', connection);
 
     return resolve(connection);
   });
