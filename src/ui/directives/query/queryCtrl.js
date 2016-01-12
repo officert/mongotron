@@ -24,7 +24,8 @@ angular.module('app').controller('queryCtrl', [
     $scope.results = [];
     $scope.keyValueResults = [];
 
-    $scope.deleteResult = _deleteResult;
+    $scope.deleteDocument = _deleteDocument;
+    $scope.editDocument = _editDocument;
 
     let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
       name: $scope.defaultCollection
@@ -153,7 +154,7 @@ angular.module('app').controller('queryCtrl', [
         });
     }
 
-    function _deleteResult(result) {
+    function _deleteDocument(result) {
       if (!result) return;
 
       modalService.openDeleteResult(result, $scope.currentCollection)
@@ -170,6 +171,10 @@ angular.module('app').controller('queryCtrl', [
             $scope.loading = false;
           });
         });
+    }
+
+    function _editDocument() {
+      alert('edit document');
     }
 
     function _getCollectionByNameFromRawQuery(collectionName) {

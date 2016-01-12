@@ -103,13 +103,13 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openEditDocument = function openEditDocument(collection) {
+    ModalService.prototype.openEditDocument = function openEditDocument(options) {
       return openModal({
         templateUrl: __dirname + '/components/editDocument/editDocument.html',
         controller: 'editDocumentCtrl',
         resolve: {
-          collection: [function() {
-            return collection;
+          editDocument: [function() {
+            return options ? options.editDocument : null;
           }]
         }
       });

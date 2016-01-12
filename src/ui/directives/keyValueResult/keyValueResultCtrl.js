@@ -26,7 +26,7 @@ angular.module('app').controller('keyValueResultCtrl', [
         click: function() {
           $timeout(function() {
             modalService.openEditDocument({
-              // collection: $scope.collection
+              editDocument: $scope.editDocument
             });
           });
         }

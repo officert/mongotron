@@ -1,7 +1,7 @@
 <div ng-right-click="openDocumentContextMenu(result)">
   <ul class="menu" ng-if="topLevel">
     <li>
-      <button class="btn btn-default" ng-click="deleteResult(result.original)">
+      <button class="btn btn-default" ng-click="deleteDocument(result.original)">
         <i class="fa fa-plus rotate-45"></i>
       </button>
     </li>
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div ng-show="keyvalue.keyValues">
-        <key-value-result result="keyvalue" delete-result="deleteResult" top-level="false"></key-value-result>
+        <key-value-result result="keyvalue" delete-document="deleteDocument" edit-document="editDocument" top-level="false"></key-value-result>
       </div>
     </div>
   </div>
