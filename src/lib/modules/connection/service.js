@@ -147,7 +147,6 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
       else {
         if (!connection.databaseName) connection.databaseName = db.name;
         let auth = db.auth;
-        connection.auth = connection.auth || auth;
         if (connection.auth) {
           connection.auth.username = connection.auth.username || (auth ? auth.username : null);
           connection.auth.password = connection.auth.password || (auth ? auth.password : null);
@@ -169,9 +168,13 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
 
     if (db) {
       if ('auth' in updates) {
-        db.auth = db.auth || {};
-        db.auth.username = (updates.auth ? updates.auth.username : null) || db.auth.username;
-        db.auth.password = (updates.auth ? updates.auth.password : null) || db.auth.password;
+        if (!updates.auth) {
+          delete db.auth;
+        } else {
+          db.auth = db.auth || {};
+          db.auth.username = (updates.auth ? updates.auth.username : null) || db.auth.username;
+          db.auth.password = (updates.auth ? updates.auth.password : null) || db.auth.password;
+        }
       }
       if ('databaseName' in updates) {
         db.name = updates.databaseName;

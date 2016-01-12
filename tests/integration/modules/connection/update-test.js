@@ -669,6 +669,49 @@ describe('modules', () => {
           });
         });
 
+        describe('when auth is removed', () => {
+          let connection;
+          let updates = {
+            auth: null
+          };
+
+          before((done) => {
+            connectionService.create({
+                name: 'Connection 1',
+                host: 'foobar.com',
+                port: 12345,
+                databaseName: 'db',
+                auth: {
+                  username: 'username',
+                  password: 'password'
+                }
+              })
+              .then((newConnection) => {
+                connection = newConnection;
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          after((done) => {
+            connectionService.delete(connection.id)
+              .then(() => {
+                return done(null);
+              })
+              .catch(done);
+          });
+
+          it('should remove the database auth and return the connection', (next) => {
+            connectionService.update(connection.id, updates)
+              .then((updatedConnection) => {
+                should.exist(updatedConnection);
+                should.exist(updatedConnection.databases[0]);
+                should.not.exist(updatedConnection.databases[0].auth);
+              })
+              .done(next);
+          });
+        });
+
         describe('when replicaSet is updated and existing connection has no replicaSet', () => {
           let connection;
           let updates = {
