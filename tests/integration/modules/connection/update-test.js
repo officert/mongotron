@@ -216,53 +216,6 @@ describe('modules', () => {
         });
       });
 
-      // describe.only('when replicaSet is updated but no name is passed and existing connection has no replicaSet.name', () => {
-      //   let connection;
-      //   let updates = {
-      //     replicaSet: {
-      //       sets: [{
-      //         host: 'foobar',
-      //         port: 21222
-      //       }]
-      //     }
-      //   };
-      //
-      //   before((done) => {
-      //     connectionService.create({
-      //         name: 'Connection 1',
-      //         replicaSet: {
-      //           name: 'foobar',
-      //           sets: [{
-      //             host: 'host1.com',
-      //             port: 27177
-      //           }]
-      //         }
-      //       })
-      //       .then((newConnection) => {
-      //         connection = newConnection;
-      //         return done(null);
-      //       })
-      //       .catch(done);
-      //   });
-      //
-      //   after((done) => {
-      //     connectionService.delete(connection.id)
-      //       .then(() => {
-      //         return done(null);
-      //       })
-      //       .catch(done);
-      //   });
-      //
-      //   it('should return an error', (next) => {
-      //     connectionService.update(connection.id, updates)
-      //       .catch((err) => {
-      //         should.exist(err);
-      //         err.message.should.equal('database is required when connecting to a remote server.');
-      //       })
-      //       .done(next);
-      //   });
-      // });
-
       describe('when all required data is passed', () => {
         describe('when name is updated', () => {
           let connection;
@@ -338,6 +291,7 @@ describe('modules', () => {
           it('should update the auth.username and return the connection', (next) => {
             connectionService.update(connection.id, updates)
               .then((updatedConnection) => {
+                console.log('in test', updatedConnection.databases[0]);
                 should.exist(updatedConnection);
                 should.exist(updatedConnection.databases[0]);
                 updatedConnection.databases[0].auth.username.should.equal(updates.auth.username);

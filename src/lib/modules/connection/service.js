@@ -1,6 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const logger = require('lib/modules/logger');
 const errors = require('lib/errors');
@@ -8,6 +9,14 @@ const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
 
 const DEFAULT_CONNECTIONS = require('./defaults');
+const ALLOWED_UPDATES = [
+  'name',
+  'databaseName',
+  'host',
+  'port',
+  'auth',
+  'replicaSet'
+];
 
 /**
  * @class ConnectionService
@@ -46,6 +55,7 @@ class ConnectionService {
     return new Promise((resolve, reject) => {
       connectionValidator.validateCreate(newConnection)
         .then(() => {
+          //TODO: move into validator so update runs it too
           return connectionRepository.existsByName(newConnection.name);
         })
         .then((exists) => {
@@ -75,46 +85,20 @@ class ConnectionService {
    */
   update(id, updates) {
     let _this = this;
-    let connection;
 
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
 
       _this.findById(id)
-        .then((_connection) => {
-          connection = _connection;
-          return connectionValidator.validateUpdate(updates, connection);
+        .then((connection) => {
+          return _applyConnectionUpdatesPreValidation(connection, updates);
         })
-        .then(() => {
-          if ('name' in updates) connection.name = updates.name;
-
-          if (connection.host !== 'localhost') {
-            let db = connection.databases ? connection.databases[0] : null;
-            if (!db) logger.warn('connection service - update() - remove connection has no db');
-            else {
-              if ('auth' in updates) db.auth = updates.auth;
-            }
-          }
-
-          if ('replicaSet' in updates) connection.replicaSet = updates.replicaSet;
-
-          // if (newConnection.databaseName || (newConnection.auth && (newConnection.auth.username || newConnection.auth.password))) {
-          //   if (connection.databases && connection.databases.length) {
-          //     let db = connection.databases[0];
-          //     if (newConnection.auth && newConnection) {
-          //       db.auth = newConnection.auth;
-          //     }
-          //     db.name = newConnection.databaseName || db.name;
-          //
-          //     newConnection.databases = [connection.databases[0]];
-          //   } else {
-          //     // connection.addDatabase({
-          //     //
-          //     // });
-          //   }
-          // }
-
+        .then(connectionValidator.validateUpdate)
+        .then((connection) => {
+          return _applyConnectionUpdatesPostValidation(connection, updates);
+        })
+        .then((connection) => {
           connectionRepository.update(id, connection)
             .then(resolve)
             .catch(reject);
@@ -130,6 +114,52 @@ class ConnectionService {
   delete(id) {
     return connectionRepository.delete(id);
   }
+}
+
+function _applyConnectionUpdatesPreValidation(connection, updates) {
+  return new Promise((resolve) => {
+    updates = _.pick(updates, ALLOWED_UPDATES);
+
+    connection = _.extend(connection, updates);
+
+    if (connection.host !== 'localhost') {
+      let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
+
+      if (!db) logger.warn('connection service - _applyConnectionUpdates() - connection has no database');
+      else {
+        if (!connection.databaseName) connection.databaseName = db.name;
+        let auth = db.auth || {};
+        connection.auth = connection.auth || auth;
+        connection.auth.username = connection.auth.username || (auth ? auth.username : null);
+        connection.auth.password = connection.auth.password || (auth ? auth.password : null);
+      }
+    }
+
+    console.log('pre updates', updates);
+    console.log('pre updated connection', connection);
+
+    return resolve(connection);
+  });
+}
+
+function _applyConnectionUpdatesPostValidation(connection, updates) {
+  return new Promise((resolve) => {
+
+    console.log('post updates', updates);
+    console.log('post updated connection', connection);
+
+    let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
+
+    if (db) {
+      if ('auth' in updates) {
+        db.auth = db.auth || {};
+        db.auth.username = updates.auth.username || db.auth.username;
+        db.auth.password = updates.auth.password || db.auth.password;
+      }
+    }
+
+    return resolve(connection);
+  });
 }
 
 /**
