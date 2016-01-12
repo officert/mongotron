@@ -170,8 +170,8 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
     if (db) {
       if ('auth' in updates) {
         db.auth = db.auth || {};
-        db.auth.username = updates.auth.username || db.auth.username;
-        db.auth.password = updates.auth.password || db.auth.password;
+        db.auth.username = (updates.auth ? updates.auth.username : null) || db.auth.username;
+        db.auth.password = (updates.auth ? updates.auth.password : null) || db.auth.password;
       }
       if ('databaseName' in updates) {
         db.name = updates.databaseName;
