@@ -9,8 +9,10 @@ angular.module('app').directive('inlineEditor', [
       controller: 'inlineEditorCtrl',
       scope: {
         'inlineEditorKey': '@',
-        'inlineEditorValue': '@',
-        'inlineEditorDoc': '@'
+        'inlineEditorValue': '=',
+        'inlineEditorDoc': '=',
+        'collection': '=',
+        'collections': '='
       },
       link: (scope, element) => {
         $templateRequest(__dirname + '/directives/inlineEditor/inlineEditor.html')

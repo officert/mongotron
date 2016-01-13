@@ -3,11 +3,11 @@
     {{ inlineEditorValue }}
   </div>
   <div class="inline-editor form-group" ng-show="show">
-    <input class="form-control control" ng-model="inlineEditorDoc[inlineEditorKey]">
-    <button class="btn btn-sm btn-default" ng-click="cancel()">
+    <input class="form-control control" type="text" ng-model="doc[inlineEditorKey]">
+    <button class="btn btn-sm btn-default first" ng-click="cancel()">
       <i class="fa fa-times"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-click="save()">
+    <button class="btn btn-sm btn-default" ng-click="saveChanges()">
       <i class="fa fa-check"></i>
     </button>
   </div>

@@ -4,11 +4,12 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    height: 20px;
     width: 100%;
-    background: red;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: row;
     .control,
     .btn {
       float: left;
@@ -16,8 +17,20 @@
       margin: 0;
     }
     .control {
+      flex-grow: 2;
       width: auto;
-      height: calc(100% - 0.6em);
+      height: 100%;
+      margin-right: 5px;
+      padding: 0.3em;
+    }
+    .btn {
+      padding: 0.09em 0.5em 0.4em;
+      &.first {
+        margin-right: 2px;
+      }
+      i {
+        margin: 0;
+      }
     }
   }
 }

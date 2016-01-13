@@ -13,5 +13,9 @@ angular.module('app').controller('keyValueResultCtrl', [
     $scope.$on('collapse', () => {
       $scope.result.isOpen = false;
     });
+
+    $scope.$on('inline-editor-show', (docId, propName) => {
+      $scope.$broadcast('inline-editor-hide', docId, propName);
+    });
   }
 ]);

@@ -10,7 +10,7 @@ angular.module('app').controller('editDocumentCtrl', [
     $scope.collections = collections;
 
     $scope.close = function() {
-      $uibModalInstance.close(1);
+      $uibModalInstance.dismiss();
     };
 
     $scope.saveChanges = () => {

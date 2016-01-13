@@ -32,7 +32,7 @@
         <div class="result-cell first-cell col-sm-3" ng-style="{ 'padding-left' : ((level * 15) + 'px') }">
           <i class="fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </div>
-        <div class="result-cell col-sm-6" inline-editor inlineEditorKey="keyvalue.key" inline-editor-value="{{ keyvalue.display }}" inline-editor-doc="result">
+        <div class="result-cell col-sm-6" inline-editor inline-editor-key="{{ keyvalue.key }}" inline-editor-value="keyvalue.display" inline-editor-doc="result.original">
         </div>
         <div class="result-cell col-sm-3">
           {{ ::keyvalue.type }}
