@@ -1,3 +1,3 @@
-<div class="result" ng-repeat="result in results" ng-init="result.__index = $index">
-  <key-value-result result="result" delete-document="deleteDocument" edit-document="editDocument" top-level="true"></key-value-result>
+<div class="result" ng-repeat="result in results" ng-init="result.__index = $index" ng-right-click="$parent.openDocumentContextMenu(result)">
+  <key-value-result result="result" delete-document="deleteDocument" top-level="true"></key-value-result>
 </div>

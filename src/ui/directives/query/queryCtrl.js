@@ -5,10 +5,8 @@ angular.module('app').controller('queryCtrl', [
   '$rootScope',
   'notificationService',
   'modalService',
-  function($scope, $rootScope, notificationService, modalService) {
-    const queryModule = require('lib/modules/query');
-    const keyValueUtils = require('src/lib/utils/keyValueUtils');
-
+  'queryRunnerService',
+  '$timeout', ($scope, $rootScope, notificationService, modalService, queryRunnerService, $timeout) => {
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
 
@@ -35,7 +33,7 @@ angular.module('app').controller('queryCtrl', [
 
     let defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
-    $scope.changeTabName = function(name) {
+    $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
       $scope.databaseTab.name = name.length > 20 ? (name.substring(0, 20) + '...') : name;
     };
@@ -46,7 +44,7 @@ angular.module('app').controller('queryCtrl', [
       query: defaultQuery
     };
 
-    $scope.runQuery = function() {
+    $scope.runQuery = () => {
       _runQuery($scope.form.query);
     };
 
@@ -59,7 +57,7 @@ angular.module('app').controller('queryCtrl', [
 
     _runQuery(defaultQuery);
 
-    $scope.autoformat = function() {
+    $scope.autoformat = () => {
       if ($scope.editorHandle.autoformat) {
         $scope.editorHandle.autoformat();
       }
@@ -67,7 +65,7 @@ angular.module('app').controller('queryCtrl', [
 
     $scope.editorHasFocus = false;
 
-    $scope.$watch('editorHasFocus', function(val) {
+    $scope.$watch('editorHasFocus', (val) => {
       if (val) {
         //make some functions available on the root scope when the editor gets focus,
         //used for keybindings
@@ -80,11 +78,11 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
-    $scope.exportResults = function() {
+    $scope.exportResults = () => {
       modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery);
     };
 
-    $scope.collapseAll = function() {
+    $scope.collapseAll = () => {
       $scope.$broadcast('collapse');
     };
 
@@ -94,61 +92,24 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.changeTabName(rawQuery);
 
-      if (!queryModule.isValidQuery(rawQuery)) {
-        $scope.error = 'Sorry, ' + rawQuery + ' is not a valid query';
-        $scope.loading = false;
-        return;
-      }
+      queryRunnerService.runQuery(rawQuery, $scope.database.collections)
+        .then((results) => {
+          $scope.results = results.result;
+          $scope.queryTime = results.time;
+          $scope.currentQuery = results.query;
+          $scope.keyValueResults = results.keyValueResults;
 
-      let collectionName = queryModule.parseCollectionName(rawQuery);
-
-      let collection = _getCollectionByNameFromRawQuery(collectionName);
-
-      if (!collection) {
-        $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
-        $scope.loading = false;
-        return;
-      }
-
-      $scope.currentCollection = collection;
-
-      let query;
-
-      queryModule.createQuery(rawQuery)
-        .then((_query) => {
-          query = _query;
-
-          return collection.execQuery(query);
+          if ($scope.currentQuery.mongoMethod === 'count') {
+            $scope.currentView = $scope.VIEWS.RAW;
+          } else if ($scope.currentView === $scope.VIEWS.RAW) {
+            $scope.currentView = $scope.VIEWS.KEYVALUE;
+          }
         })
-        .then((result) => {
-          $scope.$apply(() => {
-            $scope.currentQuery = query;
-            $scope.loading = false;
-            $scope.queryTime = result.time;
-            $scope.results = result.result;
-
-            if ($scope.results && _.isArray($scope.results)) {
-              $scope.keyValueResults = keyValueUtils.convert($scope.results);
-            }
-
-            if ($scope.currentQuery.mongoMethod === 'count') {
-              $scope.currentView = $scope.VIEWS.RAW;
-            } else if ($scope.currentView === $scope.VIEWS.RAW) {
-              $scope.currentView = $scope.VIEWS.KEYVALUE;
-            }
-
-            if ($scope.currentQuery.mongoMethod !== 'find' &&
-              $scope.currentQuery.mongoMethod !== 'aggregate' &&
-              $scope.currentQuery.mongoMethod !== 'count') {
-              notificationService.success($scope.currentQuery.mongoMethod + ' was successful');
-
-              _runQuery('db.' + $scope.currentCollection.name + '.find()');
-            }
-          });
+        .catch((err) => {
+          $scope.error = err && err.message ? err.message : err;
         })
-        .catch((error) => {
-          $scope.$apply(() => {
-            $scope.error = error && error.message ? error.message : error;
+        .finally(() => {
+          $timeout(() => {
             $scope.loading = false;
           });
         });
@@ -175,14 +136,6 @@ angular.module('app').controller('queryCtrl', [
 
     function _editDocument() {
       alert('edit document');
-    }
-
-    function _getCollectionByNameFromRawQuery(collectionName) {
-      if (!collectionName) return null;
-
-      return _.find($scope.database.collections, function(collection) {
-        return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
-      });
     }
   }
 ]);

@@ -1,6 +1,5 @@
 angular.module('app').controller('editDocumentCtrl', [
-  '$scope',
-  function($scope) {
+  '$scope', ($scope) => {
     $scope.editDocument();
   }
 ]);

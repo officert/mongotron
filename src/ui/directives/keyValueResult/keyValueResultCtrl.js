@@ -1,11 +1,7 @@
 'use strict';
 
 angular.module('app').controller('keyValueResultCtrl', [
-  '$scope',
-  '$timeout',
-  'menuService',
-  'modalService',
-  function($scope, $timeout, menuService, modalService) {
+  '$scope', ($scope) => {
     if (!$scope.result) throw new Error('keyValueResult directive - result is required on scope');
 
     if ($scope.$parent.level !== null && $scope.$parent.level !== undefined) {
@@ -14,23 +10,8 @@ angular.module('app').controller('keyValueResultCtrl', [
       $scope.level = 1;
     }
 
-    $scope.$on('collapse', function() {
+    $scope.$on('collapse', () => {
       $scope.result.isOpen = false;
     });
-
-    $scope.openDocumentContextMenu = function(doc) {
-      if (!doc) return;
-
-      menuService.showMenu([{
-        label: 'Edit Document',
-        click: function() {
-          $timeout(function() {
-            modalService.openEditDocument({
-              editDocument: $scope.editDocument
-            });
-          });
-        }
-      }]);
-    };
   }
 ]);

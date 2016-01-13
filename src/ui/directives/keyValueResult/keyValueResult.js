@@ -9,7 +9,6 @@ angular.module('app').directive('keyValueResult', [
       scope: {
         result: '=',
         deleteDocument: '=',
-        editDocument: '=',
         topLevel: '@',
         level: '@'
       },
