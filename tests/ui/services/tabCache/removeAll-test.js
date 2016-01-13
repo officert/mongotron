@@ -1,9 +1,6 @@
 describe('services', function() {
   describe('tabCache', function() {
     describe('removeAll', function() {
-      /* ------------------------------------------------------------
-       * Test Suite Setup
-       * ------------------------------------------------------------ */
       var tabCache;
 
       beforeEach(function() {
@@ -16,10 +13,6 @@ describe('services', function() {
           }
         ]);
       });
-
-      /* ------------------------------------------------------------
-       * Tests
-       * ------------------------------------------------------------ */
 
       describe('when no tabs are active', function() {
         beforeEach(function() {

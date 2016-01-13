@@ -1,9 +1,6 @@
 describe('services', function() {
   describe('tabCache', function() {
     describe('list', function() {
-      /* ------------------------------------------------------------
-       * Test Suite Setup
-       * ------------------------------------------------------------ */
       var tabCache;
 
       beforeEach(function() {
@@ -16,10 +13,6 @@ describe('services', function() {
           }
         ]);
       });
-
-      /* ------------------------------------------------------------
-       * Tests
-       * ------------------------------------------------------------ */
 
       describe('when nothing is passed', function() {
         beforeEach(function() {
