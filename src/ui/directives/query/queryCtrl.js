@@ -116,10 +116,10 @@ angular.module('app').controller('queryCtrl', [
         });
     }
 
-    function _deleteDocument(result) {
-      if (!result) return;
+    function _deleteDocument(doc) {
+      if (!doc) return;
 
-      modalService.openDeleteDocument(result, $scope.currentCollection)
+      modalService.openDeleteDocument(doc, $scope.currentCollection)
         .then(() => {
           $scope.$apply(() => {
             notificationService.success('Delete successful');
@@ -135,8 +135,26 @@ angular.module('app').controller('queryCtrl', [
         });
     }
 
-    function _editDocument() {
-      alert('edit document');
+    function _editDocument(doc) {
+      if (!doc) return;
+
+      modalService.openEditDocument(doc, $scope.currentCollection)
+        .then(() => {
+          $scope.$apply(() => {
+            notificationService.success('Update successful');
+
+            _runQuery('db.' + $scope.currentCollection.name + '.find()');
+          });
+        })
+        .catch((error) => {
+          $scope.$apply(() => {
+            let errMsg = error && error.message ? error.message : error;
+            if (errMsg !== 'backdrop click' && errMsg !== 'escape key press') {
+              $scope.error = errMsg;
+            }
+            $scope.loading = false;
+          });
+        });
     }
   }
 ]);

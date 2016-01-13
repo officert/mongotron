@@ -1,10 +1,13 @@
 angular.module('app').controller('editDocumentCtrl', [
   '$scope',
-  'queryRunnerService', ($scope, queryRunnerService) => {
+  'queryRunnerService',
+  'doc', ($scope, queryRunnerService, doc) => {
+    $scope.doc = doc;
+
     $scope.saveChanges = () => {
       alert('save changes');
 
-      queryRunnerService.runQuery();
+      queryRunnerService.runQuery('db.update({ id : ' + $scope.doc.id + ' })');
     };
   }
 ]);
