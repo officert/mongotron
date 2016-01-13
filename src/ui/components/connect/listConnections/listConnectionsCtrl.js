@@ -52,6 +52,7 @@ angular.module('app').controller('listConnectionsCtrl', [
 
       let newConnection = _.clone(connection);
       delete newConnection.id;
+      newConnection.name += ' copy';
 
       $scope.changePage('add', newConnection);
     };

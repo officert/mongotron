@@ -38,7 +38,7 @@ class Connection {
     _this.replicaSet = options.replicaSet;
     _this.databases = [];
 
-    if (options.databaseName) {
+    if (options.databaseName && options.host !== 'localhost') {
       let newDb = {
         id: uuid.v4(),
         name: options.databaseName,

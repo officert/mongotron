@@ -46,6 +46,7 @@ class ConnectionService {
     return new Promise((resolve, reject) => {
       connectionValidator.validateCreate(newConnection)
         .then(() => {
+          //TODO: move into validator so update runs it too
           return connectionRepository.existsByName(newConnection.name);
         })
         .then((exists) => {
@@ -75,46 +76,20 @@ class ConnectionService {
    */
   update(id, updates) {
     let _this = this;
-    let connection;
 
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
 
       _this.findById(id)
-        .then((_connection) => {
-          connection = _connection;
-          return connectionValidator.validateUpdate(updates, connection);
+        .then((connection) => {
+          return _applyConnectionUpdatesPreValidation(connection, updates);
         })
-        .then(() => {
-          if ('name' in updates) connection.name = updates.name;
-
-          if (connection.host !== 'localhost') {
-            let db = connection.databases ? connection.databases[0] : null;
-            if (!db) logger.warn('connection service - update() - remove connection has no db');
-            else {
-              if ('auth' in updates) db.auth = updates.auth;
-            }
-          }
-
-          if ('replicaSet' in updates) connection.replicaSet = updates.replicaSet;
-
-          // if (newConnection.databaseName || (newConnection.auth && (newConnection.auth.username || newConnection.auth.password))) {
-          //   if (connection.databases && connection.databases.length) {
-          //     let db = connection.databases[0];
-          //     if (newConnection.auth && newConnection) {
-          //       db.auth = newConnection.auth;
-          //     }
-          //     db.name = newConnection.databaseName || db.name;
-          //
-          //     newConnection.databases = [connection.databases[0]];
-          //   } else {
-          //     // connection.addDatabase({
-          //     //
-          //     // });
-          //   }
-          // }
-
+        .then(connectionValidator.validateUpdate)
+        .then((connection) => {
+          return _applyConnectionUpdatesPostValidation(connection, updates);
+        })
+        .then((connection) => {
           connectionRepository.update(id, connection)
             .then(resolve)
             .catch(reject);
@@ -130,6 +105,96 @@ class ConnectionService {
   delete(id) {
     return connectionRepository.delete(id);
   }
+}
+
+function _applyConnectionUpdatesPreValidation(connection, updates) {
+  return new Promise((resolve) => {
+    if ('name' in updates) connection.name = updates.name;
+    if ('host' in updates) {
+      connection.host = updates.host;
+      delete connection.replicaSet;
+      if (updates.host === 'localhost') {
+        delete connection.databases;
+      }
+    }
+    if ('port' in updates) connection.port = updates.port;
+    if ('databaseName' in updates) connection.databaseName = updates.databaseName;
+    if ('auth' in updates) {
+      if (!updates.auth) delete connection.auth; //null or undefined so remove it
+      else if (connection.auth) {
+        if ('username' in updates.auth) connection.auth.username = updates.auth.username;
+        if ('password' in updates.auth) connection.auth.password = updates.auth.password;
+      } else {
+        connection.auth = updates.auth;
+      }
+    }
+    if ('replicaSet' in updates) {
+      if (!updates.replicaSet) delete connection.replicaSet; //null or undefined so remove it
+      else if (connection.replicaSet) {
+        delete connection.host;
+        delete connection.port;
+        if ('name' in updates.replicaSet) connection.replicaSet.name = updates.replicaSet.name;
+        if ('sets' in updates.replicaSet) connection.replicaSet.sets = updates.replicaSet.sets;
+      } else {
+        connection.replicaSet = updates.replicaSet;
+      }
+    }
+
+    if (connection.host !== 'localhost') {
+      let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
+
+      if (!db) logger.warn('connection service - _applyConnectionUpdates() - connection has no database');
+      else {
+        if (!connection.databaseName) connection.databaseName = db.name;
+        let auth = db.auth;
+        if (connection.auth) {
+          connection.auth.username = connection.auth.username || (auth ? auth.username : null);
+          connection.auth.password = connection.auth.password || (auth ? auth.password : null);
+        }
+      }
+    }
+
+    // console.log('pre updates', updates);
+    // console.log('pre updated connection', connection);
+
+    return resolve(connection);
+  });
+}
+
+function _applyConnectionUpdatesPostValidation(connection, updates) {
+  return new Promise((resolve) => {
+
+    let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
+
+    if (db) {
+      if ('auth' in updates) {
+        if (!updates.auth) {
+          delete db.auth;
+        } else {
+          db.auth = db.auth || {};
+          db.auth.username = (updates.auth ? updates.auth.username : null) || db.auth.username;
+          db.auth.password = (updates.auth ? updates.auth.password : null) || db.auth.password;
+        }
+      }
+      if ('databaseName' in updates) {
+        db.name = updates.databaseName;
+      }
+      if ('host' in updates) db.host = updates.host;
+      if ('port' in updates) db.port = updates.port;
+    } else {
+      if ('host' in updates && updates.host !== 'localhost') {
+        connection.addDatabase({
+          host: updates.host,
+          port: updates.port
+        });
+      }
+    }
+
+    // console.log('post updates', updates);
+    // console.log('post updated connection', connection);
+
+    return resolve(connection);
+  });
 }
 
 /**
