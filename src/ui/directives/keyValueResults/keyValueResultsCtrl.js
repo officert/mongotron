@@ -13,7 +13,7 @@ angular.module('app').controller('keyValueResultsCtrl', [
         label: 'Edit Document',
         click: () => {
           $timeout(() => {
-            $scope.editDocument(doc);
+            $scope.editDocument(doc.original);
           });
         }
       }]);

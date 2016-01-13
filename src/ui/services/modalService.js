@@ -124,7 +124,8 @@ angular.module('app').service('modalService', [
               collections: () => {
                 return collections;
               }
-            }
+            },
+            size: 'lg'
           })
           .result
           .then(resolve)
