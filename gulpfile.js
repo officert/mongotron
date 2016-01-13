@@ -8,7 +8,7 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
-const karma = require('karma').server;
+const karma = require('karma');
 const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
@@ -237,7 +237,7 @@ gulp.task('test-unit', () => {
 });
 
 gulp.task('test-unit-ui', (done) => {
-  karma.start({
+  let server = new karma.Server({
     configFile: __dirname + '/tests/ui/karma.conf.js',
     singleRun: true,
     files: [
@@ -270,7 +270,9 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/services/**/*.js',
       './**/*-test.js'
     ]
-  }, done);
+  });
+
+  server.start(done);
 });
 
 /* =========================================================================
