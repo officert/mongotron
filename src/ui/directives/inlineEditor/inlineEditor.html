@@ -1,0 +1,14 @@
+<div class="inline-editor-wrapper">
+  <div class="inline-editor-value" ng-hide="show" ng-dblclick="show = true">
+    {{ inlineEditorValue }}
+  </div>
+  <div class="inline-editor form-group" ng-show="show">
+    <input class="form-control control" ng-model="inlineEditorDoc[inlineEditorKey]">
+    <button class="btn btn-sm btn-default" ng-click="cancel()">
+      <i class="fa fa-times"></i>
+    </button>
+    <button class="btn btn-sm btn-default" ng-click="save()">
+      <i class="fa fa-check"></i>
+    </button>
+  </div>
+</div>
