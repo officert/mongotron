@@ -2,8 +2,7 @@
 
 angular.module('app').service('modalService', [
   '$uibModal',
-  '$uibModalStack',
-  function($uibModal, $uibModalStack) {
+  '$uibModalStack', ($uibModal, $uibModalStack) => {
     const Promise = require('bluebird');
 
     function ModalService() {}
@@ -49,10 +48,10 @@ angular.module('app').service('modalService', [
         templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
         controller: 'queryResultsExportModalCtrl',
         resolve: {
-          query: [function() {
+          query: [() => {
             return query;
           }],
-          collection: [function() {
+          collection: [() => {
             return collection;
           }]
         },
@@ -87,7 +86,7 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openDeleteResult = function openDeleteResult(result, collection) {
+    ModalService.prototype.openDeleteDocument = function openDeleteDocument(result, collection) {
       var _this = this;
 
       return new Promise((resolve, reject) => {
@@ -103,15 +102,11 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openEditDocument = function openEditDocument(options) {
+    ModalService.prototype.openEditDocument = function openEditDocument() {
       return openModal({
         templateUrl: __dirname + '/components/editDocument/editDocument.html',
         controller: 'editDocumentCtrl',
-        resolve: {
-          editDocument: [function() {
-            return options ? options.editDocument : null;
-          }]
-        }
+        resolve: {}
       });
     };
 

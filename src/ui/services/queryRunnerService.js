@@ -35,7 +35,8 @@ angular.module('app').service('queryRunnerService', [
             let queryResults = {
               time: results.time,
               result: results.result,
-              query: query
+              query: query,
+              collection: collection
             };
 
             if (queryResults.result && _.isArray(queryResults.result)) {

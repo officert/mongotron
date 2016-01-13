@@ -97,6 +97,7 @@ angular.module('app').controller('queryCtrl', [
           $scope.results = results.result;
           $scope.queryTime = results.time;
           $scope.currentQuery = results.query;
+          $scope.currentCollection = results.collection;
           $scope.keyValueResults = results.keyValueResults;
 
           if ($scope.currentQuery.mongoMethod === 'count') {
@@ -118,7 +119,7 @@ angular.module('app').controller('queryCtrl', [
     function _deleteDocument(result) {
       if (!result) return;
 
-      modalService.openDeleteResult(result, $scope.currentCollection)
+      modalService.openDeleteDocument(result, $scope.currentCollection)
         .then(() => {
           $scope.$apply(() => {
             notificationService.success('Delete successful');

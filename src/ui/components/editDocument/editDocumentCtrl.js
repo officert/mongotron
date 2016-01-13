@@ -1,5 +1,10 @@
 angular.module('app').controller('editDocumentCtrl', [
-  '$scope', ($scope) => {
-    $scope.editDocument();
+  '$scope',
+  'queryRunnerService', ($scope, queryRunnerService) => {
+    $scope.saveChanges = () => {
+      alert('save changes');
+
+      queryRunnerService.runQuery();
+    };
   }
 ]);

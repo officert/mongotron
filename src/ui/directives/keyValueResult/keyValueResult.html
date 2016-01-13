@@ -1,11 +1,4 @@
 <div>
-  <ul class="menu" ng-if="topLevel">
-    <li>
-      <button class="btn btn-default" ng-click="deleteDocument(result.original)">
-        <i class="fa fa-plus rotate-45"></i>
-      </button>
-    </li>
-  </ul>
   <div class="clearfix" ng-click="result.isOpen = !result.isOpen">
     <div class="result-header clearfix" ng-hide="result.type === 'object' || result.type === 'array'">
       <div class="result-cell first-cell col-sm-3">
@@ -47,7 +40,7 @@
         </div>
       </div>
       <div ng-show="keyvalue.keyValues">
-        <key-value-result result="keyvalue" delete-document="deleteDocument" edit-document="editDocument" top-level="false"></key-value-result>
+        <key-value-result result="keyvalue"></key-value-result>
       </div>
     </div>
   </div>
