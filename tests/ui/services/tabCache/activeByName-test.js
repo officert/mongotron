@@ -3,9 +3,6 @@
 describe('services', () => {
   describe('tabCache', () => {
     describe('activateByName', () => {
-      /* ------------------------------------------------------------
-       * Test Suite Setup
-       * ------------------------------------------------------------ */
       var tabCache;
 
       beforeEach(() => {
@@ -17,10 +14,6 @@ describe('services', () => {
           }
         ]);
       });
-
-      /* ------------------------------------------------------------
-       * Tests
-       * ------------------------------------------------------------ */
 
       describe('when no name is passed', () => {
         it('should throw an error', () => {

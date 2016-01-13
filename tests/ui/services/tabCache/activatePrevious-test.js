@@ -1,9 +1,6 @@
 describe('services', () => {
   describe('tabCache', () => {
     describe('activatePrevious', () => {
-      /* ------------------------------------------------------------
-       * Test Suite Setup
-       * ------------------------------------------------------------ */
       var tabCache;
 
       beforeEach(() => {
@@ -15,10 +12,6 @@ describe('services', () => {
           }
         ]);
       });
-
-      /* ------------------------------------------------------------
-       * Tests
-       * ------------------------------------------------------------ */
 
       describe('when tab cache contains no tabs', () => {
         beforeEach(() => {

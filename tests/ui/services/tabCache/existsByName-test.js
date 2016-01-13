@@ -1,9 +1,6 @@
 describe('services', function() {
   describe('tabCache', function() {
     describe('existsByName', function() {
-      /* ------------------------------------------------------------
-       * Test Suite Setup
-       * ------------------------------------------------------------ */
       var tabCache;
 
       beforeEach(function() {
@@ -16,10 +13,6 @@ describe('services', function() {
           }
         ]);
       });
-
-      /* ------------------------------------------------------------
-       * Tests
-       * ------------------------------------------------------------ */
 
       describe('when no name is passed', function() {
         var name = null;
