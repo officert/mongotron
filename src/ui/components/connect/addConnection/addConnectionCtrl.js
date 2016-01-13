@@ -30,8 +30,7 @@ angular.module('app').controller('addConnectionCtrl', [
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
       databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
     }, $scope.selectedConnection) : {
-      auth: {},
-      enableReplicaSet: false
+      // auth: {}
     };
 
     if ($scope.selectedConnection && ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length)) {
@@ -55,8 +54,14 @@ angular.module('app').controller('addConnectionCtrl', [
 
       if (!addConnectionForm.$valid) return;
 
-      if ($scope.addConnectionForm.enableAuth === false) {
-        $scope.addConnectionForm.databaseName = null;
+      if ($scope.addConnectionForm.enableReplicaSet === false) {
+        $scope.addConnectionForm.replicaSet = null;
+      } else {
+        $scope.addConnectionForm.host = null;
+        $scope.addConnectionForm.port = null;
+      }
+
+      if ($scope.addConnectionForm.auth && (!$scope.addConnectionForm.auth.username && !$scope.addConnectionForm.auth.password)) {
         $scope.addConnectionForm.auth = null;
       }
 

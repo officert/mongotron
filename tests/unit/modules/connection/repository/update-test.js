@@ -54,7 +54,7 @@ describe('modules', function() {
 
                 (err instanceof errors.InvalidArugmentError).should.equal(true);
 
-                err.message.should.equal('options is required');
+                err.message.should.equal('updatedConnection is required');
 
               })
               .done(next);

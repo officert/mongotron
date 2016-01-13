@@ -84,28 +84,26 @@ class ConnectionRepository {
    * @method update
    * @param {String} id - id of the connection to update
    */
-  update(id, options) {
-    var _this = this;
+  update(id, updatedConnection) {
+    let _this = this;
+    let connections;
 
     return new Promise((resolve, reject) => {
       if (!id) return reject(new errors.InvalidArugmentError('id is required'));
-      if (!options) return reject(new errors.InvalidArugmentError('options is required'));
-
-      var connection;
+      if (!updatedConnection) return reject(new errors.InvalidArugmentError('updatedConnection is required'));
 
       return _this.list()
-        .then((connections) => {
-          return findConnectionById(id, connections)
-            .then(function(_connection) {
-              connection = _connection;
-
-              return updateConnection(_connection, options, connections);
-            });
+        .then((_connections) => {
+          connections = _connections;
+          return findConnectionById(id, connections);
+        })
+        .then((connection) => {
+          return updateConnection(connection, updatedConnection, connections);
         })
         .then(convertConnectionInstancesIntoConfig)
         .then(writeConfigFile)
         .then(() => {
-          return resolve(connection);
+          return resolve(updatedConnection);
         })
         .catch(reject);
     });
@@ -197,7 +195,8 @@ function generateConnectionInstanceFromConfig(connectionConfig) {
 
 function convertConnectionInstancesIntoConfig(connections) {
   return new Promise((resolve) => {
-    return resolve(connections.map(convertConnectionInstanceIntoConfig));
+    let configs = connections.map(convertConnectionInstanceIntoConfig);
+    return resolve(configs);
   });
 }
 
@@ -208,7 +207,7 @@ function convertConnectionInstanceIntoConfig(connection) {
   //until I change to storing these in something that assigns ids
   //we have to manually add them
 
-  return {
+  let config = {
     id: connection.id || uuid.v4(),
     name: connection.name,
     host: connection.host,
@@ -230,6 +229,8 @@ function convertConnectionInstanceIntoConfig(connection) {
       return db;
     }) : []
   };
+
+  return config;
 }
 
 function findConnectionById(connectionId, connections) {
@@ -263,9 +264,14 @@ function removeConnection(connection, connections) {
   });
 }
 
-function updateConnection(connection, options, connections) {
+function updateConnection(originalConnection, updatedConnection, connections) {
   return new Promise((resolve) => {
-    connection = _.extend(connection, options);
+    // connection = _.extend(connection, options);
+    let index = connections.indexOf(originalConnection);
+
+    connections.splice(index, 1, updatedConnection);
+
+    console.log('updatedConnection', connections);
 
     return resolve(connections);
   });
