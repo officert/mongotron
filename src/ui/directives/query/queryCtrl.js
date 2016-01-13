@@ -138,7 +138,7 @@ angular.module('app').controller('queryCtrl', [
     function _editDocument(doc) {
       if (!doc) return;
 
-      modalService.openEditDocument(doc, $scope.currentCollection)
+      modalService.openEditDocument(doc, $scope.currentCollection, $scope.database.collections)
         .then(() => {
           $scope.$apply(() => {
             notificationService.success('Update successful');

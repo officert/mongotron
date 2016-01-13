@@ -105,16 +105,25 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openEditDocument = function openEditDocument(doc, collection) {
+    ModalService.prototype.openEditDocument = function openEditDocument(doc, collection, collections) {
       if (!doc) throw new Error('modalService - openEditDocument() - doc is required');
       if (!collection) throw new Error('modalService - openEditDocument() - collection is required');
+      if (!collections) throw new Error('modalService - openEditDocument() - collections is required');
 
       return new Promise((resolve, reject) => {
         openModal({
             templateUrl: __dirname + '/components/editDocument/editDocument.html',
             controller: 'editDocumentCtrl',
             resolve: {
-              doc: doc
+              doc: () => {
+                return doc;
+              },
+              collection: () => {
+                return collection;
+              },
+              collections: () => {
+                return collections;
+              }
             }
           })
           .result
