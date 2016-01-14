@@ -278,6 +278,6 @@ function updateConnection(originalConnection, updatedConnection, connections) {
 }
 
 /**
- * @exports
+ * @exports ConnectionRepository
  */
 module.exports = new ConnectionRepository();

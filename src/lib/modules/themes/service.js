@@ -83,6 +83,6 @@ function parseThemesFileData(data) {
 }
 
 /**
- * @exports
+ * @exports ThemesService
  */
 module.exports = new ThemesService();

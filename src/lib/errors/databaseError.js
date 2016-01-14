@@ -2,7 +2,7 @@
 
 const AbstractError = require('./abstractError');
 
-/*
+/**
  * @class DatabaseError
  */
 class DatabaseError extends AbstractError {
@@ -12,4 +12,7 @@ class DatabaseError extends AbstractError {
   }
 }
 
+/**
+ * @exports DatabaseError
+ */
 module.exports = DatabaseError;

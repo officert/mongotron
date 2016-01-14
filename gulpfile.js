@@ -15,6 +15,7 @@ const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
 // const fontcustom = require('fontcustom');
 const fs = require('fs');
+const jsdoc = require('gulp-jsdoc3');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -67,6 +68,35 @@ const MOCHA_SETTINGS = {
   }
 };
 
+const JSDOC_SETTINGS = {
+  access: 'all', //show all access levels (public, private, protected)
+  // configure: './conf.json',
+  source: {
+    exclude: ['src/ui/vendor']
+  },
+  opts: {
+    destination: './docs/jsdocs'
+  },
+  tags: {
+    allowUnknownTags: true
+  }
+  // plugins: [
+  //   'plugins/markdown'
+  // ],
+  // templates: {
+  //   cleverLinks: false,
+  //   monospaceLinks: false,
+  //   default: {
+  //     outputSourceFiles: true
+  //   },
+  //   path: 'ink-docstrap',
+  //   theme: 'cerulean',
+  //   navType: 'vertical',
+  //   linenums: true,
+  //   dateFormat: 'MMMM Do YYYY, h:mm:ss a'
+  // }
+};
+
 /* =========================================================================
  * Tasks
  * ========================================================================= */
@@ -110,6 +140,13 @@ gulp.task('jshint', () => {
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
+});
+
+gulp.task('jsdoc', (next) => {
+  gulp.src(['README.md', './src/**/*.js'], {
+      read: false
+    })
+    .pipe(jsdoc(JSDOC_SETTINGS, next));
 });
 
 gulp.task('release-osx', ['pre-release'], (next) => {

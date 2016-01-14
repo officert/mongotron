@@ -301,6 +301,6 @@ class Collection {
 }
 
 /**
- * @exports
+ * @exports Collection
  */
 module.exports = Collection;

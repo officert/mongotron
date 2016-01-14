@@ -7,6 +7,9 @@ const parser = require('./parser');
 const QUERY_TYPES = require('./queryTypes');
 const QUERY_HINTS = _.keys(QUERY_TYPES);
 
+/**
+ * @class Hinter
+ */
 class Hinter {
   /**
    * Description of what this does.
@@ -41,13 +44,13 @@ class Hinter {
       hints = ['db.'];
     } else if (value.startsWith('db.') && (!collectionName || !collectionNameRegex.test(value))) {
       //collection expression hints
-      hints = options.collectionNames.map(function (collection) {
+      hints = options.collectionNames.map(function(collection) {
         return collection + '.';
       }) || [];
       value = collectionName || '';
     } else if (collectionName && collectionNameRegex.test(value) && !collectionNamePlusFunctionRegex.test(value)) {
       //function expression hints
-      hints = QUERY_HINTS.map(function (hintFunction) {
+      hints = QUERY_HINTS.map(function(hintFunction) {
         return hintFunction + '(';
       });
       value = functionName || '';
@@ -65,4 +68,7 @@ class Hinter {
   }
 }
 
+/**
+ * @exports Hinter
+ */
 module.exports = new Hinter();

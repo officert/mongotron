@@ -82,6 +82,6 @@ class LoggerService {
 }
 
 /**
- * @exports
+ * @exports LoggerService
  */
 module.exports = new LoggerService();

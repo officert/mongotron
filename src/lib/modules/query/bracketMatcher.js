@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * @class BracketMatcher
+ */
 class BracketMatcher {
   match(str) {
     if (!str) return null;
@@ -51,4 +54,7 @@ class BracketMatcher {
   }
 }
 
+/**
+ * @exports BracketMatcher
+ */
 module.exports = new BracketMatcher();

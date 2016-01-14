@@ -147,6 +147,6 @@ class Database {
 }
 
 /**
- * @exports
+ * @exports Database
  */
 module.exports = Database;

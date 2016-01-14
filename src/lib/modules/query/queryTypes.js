@@ -1,3 +1,6 @@
+/**
+ * @exports QueryTypes
+ */
 module.exports = {
   find: {
     mongoMethod: 'find',

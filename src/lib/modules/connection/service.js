@@ -198,6 +198,6 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
 }
 
 /**
- * @exports
+ * @exports ConnectionService
  */
 module.exports = new ConnectionService();

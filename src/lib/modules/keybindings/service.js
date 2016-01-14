@@ -60,6 +60,6 @@ function parseKeybindingsFileData(data) {
 }
 
 /**
- * @exports
+ * @exports KeybindingsService
  */
 module.exports = new KeybindingsService();
