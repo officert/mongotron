@@ -10,27 +10,33 @@ const connectionRepository = require('./repository');
 const DEFAULT_CONNECTIONS = require('./defaults');
 
 /**
- * @class ConnectionService
+ * @module Connection
  */
 class ConnectionService {
+  constructor() {}
+
   get defaultConnections() {
     return JSON.stringify(DEFAULT_CONNECTIONS);
   }
 
   /**
-   * @constructor ConnectionService
-   */
-  constructor() {}
-
-  /**
-   * @method findById
+   * @param {string} id - id of the connection to find
    */
   findById(id) {
     return connectionRepository.findById(id);
   }
 
   /**
-   * @method create
+   * Create a new connection
+   * @param {object} options
+   * @param {string} options.name - Connection name
+   * @param {string} options.host - Connection host
+   * @param {string} options.port - Connection port
+   * @param {string} [options.databaseName] - Database name
+   * @param {object} [options.replicaSet]
+   * @param {string} options.replicaSet.name
+   * @param {array<object>} options.replicaSet.sets
+   * @param {object} [options.auth]
    */
   create(options) {
     //map it to a new object so nothing unexpected can be passed in and saved
@@ -64,15 +70,24 @@ class ConnectionService {
   }
 
   /**
-   * @method list
+   * List all connections
    */
   list() {
     return connectionRepository.list();
   }
 
   /**
-   * @method update
-   * @param {String} id - id of the connection to update
+   * Update a connection by id
+   * @param {string} id - id of the connection to update
+   * @param {object} updates - hash of updates to apply to the connection
+   * @param {string} [updates.name] - connection name
+   * @param {string} [updates.host] - Connection host
+   * @param {string} [updates.port ]- Connection port
+   * @param {string} [updates.databaseName] - Database name
+   * @param {object} [updates.replicaSet]
+   * @param {string} [updates.replicaSet.name]
+   * @param {array<object>} [updates.replicaSet.sets]
+   * @param {object} [updates.auth]
    */
   update(id, updates) {
     let _this = this;
@@ -99,14 +114,20 @@ class ConnectionService {
   }
 
   /**
-   * @method delete
-   * @param {String} id - id of the connection to delete
+   * Delete a connection by id
+   * @param {string} id - id of the connection to delete
    */
   delete(id) {
     return connectionRepository.delete(id);
   }
 }
 
+/**
+ * Validate updates to a connection
+ * @param {Connection} connection - connection instance
+ * @param {object} updates - hash of updates to apply to validate
+ * @private
+ */
 function _applyConnectionUpdatesPreValidation(connection, updates) {
   return new Promise((resolve) => {
     if ('name' in updates) connection.name = updates.name;
@@ -161,6 +182,12 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
   });
 }
 
+/**
+ * Validate updates to a connection
+ * @param {Connection} connection - connection instance
+ * @param {object} updates - hash of updates to apply to validate
+ * @private
+ */
 function _applyConnectionUpdatesPostValidation(connection, updates) {
   return new Promise((resolve) => {
 
