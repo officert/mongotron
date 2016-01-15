@@ -8,7 +8,6 @@ const themes = require('lib/modules/themes');
 
 /**
  * @constructor Mongotron
- *
  */
 class Mongotron {
   /**
@@ -49,6 +48,6 @@ function createThemesFile() {
 }
 
 /**
- * @exports
+ * @exports Mongotron
  */
 module.exports = new Mongotron();

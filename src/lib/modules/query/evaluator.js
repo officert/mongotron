@@ -53,4 +53,7 @@ class Evaluator {
   }
 }
 
+/**
+ * @exports Evaluator
+ */
 module.exports = new Evaluator();

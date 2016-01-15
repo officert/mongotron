@@ -1,6 +1,6 @@
 'use strict';
 
-/*
+/**
  * @class AbstractError
  */
 class AbstractError extends Error {
@@ -12,4 +12,7 @@ class AbstractError extends Error {
   }
 }
 
+/**
+ * @exports AbstractError
+ */
 module.exports = AbstractError;

@@ -201,6 +201,6 @@ function _getConnectionString(connection) {
 }
 
 /**
- * @exports
+ * @exports Connection
  */
 module.exports = Connection;

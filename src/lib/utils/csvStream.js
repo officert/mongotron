@@ -17,48 +17,50 @@ class CsvStream extends stream.Transform {
 
     this.csvKeys = csvKeys;
   }
-}
 
-CsvStream.prototype._transform = function(chunk, encoding, next) {
+  /**
+   * @method _transform
+   */
+  _transform(chunk, encoding, next) {
+    if (!this._hasWritten) { //write the 1rst line of the CSV
+      this._hasWritten = true;
 
-  if (!this._hasWritten) { //write the 1rst line of the CSV
-    this._hasWritten = true;
+      var csvHeader = '';
 
-    var csvHeader = '';
+      _.each(this.csvKeys, (csvKey) => {
+        if (_.isObject(csvKey)) {
+          csvHeader += (csvKey.name + ',');
+        } else {
+          csvHeader += (csvKey + ',');
+        }
+      });
 
-    _.each(this.csvKeys, (csvKey) => {
+      csvHeader += '\n';
+
+      this.push(csvHeader);
+    }
+
+    var csvLine = '';
+
+    _.each(this.csvKeys, function(csvKey) {
       if (_.isObject(csvKey)) {
-        csvHeader += (csvKey.name + ',');
+        if (csvKey.hasOwnProperty('getProperty')) {
+          csvLine += (csvKey.getProperty(chunk) + ',');
+        } else {
+          csvLine += (_getProperty(chunk, csvKey.property) + ',');
+        }
       } else {
-        csvHeader += (csvKey + ',');
+        csvLine += (_getProperty(chunk, csvKey) + ',');
       }
     });
 
-    csvHeader += '\n';
+    csvLine += '\n';
 
-    this.push(csvHeader);
+    this.push(csvLine);
+
+    return next();
   }
-
-  var csvLine = '';
-
-  _.each(this.csvKeys, function(csvKey) {
-    if (_.isObject(csvKey)) {
-      if (csvKey.hasOwnProperty('getProperty')) {
-        csvLine += (csvKey.getProperty(chunk) + ',');
-      } else {
-        csvLine += (_getProperty(chunk, csvKey.property) + ',');
-      }
-    } else {
-      csvLine += (_getProperty(chunk, csvKey) + ',');
-    }
-  });
-
-  csvLine += '\n';
-
-  this.push(csvLine);
-
-  return next();
-};
+}
 
 function _getProperty(obj, propertyName) {
 
@@ -85,6 +87,6 @@ function _getProperty(obj, propertyName) {
 }
 
 /**
- * @exports
+ * @exports CsvStream
  */
 module.exports = CsvStream;

@@ -45,6 +45,6 @@ class QueryService {
 }
 
 /**
- * @exports
+ * @exports QueryService
  */
 module.exports = new QueryService();

@@ -2,7 +2,7 @@
 
 const AbstractError = require('./abstractError');
 
-/*
+/**
  * @class ConnectionError
  */
 class ConnectionError extends AbstractError {
@@ -12,4 +12,7 @@ class ConnectionError extends AbstractError {
   }
 }
 
+/**
+ * @exports ConnectionError
+ */
 module.exports = ConnectionError;
