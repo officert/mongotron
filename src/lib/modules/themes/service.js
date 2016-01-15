@@ -8,16 +8,15 @@ const fileUtils = require('lib/utils/fileUtils');
 
 const DEFAULT_THEMES = require('./defaults');
 
-/**
- * @class ThemesService
- */
+/** @module Themes */
+/** @class */
 class ThemesService {
   get defaultThemes() {
     return JSON.stringify(DEFAULT_THEMES);
   }
 
   /**
-   * @method list
+   * List themes
    */
   list() {
     return readThemesFile()
@@ -25,7 +24,8 @@ class ThemesService {
   }
 
   /**
-   * @method changeActive
+   * Change active theme
+   * @param {string} themeName - Name of the theme to change to
    */
   changeActive(themeName) {
     var _this = this;
@@ -69,7 +69,7 @@ function writeThemesFile(fileData) {
 }
 
 /**
- * @method parseThemesFileData
+ * @function parseThemesFileData
  * @private
  *
  * @param {Object} data - raw contexts from themes file
@@ -82,7 +82,4 @@ function parseThemesFileData(data) {
   });
 }
 
-/**
- * @exports ThemesService
- */
 module.exports = new ThemesService();

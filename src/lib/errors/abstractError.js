@@ -1,8 +1,6 @@
 'use strict';
 
-/**
- * @class AbstractError
- */
+/** @class */
 class AbstractError extends Error {
   constructor(message) {
     super(message);
@@ -12,7 +10,4 @@ class AbstractError extends Error {
   }
 }
 
-/**
- * @exports AbstractError
- */
 module.exports = AbstractError;

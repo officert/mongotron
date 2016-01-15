@@ -4,9 +4,7 @@ const _ = require('underscore');
 
 const mongoUtils = require('./mongoUtils');
 
-/**
- * @class KeyVaueUtils
- */
+/** @class */
 class KeyVaueUtils {
   convert(val) {
     if (val === null || val === undefined) return null;
@@ -127,7 +125,4 @@ function _getPropertyTypeIcon(propertyType) {
   return icon;
 }
 
-/**
- * @exports KeyVaueUtils
- */
 module.exports = new KeyVaueUtils();

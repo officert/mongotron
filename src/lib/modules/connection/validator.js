@@ -4,10 +4,13 @@ const Promise = require('bluebird');
 
 const errors = require('lib/errors');
 
-/**
- * @class ConnectionValidator
- */
+/** @module Connection */
+/** @class */
 class ConnectionValidator {
+  /**
+   * Validate a connection for creating
+   * @param {object} data
+   */
   validateCreate(data) {
     return new Promise((resolve, reject) => {
       _baseValidate(data)
@@ -16,6 +19,10 @@ class ConnectionValidator {
     });
   }
 
+  /**
+   * Validate a connection for updating
+   * @param {object} data
+   */
   validateUpdate(data) {
     return new Promise((resolve, reject) => {
       _baseValidate(data)
@@ -58,7 +65,4 @@ function _baseValidate(data) {
   });
 }
 
-/**
- * @exports ConnectionValidator
- */
 module.exports = new ConnectionValidator();

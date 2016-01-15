@@ -18,15 +18,15 @@ var logger = new winston.Logger({
   ]
 });
 
-/**
- * @class LoggerService
- */
+/** @module Logger */
+/** @class */
 class LoggerService {
-  /**
-   * @constructor LoggerService
-   */
   constructor() {}
 
+  /**
+   * Log a log message
+   * @param {string} msg - Message to log
+   */
   log(msg) {
     logger.log(msg);
     if (isElectron) {
@@ -34,6 +34,10 @@ class LoggerService {
     }
   }
 
+  /**
+   * Log a debug message
+   * @param {string} msg - Message to log
+   */
   debug(msg) {
     logger.debug(msg);
     if (isElectron) {
@@ -41,6 +45,10 @@ class LoggerService {
     }
   }
 
+  /**
+   * Log an info message
+   * @param {string} msg - Message to log
+   */
   info(msg) {
     logger.info(msg);
     if (isElectron) {
@@ -48,6 +56,10 @@ class LoggerService {
     }
   }
 
+  /**
+   * Log a warn message
+   * @param {string} msg - Message to log
+   */
   warn(msg) {
     logger.warn(msg);
     if (isElectron) {
@@ -55,6 +67,10 @@ class LoggerService {
     }
   }
 
+  /**
+   * Log an error message
+   * @param {string} msg - Message to log
+   */
   error(msg) {
     logger.error(msg);
     if (isElectron) {
@@ -62,6 +78,14 @@ class LoggerService {
     }
   }
 
+  /**
+   * List log messages
+   * @param {object} [options] - hash of options for listing
+   * @param {date} [options.fromDate]
+   * @param {date} [options.toDate]
+   * @param {number} [options.skip]
+   * @param {number} [options.limit]
+   */
   list(options) {
     options = options || {};
 
@@ -81,7 +105,4 @@ class LoggerService {
   }
 }
 
-/**
- * @exports LoggerService
- */
 module.exports = new LoggerService();

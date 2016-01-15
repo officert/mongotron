@@ -12,13 +12,9 @@ const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
-/**
- * @class Connection
- */
+/** @class */
 class Connection {
   /**
-   * @constructor Connection
-   *
    * @param {Object} options
    * @param {String} options.name
    * @param {String} [options.host]
@@ -65,7 +61,7 @@ class Connection {
   }
 
   /**
-   * @method connect
+   * Connect to the connection
    */
   connect() {
     var _this = this;
@@ -96,7 +92,7 @@ class Connection {
   }
 
   /**
-   * @method addDatabase
+   * Add a new database to the connection
    * @param {Object} options
    * @param {String} config.name
    */
@@ -129,6 +125,7 @@ class Connection {
 /**
  * @function _getDbsForLocalhostConnection
  * @param {Function} next - callback function
+ * @private
  */
 function _getDbsForLocalhostConnection(connection, next) {
   if (!connection) return next(new Error('connection is required'));
@@ -162,6 +159,11 @@ function _getDbsForLocalhostConnection(connection, next) {
   });
 }
 
+/**
+ * @function _getConnectionString
+ * @param {Connection} connection
+ * @private
+ */
 function _getConnectionString(connection) {
   if (!connection) return null;
 
@@ -200,7 +202,4 @@ function _getConnectionString(connection) {
   return connectionString;
 }
 
-/**
- * @exports Connection
- */
 module.exports = Connection;

@@ -11,17 +11,14 @@ const Connection = require('lib/entities/connection');
 
 const DB_CONNECTIONS = appConfig.dbConfigPath;
 
-/**
- * @class ConnectionRepository
- */
+/** @module Connection */
+/** @class */
 class ConnectionRepository {
-  /**
-   * @constructor ConnectionRepository
-   */
   constructor() {}
 
   /**
-   * @method findById
+   * Find a connection by id
+   * @param {string} id - Id of the connection to find
    */
   findById(id) {
     let _this = this;
@@ -39,7 +36,16 @@ class ConnectionRepository {
   }
 
   /**
-   * @method create
+   * Create a new connection
+   * @param {object} options
+   * @param {string} options.name - Connection name
+   * @param {string} options.host - Connection host
+   * @param {string} options.port - Connection port
+   * @param {string} [options.databaseName] - Database name
+   * @param {object} [options.replicaSet] - Replica set config
+   * @param {string} options.replicaSet.name - Replica set name
+   * @param {array<object>} options.replicaSet.sets - Replica set servers
+   * @param {object} [options.auth]
    */
   create(options) {
     let _this = this;
@@ -74,15 +80,24 @@ class ConnectionRepository {
   }
 
   /**
-   * @method list
+   * List all connections
    */
   list() {
     return getConnectionInstances();
   }
 
   /**
-   * @method update
-   * @param {String} id - id of the connection to update
+   * Update a connection by id
+   * @param {string} id - id of the connection to update
+   * @param {object} updates - hash of updates to apply to the connection
+   * @param {string} [updates.name] - connection name
+   * @param {string} [updates.host] - Connection host
+   * @param {string} [updates.port ]- Connection port
+   * @param {string} [updates.databaseName] - Database name
+   * @param {object} [updates.replicaSet] - Replica set config
+   * @param {string} [updates.replicaSet.name] - Replica set name
+   * @param {array<object>} [updates.replicaSet.sets] - Replica set servers
+   * @param {object} [updates.auth]
    */
   update(id, updatedConnection) {
     let _this = this;
@@ -110,8 +125,8 @@ class ConnectionRepository {
   }
 
   /**
-   * @method delete
-   * @param {String} id - id of the connection to delete
+   * Delete a connection by id
+   * @param {string} id - id of the connection to delete
    */
   delete(id) {
     var _this = this;
@@ -136,7 +151,7 @@ class ConnectionRepository {
   }
 
   /**
-   * @method existsByName
+   * Check if a connection exists by name
    * @param {String} name
    */
   existsByName(name) {
@@ -277,7 +292,4 @@ function updateConnection(originalConnection, updatedConnection, connections) {
   });
 }
 
-/**
- * @exports ConnectionRepository
- */
 module.exports = new ConnectionRepository();

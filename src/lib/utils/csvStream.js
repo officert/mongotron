@@ -3,13 +3,8 @@
 const stream = require('stream');
 const _ = require('underscore');
 
-/**
- * @class CsvStream
- */
+/** @class */
 class CsvStream extends stream.Transform {
-  /**
-   * @constructor
-   */
   constructor(csvKeys) {
     super({
       objectMode: true
@@ -19,7 +14,7 @@ class CsvStream extends stream.Transform {
   }
 
   /**
-   * @method _transform
+   * Transform
    */
   _transform(chunk, encoding, next) {
     if (!this._hasWritten) { //write the 1rst line of the CSV
@@ -86,7 +81,4 @@ function _getProperty(obj, propertyName) {
   }
 }
 
-/**
- * @exports CsvStream
- */
 module.exports = CsvStream;

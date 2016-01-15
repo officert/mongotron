@@ -7,13 +7,9 @@ const Promise = require('bluebird');
 const Collection = require('lib/entities/collection');
 const errors = require('lib/errors');
 
-/**
- * @class Database
- */
+/** @class */
 class Database {
   /**
-   * @constructor Database
-   *
    * @param {Object} options
    * @param {String} options.name - name of the database
    * @param {String} options.host - host of the database, defaults to localhost
@@ -45,7 +41,7 @@ class Database {
   }
 
   /**
-   * @method open
+   * Open the database
    * @param {Function} next - callback function
    */
   open() {
@@ -78,7 +74,7 @@ class Database {
   }
 
   /**
-   * @method listCollections
+   * List collections in the database
    */
   listCollections() {
     var _this = this;
@@ -105,7 +101,7 @@ class Database {
   }
 
   /**
-   * @method addCollection
+   * Add a new collection to the database
    * @param {Object} options
    */
   addCollection(options) {
@@ -132,7 +128,7 @@ class Database {
   }
 
   /**
-   * @method drop
+   * Drop the database
    */
   drop() {
     var _this = this;
@@ -146,7 +142,4 @@ class Database {
   }
 }
 
-/**
- * @exports Database
- */
 module.exports = Database;

@@ -2,9 +2,7 @@
 
 const AbstractError = require('./abstractError');
 
-/**
- * @class InternalServiceError
- */
+/** @class */
 class InternalServiceError extends AbstractError {
   constructor(message) {
     super(message);
@@ -12,7 +10,4 @@ class InternalServiceError extends AbstractError {
   }
 }
 
-/**
- * @exports InternalServiceError
- */
 module.exports = InternalServiceError;

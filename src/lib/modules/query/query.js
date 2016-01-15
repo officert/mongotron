@@ -9,9 +9,8 @@ const parser = require('./parser');
 
 const QUERY_TYPES = require('./queryTypes');
 
-/**
- * @class Query
- */
+/** @module Query */
+/** @class */
 class Query {
   constructor() {}
 
@@ -55,12 +54,12 @@ class Query {
 }
 
 /**
- * @method _parseRawQuery - parses a raw query, ex. 'db.users.find({...})'
- * @param {String} rawQuery
- * @param {Object} options
- * @param {String} options.methodName  - name of them mongo method that is trying to be executed
- * @param {Bool} options.extractOptions - whether or not we should parse a 2nd options objects (update, updateMany)
- * @returns {Object} 
+ * parses a raw query, ex. 'db.users.find({...})'
+ * @param {string} rawQuery
+ * @param {object} options
+ * @param {string} options.methodName  - name of them mongo method that is trying to be executed
+ * @param {boolean} options.extractOptions - whether or not we should parse a 2nd options objects (update, updateMany)
+ * @returns {object}
  */
 function _parseRawQuery(rawQuery, options) {
   options = options || {};
@@ -100,7 +99,4 @@ function _parseRawQuery(rawQuery, options) {
   };
 }
 
-/**
- * @exports QueryParser
- */
 module.exports = Query;

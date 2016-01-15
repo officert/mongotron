@@ -5,9 +5,7 @@ const jsonfile = require('jsonfile');
 
 const fs = require('fs');
 
-/**
- * @class FileUtils
- */
+/** @class */
 class FileUtils {
   createDirSync(path) {
     var dirExists = false;
@@ -79,7 +77,4 @@ class FileUtils {
   }
 }
 
-/**
- * @exports FileUtils
- */
 module.exports = new FileUtils();

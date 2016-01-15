@@ -2,9 +2,7 @@
 
 const AbstractError = require('./abstractError');
 
-/**
- * @class InvalidArugmentError
- */
+/** @class */
 class InvalidArugmentError extends AbstractError {
   constructor(message) {
     super(message);
@@ -12,7 +10,4 @@ class InvalidArugmentError extends AbstractError {
   }
 }
 
-/**
- * @exports InvalidArugmentError
- */
 module.exports = InvalidArugmentError;
