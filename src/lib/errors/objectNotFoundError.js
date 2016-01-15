@@ -2,9 +2,7 @@
 
 const AbstractError = require('./abstractError');
 
-/**
- * @class ObjectNotFoundError
- */
+/** @class */
 class ObjectNotFoundError extends AbstractError {
   constructor(message) {
     super(message);
@@ -12,7 +10,4 @@ class ObjectNotFoundError extends AbstractError {
   }
 }
 
-/**
- * @exports ObjectNotFoundError
- */
 module.exports = ObjectNotFoundError;

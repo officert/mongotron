@@ -3,19 +3,17 @@
 const _ = require('underscore');
 const vm = require('vm');
 
-/**
+/*
  * Based on https://github.com/pierrec/node-eval/blob/master/eval.js
  * ref : https://nodejs.org/api/vm.html#vm_script_runinnewcontext_sandbox_options
- *
- * @class Evaluator
  */
+/** @module Query */
+/** @class */
 class Evaluator {
   /**
-   * @method eval - evaluate a JS expression
-   *
+   * evaluate a JS expression
    * @param {String} expression
    * @param {Object} scope
-   *
    */
   eval(expression, scope) {
     if (!expression) return new Error('evaluator - eval() - must pass an expression');
@@ -53,7 +51,4 @@ class Evaluator {
   }
 }
 
-/**
- * @exports Evaluator
- */
 module.exports = new Evaluator();

@@ -19,7 +19,8 @@ class ConnectionService {
   }
 
   /**
-   * @param {string} id - id of the connection to find
+   * Find a connection by id
+   * @param {string} id - Id of the connection to find
    */
   findById(id) {
     return connectionRepository.findById(id);

@@ -5,6 +5,7 @@ angular.module('app').factory('recursionHelper', [
     return {
       /**
        * Manually compiles the element, fixing the recursion loop.
+       * @private
        * @param element
        * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
        * @returns An object containing the linking functions.
@@ -22,9 +23,6 @@ angular.module('app').factory('recursionHelper', [
         var compiledContents;
         return {
           pre: (link && link.pre) ? link.pre : null,
-          /**
-           * Compiles and re-adds the contents
-           */
           post: function(scope, element) {
             // Compile the contents
             if (!compiledContents) {

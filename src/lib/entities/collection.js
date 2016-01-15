@@ -13,13 +13,9 @@ const DEFAULT_PAGE_SIZE = 50;
 const QUERY_TYPES = require('lib/modules/query/queryTypes');
 const VALID_QUERY_TYPES = _.keys(QUERY_TYPES);
 
-/**
- * @class Collection
- */
+/** @class */
 class Collection {
   /**
-   * @constructor Collection
-   *
    * @param {Object} database - MongoDb object
    * @param {Object} options
    * @param {String} options.name - name of the collection
@@ -74,7 +70,6 @@ class Collection {
   }
 
   /**
-   * @method insertOne
    * @param {Object} doc
    */
   insertOne(doc) {
@@ -89,7 +84,6 @@ class Collection {
   }
 
   /**
-   * @method find
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
    */
@@ -119,7 +113,6 @@ class Collection {
   }
 
   /**
-   * @method count
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
    */
@@ -138,7 +131,6 @@ class Collection {
   }
 
   /**
-   * @method deleteMany
    * @param {Object} query - mongo query
    * @param {Object} [options] - mongo query options
    */
@@ -157,7 +149,6 @@ class Collection {
   }
 
   /**
-   * @method deleteById
    * @param {Object} Mongo ObjectId
    */
   deleteById(objectId) {
@@ -176,7 +167,6 @@ class Collection {
   }
 
   /**
-   * @method deleteOne
    * @param {Object} query - mongo query
    */
   deleteOne(query) {
@@ -193,7 +183,6 @@ class Collection {
   }
 
   /**
-   * @method aggregate
    * @param {Object} query - mongo query
    */
   aggregate(query, options) {
@@ -224,7 +213,6 @@ class Collection {
   }
 
   /**
-   * @method updateMany
    * @param {Object} query - mongo query
    * @param {Object} updates - updates to apply
    * @param {Object} [options] - mongo query options
@@ -245,7 +233,6 @@ class Collection {
   }
 
   /**
-   * @method updateById
    * @param {Object} Mongo ObjectId
    * @param {Object} updates - updates to apply
    */
@@ -267,7 +254,6 @@ class Collection {
   }
 
   /**
-   * @method updateOne
    * @param {Object} query - mongo query
    * @param {Object} updates - updates to apply
    */
@@ -286,7 +272,7 @@ class Collection {
   }
 
   /**
-   * @method drop
+   * Drop the collection
    */
   drop() {
     var _this = this;
@@ -300,7 +286,4 @@ class Collection {
   }
 }
 
-/**
- * @exports Collection
- */
 module.exports = Collection;

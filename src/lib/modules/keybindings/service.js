@@ -8,16 +8,15 @@ const fileUtils = require('lib/utils/fileUtils');
 
 const DEFAULT_KEYBINDINGS = require('./defaults');
 
-/**
- * @class KeybindingsService
- */
+/** @module Keybindings */
+/** @class */
 class KeybindingsService {
   get defaultBindings() {
     return JSON.stringify(DEFAULT_KEYBINDINGS);
   }
 
   /**
-   * @method list
+   * List keybindings
    */
   list() {
     return readKeybindingsFile()
@@ -30,7 +29,7 @@ function readKeybindingsFile() {
 }
 
 /**
- * @method parseKeybindingsFileData
+ * @function parseKeybindingsFileData
  * @private
  *
  * @param {Object} data - raw contexts from keybindings file
@@ -59,7 +58,4 @@ function parseKeybindingsFileData(data) {
   });
 }
 
-/**
- * @exports KeybindingsService
- */
 module.exports = new KeybindingsService();

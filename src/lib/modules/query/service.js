@@ -7,31 +7,40 @@ const parser = require('./parser');
 
 const QUERY_TYPES = require('./queryTypes');
 
-/**
- * @class QueryService
- */
+/** @module Query */
+/** @class */
 class QueryService {
   get QUERY_TYPES() {
     return QUERY_TYPES;
   }
 
+  /**
+   * @param {string} query - query to check validation on
+   * @returns {boolean}
+   */
   isValidQuery(query) {
     return parser.isValidQuery(query);
   }
 
+  /**
+   * @param {string} query - query to parse collection name from
+   * @returns {string}
+   */
   parseCollectionName(query) {
     return parser.parseCollectionName(query);
   }
 
+  /**
+   * @param {string} query - query to parse function name from
+   * @returns {string}
+   */
   parseFunctionName(query) {
     return parser.parseFunctionName(query);
   }
 
   /**
-   * Query Factory
-   *
-   * @method createQuery
-   * @param {String} rawQuery
+   * @param {string} rawQuery - raw query to parse
+   * @returns {Query}
    */
   createQuery(rawQuery) {
     return new Promise((resolve, reject) => {
@@ -44,7 +53,4 @@ class QueryService {
   }
 }
 
-/**
- * @exports QueryService
- */
 module.exports = new QueryService();

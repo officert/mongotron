@@ -12,6 +12,7 @@ const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
 
+/** @class */
 class Connection {
   /**
    * @param {Object} options
@@ -60,7 +61,7 @@ class Connection {
   }
 
   /**
-   * @method connect
+   * Connect to the connection
    */
   connect() {
     var _this = this;
@@ -91,7 +92,7 @@ class Connection {
   }
 
   /**
-   * @method addDatabase
+   * Add a new database to the connection
    * @param {Object} options
    * @param {String} config.name
    */

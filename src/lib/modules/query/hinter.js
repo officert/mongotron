@@ -7,15 +7,10 @@ const parser = require('./parser');
 const QUERY_TYPES = require('./queryTypes');
 const QUERY_HINTS = _.keys(QUERY_TYPES);
 
-/**
- * @class Hinter
- */
+/** @module Query */
+/** @class */
 class Hinter {
   /**
-   * Description of what this does.
-   *
-   * @method getHintsByValue
-   *
    * @param {String} value - value to provide automcomplete hints for
    * @param {Object} options
    * @param {Array<String>} options.collectionNames
@@ -68,7 +63,4 @@ class Hinter {
   }
 }
 
-/**
- * @exports Hinter
- */
 module.exports = new Hinter();

@@ -7,9 +7,7 @@ const InvalidArugmentError = require('./invalidArgumentError');
 const InternalServiceError = require('./internalServiceError');
 const ObjectNotFoundError = require('./objectNotFoundError');
 
-/**
- * @exports Errors
- */
+/** @module Errors */
 module.exports = {
   AbstractError: AbstractError,
   ConnectionError: ConnectionError,
