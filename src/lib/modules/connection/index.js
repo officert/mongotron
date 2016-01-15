@@ -1,4 +1,2 @@
-/**
- * @module Connection
- */
+/** @exports Connection */
 module.exports = require('./service');

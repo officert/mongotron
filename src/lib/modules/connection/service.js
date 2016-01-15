@@ -9,9 +9,8 @@ const connectionRepository = require('./repository');
 
 const DEFAULT_CONNECTIONS = require('./defaults');
 
-/**
- * @module Connection
- */
+/** @module Connection */
+/** @class */
 class ConnectionService {
   constructor() {}
 
@@ -33,9 +32,9 @@ class ConnectionService {
    * @param {string} options.host - Connection host
    * @param {string} options.port - Connection port
    * @param {string} [options.databaseName] - Database name
-   * @param {object} [options.replicaSet]
-   * @param {string} options.replicaSet.name
-   * @param {array<object>} options.replicaSet.sets
+   * @param {object} [options.replicaSet] - Replica set config
+   * @param {string} options.replicaSet.name - Replica set name
+   * @param {array<object>} options.replicaSet.sets - Replica set servers
    * @param {object} [options.auth]
    */
   create(options) {
@@ -84,9 +83,9 @@ class ConnectionService {
    * @param {string} [updates.host] - Connection host
    * @param {string} [updates.port ]- Connection port
    * @param {string} [updates.databaseName] - Database name
-   * @param {object} [updates.replicaSet]
-   * @param {string} [updates.replicaSet.name]
-   * @param {array<object>} [updates.replicaSet.sets]
+   * @param {object} [updates.replicaSet] - Replica set config
+   * @param {string} [updates.replicaSet.name] - Replica set name
+   * @param {array<object>} [updates.replicaSet.sets] - Replica set servers
    * @param {object} [updates.auth]
    */
   update(id, updates) {
@@ -224,7 +223,4 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
   });
 }
 
-/**
- * @exports ConnectionService
- */
 module.exports = new ConnectionService();
