@@ -13,9 +13,6 @@ angular.module('app').directive('giveFocus', [
             });
           }
         });
-        element.bind('blur', () => {
-          scope.$apply(model.assign(scope, false));
-        });
       }
     };
   }
