@@ -2,7 +2,9 @@
 
 angular.module('app').controller('inlineEditorCtrl', [
   '$scope',
-  'queryRunnerService', ($scope, queryRunnerService) => {
+  'queryRunnerService',
+  'tabCache',
+  'notificationService', ($scope, queryRunnerService, tabCache, notificationService) => {
     $scope.show = false;
     $scope.doc = _.extend({}, $scope.inlineEditorDoc);
     $scope.newValue = $scope.doc[$scope.inlineEditorKey];
@@ -28,19 +30,27 @@ angular.module('app').controller('inlineEditorCtrl', [
     };
 
     $scope.saveChanges = () => {
-      alert('save changes');
+      let activeTab = tabCache.getActive();
 
-      queryRunnerService.runQuery('db.' + $scope.collection.name + 'updateOne({ id : ' + $scope.doc.id + ' })', $scope.collections)
+      if (!activeTab) return;
+
+      let fullQuery = _getFullQuery(activeTab.collection.name);
+
+      queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
         .then(() => {
-
+          notificationService.success('yay!!');
         })
         .catch((err) => {
-          alert(err);
+          notificationService.error(err);
         });
     };
 
     $scope.cancel = function() {
       $scope.show = false;
     };
+
+    function _getFullQuery(collectionName) {
+      return 'db.' + collectionName + '.updateOne({ id : ' + $scope.doc._id.toString() + ' }, { $set : { ' + $scope.inlineEditorKey + ' : \'' + $scope.newValue + '\' } })';
+    }
   }
 ]);
