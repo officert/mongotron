@@ -5,7 +5,7 @@ angular.module('app').directive('giveFocus', [
   '$parse', ($timeout, $parse) => {
     return {
       link: (scope, element, attrs) => {
-        var model = $parse(attrs.giveFocus);
+        let model = $parse(attrs.giveFocus);
         scope.$watch(model, (value) => {
           if (value === true) {
             $timeout(() => {

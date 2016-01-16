@@ -175,9 +175,6 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
       }
     }
 
-    // console.log('pre updates', updates);
-    // console.log('pre updated connection', connection);
-
     return resolve(connection);
   });
 }
@@ -216,9 +213,6 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
         });
       }
     }
-
-    // console.log('post updates', updates);
-    // console.log('post updated connection', connection);
 
     return resolve(connection);
   });

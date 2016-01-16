@@ -1,10 +1,11 @@
+'use strict';
+
 angular.module('app').directive('themeClass', [
-  'themeService',
-  function(themeService) {
+  'themeService', (themeService) => {
     return {
       restrict: 'A',
-      link: function(scope, element) {
-        var currentTheme = themeService.currentTheme;
+      link: (scope, element) => {
+        let currentTheme = themeService.currentTheme;
 
         if (currentTheme) element.addClass('theme-' + currentTheme.name);
 

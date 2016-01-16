@@ -1,10 +1,11 @@
+'use strict';
+
 angular.module('app').controller('tabViewCtrl', [
   '$scope',
   'tabCache',
   'connectionCache',
   '$timeout',
-  'menuService',
-  function($scope, tabCache, connectionCache, $timeout, menuService) {
+  'menuService', ($scope, tabCache, connectionCache, $timeout, menuService) => {
     $scope.tabs = tabCache.list();
     $scope.connections = connectionCache.list();
 
@@ -16,8 +17,8 @@ angular.module('app').controller('tabViewCtrl', [
       delay: 150,
       appendTo: 'body',
       revert: 50,
-      helper: function(e, item) {
-        $timeout(function() {
+      helper: (e, item) => {
+        $timeout(() => {
           //force the element to show, race condition :(
           item.attr('style', 'display: block !important');
         });
@@ -26,10 +27,10 @@ angular.module('app').controller('tabViewCtrl', [
       // helper: 'clone',
       opacity: 1,
       tolerance: 'intersect',
-      stop: function(event, ui) {
-        $timeout(function() {
+      stop: (event, ui) => {
+        $timeout(() => {
           //activate the dropped tab
-          var tabId = angular.element(ui.item).attr('tab-id');
+          let tabId = angular.element(ui.item).attr('tab-id');
 
           if (!tabId) return;
 
@@ -38,30 +39,30 @@ angular.module('app').controller('tabViewCtrl', [
       }
     };
 
-    tabCache.on(tabCache.EVENTS.TAB_CACHE_CHANGED, function(updatedCache) {
+    tabCache.on(tabCache.EVENTS.TAB_CACHE_CHANGED, (updatedCache) => {
       $scope.tabs = updatedCache;
     });
 
-    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, (updatedCache) => {
       $scope.connections = updatedCache;
     });
 
-    $scope.openTabContextMenu = function(tab, $event) {
+    $scope.openTabContextMenu = (tab, $event) => {
       if (!tab) return;
       if ($event) $event.preventDefault();
 
       menuService.showMenu([{
         label: 'Close Tab',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             if (tab.active) tabCache.activateNext();
             tabCache.remove(tab);
           });
         }
       }, {
         label: 'Close Other Tabs',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             if (!tab.active) tabCache.activateById(tab.id);
             tabCache.removeAll([tab.id]);
           });
@@ -69,7 +70,7 @@ angular.module('app').controller('tabViewCtrl', [
       }]);
     };
 
-    $scope.activateTab = function(tab, $event) {
+    $scope.activateTab = (tab, $event) => {
       if ($event) $event.preventDefault();
 
       if ($event.button === 1) return $scope.closeTab(tab, $event);
@@ -81,7 +82,7 @@ angular.module('app').controller('tabViewCtrl', [
       }
     };
 
-    $scope.closeTab = function(tab, $event) {
+    $scope.closeTab = (tab, $event) => {
       if ($event) $event.preventDefault();
 
       tabCache.remove(tab);
