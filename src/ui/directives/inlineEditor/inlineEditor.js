@@ -12,9 +12,7 @@ angular.module('app').directive('inlineEditor', [
       scope: {
         'inlineEditorKey': '@',
         'inlineEditorValue': '=',
-        'inlineEditorDoc': '=',
-        'collection': '=',
-        'collections': '='
+        'inlineEditorDoc': '='
       },
       link: (scope, element) => {
         scope.id = uuid.v4();
