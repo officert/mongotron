@@ -5,10 +5,13 @@ angular.module('app').controller('inlineEditorCtrl', [
   'queryRunnerService', ($scope, queryRunnerService) => {
     $scope.show = false;
     $scope.doc = _.extend({}, $scope.inlineEditorDoc);
+    $scope.newValue = $scope.doc[$scope.inlineEditorKey];
 
     $scope.$watch('show', (val) => {
       if (val === true) {
         $scope.$emit('inline-editor-show', $scope.doc.id, $scope.inlineEditorKey);
+      } else {
+        $scope.newValue = $scope.doc[$scope.inlineEditorKey];
       }
     });
 
@@ -17,6 +20,10 @@ angular.module('app').controller('inlineEditorCtrl', [
         $scope.show = false;
       }
     });
+
+    $scope.keydown = function($event) {
+      if ($event && $event.keyCode === '27') $scope.show = false;
+    };
 
     $scope.saveChanges = () => {
       alert('save changes');
