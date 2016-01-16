@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('app').directive('giveFocus', [
+angular.module('app').directive('giveFocusAndSelect', [
   '$timeout',
   '$parse', ($timeout, $parse) => {
     return {
       link: (scope, element, attrs) => {
-        let model = $parse(attrs.giveFocus);
+        let model = $parse(attrs.giveFocusAndSelect);
         scope.$watch(model, (value) => {
           if (value === true) {
             $timeout(() => {
-              element[0].focus();
+              element.focus().select();
             });
           }
         });
