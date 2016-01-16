@@ -22,7 +22,9 @@ angular.module('app').controller('inlineEditorCtrl', [
     });
 
     $scope.keydown = function($event) {
-      if ($event && $event.keyCode === '27') $scope.show = false;
+      if ($event && $event.keyCode === 27) {
+        $scope.show = false;
+      }
     };
 
     $scope.saveChanges = () => {

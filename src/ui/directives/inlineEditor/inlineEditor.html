@@ -3,7 +3,7 @@
     {{ inlineEditorValue }}
   </div>
   <div class="inline-editor form-group" ng-show="show">
-    <input class="form-control control" type="text" give-focus="show" ng-model="newValue" inline-editor-id="{{ id }}" ng-keydown="keyDown($event)">
+    <input class="form-control control" type="text" give-focus="show" ng-model="newValue" inline-editor-id="{{ id }}" ng-keydown="keydown($event)">
     <button class="btn btn-sm btn-default first" ng-click="cancel()">
       <i class="fa fa-times"></i>
     </button>
