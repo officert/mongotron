@@ -87,8 +87,8 @@ angular.module('app').service('modalService', [
     };
 
     ModalService.prototype.openDeleteDocument = function openDeleteDocument(doc, collection) {
-      if (!doc) throw new Error('modalService - openEditDocument() - doc is required');
-      if (!collection) throw new Error('modalService - openEditDocument() - collection is required');
+      if (!doc) throw new Error('modalService - openDeleteDocument() - doc is required');
+      if (!collection) throw new Error('modalService - openDeleteDocument() - collection is required');
 
       var _this = this;
 
@@ -105,10 +105,8 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openEditDocument = function openEditDocument(doc, collection, collections) {
+    ModalService.prototype.openEditDocument = function openEditDocument(doc) {
       if (!doc) throw new Error('modalService - openEditDocument() - doc is required');
-      if (!collection) throw new Error('modalService - openEditDocument() - collection is required');
-      if (!collections) throw new Error('modalService - openEditDocument() - collections is required');
 
       return new Promise((resolve, reject) => {
         openModal({
@@ -117,12 +115,6 @@ angular.module('app').service('modalService', [
             resolve: {
               doc: () => {
                 return doc;
-              },
-              collection: () => {
-                return collection;
-              },
-              collections: () => {
-                return collections;
               }
             },
             size: 'lg'
