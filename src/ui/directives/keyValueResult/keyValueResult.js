@@ -8,6 +8,7 @@ angular.module('app').directive('keyValueResult', [
       controller: 'keyValueResultCtrl',
       scope: {
         result: '=',
+        resultOriginal: '=',
         level: '@'
       },
       compile: function(element) {

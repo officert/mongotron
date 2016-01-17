@@ -5,15 +5,19 @@ angular.module('app').controller('inlineEditorCtrl', [
   'queryRunnerService',
   'tabCache',
   'notificationService', ($scope, queryRunnerService, tabCache, notificationService) => {
+    const mongoUtils = require('src/lib/utils/mongoUtils');
+
     $scope.show = false;
     $scope.doc = _.extend({}, $scope.inlineEditorDoc);
-    $scope.newValue = $scope.doc[$scope.inlineEditorKey];
+    $scope.newValue = $scope.inlineEditorValue;
+    // $scope.newValue = _getPropertyValue($scope.doc, $scope.inlineEditorKey);
 
     $scope.$watch('show', (val) => {
       if (val === true) {
         $scope.$emit('inline-editor-show', $scope.doc.id, $scope.inlineEditorKey);
       } else {
-        $scope.newValue = $scope.doc[$scope.inlineEditorKey];
+        $scope.newValue = $scope.inlineEditorValue;
+        // $scope.newValue = $scope.doc[$scope.inlineEditorKey];
       }
     });
 
@@ -24,8 +28,12 @@ angular.module('app').controller('inlineEditorCtrl', [
     });
 
     $scope.keydown = function($event) {
-      if ($event && $event.keyCode === 27) {
-        $scope.show = false;
+      if ($event) {
+        if ($event.keyCode === 27) {
+          $scope.show = false;
+        } else if ($event.keyCode === 13) {
+          $scope.saveChanges();
+        }
       }
     };
 
@@ -38,7 +46,6 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
         .then(() => {
-          notificationService.success('yay!!');
         })
         .catch((err) => {
           notificationService.error(err);
@@ -50,7 +57,40 @@ angular.module('app').controller('inlineEditorCtrl', [
     };
 
     function _getFullQuery(collectionName) {
-      return 'db.' + collectionName + '.updateOne({ id : ' + $scope.doc._id.toString() + ' }, { $set : { ' + $scope.inlineEditorKey + ' : \'' + $scope.newValue + '\' } })';
+      return 'db.' + collectionName + '.updateOne({ _id : ' + _getDocId($scope.doc) + ' }, { $set : { \'' + $scope.inlineEditorKey + '\' : \'' + $scope.newValue + '\' } })';
     }
+
+    function _getDocId(doc) {
+      if (!doc) return null;
+
+      if (mongoUtils.isObjectId(doc._id)) return 'new ObjectId(\'' + doc._id.toString() + '\')';
+      else return doc._id;
+    }
+
+    // function _getPropertyValue(obj, prop) {
+    //   if (!obj || !prop) return null;
+    //
+    //   let val = null;
+    //
+    //   if (prop.indexOf('.') < 0) {
+    //     val = obj[prop];
+    //   } else {
+    //     let parts = prop.split('.').map(s => {
+    //       return s.trim();
+    //     });
+    //
+    //     for (let i = 0; i < parts.length; i++) {
+    //       let key = parts[i];
+    //
+    //       if (i === (parts.length - 1)) {
+    //         val = obj[key];
+    //       } else {
+    //         obj = obj[key];
+    //       }
+    //     }
+    //   }
+    //
+    //   return val;
+    // }
   }
 ]);
