@@ -82,7 +82,7 @@ angular.module('app').directive('codemirror', [
         }
 
         function _showAutoComplete(cm, event) {
-          if (event && event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1) return;
+          if (event && (event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1)) return;
 
           CodeMirror.commands.autocomplete(cm, null, {
             completeSingle: false

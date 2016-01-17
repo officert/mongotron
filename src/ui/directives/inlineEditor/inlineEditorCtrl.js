@@ -4,7 +4,8 @@ angular.module('app').controller('inlineEditorCtrl', [
   '$scope',
   'queryRunnerService',
   'tabCache',
-  'notificationService', ($scope, queryRunnerService, tabCache, notificationService) => {
+  'notificationService',
+  '$timeout', ($scope, queryRunnerService, tabCache, notificationService, $timeout) => {
     const mongoUtils = require('src/lib/utils/mongoUtils');
 
     $scope.show = false;
@@ -47,12 +48,16 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
         .then(() => {
-          $scope.show = false;
-          _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, $scope.newValue);
-          $scope.inlineEditorValue = $scope.newValue;
+          $timeout(() => {
+            $scope.show = false;
+            _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, $scope.newValue);
+            $scope.inlineEditorValue = $scope.newValue;
+          });
         })
         .catch((err) => {
-          notificationService.error(err);
+          $timeout(() => {
+            notificationService.error(err);
+          });
         });
     };
 
@@ -68,7 +73,7 @@ angular.module('app').controller('inlineEditorCtrl', [
       if (!doc) return null;
 
       if (mongoUtils.isObjectId(doc._id)) return 'new ObjectId(\'' + doc._id.toString() + '\')';
-      else return doc._id;
+      else return '\'' + doc._id + '\'';
     }
 
     function _setPropertyValueByKey(obj, prop, val) {
