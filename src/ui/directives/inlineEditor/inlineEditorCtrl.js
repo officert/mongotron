@@ -8,8 +8,9 @@ angular.module('app').controller('inlineEditorCtrl', [
     const mongoUtils = require('src/lib/utils/mongoUtils');
 
     $scope.show = false;
-    $scope.doc = _.extend({}, $scope.inlineEditorDoc);
+    $scope.doc = $scope.inlineEditorDoc;
     $scope.newValue = $scope.inlineEditorValue;
+    $scope.validType = $scope.inlineEditorType !== 'objectId';
     // $scope.newValue = _getPropertyValue($scope.doc, $scope.inlineEditorKey);
 
     $scope.$watch('show', (val) => {
@@ -46,6 +47,9 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
         .then(() => {
+          $scope.show = false;
+          _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, $scope.newValue);
+          $scope.inlineEditorValue = $scope.newValue;
         })
         .catch((err) => {
           notificationService.error(err);
@@ -67,7 +71,31 @@ angular.module('app').controller('inlineEditorCtrl', [
       else return doc._id;
     }
 
-    // function _getPropertyValue(obj, prop) {
+    function _setPropertyValueByKey(obj, prop, val) {
+      if (!obj || !prop) return null;
+
+      if (prop.indexOf('.') < 0) {
+        obj[prop] = val;
+      } else {
+        let parts = prop.split('.').map(s => {
+          return s.trim();
+        });
+
+        for (let i = 0; i < parts.length; i++) {
+          let key = parts[i];
+
+          if (i === (parts.length - 1)) {
+            obj[key] = val;
+          } else {
+            obj = obj[key];
+          }
+        }
+      }
+
+      return val;
+    }
+
+    // function _getPropertyValueByKey(obj, prop) {
     //   if (!obj || !prop) return null;
     //
     //   let val = null;

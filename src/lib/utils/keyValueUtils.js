@@ -42,6 +42,7 @@ function _convertResultToKeyValueResult(obj, fullKey) {
     let value = obj[key];
     let type = _getPropertyType(obj[key]);
     let icon = _getPropertyTypeIcon(type);
+    let newFullKey = fullKey ? (fullKey + '.' + key) : key;
 
     if (type === 'string' || type === 'number') {
       display = value;
@@ -55,18 +56,18 @@ function _convertResultToKeyValueResult(obj, fullKey) {
       display = 'ObjectId(\'' + value + '\')';
     } else if (type === 'object') {
       display = 'Object { ' + _.keys(value).length + ' properties }';
-      let objKeyValues = _convertResultToKeyValueResult(value, key);
+      let objKeyValues = _convertResultToKeyValueResult(value, newFullKey);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
       display = 'Array [' + _.keys(value).length + ']';
-      let objKeyValues = _convertResultToKeyValueResult(value, key);
+      let objKeyValues = _convertResultToKeyValueResult(value, newFullKey);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     }
 
     keyValue.display = display;
-    keyValue.fullKey = fullKey ? (fullKey + '.' + key) : key;
+    keyValue.fullKey = newFullKey;
     keyValue.key = key;
     keyValue.value = value;
     keyValue.type = type;

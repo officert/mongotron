@@ -32,14 +32,14 @@
         <div class="result-cell first-cell col-sm-3" ng-style="{ 'padding-left' : ((level * 15) + 'px') }">
           <i class="fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </div>
-        <div class="result-cell col-sm-6" inline-editor inline-editor-key="{{ keyvalue.fullKey }}" inline-editor-value="keyvalue.display" inline-editor-doc="resultOriginal">
+        <div class="result-cell col-sm-6" inline-editor inline-editor-key="{{ keyvalue.fullKey }}" inline-editor-value="keyvalue.display" inline-editor-type="{{ keyvalue.type }}" inline-editor-doc="resultOriginal">
         </div>
         <div class="result-cell col-sm-3">
           {{ ::keyvalue.type }}
         </div>
       </div>
       <div ng-show="keyvalue.keyValues">
-        <key-value-result result="keyvalue" result-original="result.original"></key-value-result>
+        <key-value-result result="keyvalue" result-original="resultOriginal"></key-value-result>
       </div>
     </div>
   </div>

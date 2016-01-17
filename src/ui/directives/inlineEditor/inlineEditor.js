@@ -12,6 +12,7 @@ angular.module('app').directive('inlineEditor', [
       scope: {
         'inlineEditorKey': '@',
         'inlineEditorValue': '=',
+        'inlineEditorType': '@',
         'inlineEditorDoc': '='
       },
       link: (scope, element) => {
