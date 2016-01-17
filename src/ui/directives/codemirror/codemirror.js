@@ -13,12 +13,12 @@ angular.module('app').directive('codemirror', [
         handle: '=',
         customData: '='
       },
-      link: function(scope, element, attrs, ngModelCtrl) {
+      link: (scope, element, attrs, ngModelCtrl) => {
         let editor;
         let options = scope.codemirror || {};
 
         scope.handle = scope.handle || {};
-        scope.handle.autoformat = function() {
+        scope.handle.autoformat = () => {
           _autoFormatSelection(editor);
         };
 
@@ -82,7 +82,7 @@ angular.module('app').directive('codemirror', [
         }
 
         function _showAutoComplete(cm, event) {
-          if (event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1) return;
+          if (event && event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1) return;
 
           CodeMirror.commands.autocomplete(cm, null, {
             completeSingle: false
@@ -151,7 +151,6 @@ angular.module('app').directive('codemirror', [
 
     return inner;
   });
-
 
   // https://github.com/codemirror/CodeMirror/issues/3092
   let javascriptHint = CodeMirror.hint.javascript;
