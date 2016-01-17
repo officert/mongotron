@@ -6,6 +6,7 @@
     <i class="close icon-times" ng-click="close()"></i>
   </div>
   <div class="modal-body">
-    {{ doc | json }}
+    <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" custom-data="codeEditorCustomData" has-focus="editorHasFocus" ng-model="form.doc">
+    </div>
   </div>
 </div>

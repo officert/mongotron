@@ -9,20 +9,34 @@ angular.module('app').controller('editDocumentCtrl', [
   'notificationService', ($scope, queryRunnerService, $uibModalInstance, doc, tabCache, notificationService) => {
     $scope.doc = doc;
 
+    //editor
+    $scope.editorHandle = {};
+    $scope.codeEditorOptions = {};
+    $scope.editorHasFocus = false;
+
+    $scope.form = {
+      doc: $scope.doc
+    };
+
+    let activeTab = tabCache.getActive();
+
+    if (!activeTab) throw new Error('editDocumentCtrl - no active tab');
+
+    $scope.codeEditorCustomData = {
+      collectionNames: _.pluck(activeTab.database.collections, 'name')
+    };
+
     $scope.close = function() {
       $uibModalInstance.dismiss();
     };
 
     $scope.saveChanges = () => {
-      let activeTab = tabCache.getActive();
-
       if (!activeTab) return;
 
       let fullQuery = _getFullQuery(activeTab.collection.name);
 
       queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
         .then(() => {
-          notificationService.success('yay!!');
         })
         .catch((err) => {
           notificationService.error(err);
