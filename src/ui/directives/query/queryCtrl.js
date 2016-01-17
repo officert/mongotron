@@ -12,11 +12,14 @@ angular.module('app').controller('queryCtrl', [
 
     $scope.loading = false;
     $scope.queryTime = null;
+
+    //editor
     $scope.editorHandle = {};
     $scope.codeEditorOptions = {};
     $scope.codeEditorCustomData = {
       collectionNames: _.pluck($scope.database.collections, 'name')
     };
+    $scope.editorHasFocus = false;
 
     $scope.currentQuery = null;
     $scope.results = [];
@@ -62,8 +65,6 @@ angular.module('app').controller('queryCtrl', [
         $scope.editorHandle.autoformat();
       }
     };
-
-    $scope.editorHasFocus = false;
 
     $scope.$watch('editorHasFocus', (val) => {
       if (val) {
