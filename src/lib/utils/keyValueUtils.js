@@ -28,7 +28,7 @@ function _convertToKeyValueResults(val) {
   });
 }
 
-function _convertResultToKeyValueResult(obj) {
+function _convertResultToKeyValueResult(obj, fullKey) {
   if (!obj || !_.isObject(obj)) return null;
 
   let newObj = {
@@ -55,17 +55,18 @@ function _convertResultToKeyValueResult(obj) {
       display = 'ObjectId(\'' + value + '\')';
     } else if (type === 'object') {
       display = 'Object { ' + _.keys(value).length + ' properties }';
-      let objKeyValues = _convertResultToKeyValueResult(value);
+      let objKeyValues = _convertResultToKeyValueResult(value, key);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
       display = 'Array [' + _.keys(value).length + ']';
-      let objKeyValues = _convertResultToKeyValueResult(value);
+      let objKeyValues = _convertResultToKeyValueResult(value, key);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     }
 
     keyValue.display = display;
+    keyValue.fullKey = fullKey ? (fullKey + '.' + key) : key;
     keyValue.key = key;
     keyValue.value = value;
     keyValue.type = type;
