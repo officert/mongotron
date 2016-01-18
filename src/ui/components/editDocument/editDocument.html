@@ -6,7 +6,26 @@
     <i class="close icon-times" ng-click="close()"></i>
   </div>
   <div class="modal-body">
-    <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" custom-data="codeEditorCustomData" has-focus="editorHasFocus" ng-model="form.doc">
+    <div class="editor">
+      <ul class="menu">
+        <li>
+          <button class="btn btn-default" ng-click="refresh()">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </li>
+      </ul>
+      <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" custom-data="codeEditorCustomData" has-focus="editorHasFocus" ng-model="form.doc">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="clearfix pull-right">
+      <button class="btn btn-default" type="button" ng-click="close()">
+        Close
+      </button>
+      <button class="btn btn-primary" type="button" ng-click="saveChanges()">
+        Save
+      </button>
     </div>
   </div>
 </div>
