@@ -7,6 +7,8 @@ angular.module('app').controller('editDocumentCtrl', [
   'doc',
   'tabCache',
   'notificationService', ($scope, queryRunnerService, $uibModalInstance, doc, tabCache, notificationService) => {
+    // const mongoUtils = require('lib/utils/mongoUtils');
+
     $scope.doc = doc;
 
     //editor
@@ -15,7 +17,7 @@ angular.module('app').controller('editDocumentCtrl', [
     $scope.editorHasFocus = false;
 
     $scope.form = {
-      doc: $scope.doc
+      doc: JSON.stringify($scope.doc, null, 4)
     };
 
     let activeTab = tabCache.getActive();
@@ -30,14 +32,17 @@ angular.module('app').controller('editDocumentCtrl', [
       $uibModalInstance.dismiss();
     };
 
+    $scope.refresh = function() {
+      $scope.editorHandle.refresh();
+    };
+
     $scope.saveChanges = () => {
       if (!activeTab) return;
 
       let fullQuery = _getFullQuery(activeTab.collection.name);
 
       queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
-        .then(() => {
-        })
+        .then(() => {})
         .catch((err) => {
           notificationService.error(err);
         });
