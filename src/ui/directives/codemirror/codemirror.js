@@ -21,6 +21,9 @@ angular.module('app').directive('codemirror', [
         scope.handle.autoformat = () => {
           _autoFormatSelection(editor);
         };
+        scope.handle.refresh = () => {
+          _refresh(editor);
+        };
 
         const TAB = '  '; //2 spaces
 
@@ -63,7 +66,12 @@ angular.module('app').directive('codemirror', [
 
           _registerEditorEvents();
 
-          editor.refresh();
+          $timeout(() => {
+            _refresh(editor);
+            $timeout(() => { //TODO: figure out a better way - sometimes the editor styles are screwed up, re-freshing helps but this isn't ideal
+              _refresh(editor);
+            }, 500);
+          });
         }
 
         function _autoFormatSelection(codeMirrorEditor) {
@@ -87,6 +95,10 @@ angular.module('app').directive('codemirror', [
           CodeMirror.commands.autocomplete(cm, null, {
             completeSingle: false
           });
+        }
+
+        function _refresh(codeMirrorEditor) {
+          codeMirrorEditor.refresh();
         }
 
         function _registerEditorEvents() {
