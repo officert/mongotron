@@ -99,16 +99,16 @@ function _getPropertyTypeIcon(propertyType) {
 
   switch (propertyType) {
     case 'null':
-      icon = 'fa-smile-o';
+      icon = 'icon-null';
       break;
     case 'number':
-      icon = 'fa-smile-o';
+      icon = 'icon-number';
       break;
     case 'string':
-      icon = 'fa-quote-left';
+      icon = 'icon-string';
       break;
     case 'boolean':
-      icon = 'fa-calendar';
+      icon = 'icon-boolean';
       break;
     case 'date':
       icon = 'fa-calendar';

@@ -16,6 +16,13 @@ angular.module('app').controller('keyValueResultsCtrl', [
             $scope.editDocument(doc.original);
           });
         }
+      }, {
+        label: 'Delete Document',
+        click: () => {
+          $timeout(() => {
+            $scope.deleteDocument(doc.original);
+          });
+        }
       }]);
     };
   }
