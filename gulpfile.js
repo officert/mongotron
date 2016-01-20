@@ -144,7 +144,7 @@ gulp.task('jshint', () => {
 
 gulp.task('jsdoc', (next) => {
   gulp.src(['README.md', './src/**/*.js'], {
-  // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
+      // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
       read: false
     })
     .pipe(jsdoc(JSDOC_SETTINGS, next));
@@ -214,8 +214,8 @@ gulp.task('remove-link-tests', (next) => {
 });
 
 gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
-  return gulp.src(['build/', 'build/lib/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
+  return gulp.src(['build/', 'build/lib/', 'package.json'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/package.json'], {
       force: true
     }));
 });
