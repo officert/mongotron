@@ -12,9 +12,9 @@ var logger = new winston.Logger({
   colorize: true,
   transports: [
     new(winston.transports.Console)(),
-    new(winston.transports.File)({
-      filename: appConfig.logFilePath
-    })
+    // new(winston.transports.File)({
+    //   filename: appConfig.logFilePath
+    // })
   ]
 });
 
