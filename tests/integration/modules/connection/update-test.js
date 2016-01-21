@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe('modules', () => {
   describe('connection', () => {
-    describe('update', () => {
+    describe.only('update', () => {
       describe('when no id is passed', () => {
         it('should return an error', (next) => {
           let id = null;
@@ -178,7 +178,7 @@ describe('modules', () => {
         });
       });
 
-      describe.only('when port is changed to an invalid port', () => {
+      describe('when port is changed to an invalid port', () => {
         let connection;
         let updates = {
           port: 999999
