@@ -61,7 +61,7 @@ const RELEASE_SETTINGS = {
   overwrite: true,
   force: true,
   asar: true,
-  // prune: true
+  prune: true
 };
 
 const LESSOPTIONS = {
