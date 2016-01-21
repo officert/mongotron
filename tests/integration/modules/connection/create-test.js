@@ -1,6 +1,6 @@
 'use strict';
 
-require('tests/unit/before-all');
+require('tests/integration/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
