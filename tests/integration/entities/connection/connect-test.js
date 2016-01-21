@@ -1,6 +1,6 @@
 'use strict';
 
-require('tests/unit/before-all');
+require('tests/integration/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
@@ -44,7 +44,9 @@ describe('entities', function() {
               .catch((err) => {
                 should.exist(err);
 
-                (err instanceof errors.ConnectionError).should.equal(true);
+                console.log('err', err);
+
+                err.name.should.equal('Connection Error');
 
                 err.message.should.equal('connect ECONNREFUSED 127.0.0.1:10000');
               })

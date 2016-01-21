@@ -9,6 +9,7 @@ angular.module('app').controller('addConnectionCtrl', [
   function($scope, $timeout, $log, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
     const Connection = require('lib/entities/connection');
+    const mongoUtils = require('src/lib/utils/mongoUtils');
 
     $scope.currentSubPage = 'server';
 
@@ -27,6 +28,8 @@ angular.module('app').controller('addConnectionCtrl', [
       buttonErrorClass: 'btn-danger'
     };
 
+    $scope.isLocalHost = mongoUtils.isLocalHost;
+
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
       databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
     }, $scope.selectedConnection) : {
@@ -42,7 +45,7 @@ angular.module('app').controller('addConnectionCtrl', [
     }
 
     $scope.$watch('addConnectionForm.host', function(val) {
-      if (val === 'localhost') {
+      if (mongoUtils.isLocalHost(val)) {
         $scope.addConnectionForm.databaseName = null;
       }
     });

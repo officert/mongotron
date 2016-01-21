@@ -11,6 +11,7 @@ const _ = require('underscore');
 const logger = require('lib/modules/logger');
 const Database = require('lib/entities/database');
 const errors = require('lib/errors');
+const mongoUtils = require('src/lib/utils/mongoUtils');
 
 /** @class */
 class Connection {
@@ -34,7 +35,7 @@ class Connection {
     _this.replicaSet = options.replicaSet;
     _this.databases = [];
 
-    if (options.databaseName && options.host !== 'localhost') {
+    if (options.databaseName && !mongoUtils.isLocalHost(options.host)) {
       let newDb = {
         id: uuid.v4(),
         name: options.databaseName,
@@ -80,7 +81,7 @@ class Connection {
 
         logger.log('Connected to ' + _this.name + ' server @ ' + _this.connectionString);
 
-        if (_this.host === 'localhost') {
+        if (mongoUtils.isLocalHost(_this.host)) {
           _getDbsForLocalhostConnection(_this, () => {
             return resolve(null);
           });
@@ -130,7 +131,7 @@ class Connection {
 function _getDbsForLocalhostConnection(connection, next) {
   if (!connection) return next(new Error('connection is required'));
   if (!next) return next(new Error('next is required'));
-  if (connection.host !== 'localhost') return next(new Error('cannot get local dbs for non localhost connection'));
+  if (!mongoUtils.isLocalHost(connection.host)) return next(new Error('cannot get local dbs for non localhost connection'));
 
   var localDb = new MongoDb('local', new MongoServer(connection.host, connection.port));
 

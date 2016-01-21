@@ -3,6 +3,7 @@
 const Promise = require('bluebird');
 
 const errors = require('lib/errors');
+const mongoUtils = require('src/lib/utils/mongoUtils');
 
 /** @module Connection */
 /** @class */
@@ -57,7 +58,7 @@ function _baseValidate(data) {
       if (!data.auth.password) return reject(new errors.InvalidArugmentError('auth.password is required'));
     }
 
-    if (data.host !== 'localhost') {
+    if (!mongoUtils.isLocalHost(data.host)) {
       if (!data.databaseName) return reject(new errors.InvalidArugmentError('database is required when connecting to a remote server.'));
     }
 

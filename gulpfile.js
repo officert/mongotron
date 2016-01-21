@@ -8,7 +8,7 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
-const karma = require('karma');
+const karma = require('karma').server;
 const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
@@ -27,33 +27,41 @@ require('gulp-task-list')(gulp);
 const SRC_DIR = 'src';
 const DOCS_DIR = 'docs';
 const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
+  'bower',
+  'babel-preset-es2015',
   'electron-packager',
   'electron-prebuilt',
-  'gulp|gulp-jshint',
-  'gulp-less',
-  'gulp-mocha',
-  'gulp-task-list',
-  'jshint-stylish',
+  'fontcustom',
+  'gulp|gulp-*',
+  'jasmine-core',
+  'jshint|jshint-*',
+  'karma|karma-*',
   'run-sequence',
-  'bower',
-  'babel',
+  'shelljs',
   'should',
-  'sinon',
+  'sinon|sinon-*',
   'supertest'
 ];
 const RELEASE_IMAGE_ICON = __dirname + '/resources/icon/logo_icon';
 const RELEASE_OSX_IMAGE_ICON = RELEASE_IMAGE_ICON + '.icns';
 const RELEASE_WIN_IMAGE_ICON = RELEASE_IMAGE_ICON + '.ico';
+
 const RELEASE_SETTINGS = {
   dir: '.',
   name: appConfig.name,
   out: appConfig.releasePath,
   version: '0.36.0',
-  ignore: RELEASE_IGNORE_PKGS.map((ignore) => {
-    return '/node_modules/' + ignore + '($|/)';
-  }),
+  'app-version': appConfig.version,
+  'version-string': {
+    ProductVersion: appConfig.version,
+    ProductName: appConfig.name,
+  },
+  ignore: '/node_modules/(' + RELEASE_IGNORE_PKGS.join('|') + ')',
   appPath: 'build/browser/main.js',
-  force: true
+  overwrite: true,
+  force: true,
+  asar: true,
+  prune: true
 };
 
 const LESSOPTIONS = {
@@ -144,7 +152,7 @@ gulp.task('jshint', () => {
 
 gulp.task('jsdoc', (next) => {
   gulp.src(['README.md', './src/**/*.js'], {
-  // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
+      // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
       read: false
     })
     .pipe(jsdoc(JSDOC_SETTINGS, next));
@@ -214,8 +222,8 @@ gulp.task('remove-link-tests', (next) => {
 });
 
 gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
-  return gulp.src(['build/', 'build/lib/'])
-    .pipe(symlink(['./node_modules/src', './node_modules/lib'], {
+  return gulp.src(['build/', 'build/lib/', 'package.json'])
+    .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/package.json'], {
       force: true
     }));
 });
@@ -258,10 +266,8 @@ gulp.task('serve-site', ['site-css'], () => {
 
 gulp.task('default', ['serve']);
 
-gulp.task('test', () => {
-  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', () => {
-    process.exit(0);
-  });
+gulp.task('test', (done) => {
+  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', done);
 });
 
 gulp.task('test-int', () => {
@@ -274,8 +280,8 @@ gulp.task('test-unit', () => {
     .pipe(mocha(MOCHA_SETTINGS));
 });
 
-gulp.task('test-unit-ui', (done) => {
-  let server = new karma.Server({
+gulp.task('test-unit-ui', () => {
+  karma.start({
     configFile: __dirname + '/tests/ui/karma.conf.js',
     singleRun: true,
     files: [
@@ -308,9 +314,7 @@ gulp.task('test-unit-ui', (done) => {
       '../../src/ui/services/**/*.js',
       './**/*-test.js'
     ]
-  });
-
-  server.start(done);
+  }, exitCode => process.exit(exitCode));
 });
 
 /* =========================================================================
