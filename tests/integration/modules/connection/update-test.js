@@ -178,7 +178,7 @@ describe('modules', () => {
         });
       });
 
-      describe('when port is changed to an invalid port', () => {
+      describe.only('when port is changed to an invalid port', () => {
         let connection;
         let updates = {
           port: 999999
