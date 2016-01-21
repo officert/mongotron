@@ -28,6 +28,8 @@ angular.module('app').controller('addConnectionCtrl', [
       buttonErrorClass: 'btn-danger'
     };
 
+    $scope.isLocalHost = mongoUtils.isLocalHost;
+
     $scope.addConnectionForm = $scope.selectedConnection ? _.extend({
       databaseName: ($scope.selectedConnection.databases && $scope.selectedConnection.databases.length) ? $scope.selectedConnection.databases[0].name : null
     }, $scope.selectedConnection) : {
