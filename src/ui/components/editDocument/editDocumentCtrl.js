@@ -49,7 +49,8 @@ angular.module('app').controller('editDocumentCtrl', [
     };
 
     function _getFullQuery(collectionName) {
-      return 'db.' + collectionName + '.updateOne({ id : ' + $scope.doc._id.toString() + ' }, { $set : { ' + $scope.inlineEditorKey + ' : \'' + $scope.newValue + '\' } })';
+      return `db.${collectionName}.updateOne({ id : ${$scope.doc._id.toString()} }, { $set : { ${$scope.inlineEditorKey} : ${$scope.newValue} } })`;
+      // return 'db.' + collectionName + '.updateOne({ id : ' + $scope.doc._id.toString() + ' }, { $set : { ' + $scope.inlineEditorKey + ' : \'' + $scope.newValue + '\' } })';
     }
   }
 ]);

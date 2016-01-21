@@ -45,8 +45,6 @@ class FileUtils {
     } catch (e) {
       //eat the error because you'll get an error if the dir doesn't exists,
       //in which case we should create the dir
-      console.log('\n\n\n ----------------------- ERROR createLogFile ----------------------- \n\n\n');
-      console.log(e);
     }
 
     if (!fileExists) {

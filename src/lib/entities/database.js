@@ -116,7 +116,7 @@ class Database {
 
     if (existingCollection) return;
 
-    options.serverName = _this.host + ':' + _this.port;
+    options.serverName = `${_this.host}:${_this.port}`;
     options.databaseName = _this.name;
     options.connection = _this.connection;
     options.database = _this;

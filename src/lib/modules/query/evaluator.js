@@ -34,7 +34,7 @@ class Evaluator {
     var result;
 
     try {
-      script = new vm.Script('(' + expression + ')', options);
+      script = new vm.Script(`(${expression})`, options);
     } catch (err) {
       result = err;
     }
