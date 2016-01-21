@@ -23,7 +23,7 @@ afterEach(() => {
 
 describe('modules', () => {
   describe('connection', () => {
-    describe.only('update', () => {
+    describe('update', () => {
       describe('when no id is passed', () => {
         it('should return an error', (next) => {
           let id = null;
