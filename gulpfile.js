@@ -13,7 +13,6 @@ const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
-const fontcustom = require('fontcustom');
 const fs = require('fs');
 const jsdoc = require('gulp-jsdoc3');
 
@@ -134,7 +133,9 @@ gulp.task('site-css', () => {
     .pipe(gulp.dest(DOCS_DIR + '/css'));
 });
 
-gulp.task('fonts', function() {
+gulp.task('fonts', () => {
+  const fontcustom = require('fontcustom');
+
   return fontcustom({
     path: 'resources/font-glyphs',
     output: 'src/ui/font-glyphs',
@@ -326,12 +327,12 @@ function _init(stream) {
 }
 
 function unlink(symlink, next) {
-  fs.lstat(symlink, function(lerr, lstat) {
+  fs.lstat(symlink, (lerr, lstat) => {
     if (lerr || !lstat.isSymbolicLink()) {
       return next();
     }
 
-    fs.unlink(symlink, function() {
+    fs.unlink(symlink, () => {
       return next();
     });
   });
