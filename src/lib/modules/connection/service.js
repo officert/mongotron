@@ -6,6 +6,7 @@ const logger = require('lib/modules/logger');
 const errors = require('lib/errors');
 const connectionValidator = require('./validator');
 const connectionRepository = require('./repository');
+const mongoUtils = require('src/lib/utils/mongoUtils');
 
 const DEFAULT_CONNECTIONS = require('./defaults');
 
@@ -134,7 +135,7 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
     if ('host' in updates) {
       connection.host = updates.host;
       delete connection.replicaSet;
-      if (updates.host === 'localhost') {
+      if (mongoUtils.isLocalHost(updates.host)) {
         delete connection.databases;
       }
     }
@@ -161,7 +162,7 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
       }
     }
 
-    if (connection.host !== 'localhost') {
+    if (mongoUtils.isLocalHost(connection.host)) {
       let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
 
       if (!db) logger.warn('connection service - _applyConnectionUpdates() - connection has no database');
@@ -209,7 +210,7 @@ function _applyConnectionUpdatesPostValidation(connection, updates) {
       if ('host' in updates) db.host = updates.host;
       if ('port' in updates) db.port = updates.port;
     } else {
-      if ('host' in updates && updates.host !== 'localhost') {
+      if ('host' in updates && !mongoUtils.isLocalHost(updates.host)) {
         connection.addDatabase({
           host: updates.host,
           port: updates.port

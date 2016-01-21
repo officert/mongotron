@@ -6,6 +6,7 @@ const Promise = require('bluebird');
 
 const Collection = require('lib/entities/collection');
 const errors = require('lib/errors');
+const mongoUtils = require('src/lib/utils/mongoUtils');
 
 /** @class */
 class Database {
@@ -33,7 +34,7 @@ class Database {
 
     _this.collections = [];
 
-    if (_this.host === 'localhost') {
+    if (mongoUtils.isLocalHost(_this.host)) {
       _this._dbConnection = new MongoDb(_this.name, new MongoServer(_this.host, _this.port));
     } else {
       _this._dbConnection = null; //this is set by the parent connection once we've connect to it
@@ -50,7 +51,7 @@ class Database {
     return new Promise((resolve, reject) => {
       //TODO: need to do some research and see if connecting to a database
       //over and over like this is a performance issue or causes memory leaks
-      if (_this.host === 'localhost') {
+      if (mongoUtils.isLocalHost(_this.host)) {
         _this._dbConnection.open((err) => {
           if (err) return reject(new errors.DatabaseError(err.message));
 
