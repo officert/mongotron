@@ -8,7 +8,6 @@
     "async": "1.5.0",
     "bluebird": "3.0.6",
     "bson": "https://github.com/officert/js-bson/tarball/master",
-    "buffer": "3.6.0",
     "csv": "0.4.6",
     "jsonfile": "2.2.3",
     "mongodb": "2.1.2",
@@ -48,7 +47,6 @@
     "supertest": "1.1.0"
   },
   "scripts": {
-    "test": "gulp test",
     "postinstall": "./node_modules/.bin/bower install && gulp dev-sym-links"
   },
   "repository": {
