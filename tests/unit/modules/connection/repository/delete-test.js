@@ -35,7 +35,7 @@ describe('modules', function() {
               .catch(function(err) {
                 should.exist(err);
 
-                (err instanceof errors.InvalidArugmentError).should.equal(true);
+                err.name.should.equal('Invalid Argument Error');
 
                 err.message.should.equal('id is required');
 
@@ -57,7 +57,7 @@ describe('modules', function() {
               .catch(function(err) {
                 should.exist(err);
 
-                (err instanceof errors.ObjectNotFoundError).should.equal(true);
+                err.name.should.equal('Object Not Found Error');
 
                 err.message.should.equal('Connection not found');
 
