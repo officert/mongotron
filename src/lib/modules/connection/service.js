@@ -162,7 +162,7 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
       }
     }
 
-    if (mongoUtils.isLocalHost(connection.host)) {
+    if (!mongoUtils.isLocalHost(connection.host)) {
       let db = connection.databases && connection.databases.length ? connection.databases[0] : null;
 
       if (!db) logger.warn('connection service - _applyConnectionUpdates() - connection has no database');
