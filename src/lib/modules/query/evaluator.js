@@ -2,6 +2,7 @@
 
 const _ = require('underscore');
 const vm = require('vm');
+const ObjectId = require('mongodb').ObjectId;
 
 /*
  * Based on https://github.com/pierrec/node-eval/blob/master/eval.js
@@ -19,7 +20,9 @@ class Evaluator {
     if (!expression) return new Error('evaluator - eval() - must pass an expression');
     if (!_.isString(expression)) return new Error('evaluator - eval() - expression must be a string');
 
-    var evalScope = {};
+    var evalScope = {
+      ObjectId: ObjectId
+    };
 
     if (scope && _.isObject(scope)) {
       _.extend(evalScope, scope);

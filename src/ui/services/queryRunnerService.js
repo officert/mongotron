@@ -16,13 +16,13 @@ angular.module('app').service('queryRunnerService', [
         if (!rawQuery) return reject(new Error('QueryRunnerService - runQuery() - rawQuery is required'));
         if (!collections) return reject(new Error('QueryRunnerService - runQuery() - collections is required'));
 
-        if (!queryModule.isValidQuery(rawQuery)) return reject(new Error('Sorry, ' + rawQuery + ' is not a valid query'));
+        if (!queryModule.isValidQuery(rawQuery)) return reject(new Error(`Sorry, ${rawQuery} is not a valid query`));
 
         let collectionName = queryModule.parseCollectionName(rawQuery);
 
         let collection = _getCollectionByNameFromRawQuery(collectionName, collections);
 
-        if (!collection) return reject(new Error('Sorry, ' + collectionName + ' is not a valid collection name'));
+        if (!collection) return reject(new Error(`Sorry, ${collectionName} is not a valid collection name`));
 
         let query;
 
@@ -44,9 +44,9 @@ angular.module('app').service('queryRunnerService', [
             }
 
             if (query.mongoMethod !== 'find' && query.mongoMethod !== 'aggregate' && query.mongoMethod !== 'count') {
-              notificationService.success(query.mongoMethod + ' was successful');
+              notificationService.success(`${query.mongoMethod} was successful`);
 
-              return _this.runQuery('db.' + collectionName + '.find()', collections)
+              return _this.runQuery(`db.${collectionName}.find()`, collections)
                 .then(resolve)
                 .catch(reject);
             } else {

@@ -7,6 +7,7 @@ angular.module('app').controller('inlineEditorCtrl', [
   'notificationService',
   '$timeout', ($scope, queryRunnerService, tabCache, notificationService, $timeout) => {
     const mongoUtils = require('src/lib/utils/mongoUtils');
+    const evaluator = require('lib/modules/query/evaluator');
 
     $scope.show = false;
     $scope.doc = $scope.inlineEditorDoc;
@@ -66,14 +67,19 @@ angular.module('app').controller('inlineEditorCtrl', [
     };
 
     function _getFullQuery(collectionName) {
-      return 'db.' + collectionName + '.updateOne({ _id : ' + _getDocId($scope.doc) + ' }, { $set : { \'' + $scope.inlineEditorKey + '\' : \'' + $scope.newValue + '\' } })';
+      // let value = evaluator.eval($scope.newValue);
+      // if (_.isString(value)) {
+      //   value = `'${value}'`;
+      // }
+      let value = $scope.newValue;
+      return `db.${collectionName}.updateOne({ _id : ${_getDocId($scope.doc)} }, { $set : { \'${$scope.inlineEditorKey}\' : ${value} } })`;
     }
 
     function _getDocId(doc) {
       if (!doc) return null;
 
-      if (mongoUtils.isObjectId(doc._id)) return 'new ObjectId(\'' + doc._id.toString() + '\')';
-      else return '\'' + doc._id + '\'';
+      if (mongoUtils.isObjectId(doc._id)) return `new ObjectId(\'${doc._id.toString()}\')`;
+      else return `\'${doc._id}\'`;
     }
 
     function _setPropertyValueByKey(obj, prop, val) {

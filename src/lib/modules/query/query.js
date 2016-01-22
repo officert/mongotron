@@ -2,7 +2,6 @@
 
 const _ = require('underscore');
 const Promise = require('bluebird');
-const ObjectId = require('mongodb').ObjectId;
 
 const evaluator = require('./evaluator');
 const parser = require('./parser');
@@ -32,7 +31,7 @@ class Query {
 
       var queryType = QUERY_TYPES[functionName];
 
-      if (!queryType) return reject(new Error(functionName + ' is not a supported query'));
+      if (!queryType) return reject(new Error(`${functionName} is not a supported query`));
 
       _.extend(_this, queryType);
 
@@ -64,10 +63,6 @@ class Query {
 function _parseRawQuery(rawQuery, options) {
   options = options || {};
 
-  var evalScope = {
-    ObjectId: ObjectId
-  };
-
   var query = null;
   var queryOptions = null;
 
@@ -76,7 +71,7 @@ function _parseRawQuery(rawQuery, options) {
 
     if (!rawQueryValue) return new Error('error parsing query');
 
-    query = evaluator.eval(rawQueryValue, evalScope);
+    query = evaluator.eval(rawQueryValue);
 
     if (_.isError(query)) return query;
   } else {
@@ -86,8 +81,8 @@ function _parseRawQuery(rawQuery, options) {
     if (!rawQueryValue) return new Error('error parsing query');
     if (!rawOptionsValue && options.requireOptions) return new Error(`query options are required for mongo ${options.methodName}`);
 
-    query = evaluator.eval(rawQueryValue, evalScope);
-    if (rawOptionsValue) queryOptions = evaluator.eval(rawOptionsValue, evalScope);
+    query = evaluator.eval(rawQueryValue);
+    if (rawOptionsValue) queryOptions = evaluator.eval(rawOptionsValue);
 
     if (_.isError(query)) return query;
     if (_.isError(queryOptions)) return queryOptions;
