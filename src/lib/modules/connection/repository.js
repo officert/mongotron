@@ -286,8 +286,6 @@ function updateConnection(originalConnection, updatedConnection, connections) {
 
     connections.splice(index, 1, updatedConnection);
 
-    console.log('updatedConnection', connections);
-
     return resolve(connections);
   });
 }

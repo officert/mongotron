@@ -72,8 +72,6 @@ angular.module('app').factory('keypressService', [
       //the current keybindingContext
       else {
         let callbackWrapper = () => {
-          console.log('keybindingContext', _this.keybindingContext);
-
           let args = Array.prototype.slice.call(arguments);
 
           let callbacks = _this.registeredCombos[combo];

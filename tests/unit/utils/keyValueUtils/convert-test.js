@@ -69,8 +69,6 @@ describe('utils', function() {
 
           var result = keyValueUtils.convert(value);
 
-          console.log(result);
-
           should.exist(result);
           should(result.original).equal(value);
           should.exist(result.keyValues);
