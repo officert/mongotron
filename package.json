@@ -9,6 +9,8 @@
     "bluebird": "3.0.6",
     "bson": "https://github.com/officert/js-bson/tarball/master",
     "csv": "0.4.6",
+    "escodegen": "1.8.0",
+    "esprima": "2.7.1",
     "jsonfile": "2.2.3",
     "mongodb": "2.1.2",
     "node-uuid": "1.4.7",
