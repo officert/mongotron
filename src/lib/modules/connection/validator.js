@@ -43,9 +43,9 @@ function _baseValidate(data) {
       for (let i = 0; i < data.replicaSet.sets.length; i++) {
         let set = data.replicaSet.sets[i];
 
-        if (!set.host) return reject(new errors.InvalidArugmentError('data.replicaSet.sets[' + i + '].host is required'));
-        if (!set.port) return reject(new errors.InvalidArugmentError('data.replicaSet.sets[' + i + '].port is required'));
-        if (set.port < 0 || set.port > 65535) return reject(new errors.InvalidArugmentError('data.replicaSet.sets[' + i + '].port number must be between 0 and 65535.'));
+        if (!set.host) return reject(new errors.InvalidArugmentError(`data.replicaSet.sets[${i}].host is required`));
+        if (!set.port) return reject(new errors.InvalidArugmentError(`data.replicaSet.sets[${i}].port is required`));
+        if (set.port < 0 || set.port > 65535) return reject(new errors.InvalidArugmentError(`data.replicaSet.sets[${i}].port number must be between 0 and 65535.`));
       }
     } else {
       if (!data.host) return reject(new errors.InvalidArugmentError('data.host is required'));

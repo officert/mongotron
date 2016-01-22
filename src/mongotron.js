@@ -31,7 +31,6 @@ function createDbConfigFile() {
 }
 
 function createLogFile() {
-  console.log('\n\n\n ----------------------- createLogFile ----------------------- \n\n\n');
   fileUtils.createFileSync(appConfig.logFilePath);
 }
 

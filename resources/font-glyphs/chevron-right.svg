@@ -5,9 +5,9 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="Slice-1-+-Rectangle-1" sketch:type="MSLayerGroup"></g>
-        <g id="Chevron-Right" sketch:type="MSLayerGroup" transform="translate(69.000000, 7.000000)" fill="#D8D8D8">
-            <path d="M100.174808,122.647236 L0.4521578,222.369886 L22.6625631,244.580291 L144.590705,122.652149 L144.585792,122.647236 L144.590705,122.642322 L22.6625631,0.714179738 L0.4521578,22.924585 L100.174808,122.647236 Z" id="Rectangle-33" sketch:type="MSShapeGroup"></path>
+        <g id="Chevron-Right-New" sketch:type="MSLayerGroup" transform="translate(104.387302, 130.402020) rotate(-315.000000) translate(-104.387302, -130.402020) translate(23.887302, 49.402020)" fill="#D8D8D8">
+            <rect id="Rectangle-46" sketch:type="MSShapeGroup" x="111.656854" y="1.34314575" width="49" height="160"></rect>
+            <rect id="Rectangle-46" sketch:type="MSShapeGroup" transform="translate(80.295419, 25.481710) scale(-1, -1) rotate(-270.000000) translate(-80.295419, -25.481710) " x="55.7954185" y="-54.51829" width="49" height="160"></rect>
         </g>
     </g>
 </svg>

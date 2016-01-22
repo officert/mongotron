@@ -13,13 +13,16 @@ angular.module('app').directive('codemirror', [
         handle: '=',
         customData: '='
       },
-      link: function(scope, element, attrs, ngModelCtrl) {
+      link: (scope, element, attrs, ngModelCtrl) => {
         let editor;
         let options = scope.codemirror || {};
 
         scope.handle = scope.handle || {};
-        scope.handle.autoformat = function() {
+        scope.handle.autoformat = () => {
           _autoFormatSelection(editor);
+        };
+        scope.handle.refresh = () => {
+          _refresh(editor);
         };
 
         const TAB = '  '; //2 spaces
@@ -63,7 +66,12 @@ angular.module('app').directive('codemirror', [
 
           _registerEditorEvents();
 
-          editor.refresh();
+          $timeout(() => {
+            _refresh(editor);
+            $timeout(() => { //TODO: figure out a better way - sometimes the editor styles are screwed up, re-freshing helps but this isn't ideal
+              _refresh(editor);
+            }, 500);
+          });
         }
 
         function _autoFormatSelection(codeMirrorEditor) {
@@ -82,11 +90,15 @@ angular.module('app').directive('codemirror', [
         }
 
         function _showAutoComplete(cm, event) {
-          if (event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1) return;
+          if (event && (event.keyIdentifier.indexOf('Up') !== -1 || event.keyIdentifier.indexOf('Down') !== -1)) return;
 
           CodeMirror.commands.autocomplete(cm, null, {
             completeSingle: false
           });
+        }
+
+        function _refresh(codeMirrorEditor) {
+          codeMirrorEditor.refresh();
         }
 
         function _registerEditorEvents() {
@@ -151,7 +163,6 @@ angular.module('app').directive('codemirror', [
 
     return inner;
   });
-
 
   // https://github.com/codemirror/CodeMirror/issues/3092
   let javascriptHint = CodeMirror.hint.javascript;

@@ -28,7 +28,7 @@ function _convertToKeyValueResults(val) {
   });
 }
 
-function _convertResultToKeyValueResult(obj) {
+function _convertResultToKeyValueResult(obj, fullKey) {
   if (!obj || !_.isObject(obj)) return null;
 
   let newObj = {
@@ -42,6 +42,7 @@ function _convertResultToKeyValueResult(obj) {
     let value = obj[key];
     let type = _getPropertyType(obj[key]);
     let icon = _getPropertyTypeIcon(type);
+    let newFullKey = fullKey ? `${fullKey}.${key}` : key;
 
     if (type === 'string' || type === 'number') {
       display = value;
@@ -52,20 +53,21 @@ function _convertResultToKeyValueResult(obj) {
     } else if (type === 'null') {
       display = 'null';
     } else if (type === 'objectId') {
-      display = 'ObjectId(\'' + value + '\')';
+      display = `ObjectId(\'${value}\')`;
     } else if (type === 'object') {
-      display = 'Object { ' + _.keys(value).length + ' properties }';
-      let objKeyValues = _convertResultToKeyValueResult(value);
+      display = `Object { ${_.keys(value).length} properties }`;
+      let objKeyValues = _convertResultToKeyValueResult(value, newFullKey);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     } else if (type === 'array') {
-      display = 'Array [' + _.keys(value).length + ']';
-      let objKeyValues = _convertResultToKeyValueResult(value);
+      display = `Array [${_.keys(value).length}]`;
+      let objKeyValues = _convertResultToKeyValueResult(value, newFullKey);
       keyValue.keyValues = objKeyValues.keyValues;
       keyValue.original = objKeyValues.original;
     }
 
     keyValue.display = display;
+    keyValue.fullKey = newFullKey;
     keyValue.key = key;
     keyValue.value = value;
     keyValue.type = type;
@@ -97,16 +99,16 @@ function _getPropertyTypeIcon(propertyType) {
 
   switch (propertyType) {
     case 'null':
-      icon = 'fa-smile-o';
+      icon = 'icon-null';
       break;
     case 'number':
-      icon = 'fa-smile-o';
+      icon = 'icon-number';
       break;
     case 'string':
-      icon = 'fa-quote-left';
+      icon = 'icon-string';
       break;
     case 'boolean':
-      icon = 'fa-calendar';
+      icon = 'icon-boolean';
       break;
     case 'date':
       icon = 'fa-calendar';

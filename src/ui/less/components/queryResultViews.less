@@ -75,9 +75,13 @@
         color: @theme-query-result-string-icon;
       }
       .result-row {
-        border-bottom: 1px solid lighten(@theme-query-result-json-border-color, 20%);
+        background: @theme-query-result-json-bg;
+        // border-bottom: 1px solid lighten(@theme-query-result-json-border-color, 20%);
+        &:nth-child(odd) {
+          background: darken(@theme-query-result-json-bg, 4%);
+        }
         &:hover {
-          background: darken(@theme-query-result-json-bg, 2%);
+          background: darken(@theme-query-result-json-bg, 4%);
         }
         &:last-child {
           border-bottom: none;

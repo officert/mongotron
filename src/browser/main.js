@@ -9,10 +9,6 @@ const path = require('path');
 require('src/mongotron').init();
 
 const appConfig = require('src/config/appConfig');
-const logger = require('lib/modules/logger');
-
-logger.debug('appConfig');
-logger.debug(appConfig);
 
 /* ------------------------------------------------
  * App initialization
@@ -47,7 +43,7 @@ app.on('ready', function() {
 
   mainWindow.setMinimumSize(770, 400);
 
-  mainWindow.loadUrl(path.join('file://', __dirname, '../ui/index.html'));
+  mainWindow.loadUrl(path.join(`file://${__dirname}`, '../ui/index.html'));
 
   // if (appConfig.env !== 'production') mainWindow.openDevTools();
 

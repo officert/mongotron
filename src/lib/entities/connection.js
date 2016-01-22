@@ -68,7 +68,7 @@ class Connection {
     var _this = this;
 
     return new Promise((resolve, reject) => {
-      logger.log('Connecting to ' + _this.name + ' server @ ' + _this.connectionString + '...');
+      logger.log(`Connecting to ${_this.name} server @ ${_this.connectionString}...`);
 
       let client = new MongoClient();
 
@@ -79,7 +79,7 @@ class Connection {
       client.connect(_this.connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
 
-        logger.log('Connected to ' + _this.name + ' server @ ' + _this.connectionString);
+        logger.log(`Connected to ${_this.name} server @ ${_this.connectionString}`);
 
         if (mongoUtils.isLocalHost(_this.host)) {
           _getDbsForLocalhostConnection(_this, () => {
@@ -172,7 +172,7 @@ function _getConnectionString(connection) {
   let auth = '';
 
   if (db && db.auth && db.auth.username && db.auth.password) {
-    auth += (db.auth.username + ':' + db.auth.password + '@');
+    auth += (`${db.auth.username}:${db.auth.password}@`);
   }
 
   let connectionString = 'mongodb://';
@@ -186,19 +186,19 @@ function _getConnectionString(connection) {
     for (let i = 0; i < connection.replicaSet.sets.length; i++) {
       let set = connection.replicaSet.sets[i];
 
-      connectionString += set.host + ':' + set.port;
+      connectionString += `${set.host}:${set.port}`;
 
       if (i < (connection.replicaSet.sets.length - 1)) {
         connectionString += ',';
       }
     }
   } else {
-    connectionString += auth + connection.host + ':' + connection.port;
+    connectionString += auth + `${connection.host}:${connection.port}`;
   }
 
-  if (db) connectionString += ('/' + db.name);
+  if (db) connectionString += `/${db.name}`;
 
-  if (hasReplSet) connectionString += '?replicaSet=' + connection.replicaSet.name;
+  if (hasReplSet) connectionString += `?replicaSet=${connection.replicaSet.name}`;
 
   return connectionString;
 }

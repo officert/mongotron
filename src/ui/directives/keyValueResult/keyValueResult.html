@@ -1,11 +1,4 @@
-<div ng-right-click="openDocumentContextMenu(result)">
-  <ul class="menu" ng-if="topLevel">
-    <li>
-      <button class="btn btn-default" ng-click="deleteResult(result.original)">
-        <i class="fa fa-plus rotate-45"></i>
-      </button>
-    </li>
-  </ul>
+<div>
   <div class="clearfix" ng-click="result.isOpen = !result.isOpen">
     <div class="result-header clearfix" ng-hide="result.type === 'object' || result.type === 'array'">
       <div class="result-cell first-cell col-sm-3">
@@ -39,15 +32,14 @@
         <div class="result-cell first-cell col-sm-3" ng-style="{ 'padding-left' : ((level * 15) + 'px') }">
           <i class="fa {{ ::keyvalue.icon }}"></i> {{ ::keyvalue.key }}
         </div>
-        <div class="result-cell col-sm-6">
-          {{ ::keyvalue.display }}
+        <div class="result-cell col-sm-6" inline-editor inline-editor-key="{{ keyvalue.fullKey }}" inline-editor-value="keyvalue.display" inline-editor-type="{{ keyvalue.type }}" inline-editor-doc="resultOriginal">
         </div>
         <div class="result-cell col-sm-3">
           {{ ::keyvalue.type }}
         </div>
       </div>
       <div ng-show="keyvalue.keyValues">
-        <key-value-result result="keyvalue" delete-result="deleteResult" top-level="false"></key-value-result>
+        <key-value-result result="keyvalue" result-original="resultOriginal"></key-value-result>
       </div>
     </div>
   </div>

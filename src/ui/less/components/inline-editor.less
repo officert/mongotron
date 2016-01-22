@@ -1,0 +1,36 @@
+.inline-editor-wrapper {
+  position: relative;
+  .inline-editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    .control,
+    .btn {
+      float: left;
+      display: block;
+      margin: 0;
+    }
+    .control {
+      flex-grow: 2;
+      width: auto;
+      height: 100%;
+      margin-right: 5px;
+      padding: 0.3em;
+    }
+    .btn {
+      padding: 0.09em 0.5em 0.4em;
+      &.first {
+        margin-right: 2px;
+      }
+      i {
+        margin: 0;
+      }
+    }
+  }
+}

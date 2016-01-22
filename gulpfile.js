@@ -8,12 +8,11 @@ const runSequence = require('run-sequence');
 const mocha = require('gulp-spawn-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
-const karma = require('karma').server;
+const karma = require('karma');
 const babel = require('gulp-babel');
 const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
-// const fontcustom = require('fontcustom');
 const fs = require('fs');
 const jsdoc = require('gulp-jsdoc3');
 
@@ -134,14 +133,16 @@ gulp.task('site-css', () => {
     .pipe(gulp.dest(DOCS_DIR + '/css'));
 });
 
-// gulp.task('fonts', function() {
-//   return fontcustom({
-//     path: 'resources/font-glyphs',
-//     output: 'src/ui/font-glyphs',
-//     noisy: true,
-//     force: true
-//   });
-// });
+gulp.task('fonts', () => {
+  const fontcustom = require('fontcustom');
+
+  return fontcustom({
+    path: 'resources/font-glyphs',
+    output: 'src/ui/font-glyphs',
+    noisy: true,
+    force: true
+  });
+});
 
 gulp.task('jshint', () => {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
@@ -281,7 +282,7 @@ gulp.task('test-unit', () => {
 });
 
 gulp.task('test-unit-ui', () => {
-  karma.start({
+  let server = new karma.Server({
     configFile: __dirname + '/tests/ui/karma.conf.js',
     singleRun: true,
     files: [
@@ -315,6 +316,8 @@ gulp.task('test-unit-ui', () => {
       './**/*-test.js'
     ]
   }, exitCode => process.exit(exitCode));
+  
+  server.start();
 });
 
 /* =========================================================================
@@ -326,12 +329,12 @@ function _init(stream) {
 }
 
 function unlink(symlink, next) {
-  fs.lstat(symlink, function(lerr, lstat) {
+  fs.lstat(symlink, (lerr, lstat) => {
     if (lerr || !lstat.isSymbolicLink()) {
       return next();
     }
 
-    fs.unlink(symlink, function() {
+    fs.unlink(symlink, () => {
       return next();
     });
   });

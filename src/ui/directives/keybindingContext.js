@@ -1,17 +1,22 @@
+'use strict';
+
 angular.module('app').directive('keybindingContext', [
-  'keypressService',
-  function(keypressService) {
+  'keypressService', (keypressService) => {
     return {
       restrict: 'A',
-      link: function(scope, element, attrs) {
-        var contextName = attrs.keybindingContext;
+      link: (scope, element, attrs) => {
+        let contextName = attrs.keybindingContext;
 
         if (!contextName) throw new Error('keybindingContext - contextName is required');
 
-        element.click(function(event) {
-          if (event) event.stopPropagation();
+        element.click((event) => {
+          if (event.originalEvent.keybindingContextHandled === true) { //event was already handled by a more specific context
+            return;
+          }
 
           keypressService.changeCurrentContext(contextName);
+
+          event.originalEvent.keybindingContextHandled = true;
         });
       }
     };
