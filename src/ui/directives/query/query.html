@@ -12,7 +12,7 @@
           <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
         </li>
         <li>
-          {{ results.length }} Count
+          {{ result.length }} Count
         </li>
       </ul>
     </div>
@@ -57,16 +57,16 @@
         <div class="query-error alert alert-danger" ng-show="!loading && error">
           {{ error }}
         </div>
-        <div class="alert alert-info" ng-show="!loading && !error && (!results || !results.length) && currentQuery.mongoMethod !== 'count'">
+        <div class="alert alert-info" ng-show="!loading && !error && (!result || !result.length) && currentQuery.mongoMethod !== 'count'">
           Your search did not return any results.
         </div>
-        <div ng-show="!loading && !error && (results !== null && results !== undefined)">
-          <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="results">
+        <div ng-show="!loading && !error && (result !== null && result !== undefined)">
+          <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="result">
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT">
             <div class="text-view">
               <div class="results-list" ng-if="currentQuery.mongoMethod !== 'count'">
-                <div class="result" ng-repeat="result in results track by result._id">
+                <div class="result" ng-repeat="result in result track by result._id">
                   <ul class="menu">
                     <li>
                       <button class="btn btn-default" ng-click="deleteResult(result)">

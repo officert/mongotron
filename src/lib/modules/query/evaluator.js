@@ -1,12 +1,11 @@
 'use strict';
 
+const esprima = require('esprima');
+// const escodegen = require('escodegen');
+const Promise = require('bluebird');
 const _ = require('underscore');
 const vm = require('vm');
 
-/*
- * Based on https://github.com/pierrec/node-eval/blob/master/eval.js
- * ref : https://nodejs.org/api/vm.html#vm_script_runinnewcontext_sandbox_options
- */
 /** @module Query */
 /** @class */
 class Evaluator {
@@ -16,39 +15,77 @@ class Evaluator {
    * @param {Object} scope
    */
   eval(expression, scope) {
-    if (!expression) return new Error('evaluator - eval() - must pass an expression');
-    if (!_.isString(expression)) return new Error('evaluator - eval() - expression must be a string');
+    return new Promise((resolve, reject) => {
+      if (!expression) return reject(new Error('evaluator - eval() - must pass an expression'));
+      if (!_.isString(expression)) return reject(new Error('evaluator - eval() - expression must be a string'));
 
-    var evalScope = {};
+      let evalScope = {};
 
-    if (scope && _.isObject(scope)) {
-      _.extend(evalScope, scope);
-    }
+      if (scope && _.isObject(scope)) {
+        _.extend(evalScope, scope);
+      }
 
-    var options = {
-      displayErrors: false
-    };
+      var options = {
+        displayErrors: false
+      };
 
-    // Evalutate the expression with the given scope
-    var script;
-    var result;
+      // Evalutate the expression with the given scope
+      var script;
+      var result;
 
-    try {
-      script = new vm.Script('(' + expression + ')', options);
-    } catch (err) {
-      result = err;
-    }
+      let astTokens = esprima.tokenize(expression);
+      let ast = esprima.parse(expression);
 
-    if (result) return result;
+      //NOTE: ast could contain multiple expressions (top level nodes)
 
-    try {
-      result = script.runInNewContext(evalScope, options);
-    } catch (err) {
-      result = err;
-    }
+      try {
+        script = new vm.Script(expression, options);
+      } catch (err) {
+        return reject(err);
+      }
 
-    return result;
+      if (result) return result;
+
+      try {
+        result = script.runInNewContext(evalScope, options);
+      } catch (err) {
+        return reject(err);
+      }
+
+      if (_isPromise(result)) {
+        result.then(promiseResult => {
+          return resolve(promiseResult);
+        });
+
+        if (result.catch) result.catch(reject);
+      } else {
+        return resolve(result);
+      }
+
+      // let esCodeGenOptions = {
+      //   comment: true,
+      //   format: {
+      //     indent: {
+      //       style: '  '
+      //     },
+      //     quotes: 'auto'
+      //   }
+      // };
+
+      //
+      // //------------------------------
+      // // Esprima
+      // //------------------------------
+      // let ast = esprima.parse(result);
+      // let newResult = escodegen.generate(ast, esCodeGenOptions);
+      //
+      // return newResult;
+    });
   }
+}
+
+function _isPromise(func) {
+  return func && func.then && typeof(func.then) === 'function';
 }
 
 module.exports = new Evaluator();
