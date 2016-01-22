@@ -7,7 +7,6 @@ angular.module('app').controller('inlineEditorCtrl', [
   'notificationService',
   '$timeout', ($scope, queryRunnerService, tabCache, notificationService, $timeout) => {
     const mongoUtils = require('src/lib/utils/mongoUtils');
-    const evaluator = require('lib/modules/query/evaluator');
 
     $scope.show = false;
     $scope.doc = $scope.inlineEditorDoc;
