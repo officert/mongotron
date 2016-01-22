@@ -1,3 +1,15 @@
-<div class="result" ng-repeat="result in results" ng-init="result.__index = $index">
-  <key-value-result result="result" delete-result="deleteResult" top-level="true"></key-value-result>
+<div class="result" ng-repeat="result in results" ng-init="result.__index = $index" ng-right-click="$parent.openDocumentContextMenu(result)">
+  <ul class="menu">
+    <li>
+      <button class="btn btn-default" ng-click="editDocument(result.original)">
+        <i class="fa fa-pencil"></i>
+      </button>
+    </li>
+    <li>
+      <button class="btn btn-default" ng-click="deleteDocument(result.original)">
+        <i class="fa fa-plus rotate-45"></i>
+      </button>
+    </li>
+  </ul>
+  <key-value-result result="result" result-original="result.original"></key-value-result>
 </div>

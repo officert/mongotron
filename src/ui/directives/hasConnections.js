@@ -1,13 +1,14 @@
+'use strict';
+
 angular.module('app').directive('hasConnections', [
   '$timeout',
-  'connectionCache',
-  function($timeout, connectionCache) {
+  'connectionCache', ($timeout, connectionCache) => {
     return {
       restrict: 'A',
-      link: function(scope, element) {
+      link: (scope, element) => {
         element.addClass('no-connections');
 
-        connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+        connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, (updatedCache) => {
           if (updatedCache && updatedCache.length) {
             element.removeClass('no-connections');
           } else {

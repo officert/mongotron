@@ -1,18 +1,22 @@
 {
   "checksum": {
-    "previous": "edc67e213096f98b61fd5bf747886101eb78529c5671146e21747d9f424b09f8",
-    "current": "edc67e213096f98b61fd5bf747886101eb78529c5671146e21747d9f424b09f8"
+    "previous": "4243f883ea5d5e1c7a51985d4bdef25e2b28441ce2f91b61f207d83338ecf867",
+    "current": "4243f883ea5d5e1c7a51985d4bdef25e2b28441ce2f91b61f207d83338ecf867"
   },
   "fonts": [
-    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.ttf",
-    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.svg",
-    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.woff",
-    "src/ui/font-glyphs/fontcustom_edc67e213096f98b61fd5bf747886101.eot"
+    "src/ui/font-glyphs/fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.ttf",
+    "src/ui/font-glyphs/fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.svg",
+    "src/ui/font-glyphs/fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.woff",
+    "src/ui/font-glyphs/fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.eot"
   ],
   "glyphs": {
     "array": {
       "codepoint": 61702,
       "source": "resources/font-glyphs/array.svg"
+    },
+    "boolean": {
+      "codepoint": 61711,
+      "source": "resources/font-glyphs/boolean.svg"
     },
     "chevron-down": {
       "codepoint": 61707,
@@ -38,6 +42,14 @@
       "codepoint": 61704,
       "source": "resources/font-glyphs/minus.svg"
     },
+    "null": {
+      "codepoint": 61712,
+      "source": "resources/font-glyphs/null.svg"
+    },
+    "number": {
+      "codepoint": 61709,
+      "source": "resources/font-glyphs/number.svg"
+    },
     "object": {
       "codepoint": 61703,
       "source": "resources/font-glyphs/object.svg"
@@ -57,6 +69,10 @@
     "server-plus": {
       "codepoint": 61699,
       "source": "resources/font-glyphs/server-plus.svg"
+    },
+    "string": {
+      "codepoint": 61710,
+      "source": "resources/font-glyphs/string.svg"
     },
     "times": {
       "codepoint": 61700,

@@ -69,7 +69,7 @@
                 <div class="result" ng-repeat="result in result track by result._id">
                   <ul class="menu">
                     <li>
-                      <button class="btn btn-default" ng-click="deleteResult(result)">
+                      <button class="btn btn-default" ng-click="deleteDocument(result)">
                         <i class="fa fa-plus rotate-45"></i>
                       </button>
                     </li>
@@ -92,7 +92,7 @@
                   Type
                 </span>
               </div>
-              <key-value-results results="keyValueResults" delete-result="deleteResult"></key-value-results>
+              <key-value-results results="keyValueResults" delete-document="deleteDocument" edit-document="editDocument"></key-value-results>
             </div>
           </div>
         </div>

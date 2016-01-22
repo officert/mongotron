@@ -2,8 +2,7 @@
 
 angular.module('app').service('modalService', [
   '$uibModal',
-  '$uibModalStack',
-  function($uibModal, $uibModalStack) {
+  '$uibModalStack', ($uibModal, $uibModalStack) => {
     const Promise = require('bluebird');
 
     function ModalService() {}
@@ -49,10 +48,10 @@ angular.module('app').service('modalService', [
         templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
         controller: 'queryResultsExportModalCtrl',
         resolve: {
-          query: [function() {
+          query: [() => {
             return query;
           }],
-          collection: [function() {
+          collection: [() => {
             return collection;
           }]
         },
@@ -87,7 +86,10 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openDeleteResult = function openDeleteResult(result, collection) {
+    ModalService.prototype.openDeleteDocument = function openDeleteDocument(doc, collection) {
+      if (!doc) throw new Error('modalService - openDeleteDocument() - doc is required');
+      if (!collection) throw new Error('modalService - openDeleteDocument() - collection is required');
+
       var _this = this;
 
       return new Promise((resolve, reject) => {
@@ -95,11 +97,31 @@ angular.module('app').service('modalService', [
           message: 'Are you sure you want to delete this document?',
           confirmButtonMessage: 'Yes',
           cancelButtonMessage: 'No'
-        }).result.then(function() {
-          collection.deleteById(result._id)
+        }).result.then(() => {
+          collection.deleteById(doc._id)
             .then(resolve)
             .catch(reject);
         });
+      });
+    };
+
+    ModalService.prototype.openEditDocument = function openEditDocument(doc) {
+      if (!doc) throw new Error('modalService - openEditDocument() - doc is required');
+
+      return new Promise((resolve, reject) => {
+        openModal({
+            templateUrl: __dirname + '/components/editDocument/editDocument.html',
+            controller: 'editDocumentCtrl',
+            resolve: {
+              doc: () => {
+                return doc;
+              }
+            },
+            size: 'lg'
+          })
+          .result
+          .then(resolve)
+          .catch(reject);
       });
     };
 

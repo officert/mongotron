@@ -48,11 +48,11 @@ class Collection {
       var mongoMethod = query.mongoMethod;
 
       if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
-      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not a supported mongo method'));
+      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error(`collection - exec() : ${mongoMethod} is not a supported mongo method`));
 
       var method = _this[mongoMethod];
 
-      if (!method) return reject(new Error('collection - exec() : ' + mongoMethod + ' is not implemented'));
+      if (!method) return reject(new Error(`collection - exec() : ${mongoMethod} is not implemented`));
 
       var startTime = performance.now();
 

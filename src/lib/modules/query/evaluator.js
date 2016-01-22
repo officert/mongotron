@@ -1,10 +1,11 @@
 'use strict';
 
-const esprima = require('esprima');
+// const esprima = require('esprima');
 // const escodegen = require('escodegen');
 const Promise = require('bluebird');
 const _ = require('underscore');
 const vm = require('vm');
+const ObjectId = require('mongodb').ObjectId;
 
 /** @module Query */
 /** @class */
@@ -19,7 +20,9 @@ class Evaluator {
       if (!expression) return reject(new Error('evaluator - eval() - must pass an expression'));
       if (!_.isString(expression)) return reject(new Error('evaluator - eval() - expression must be a string'));
 
-      let evalScope = {};
+      var evalScope = {
+        ObjectId: ObjectId
+      };
 
       if (scope && _.isObject(scope)) {
         _.extend(evalScope, scope);
@@ -33,16 +36,16 @@ class Evaluator {
       var script;
       var result;
 
-      let astTokens = esprima.tokenize(expression);
-      let ast = esprima.parse(expression);
-
-      //NOTE: ast could contain multiple expressions (top level nodes)
+      // let astTokens = esprima.tokenize(expression);
+      // let ast = esprima.parse(expression);
 
       try {
-        script = new vm.Script(expression, options);
+        script = new vm.Script(`(${expression})`, options);
       } catch (err) {
-        return reject(err);
+        result = err;
       }
+
+      //NOTE: ast could contain multiple expressions (top level nodes)
 
       if (result) return result;
 

@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "fontcustom";
-  src: url("./fontcustom_edc67e213096f98b61fd5bf747886101.eot");
-  src: url("./fontcustom_edc67e213096f98b61fd5bf747886101.eot?#iefix") format("embedded-opentype"),
-       url("./fontcustom_edc67e213096f98b61fd5bf747886101.woff") format("woff"),
-       url("./fontcustom_edc67e213096f98b61fd5bf747886101.ttf") format("truetype"),
-       url("./fontcustom_edc67e213096f98b61fd5bf747886101.svg#fontcustom") format("svg");
+  src: url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.eot");
+  src: url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.eot?#iefix") format("embedded-opentype"),
+       url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.woff") format("woff"),
+       url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.ttf") format("truetype"),
+       url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.svg#fontcustom") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "fontcustom";
-    src: url("./fontcustom_edc67e213096f98b61fd5bf747886101.svg#fontcustom") format("svg");
+    src: url("./fontcustom_4243f883ea5d5e1c7a51985d4bdef25e.svg#fontcustom") format("svg");
   }
 }
 
@@ -24,17 +24,21 @@
 
 [data-icon]:before,
 .icon-array:before,
+.icon-boolean:before,
 .icon-chevron-down:before,
 .icon-chevron-left:before,
 .icon-chevron-right:before,
 .icon-chevron-up:before,
 .icon-left-arrow:before,
 .icon-minus:before,
+.icon-null:before,
+.icon-number:before,
 .icon-object:before,
 .icon-plus:before,
 .icon-right-arrow:before,
 .icon-server:before,
 .icon-server-plus:before,
+.icon-string:before,
 .icon-times:before {
   display: inline-block;
   font-family: "fontcustom";
@@ -51,15 +55,19 @@
 }
 
 .icon-array:before { content: "\f106"; }
+.icon-boolean:before { content: "\f10f"; }
 .icon-chevron-down:before { content: "\f10b"; }
 .icon-chevron-left:before { content: "\f109"; }
 .icon-chevron-right:before { content: "\f10a"; }
 .icon-chevron-up:before { content: "\f10c"; }
 .icon-left-arrow:before { content: "\f101"; }
 .icon-minus:before { content: "\f108"; }
+.icon-null:before { content: "\f110"; }
+.icon-number:before { content: "\f10d"; }
 .icon-object:before { content: "\f107"; }
 .icon-plus:before { content: "\f105"; }
 .icon-right-arrow:before { content: "\f100"; }
 .icon-server:before { content: "\f102"; }
 .icon-server-plus:before { content: "\f103"; }
+.icon-string:before { content: "\f10e"; }
 .icon-times:before { content: "\f104"; }

@@ -1,5 +1,7 @@
+'use strict';
+
 angular.module('app').directive('textResults', [
-  function() {
+  () => {
     return {
       restrict: 'E',
       replace: true,

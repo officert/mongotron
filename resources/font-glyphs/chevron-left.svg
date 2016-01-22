@@ -5,9 +5,8 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="Slice-1-+-Rectangle-1" sketch:type="MSLayerGroup"></g>
-        <g id="Chevron-Left" sketch:type="MSLayerGroup" transform="translate(141.500000, 129.500000) scale(-1, 1) translate(-141.500000, -129.500000) translate(69.000000, 7.000000)" fill="#D8D8D8">
-            <path d="M100.174808,122.647236 L0.4521578,222.369886 L22.6625631,244.580291 L144.590705,122.652149 L144.585792,122.647236 L144.590705,122.642322 L22.6625631,0.714179738 L0.4521578,22.924585 L100.174808,122.647236 Z" id="Rectangle-33" sketch:type="MSShapeGroup"></path>
+        <g id="Chevron-Left" sketch:type="MSLayerGroup" transform="translate(155.298990, 130.402020) rotate(-315.000000) translate(-155.298990, -130.402020) translate(74.798990, 49.402020)" fill="#D8D8D8">
+            <path d="M160.357864,1.28069991 L160.7193,1.28069991 L160.7193,161.2807 L111.7193,161.2807 L111.7193,49.9192642 L0.357864376,49.9192642 L0.357864376,0.919264196 L160.357864,0.919264196 L160.357864,1.28069991 Z" id="Rectangle-46" sketch:type="MSShapeGroup" transform="translate(80.538582, 81.099982) rotate(-180.000000) translate(-80.538582, -81.099982) "></path>
         </g>
     </g>
 </svg>

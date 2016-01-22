@@ -4,8 +4,7 @@ angular.module('app').controller('queryCtrl', [
   '$scope',
   '$rootScope',
   'notificationService',
-  'modalService',
-  '$timeout', ($scope, $rootScope, notificationService, modalService, $timeout) => {
+  'modalService', ($scope, $rootScope, notificationService, modalService) => {
     const keyValueUtils = require('src/lib/utils/keyValueUtils');
     const evaluator = require('lib/modules/query/evaluator');
 
@@ -14,17 +13,21 @@ angular.module('app').controller('queryCtrl', [
 
     $scope.loading = false;
     $scope.queryTime = null;
+
+    //editor
     $scope.editorHandle = {};
     $scope.codeEditorOptions = {};
     $scope.codeEditorCustomData = {
       collectionNames: _.pluck($scope.database.collections, 'name')
     };
+    $scope.editorHasFocus = false;
 
     $scope.currentQuery = null;
     $scope.results = [];
     $scope.keyValueResults = [];
 
-    $scope.deleteResult = _deleteResult;
+    $scope.deleteDocument = _deleteDocument;
+    $scope.editDocument = _editDocument;
 
     let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
       name: $scope.defaultCollection
@@ -34,7 +37,7 @@ angular.module('app').controller('queryCtrl', [
 
     let defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
 
-    $scope.changeTabName = function(name) {
+    $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
       $scope.databaseTab.name = name.length > 20 ? (name.substring(0, 20) + '...') : name;
     };
@@ -45,7 +48,7 @@ angular.module('app').controller('queryCtrl', [
       query: defaultQuery
     };
 
-    $scope.runQuery = function() {
+    $scope.runQuery = () => {
       _runQuery($scope.form.query);
     };
 
@@ -58,15 +61,13 @@ angular.module('app').controller('queryCtrl', [
 
     _runQuery(defaultQuery);
 
-    $scope.autoformat = function() {
+    $scope.autoformat = () => {
       if ($scope.editorHandle.autoformat) {
         $scope.editorHandle.autoformat();
       }
     };
 
-    $scope.editorHasFocus = false;
-
-    $scope.$watch('editorHasFocus', function(val) {
+    $scope.$watch('editorHasFocus', (val) => {
       if (val) {
         //make some functions available on the root scope when the editor gets focus,
         //used for keybindings
@@ -79,11 +80,11 @@ angular.module('app').controller('queryCtrl', [
       }
     });
 
-    $scope.exportResults = function() {
+    $scope.exportResults = () => {
       modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery);
     };
 
-    $scope.collapseAll = function() {
+    $scope.collapseAll = () => {
       $scope.$broadcast('collapse');
     };
 
@@ -182,10 +183,10 @@ angular.module('app').controller('queryCtrl', [
       //   });
     }
 
-    function _deleteResult(result) {
-      if (!result) return;
+    function _deleteDocument(doc) {
+      if (!doc) return;
 
-      modalService.openDeleteResult(result, $scope.currentCollection)
+      modalService.openDeleteDocument(doc, $scope.currentCollection)
         .then(() => {
           $scope.$apply(() => {
             notificationService.success('Delete successful');
@@ -201,12 +202,26 @@ angular.module('app').controller('queryCtrl', [
         });
     }
 
-    function _getCollectionByNameFromRawQuery(collectionName) {
-      if (!collectionName) return null;
+    function _editDocument(doc) {
+      if (!doc) return;
 
-      return _.find($scope.database.collections, function(collection) {
-        return collection.name && collection.name.toLowerCase && collection.name.toLowerCase() === collectionName.toLowerCase() ? true : false;
-      });
+      modalService.openEditDocument(doc)
+        .then(() => {
+          $scope.$apply(() => {
+            notificationService.success('Update successful');
+
+            _runQuery('db.' + $scope.currentCollection.name + '.find()');
+          });
+        })
+        .catch((error) => {
+          $scope.$apply(() => {
+            let errMsg = error && error.message ? error.message : error;
+            if (errMsg !== 'backdrop click' && errMsg !== 'escape key press') {
+              $scope.error = errMsg;
+            }
+            $scope.loading = false;
+          });
+        });
     }
   }
 ]);
