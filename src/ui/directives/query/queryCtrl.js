@@ -4,9 +4,9 @@ angular.module('app').controller('queryCtrl', [
   '$scope',
   '$rootScope',
   'notificationService',
-  'modalService', ($scope, $rootScope, notificationService, modalService) => {
+  'modalService',
+  'queryRunnerService', ($scope, $rootScope, notificationService, modalService, queryRunnerService) => {
     const keyValueUtils = require('src/lib/utils/keyValueUtils');
-    const evaluator = require('lib/modules/query/evaluator');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
@@ -35,11 +35,11 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    let defaultQuery = 'db.' + defaultCollection.name.toLowerCase() + '.find({\n  \n})';
+    let defaultQuery = `db.${defaultCollection.name}.find({\n  \n})`;
 
     $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
-      $scope.databaseTab.name = name.length > 20 ? (name.substring(0, 20) + '...') : name;
+      $scope.databaseTab.name = name.length > 20 ? `${name.substring(0, 20)}...` : name;
     };
 
     $scope.changeTabName(defaultQuery);
@@ -94,15 +94,7 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.changeTabName(rawQuery);
 
-      let evalScope = {
-        db: {}
-      };
-
-      $scope.database.collections.forEach(collection => {
-        evalScope.db[collection.name.toLowerCase()] = collection._dbCollection;
-      });
-
-      evaluator.eval(rawQuery, evalScope)
+      queryRunnerService.runQuery(rawQuery, $scope.database.collections)
         .then(result => {
           $scope.$apply(() => {
             $scope.loading = false;
@@ -119,68 +111,10 @@ angular.module('app').controller('queryCtrl', [
         })
         .catch((error) => {
           $scope.$apply(() => {
-            $scope.error = error && error.message ? error.message : error;
+            $scope.error = error && error.message ? `Error : ${error.message}` : error;
             $scope.loading = false;
           });
         });
-
-      // if (!queryModule.isValidQuery(rawQuery)) {
-      //   $scope.error = 'Sorry, ' + rawQuery + ' is not a valid query';
-      //   $scope.loading = false;
-      //   return;
-      // }
-      //
-      // let collectionName = queryModule.parseCollectionName(rawQuery);
-      //
-      // let collection = _getCollectionByNameFromRawQuery(collectionName);
-      //
-      // if (!collection) {
-      //   $scope.error = 'Sorry, ' + collectionName + ' is not a valid collection name';
-      //   $scope.loading = false;
-      //   return;
-      // }
-      //
-      // $scope.currentCollection = collection;
-
-      // let query;
-      // queryModule.createQuery(rawQuery)
-      //   .then((_query) => {
-      //     query = _query;
-      //
-      //     return collection.execQuery(query);
-      //   })
-      //   .then((result) => {
-      //     $scope.$apply(() => {
-      //       $scope.currentQuery = query;
-      //       $scope.loading = false;
-      //       $scope.queryTime = result.time;
-      //       $scope.results = result.result;
-      //
-      //       if ($scope.results && _.isArray($scope.results)) {
-      //         $scope.keyValueResults = keyValueUtils.convert($scope.results);
-      //       }
-      //
-      //       if ($scope.currentQuery.mongoMethod === 'count') {
-      //         $scope.currentView = $scope.VIEWS.RAW;
-      //       } else if ($scope.currentView === $scope.VIEWS.RAW) {
-      //         $scope.currentView = $scope.VIEWS.KEYVALUE;
-      //       }
-      //
-      //       if ($scope.currentQuery.mongoMethod !== 'find' &&
-      //         $scope.currentQuery.mongoMethod !== 'aggregate' &&
-      //         $scope.currentQuery.mongoMethod !== 'count') {
-      //         notificationService.success($scope.currentQuery.mongoMethod + ' was successful');
-      //
-      //         _runQuery('db.' + $scope.currentCollection.name + '.find()');
-      //       }
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     $scope.$apply(() => {
-      //       $scope.error = error && error.message ? error.message : error;
-      //       $scope.loading = false;
-      //     });
-      //   });
     }
 
     function _deleteDocument(doc) {
@@ -191,7 +125,7 @@ angular.module('app').controller('queryCtrl', [
           $scope.$apply(() => {
             notificationService.success('Delete successful');
 
-            _runQuery('db.' + $scope.currentCollection.name + '.find()');
+            _runQuery(`db.${$scope.currentCollection.name}.find()`);
           });
         })
         .catch((error) => {
@@ -210,7 +144,7 @@ angular.module('app').controller('queryCtrl', [
           $scope.$apply(() => {
             notificationService.success('Update successful');
 
-            _runQuery('db.' + $scope.currentCollection.name + '.find()');
+            _runQuery(`db.${$scope.currentCollection.name}.find()`);
           });
         })
         .catch((error) => {
