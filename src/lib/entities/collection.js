@@ -2,16 +2,11 @@
 
 const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
-const _ = require('underscore');
 
 const mongoUtils = require('src/lib/utils/mongoUtils');
 const errors = require('lib/errors');
-const Query = require('lib/modules/query/query');
 
 const DEFAULT_PAGE_SIZE = 50;
-
-const QUERY_TYPES = require('lib/modules/query/queryTypes');
-const VALID_QUERY_TYPES = _.keys(QUERY_TYPES);
 
 /** @class */
 class Collection {
@@ -37,38 +32,6 @@ class Collection {
     _this._dbCollection = database.collection(_this.name);
   }
 
-  execQuery(query) {
-    var _this = this;
-
-    return new Promise((resolve, reject) => {
-      if (!query) return reject(new Error('query is required'));
-      if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
-      if (!query.query) return reject(new Error('query must have a query'));
-
-      var mongoMethod = query.mongoMethod;
-
-      if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
-      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error(`collection - exec() : ${mongoMethod} is not a supported mongo method`));
-
-      var method = _this[mongoMethod];
-
-      if (!method) return reject(new Error(`collection - exec() : ${mongoMethod} is not implemented`));
-
-      var startTime = performance.now();
-
-      method.call(_this, query.query, query.queryOptions)
-        .then((result) => {
-          var endTime = performance.now();
-
-          return resolve({
-            result: result,
-            time: (endTime - startTime).toFixed(5)
-          });
-        })
-        .catch(reject);
-    });
-  }
-
   /**
    * @param {Object} doc
    */
@@ -91,7 +54,7 @@ class Collection {
     var _this = this;
     options = options || {};
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       let stream = options.stream;
       delete options.stream;
 
@@ -104,7 +67,7 @@ class Collection {
       if (stream === true) {
         return resolve(dbQuery.stream());
       } else {
-        dbQuery.toArray(function(err, docs) {
+        dbQuery.toArray((err, docs) => {
           if (err) return reject(err);
           return resolve(docs);
         });
