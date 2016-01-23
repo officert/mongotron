@@ -7,7 +7,6 @@ const _ = require('underscore');
 const vm = require('vm');
 const ObjectId = require('mongodb').ObjectId;
 
-/** @module Query */
 /** @class */
 class Evaluator {
   /**
@@ -40,7 +39,8 @@ class Evaluator {
       // let ast = esprima.parse(expression);
 
       try {
-        script = new vm.Script(`(${expression})`, options);
+        script = new vm.Script(expression, options);
+        // script = new vm.Script(`(${expression})`, options);
       } catch (err) {
         result = err;
       }
@@ -91,4 +91,5 @@ function _isPromise(func) {
   return func && func.then && typeof(func.then) === 'function';
 }
 
+/** @exports */
 module.exports = new Evaluator();
