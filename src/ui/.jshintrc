@@ -1,0 +1,24 @@
+// docs for jshint : http://www.jshint.com/docs/
+// options for jshint : http://www.jshint.com/docs/options/
+
+{
+  "undef": true,
+  "unused": true,
+  "node": true,
+  "esnext": true,
+  "globals": {
+    "$": true,
+    "_": true,
+    "orion": true,
+    "require": true,
+    "angular": true,
+    "console": true,
+    "process": true,
+    "CodeMirror": true,
+    "performance": true,
+    "alert": true
+  },
+  "camelcase": true,
+  "bitwise": true,
+  "eqeqeq": true
+}
