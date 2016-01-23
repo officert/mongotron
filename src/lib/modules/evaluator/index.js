@@ -40,14 +40,11 @@ class Evaluator {
 
       try {
         script = new vm.Script(expression, options);
-        // script = new vm.Script(`(${expression})`, options);
       } catch (err) {
-        result = err;
+        return reject(err);
       }
 
       //NOTE: ast could contain multiple expressions (top level nodes)
-
-      if (result) return result;
 
       try {
         result = script.runInNewContext(evalScope, options);
