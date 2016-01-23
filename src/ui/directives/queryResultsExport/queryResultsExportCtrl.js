@@ -15,7 +15,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
     const fs = require('fs');
     const csv = require('csv');
 
-    const CsvStream = require('lib/utils/csvStream');
+    // const CsvStream = require('lib/utils/csvStream');
 
     $scope.keyValuePairs = [];
 
@@ -66,12 +66,12 @@ angular.module('app').controller('queryResultsExportCtrl', [
     };
 
     function _export() {
-      let nameProps = $scope.keyValuePairs.map((kvp) => {
-        return {
-          name: kvp.key,
-          property: kvp.value
-        };
-      });
+      // let nameProps = $scope.keyValuePairs.map((kvp) => {
+      //   return {
+      //     name: kvp.key,
+      //     property: kvp.value
+      //   };
+      // });
 
       dialogService.showSaveDialog()
         .then((path) => {
@@ -87,7 +87,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
               limit: $scope.limit || 50
             };
 
-            let startTime = performance.now();
+            // let startTime = performance.now();
 
             alert('TODO: fix this!!');
 
