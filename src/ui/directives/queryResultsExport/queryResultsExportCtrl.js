@@ -7,13 +7,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
   '$timeout',
   'notificationService',
   function($scope, dialogService, $log, $timeout, notificationService) {
-    const Query = require('lib/modules/query/query');
-
     if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
-    if (!($scope.query instanceof Query)) throw new Error('queryResultsExport directive - $scope.query must be an instance of Query');
-
-    if ($scope.query.mongoMethod !== 'find' && $scope.query.mongoMethod !== 'aggregate') throw new Error('queryResultsExport directive - query type can only be find or aggregate query');
 
     $scope.limit = null;
 
@@ -94,23 +89,25 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
             let startTime = performance.now();
 
-            $scope.collection.execQuery($scope.query)
-              .then((results) => {
-                results.result
-                  .pipe(new CsvStream(nameProps))
-                  .on('error', handleError)
-                  .pipe(fs.createWriteStream(path))
-                  .on('error', handleError)
-                  .on('finish', () => {
-                    let ellapsed = (performance.now() - startTime).toFixed(5);
+            alert('TODO: fix this!!');
 
-                    $timeout(() => {
-                      $scope.loading = false;
-                      notificationService.success('Finished exporting');
-                    }, (ellapsed >= 1000 ? 0 : 1000));
-                  });
-              })
-              .catch(handleError);
+            // $scope.collection.execQuery($scope.query)
+            //   .then((results) => {
+            //     results.result
+            //       .pipe(new CsvStream(nameProps))
+            //       .on('error', handleError)
+            //       .pipe(fs.createWriteStream(path))
+            //       .on('error', handleError)
+            //       .on('finish', () => {
+            //         let ellapsed = (performance.now() - startTime).toFixed(5);
+            //
+            //         $timeout(() => {
+            //           $scope.loading = false;
+            //           notificationService.success('Finished exporting');
+            //         }, (ellapsed >= 1000 ? 0 : 1000));
+            //       });
+            //   })
+            //   .catch(handleError);
           });
         })
         .catch(handleError);

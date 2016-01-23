@@ -23,22 +23,20 @@
         <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" ng-disabled="currentQuery.mongoMethod === 'count'" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
-        tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" ng-disabled="currentQuery.mongoMethod === 'count'" uib-tooltip="Key Value View" tooltip-placement="bottom"
-        tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentQuery.mongoMethod === 'count' || currentView === VIEWS.TEXT" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentView !== VIEWS.KEYVALUE" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-compress"></i>
         </button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="exportResults()" uib-tooltip="Export Results" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true" ng-disabled="!result.length || (currentQuery.mongoMethod !== 'find' && currentQuery.mongoMethod !== 'aggregate')">
+        <button type="button" class="btn btn-default btn-sm" ng-click="exportResults()" uib-tooltip="Export Results" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true" ng-disabled="!result.length">
           <i class="fa fa-external-link-square"></i>
         </button>
       </div>
@@ -65,7 +63,7 @@
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT">
             <div class="text-view">
-              <div class="results-list" ng-if="currentQuery.mongoMethod !== 'count'">
+              <div class="results-list">
                 <div class="result" ng-repeat="result in result track by $index">
                   <ul class="menu">
                     <li>
