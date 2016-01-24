@@ -109,6 +109,12 @@ angular.module('app').controller('queryCtrl', [
                 name: expressionResult.mongoCollectionName
               });
             }
+
+            if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate' && expressionResult.mongoMethodName !== 'count') {
+              notificationService.success(`${expressionResult.mongoMethodName} was successful`);
+
+              return _evalExpression(`db.${expressionResult.mongoCollectionName}.find()`, $scope.database.collections);
+            }
           });
         })
         .catch((error) => {
