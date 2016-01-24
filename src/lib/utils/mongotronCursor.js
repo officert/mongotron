@@ -21,12 +21,12 @@ class MongotronCursor {
 
   limit(limit) {
     this._cursor.limit(limit);
-    return this.promise();
+    return this;
   }
 
   skip(skip) {
     this._cursor.skip(skip);
-    return this.promise();
+    return this;
   }
 
   /**
