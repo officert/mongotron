@@ -3,10 +3,8 @@
 angular.module('app').controller('queryResultsExportModalCtrl', [
   '$scope',
   '$uibModalInstance',
-  'collection',
   'query',
-  function($scope, $uibModalInstance, collection, query) {
-    $scope.collection = collection;
+  function($scope, $uibModalInstance, query) {
     $scope.query = query;
 
     $scope.queryResultsExportHandle = {};

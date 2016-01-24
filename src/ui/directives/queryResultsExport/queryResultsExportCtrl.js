@@ -7,7 +7,6 @@ angular.module('app').controller('queryResultsExportCtrl', [
   '$timeout',
   'notificationService',
   function($scope, dialogService, $log, $timeout, notificationService) {
-    if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
 
     $scope.limit = null;

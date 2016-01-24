@@ -22,7 +22,6 @@ angular.module('app').controller('queryCtrl', [
     };
     $scope.editorHasFocus = false;
 
-    $scope.currentQuery = null;
     $scope.results = [];
     $scope.keyValueResults = [];
 
@@ -81,7 +80,7 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = () => {
-      modalService.openQueryResultsExport($scope.currentCollection, $scope.currentQuery);
+      modalService.openQueryResultsExport($scope.form.query);
     };
 
     $scope.collapseAll = () => {
