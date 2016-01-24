@@ -2,11 +2,11 @@
 
 angular.module('app').controller('inlineEditorCtrl', [
   '$scope',
-  'queryRunnerService',
   'tabCache',
   'notificationService',
-  '$timeout', ($scope, queryRunnerService, tabCache, notificationService, $timeout) => {
+  '$timeout', ($scope, tabCache, notificationService, $timeout) => {
     const mongoUtils = require('src/lib/utils/mongoUtils');
+    const expression = require('lib/modules/expression');
 
     $scope.show = false;
     $scope.doc = $scope.inlineEditorDoc;
@@ -44,9 +44,9 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       if (!activeTab) return;
 
-      let fullQuery = _getFullQuery(activeTab.collection.name);
+      let rawExpression = _getFullQuery(activeTab.collection.name);
 
-      queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
+      expression.eval(rawExpression, activeTab.database.collections)
         .then(() => {
           $timeout(() => {
             $scope.show = false;

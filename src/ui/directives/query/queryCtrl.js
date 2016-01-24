@@ -5,8 +5,8 @@ angular.module('app').controller('queryCtrl', [
   '$rootScope',
   'notificationService',
   'modalService',
-  'queryRunnerService', ($scope, $rootScope, notificationService, modalService, queryRunnerService) => {
-    const keyValueUtils = require('src/lib/utils/keyValueUtils');
+  '$timeout', ($scope, $rootScope, notificationService, modalService, $timeout) => {
+    const expression = require('lib/modules/expression');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
@@ -34,21 +34,21 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    let defaultQuery = `db.${defaultCollection.name}.find({\n  \n})`;
+    let defaultExpression = `db.${defaultCollection.name}.find({\n  \n})`;
 
     $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
       $scope.databaseTab.name = name.length > 20 ? `${name.substring(0, 20)}...` : name;
     };
 
-    $scope.changeTabName(defaultQuery);
+    $scope.changeTabName(defaultExpression);
 
     $scope.form = {
-      query: defaultQuery
+      expression: defaultExpression
     };
 
-    $scope.runQuery = () => {
-      _runQuery($scope.form.query);
+    $scope.evaluateExpression = () => {
+      _evalExpression($scope.form.expression);
     };
 
     $scope.VIEWS = {
@@ -58,7 +58,7 @@ angular.module('app').controller('queryCtrl', [
     };
     $scope.currentView = $scope.VIEWS.KEYVALUE;
 
-    _runQuery(defaultQuery);
+    _evalExpression(defaultExpression);
 
     $scope.autoformat = () => {
       if ($scope.editorHandle.autoformat) {
@@ -71,7 +71,7 @@ angular.module('app').controller('queryCtrl', [
         //make some functions available on the root scope when the editor gets focus,
         //used for keybindings
         $rootScope.currentQuery = {
-          runQuery: $scope.runQuery,
+          runQuery: $scope.evaluateExpression,
           autoformat: $scope.autoformat
         };
       } else {
@@ -80,37 +80,42 @@ angular.module('app').controller('queryCtrl', [
     });
 
     $scope.exportResults = () => {
-      modalService.openQueryResultsExport($scope.form.query);
+      modalService.openQueryResultsExport($scope.form.expression);
     };
 
     $scope.collapseAll = () => {
       $scope.$broadcast('collapse');
     };
 
-    function _runQuery(rawQuery) {
+    function _evalExpression(rawExpression) {
       $scope.loading = true;
       $scope.error = null;
 
-      $scope.changeTabName(rawQuery);
+      $scope.changeTabName(rawExpression);
 
-      queryRunnerService.runQuery(rawQuery, $scope.database.collections)
-        .then(result => {
+      expression.eval(rawExpression, $scope.database.collections)
+        .then(expressionResult => {
           $scope.$apply(() => {
-            $scope.loading = false;
-            $scope.result = result;
+            $scope.result = expressionResult.result;
 
-            if ($scope.result) {
-              if (_.isArray($scope.result)) {
-                $scope.keyValueResults = keyValueUtils.convert($scope.result);
-              } else {
-                $scope.currentView = $scope.VIEWS.RAW;
-              }
+            $scope.queryTime = expressionResult.time;
+            $scope.keyValueResults = expressionResult.keyValueResults;
+
+            if (expressionResult.mongoCollectionName) {
+              $scope.currentCollection = _.findWhere($scope.database.collapse, {
+                name: expressionResult.mongoCollectionName
+              });
             }
           });
         })
         .catch((error) => {
           $scope.$apply(() => {
             $scope.error = error && error.message ? `Error : ${error.message}` : error;
+            $scope.loading = false;
+          });
+        })
+        .finally(() => {
+          $timeout(() => {
             $scope.loading = false;
           });
         });
@@ -124,7 +129,7 @@ angular.module('app').controller('queryCtrl', [
           $scope.$apply(() => {
             notificationService.success('Delete successful');
 
-            _runQuery(`db.${$scope.currentCollection.name}.find()`);
+            _evalExpression(`db.${$scope.currentCollection.name}.find()`);
           });
         })
         .catch((error) => {
@@ -138,12 +143,12 @@ angular.module('app').controller('queryCtrl', [
     function _editDocument(doc) {
       if (!doc) return;
 
-      modalService.openEditDocument(doc)
+      modalService.openEditDocument(doc, $scope.currentCollection)
         .then(() => {
           $scope.$apply(() => {
             notificationService.success('Update successful');
 
-            _runQuery(`db.${$scope.currentCollection.name}.find()`);
+            _evalExpression(`db.${$scope.currentCollection.name}.find()`);
           });
         })
         .catch((error) => {
