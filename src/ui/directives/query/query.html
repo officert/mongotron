@@ -61,7 +61,7 @@
         <div ng-show="(!loading && !error) && (result !== null && result !== undefined)">
           <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="result">
           </div>
-          <div class="query-results" ng-if="currentView === VIEWS.TEXT">
+          <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
             <div class="text-view">
               <div class="results-list">
                 <div class="result" ng-repeat="result in result track by $index">
@@ -77,7 +77,7 @@
               </div>
             </div>
           </div>
-          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE">
+          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE && !loading">
             <div class="key-value-view">
               <div class="top-header clearfix">
                 <span class="table-cell col-sm-3 key">

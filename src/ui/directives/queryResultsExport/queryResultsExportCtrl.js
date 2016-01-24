@@ -163,8 +163,6 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           parser
             .on('data', (chunk) => {
-              console.log(chunk);
-
               $timeout(() => {
                 if (chunk && chunk.length >= 2) {
                   $scope.keyValuePairs.push({

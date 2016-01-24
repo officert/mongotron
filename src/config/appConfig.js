@@ -49,7 +49,7 @@ const configs = {
 function getConfig(env) {
   let envConfig = configs[env];
 
-  if (!envConfig) throw new Error(env + ' is not a valid environment');
+  if (!envConfig) throw new Error(`${env} is not a valid environment`);
 
   console.log('\nENVIRONMENT\n------------------');
   console.log(envConfig);
