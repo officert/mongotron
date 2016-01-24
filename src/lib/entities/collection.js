@@ -2,6 +2,7 @@
 
 const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const MongotronCursor = require('lib/utils/mongotronCursor');
 const mongoUtils = require('lib/utils/mongoUtils');

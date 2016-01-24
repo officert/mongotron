@@ -3,6 +3,7 @@
 const MongoDb = require('mongodb').Db;
 const MongoServer = require('mongodb').Server;
 const Promise = require('bluebird');
+const _ = require('underscore');
 
 const Collection = require('lib/entities/collection');
 const errors = require('lib/errors');
