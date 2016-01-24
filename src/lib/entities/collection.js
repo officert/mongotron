@@ -88,36 +88,45 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   deleteMany(query, options) {
-    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
-    options = options || {};
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      options = options || {};
 
-    let cursor = this._dbCollection.deleteMany(query, options);
-
-    return new MongotronCursor(cursor);
+      this._dbCollection.deleteMany(query, options, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
    * @param {Object} Mongo ObjectId
    */
   deleteById(objectId) {
-    if (!objectId) return Promise.reject(new errors.InvalidArugmentError('objectId is required'));
+    return new Promise((resolve, reject) => {
+      if (!objectId) return reject(new errors.InvalidArugmentError('objectId is required'));
 
-    let cursor = this._dbCollection.deleteOne({
-      _id: objectId
+      this._dbCollection.deleteOne({
+        _id: objectId
+      }, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
     });
-
-    return new MongotronCursor(cursor);
   }
 
   /**
    * @param {Object} query - mongo query
    */
   deleteOne(query) {
-    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-    let cursor = this._dbCollection.deleteOne(query);
-
-    return new MongotronCursor(cursor);
+      this._dbCollection.deleteOne(query, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
@@ -152,13 +161,16 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   updateMany(query, updates, options) {
-    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
-    if (!updates) return Promise.reject(new errors.InvalidArugmentError('updates is required'));
-    options = options || {};
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      options = options || {};
 
-    let cursor = this._dbCollection.updateMany(query, updates, options);
-
-    return new MongotronCursor(cursor);
+      this._dbCollection.updateMany(query, updates, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
@@ -167,16 +179,19 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   updateById(objectId, updates, options) {
-    if (!objectId) return Promise.reject(new errors.InvalidArugmentError('objectId is required'));
-    if (!updates) return Promise.reject(new errors.InvalidArugmentError('updates is required'));
-    if (!mongoUtils.isObjectId(objectId)) return Promise.reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
-    options = options || {};
+    return new Promise((resolve, reject) => {
+      if (!objectId) return reject(new errors.InvalidArugmentError('objectId is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
+      options = options || {};
 
-    let cursor = this._dbCollection.updateOne({
-      _id: objectId
-    }, updates, options);
-
-    return new MongotronCursor(cursor);
+      this._dbCollection.updateOne({
+        _id: objectId
+      }, updates, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
@@ -185,13 +200,16 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   updateOne(query, updates, options) {
-    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
-    if (!updates) return Promise.reject(new errors.InvalidArugmentError('updates is required'));
-    options = options || {};
+    return new Promise((resolve, reject) => {
+      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      options = options || {};
 
-    let cursor = this._dbCollection.updateOne(query, updates, options);
-
-    return new MongotronCursor(cursor);
+      this._dbCollection.updateOne(query, updates, (err, result) => {
+        if (err) return reject(err);
+        return resolve(result);
+      });
+    });
   }
 
   /**
