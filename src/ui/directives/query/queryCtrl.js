@@ -105,7 +105,7 @@ angular.module('app').controller('queryCtrl', [
             $scope.keyValueResults = expressionResult.keyValueResults;
 
             if (expressionResult.mongoCollectionName) {
-              $scope.currentCollection = _.findWhere($scope.database.collapse, {
+              $scope.currentCollection = _.findWhere($scope.database.collections, {
                 name: expressionResult.mongoCollectionName
               });
             }

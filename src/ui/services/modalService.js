@@ -99,7 +99,10 @@ angular.module('app').service('modalService', [
               .then(resolve)
               .catch(reject);
           })
-          .catch(reject);
+          .catch(err => {
+            if (err === 'cancel' || err === 'escape key press') return reject(null); //eat the cancel button "error" and esc keypress
+            return reject(err);
+          });
       });
     };
 

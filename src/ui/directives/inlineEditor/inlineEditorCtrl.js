@@ -5,14 +5,10 @@ angular.module('app').controller('inlineEditorCtrl', [
   'tabCache',
   'notificationService',
   '$timeout', ($scope, tabCache, notificationService, $timeout) => {
-    const mongoUtils = require('src/lib/utils/mongoUtils');
-    const expression = require('lib/modules/expression');
-
     $scope.show = false;
     $scope.doc = $scope.inlineEditorDoc;
     $scope.newValue = $scope.inlineEditorValue;
     $scope.validType = $scope.inlineEditorType !== 'objectId';
-    // $scope.newValue = _getPropertyValue($scope.doc, $scope.inlineEditorKey);
 
     $scope.$watch('show', (val) => {
       if (val === true) {
@@ -44,14 +40,23 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       if (!activeTab) return;
 
-      let rawExpression = _getFullQuery(activeTab.collection.name);
+      let set = {};
+      set[$scope.inlineEditorKey] = $scope.newValue;
 
-      expression.eval(rawExpression, activeTab.database.collections)
+      activeTab.collection.updateOne({
+          _id: $scope.doc._id
+        }, {
+          $set: set
+        })
         .then(() => {
           $timeout(() => {
             $scope.show = false;
+
             _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, $scope.newValue);
+
             $scope.inlineEditorValue = $scope.newValue;
+
+            notificationService.success('Updates saved.');
           });
         })
         .catch((err) => {
@@ -64,22 +69,6 @@ angular.module('app').controller('inlineEditorCtrl', [
     $scope.cancel = function() {
       $scope.show = false;
     };
-
-    function _getFullQuery(collectionName) {
-      // let value = evaluator.eval($scope.newValue);
-      // if (_.isString(value)) {
-      //   value = `'${value}'`;
-      // }
-      let value = $scope.newValue;
-      return `db.${collectionName}.updateOne({ _id : ${_getDocId($scope.doc)} }, { $set : { \'${$scope.inlineEditorKey}\' : ${value} } })`;
-    }
-
-    function _getDocId(doc) {
-      if (!doc) return null;
-
-      if (mongoUtils.isObjectId(doc._id)) return `new ObjectId(\'${doc._id.toString()}\')`;
-      else return `\'${doc._id}\'`;
-    }
 
     function _setPropertyValueByKey(obj, prop, val) {
       if (!obj || !prop) return null;
