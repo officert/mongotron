@@ -7,11 +7,6 @@
   "node": true,
   "esnext": true,
   "globals": {
-    "_": true,
-    "toastr": true,
-    "CodeMirror": true,
-    "angular": true,
-    "performance": true,
     "describe": true,
     "before": true,
     "beforeEach": true,
@@ -19,13 +14,8 @@
     "afterEach": true,
     "it": true,
     "Promise": true,
-    "$": true,
-    "alert": true,
-    "inject": true,
     "expect": true,
-    "window": true,
-    "should": true,
-    "spyOn": true
+    "should": true
   },
   "camelcase": true,
   "bitwise": true,
