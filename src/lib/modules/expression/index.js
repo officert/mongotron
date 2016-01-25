@@ -27,10 +27,11 @@ class Expression {
 
       evaluator.eval(expression, evalScope)
         .then((result) => {
+          let time = _getTime(startTime);
 
           let expressionResult = {
             result: result,
-            time: _getTime(startTime),
+            time: time,
             mongoMethodName: _getMongoMethodName(astTokens),
             mongoCollectionName: _getMongoCollectionName(astTokens)
           };
