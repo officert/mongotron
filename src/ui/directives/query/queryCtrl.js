@@ -100,7 +100,7 @@ angular.module('app').controller('queryCtrl', [
         .then(expressionResult => {
           $scope.$apply(() => {
             $scope.result = expressionResult.result;
-
+            $scope.resultMongoMethodName = expressionResult.mongoMethodName;
             $scope.queryTime = expressionResult.time;
             $scope.keyValueResults = expressionResult.keyValueResults;
 
@@ -108,12 +108,14 @@ angular.module('app').controller('queryCtrl', [
               $scope.currentCollection = _.findWhere($scope.database.collections, {
                 name: expressionResult.mongoCollectionName
               });
-            }
 
-            if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate' && expressionResult.mongoMethodName !== 'count') {
-              notificationService.success(`${expressionResult.mongoMethodName} was successful`);
+              if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate' && expressionResult.mongoMethodName !== 'count') {
+                notificationService.success(`${expressionResult.mongoMethodName} was successful`);
 
-              return _evalExpression(`db.${expressionResult.mongoCollectionName}.find()`, $scope.database.collections);
+                return _evalExpression(`db.${expressionResult.mongoCollectionName}.find()`, $scope.database.collections);
+              }
+            } else {
+              $scope.currentView = $scope.VIEWS.RAW;
             }
           });
         })

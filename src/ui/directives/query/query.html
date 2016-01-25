@@ -18,15 +18,18 @@
     </div>
     <div class="right-btns">
       <div class="query-btn-list btn-group clearfix">
-        <!-- <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
-        <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input> -->
-        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
+        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="evaluateExpression()">Run</button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        tooltip-append-to-body="true">
+          <i class="fa fa-file-text-o"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
       </div>
@@ -55,11 +58,11 @@
         <div class="query-error alert alert-danger" ng-show="!loading && error">
           {{ error }}
         </div>
-        <div class="alert alert-info" ng-show="(!loading && !error) && (!result || !result.length)">
-          Your search did not return any results.
-        </div>
-        <div ng-show="(!loading && !error) && (result !== null && result !== undefined)">
-          <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="result">
+        <div ng-show="(!loading && !error)">
+          <div class="query-results" ng-if="currentView === VIEWS.RAW && !loading">
+            <div class="raw-view">
+              <pre>{{ ::result | json }}</pre>
+            </div>
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
             <div class="text-view">
@@ -93,6 +96,9 @@
               <key-value-results results="keyValueResults" delete-document="deleteDocument" edit-document="editDocument"></key-value-results>
             </div>
           </div>
+        </div>
+        <div class="alert alert-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
+          Your search did not return any results.
         </div>
       </div>
     </div>
