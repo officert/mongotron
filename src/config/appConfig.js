@@ -36,7 +36,10 @@ const local = _.extend(_.extend({}, defaultSettings), {
 
 const test = _.extend(_.extend({}, defaultSettings), {
   env: 'test',
-  dbConfigPath: 'tests/config/dbConnections-test.json'
+  logFilePath: 'tests/config/logs.json',
+  dbConfigPath: 'tests/config/dbConnections-test.json',
+  keybindingsPath: 'tests/config/keybindings.json',
+  themesPath: 'tests/config/themes.json'
 });
 
 const configs = {

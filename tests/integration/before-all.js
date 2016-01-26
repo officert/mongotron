@@ -1,13 +1,15 @@
 'use strict';
 
-before(function(next) {
+before(next => {
   console.log('\n--------------------------------------------\nRUNNING INTEGRATION TEST SETUP...\n--------------------------------------------');
 
-  next();
+  require('src/mongotron').init();
+
+  return next(null);
 });
 
-before(function(next) {
+before(next => {
   console.log('\n--------------------------------------------\nFINISHED RUNNING TEST SETUP\n--------------------------------------------');
 
-  next();
+  return next(null);
 });
