@@ -1,7 +1,6 @@
-/* =========================================================================
- * Exports
- * ========================================================================= */
-module.exports = function(config) {
+'use strict';
+
+module.exports = config => {
 
   config.set({
     frameworks: ['jasmine', 'sinon'],

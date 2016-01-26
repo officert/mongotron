@@ -8,4 +8,5 @@ src/ui/css
 *.idea
 release
 build
+coverage
 tests/config/*.json
