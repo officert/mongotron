@@ -8,4 +8,4 @@ src/ui/css
 *.idea
 release
 build
-tests/config
+tests/config/*.json
