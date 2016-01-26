@@ -9,7 +9,6 @@ angular.module('app').directive('queryResultsExport', [
       controller: 'queryResultsExportCtrl',
       scope: {
         handle: '=',
-        collection: '=',
         query: '='
       }
     };

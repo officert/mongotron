@@ -316,7 +316,7 @@ gulp.task('test-unit-ui', () => {
       './**/*-test.js'
     ]
   }, exitCode => process.exit(exitCode));
-  
+
   server.start();
 });
 

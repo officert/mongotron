@@ -6,15 +6,15 @@ angular.module('app').controller('queryResultsExportCtrl', [
   '$log',
   '$timeout',
   'notificationService',
-  function($scope, dialogService, $log, $timeout, notificationService) {
+  'tabCache', ($scope, dialogService, $log, $timeout, notificationService, tabCache) => {
+    const fs = require('fs');
+    const csv = require('csv');
+    const CsvStream = require('lib/utils/csvStream');
+    const expression = require('lib/modules/expression');
+
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
 
     $scope.limit = null;
-
-    const fs = require('fs');
-    const csv = require('csv');
-
-    // const CsvStream = require('lib/utils/csvStream');
 
     $scope.keyValuePairs = [];
 
@@ -24,8 +24,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
       delay: 0,
       appendTo: '.key-value-pair-wrapper',
       revert: 50,
-      helper: function(e, item) {
-        $timeout(function() {
+      helper: (e, item) => {
+        $timeout(() => {
           //force the element to show, race condition :(
           item.attr('style', 'display: block !important');
         });
@@ -65,12 +65,16 @@ angular.module('app').controller('queryResultsExportCtrl', [
     };
 
     function _export() {
-      // let nameProps = $scope.keyValuePairs.map((kvp) => {
-      //   return {
-      //     name: kvp.key,
-      //     property: kvp.value
-      //   };
-      // });
+      let activeTab = tabCache.getActive();
+
+      if (!activeTab) throw new Error('editDocumentCtrl - no active tab');
+
+      let nameProps = $scope.keyValuePairs.map((kvp) => {
+        return {
+          name: kvp.key,
+          property: kvp.value
+        };
+      });
 
       dialogService.showSaveDialog()
         .then((path) => {
@@ -78,36 +82,36 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           path = _fixExportCsvPath(path);
 
-          $timeout(() => {
-            $scope.loading = true;
+          // $scope.query.stream = true;
 
-            $scope.query.queryOptions = {
-              stream: true,
-              limit: $scope.limit || 50
-            };
+          expression.eval($scope.query, activeTab.database.collections)
+            .then(expressionResult => {
+              if (!expressionResult.mongoMethodName) {
+                notificationService.error('Cannot export a non MongoDb expression');
+                return;
+              }
+              if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate') {
+                notificationService.error('Cannot export a MongoDb expression that is not find or aggregate');
+                return;
+              }
 
-            // let startTime = performance.now();
+              let startTime = performance.now();
 
-            alert('TODO: fix this!!');
+              expressionResult.result
+                .pipe(new CsvStream(nameProps))
+                .on('error', handleError)
+                .pipe(fs.createWriteStream(path))
+                .on('error', handleError)
+                .on('finish', () => {
+                  let ellapsed = (performance.now() - startTime).toFixed(5);
 
-            // $scope.collection.execQuery($scope.query)
-            //   .then((results) => {
-            //     results.result
-            //       .pipe(new CsvStream(nameProps))
-            //       .on('error', handleError)
-            //       .pipe(fs.createWriteStream(path))
-            //       .on('error', handleError)
-            //       .on('finish', () => {
-            //         let ellapsed = (performance.now() - startTime).toFixed(5);
-            //
-            //         $timeout(() => {
-            //           $scope.loading = false;
-            //           notificationService.success('Finished exporting');
-            //         }, (ellapsed >= 1000 ? 0 : 1000));
-            //       });
-            //   })
-            //   .catch(handleError);
-          });
+                  $timeout(() => {
+                    $scope.loading = false;
+                    notificationService.success('Finished exporting');
+                  }, (ellapsed >= 1000 ? 0 : 1000));
+                });
+            })
+            .catch(handleError);
         })
         .catch(handleError);
     }
