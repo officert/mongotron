@@ -5,7 +5,7 @@ const jshint = require('gulp-jshint');
 const less = require('gulp-less');
 const sh = require('shelljs');
 const runSequence = require('run-sequence');
-const mocha = require('gulp-spawn-mocha');
+const mocha = require('gulp-mocha');
 const _ = require('underscore');
 const childProcess = require('child_process');
 const karma = require('karma');
@@ -15,6 +15,7 @@ const symlink = require('gulp-symlink');
 const electron = require('electron-prebuilt');
 const fs = require('fs');
 const jsdoc = require('gulp-jsdoc3');
+const istanbul = require('gulp-istanbul');
 
 const appConfig = require('./src/config/appConfig');
 
@@ -267,8 +268,28 @@ gulp.task('serve-site', ['site-css'], () => {
 
 gulp.task('default', ['serve']);
 
+gulp.task('pre-test', () => {
+  return gulp.src(['src/**/*.js', '!src/ui/**/*.js'])
+    .pipe(istanbul({
+      includeUntested: true
+    }))
+    .pipe(istanbul.hookRequire());
+});
+
+gulp.task('coverage', () => {
+  gulp.src(['tests/integration/**/**/**-test.js', 'tests/unit/**/**/**-test.js'])
+    .pipe(istanbul.writeReports());
+});
+
+gulp.task('coveralls', (next) => {
+  childProcess.exec('cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js', (err) => {
+    if (err) return next(err);
+    return next(null);
+  });
+});
+
 gulp.task('test', (done) => {
-  runSequence('jshint', 'test-int', 'test-unit', 'test-unit-ui', done);
+  runSequence('jshint', 'pre-test', 'test-int', 'test-unit', 'test-unit-ui', 'coverage', done);
 });
 
 gulp.task('test-int', () => {
@@ -316,7 +337,7 @@ gulp.task('test-unit-ui', () => {
       './**/*-test.js'
     ]
   }, exitCode => process.exit(exitCode));
-  
+
   server.start();
 });
 
