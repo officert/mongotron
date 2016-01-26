@@ -10,9 +10,6 @@ const themes = require('lib/modules/themes');
 class Mongotron {
   constructor() {}
 
-  /**
-   * Init
-   */
   init() {
     createAppConfigDir();
     createDbConfigFile();
