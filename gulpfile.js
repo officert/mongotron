@@ -88,21 +88,6 @@ const JSDOC_SETTINGS = {
   tags: {
     allowUnknownTags: true
   }
-  // plugins: [
-  //   'plugins/markdown'
-  // ],
-  // templates: {
-  //   cleverLinks: false,
-  //   monospaceLinks: false,
-  //   default: {
-  //     outputSourceFiles: true
-  //   },
-  //   path: 'ink-docstrap',
-  //   theme: 'cerulean',
-  //   navType: 'vertical',
-  //   linenums: true,
-  //   dateFormat: 'MMMM Do YYYY, h:mm:ss a'
-  // }
 };
 
 /* =========================================================================
@@ -111,10 +96,7 @@ const JSDOC_SETTINGS = {
 /**
  * List gulp tasks
  */
-gulp.task('?', (next) => {
-  sh.exec('gulp task-list');
-  next();
-});
+gulp.task('?', ['gulp task-list']);
 
 gulp.task('clean', (next) => {
   sh.rm('-rf', appConfig.releasePath);
