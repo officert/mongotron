@@ -656,7 +656,6 @@ describe('modules', () => {
           it('should update the auth.username and return the connection', (next) => {
             connectionService.update(connection.id, updates)
               .then((updatedConnection) => {
-                console.log('in test', updatedConnection.databases[0]);
                 should.exist(updatedConnection);
                 should.exist(updatedConnection.databases[0]);
                 updatedConnection.databases[0].auth.username.should.equal(updates.auth.username);
