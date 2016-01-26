@@ -9,3 +9,4 @@ src/ui/css
 release
 build
 coverage
+tests/config/*.json

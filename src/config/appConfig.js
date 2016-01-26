@@ -22,21 +22,24 @@ const defaultSettings = {
   themesPath: path.join(path.homedir(), `.${appName}`, 'themes.json')
 };
 
-const production = _.extend(_.extend({}, defaultSettings), {
+const production = _.extend(_.clone(defaultSettings), {
   env: 'production'
 });
 
-const development = _.extend(_.extend({}, defaultSettings), {
+const development = _.extend(_.clone(defaultSettings), {
   env: 'development'
 });
 
-const local = _.extend(_.extend({}, defaultSettings), {
+const local = _.extend(_.clone(defaultSettings), {
   env: 'local'
 });
 
-const test = _.extend(_.extend({}, defaultSettings), {
+const test = _.extend(_.clone(defaultSettings), {
   env: 'test',
-  dbConfigPath: 'tests/config/dbConnections-test.json'
+  logFilePath: 'tests/config/logs.json',
+  dbConfigPath: 'tests/config/dbConnections.json',
+  keybindingsPath: 'tests/config/keybindings.json',
+  themesPath: 'tests/config/themes.json'
 });
 
 const configs = {
