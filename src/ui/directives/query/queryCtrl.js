@@ -109,7 +109,7 @@ angular.module('app').controller('queryCtrl', [
                 name: expressionResult.mongoCollectionName
               });
 
-              if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate' && expressionResult.mongoMethodName !== 'count') {
+              if (_isModifyingMongoMethod(expressionResult.mongoMethodName)) {
                 notificationService.success(`${expressionResult.mongoMethodName} was successful`);
 
                 return _evalExpression(`db.${expressionResult.mongoCollectionName}.find()`, $scope.database.collections);
@@ -130,6 +130,10 @@ angular.module('app').controller('queryCtrl', [
             $scope.loading = false;
           });
         });
+    }
+
+    function _isModifyingMongoMethod(methodName) {
+      return methodName && (methodName === 'updateMany'|| methodName === 'updateById' || methodName === 'updateOne' || methodName === 'deleteMany' || methodName === 'deleteById' || methodName === 'deleteOne');
     }
 
     function _deleteDocument(doc) {
