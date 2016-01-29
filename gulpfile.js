@@ -64,11 +64,6 @@ const LESSOPTIONS = {
   compress: false
 };
 
-// const MOCHA_SETTINGS = {
-//   reporter: 'spec',
-//   growl: true
-// };
-
 const JSDOC_SETTINGS = {
   access: 'all', //show all access levels (public, private, protected)
   // configure: './conf.json',
@@ -133,7 +128,6 @@ gulp.task('jshint', () => {
  * ------------------------------------------------ */
 gulp.task('jsdoc', next => {
   gulp.src(['README.md', './src/**/*.js'], {
-      // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
       read: false
     })
     .pipe(jsdoc(JSDOC_SETTINGS, next));
