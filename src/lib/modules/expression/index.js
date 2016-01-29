@@ -46,16 +46,25 @@ class Expression {
 
   getMongoCollectionName(expression) {
     if (!expression) return null;
+
+    let errors = this.validate(expression);
+
+    if (errors && errors.length) return null;
+
     let astTokens = esprima.tokenize(expression);
-    console.log('astTokens', astTokens);
+
     return _getMongoCollectionName(astTokens);
   }
 
   getMongoMethodName(expression) {
     if (!expression) return null;
+
     let errors = this.validate(expression);
+
     if (errors && errors.length) return null;
+
     let astTokens = esprima.tokenize(expression);
+
     return _getMongoMethodName(astTokens);
   }
 
@@ -66,10 +75,15 @@ class Expression {
   }
 
   validate(expression) {
-    let syntax = esprima.parse(expression, {
-      tolerant: true,
-      loc: true
-    });
+    let syntax;
+    try {
+      syntax = esprima.parse(expression, {
+        tolerant: true,
+        loc: true
+      });
+    } catch (e) {
+      return null;
+    }
 
     return syntax.errors;
   }
@@ -89,11 +103,16 @@ function _getMongoCollectionName(astTokens) {
 }
 
 function _getMongoMethodName(astTokens) {
-  //TODO: need to handle the case of 'db[Cars].find'
   if (!astTokens || astTokens.length < 4) return null;
   if (astTokens[0].value !== 'db') return null;
 
-  return astTokens[4].value;
+  let bracketNotation = astTokens[3].value === '[';
+
+  let value = astTokens[4].value;
+
+  if (bracketNotation) value = _getStringValue(value);
+
+  return value;
 }
 
 function _getMongoQuery() {
@@ -167,7 +186,6 @@ function _isPromise(func) {
 
 function _getStringValue(str) {
   let matches = str.match(/(?:\\?\"|\\?\')(.*?)(?:\\?\"|\\?\')/);
-  console.log('matches', matches);
   return matches && matches.length >= 2 ? matches[1] : null;
 }
 

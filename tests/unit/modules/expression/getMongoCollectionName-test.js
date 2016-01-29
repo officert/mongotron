@@ -22,6 +22,15 @@ describe('modules', () => {
         });
       });
 
+      describe('when an invalid expression is not passed', () => {
+        let expr = 'aasdfasdf.asd.as.dfas.';
+
+        it('should return null', () => {
+          let value = expression.getMongoCollectionName(expr);
+          should(value).equal(null);
+        });
+      });
+
       describe('when an expression is passed and doesn\'t begin with db Identifier', () => {
         let expr = 'foooobar';
 
