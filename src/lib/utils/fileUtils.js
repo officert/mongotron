@@ -33,6 +33,8 @@ class FileUtils {
   }
 
   createFileSync(path, fileData) {
+    console.log('\n\ncreateFileSync\n\n');
+
     var fileExists = false;
     fileData = fileData || '';
 
@@ -49,8 +51,10 @@ class FileUtils {
 
     if (!fileExists) {
       try {
+        console.log('\n\ncreating file\n\n');
         fs.writeFileSync(path, fileData);
       } catch (e) {
+        console.log('\n\nerror creating file\n\n');
         //eat the error
         console.log(e);
       }
