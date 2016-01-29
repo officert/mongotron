@@ -96,7 +96,9 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.changeTabName(rawExpression);
 
-      expression.eval(rawExpression, $scope.database.collections)
+      let evalScope = expression.createEvalScopeFromCollections($scope.database.collections);
+
+      expression.eval(rawExpression, evalScope)
         .then(expressionResult => {
           $scope.$apply(() => {
             $scope.result = expressionResult.result;
@@ -133,7 +135,7 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _isModifyingMongoMethod(methodName) {
-      return methodName && (methodName === 'updateMany'|| methodName === 'updateById' || methodName === 'updateOne' || methodName === 'deleteMany' || methodName === 'deleteById' || methodName === 'deleteOne');
+      return methodName && (methodName === 'updateMany' || methodName === 'updateById' || methodName === 'updateOne' || methodName === 'deleteMany' || methodName === 'deleteById' || methodName === 'deleteOne');
     }
 
     function _deleteDocument(doc) {

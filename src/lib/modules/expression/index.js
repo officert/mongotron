@@ -12,22 +12,19 @@ class Expression {
   /**
    * evaluate a JS expression
    * @param {String} expression
-   * @param {Array<Collection>} [collections]
+   * @param {Object} [scope] - a customized scope that the expression will be evaluated in
    * @returns Promise
    */
-  eval(expression, collections) {
+  eval(expression, scope) {
     return new Promise((resolve, reject) => {
       if (!expression) return reject(new Error('Expression - eval() - expression is required'));
-      if (!collections || !_.isArray(collections)) return reject(new Error('Expression - eval() - collections is required'));
 
       let astTokens = esprima.tokenize(expression);
 
-      let evalScope = _createEvalScope(collections);
-
       let startTime = process.hrtime();
 
-      _eval(expression, evalScope)
-        .then((result) => {
+      _eval(expression, scope)
+        .then(result => {
           let time = _getTime(startTime);
 
           let expressionResult = {
@@ -45,6 +42,11 @@ class Expression {
         })
         .catch(reject);
     });
+  }
+
+  createEvalScopeFromCollections(collections) {
+    if (!collections || !_.isArray(collections)) return null;
+    return _createEvalScope(collections);
   }
 
   getMongoMethodName(expression) {

@@ -20,7 +20,7 @@ afterEach(() => {
 });
 
 describe('modules', () => {
-  describe.only('expression', () => {
+  describe('expression', () => {
     describe('eval', () => {
       describe('when an expression is not passed', () => {
         let expr = null;
@@ -38,34 +38,90 @@ describe('modules', () => {
         });
       });
 
-      describe('when an collections is not passed', () => {
-        let expr = 'asdfasdf';
-        let collections = null;
+      describe('when evaluating a simple expression', () => {
+        let expr = '1 + 2';
+        let expectedEvalResult = 3;
 
-        it('should reject with an error', next => {
-          expression.eval(expr, collections)
-            .catch(error => {
+        it('should return an expression result object', next => {
+          expression.eval(expr)
+            .then(expressionResult => {
 
-              should.exist(error);
+              should.exist(expressionResult);
 
-              error.message.should.equal('Expression - eval() - collections is required');
+              expressionResult.result.should.equal(expectedEvalResult);
 
               return next(null);
             });
         });
       });
 
-      describe('when an collections passed is not an array', () => {
-        let expr = 'asdfasdf';
-        let collections = 'asdfasdf';
+      describe('when evaluating an expression containing a variable', () => {
+        let expr = 'var foo = "hello"; foo';
+        let expectedEvalResult = 'hello';
+
+        it('should return an expression result object', next => {
+          expression.eval(expr)
+            .then(expressionResult => {
+
+              should.exist(expressionResult);
+
+              expressionResult.result.should.equal(expectedEvalResult);
+
+              return next(null);
+            });
+        });
+      });
+
+      describe('when evaluating an expression containing something not in scope', () => {
+        let expr = 'foo';
+        let expectedEvalResult = 'foo is not defined';
 
         it('should reject with an error', next => {
-          expression.eval(expr, collections)
+          expression.eval(expr)
             .catch(error => {
 
               should.exist(error);
+              error.message.should.equal(expectedEvalResult);
 
-              error.message.should.equal('Expression - eval() - collections is required');
+              return next(null);
+            });
+        });
+      });
+
+      describe('when evaluating an expression containing variable that is in scope', () => {
+        let expr = 'foo';
+        let evalScope = {
+          foo: 12345
+        };
+        let expectedEvalResult = 12345;
+
+        it('should return an expression result object', next => {
+          expression.eval(expr, evalScope)
+            .then(expressionResult => {
+
+              should.exist(expressionResult);
+              expressionResult.result.should.equal(expectedEvalResult);
+
+              return next(null);
+            });
+        });
+      });
+
+      describe('when evaluating an expression containing a function that is in scope', () => {
+        let expr = 'foo()';
+        let evalScope = {
+          foo: function() {
+            return 12345;
+          }
+        };
+        let expectedEvalResult = 12345;
+
+        it('should return an expression result object', next => {
+          expression.eval(expr, evalScope)
+            .then(expressionResult => {
+
+              should.exist(expressionResult);
+              expressionResult.result.should.equal(expectedEvalResult);
 
               return next(null);
             });
