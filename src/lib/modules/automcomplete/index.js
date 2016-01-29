@@ -13,5 +13,5 @@ class AutoComplete {
   }
 }
 
-/** @exports */
+/** @exports AutoComplete */
 module.exports = new AutoComplete();

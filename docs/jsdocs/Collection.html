@@ -32,14 +32,14 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-AppConfig.html">AppConfig</a></li><li><a href="module-Connection.html">Connection</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-Keybindings.html">Keybindings</a></li><li><a href="module-Logger.html">Logger</a></li><li><a href="module-Query.html">Query</a></li><li><a href="module-Themes.html">Themes</a></li>
+					<li><a href="module-AppConfig.html">AppConfig</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-Connection.html">Connection</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-Keybindings.html">Keybindings</a></li><li><a href="module-Logger.html">Logger</a></li><li><a href="module-Themes.html">Themes</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="AbstractError.html">AbstractError</a></li><li><a href="Collection.html">Collection</a></li><li><a href="Connection.html">Connection</a></li><li><a href="ConnectionError.html">ConnectionError</a></li><li><a href="CsvStream.html">CsvStream</a></li><li><a href="Database.html">Database</a></li><li><a href="DatabaseError.html">DatabaseError</a></li><li><a href="FileUtils.html">FileUtils</a></li><li><a href="InternalServiceError.html">InternalServiceError</a></li><li><a href="InvalidArugmentError.html">InvalidArugmentError</a></li><li><a href="KeyVaueUtils.html">KeyVaueUtils</a></li><li><a href="module-Connection-ConnectionRepository.html">Connection~ConnectionRepository</a></li><li><a href="module-Connection-ConnectionService.html">Connection~ConnectionService</a></li><li><a href="module-Connection-ConnectionValidator.html">Connection~ConnectionValidator</a></li><li><a href="module-Keybindings-KeybindingsService.html">Keybindings~KeybindingsService</a></li><li><a href="module-Logger-LoggerService.html">Logger~LoggerService</a></li><li><a href="module-Query-BracketMatcher.html">Query~BracketMatcher</a></li><li><a href="module-Query-Evaluator.html">Query~Evaluator</a></li><li><a href="module-Query-Hinter.html">Query~Hinter</a></li><li><a href="module-Query-Query.html">Query~Query</a></li><li><a href="module-Query-QueryParser.html">Query~QueryParser</a></li><li><a href="module-Query-QueryService.html">Query~QueryService</a></li><li><a href="module-Themes-ThemesService.html">Themes~ThemesService</a></li><li><a href="Mongotron.html">Mongotron</a></li><li><a href="MongoUtils.html">MongoUtils</a></li><li><a href="ObjectNotFoundError.html">ObjectNotFoundError</a></li>
+					<li><a href="AbstractError.html">AbstractError</a></li><li><a href="AutoComplete.html">AutoComplete</a></li><li><a href="Collection.html">Collection</a></li><li><a href="Connection.html">Connection</a></li><li><a href="ConnectionError.html">ConnectionError</a></li><li><a href="CsvStream.html">CsvStream</a></li><li><a href="Database.html">Database</a></li><li><a href="DatabaseError.html">DatabaseError</a></li><li><a href="FileUtils.html">FileUtils</a></li><li><a href="InternalServiceError.html">InternalServiceError</a></li><li><a href="InvalidArugmentError.html">InvalidArugmentError</a></li><li><a href="KeyVaueUtils.html">KeyVaueUtils</a></li><li><a href="module-Connection-ConnectionRepository.html">Connection~ConnectionRepository</a></li><li><a href="module-Connection-ConnectionService.html">Connection~ConnectionService</a></li><li><a href="module-Connection-ConnectionValidator.html">Connection~ConnectionValidator</a></li><li><a href="module-Keybindings-KeybindingsService.html">Keybindings~KeybindingsService</a></li><li><a href="module-Logger-LoggerService.html">Logger~LoggerService</a></li><li><a href="module-Themes-ThemesService.html">Themes~ThemesService</a></li><li><a href="Mongotron.html">Mongotron</a></li><li><a href="MongoUtils.html">MongoUtils</a></li><li><a href="ObjectNotFoundError.html">ObjectNotFoundError</a></li>
 				</ul>
 			</li>
 			
@@ -352,7 +352,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="aggregate"><span class="type-signature"></span>aggregate(query)</h4>
+    <h4 class="name" id="aggregate"><span class="type-signature"></span>aggregate(<span class="optional">pipeline</span>, <span class="optional">options</span>)</h4>
     
     
 </dt>
@@ -379,6 +379,8 @@
         <th>Type</th>
 
         
+        <th>Argument</th>
+        
 
         
 
@@ -391,7 +393,7 @@
 
         <tr>
             
-                <td class="name"><code>query</code></td>
+                <td class="name"><code>pipeline</code></td>
             
 
             <td class="type">
@@ -405,10 +407,54 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">mongo query</td>
+            <td class="description last">mongo pipeline</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">mongo pipeline options</td>
         </tr>
 
     
@@ -1138,7 +1184,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="find"><span class="type-signature"></span>find(query, <span class="optional">options</span>)</h4>
+    <h4 class="name" id="find"><span class="type-signature"></span>find(<span class="optional">query</span>, <span class="optional">options</span>)</h4>
     
     
 </dt>
@@ -1194,6 +1240,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -1430,7 +1478,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="updateById"><span class="type-signature"></span>updateById(Mongo, updates)</h4>
+    <h4 class="name" id="updateById"><span class="type-signature"></span>updateById(Mongo, updates, <span class="optional">options</span>)</h4>
     
     
 </dt>
@@ -1456,6 +1504,8 @@
 
         <th>Type</th>
 
+        
+        <th>Argument</th>
         
 
         
@@ -1483,6 +1533,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1507,10 +1565,52 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">updates to apply</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">mongo query options</td>
         </tr>
 
     
@@ -1778,7 +1878,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="updateOne"><span class="type-signature"></span>updateOne(query, updates)</h4>
+    <h4 class="name" id="updateOne"><span class="type-signature"></span>updateOne(query, updates, <span class="optional">options</span>)</h4>
     
     
 </dt>
@@ -1804,6 +1904,8 @@
 
         <th>Type</th>
 
+        
+        <th>Argument</th>
         
 
         
@@ -1831,6 +1933,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1855,10 +1965,52 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">updates to apply</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">mongo query options</td>
         </tr>
 
     
@@ -1970,7 +2122,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-01-15T16:48:40-05:00
+		on 2016-01-29T11:28:51-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

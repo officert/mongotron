@@ -9,6 +9,12 @@ const ObjectId = require('mongodb').ObjectId;
 const keyValueUtils = require('src/lib/utils/keyValueUtils');
 
 class Expression {
+  /**
+   * evaluate a JS expression
+   * @param {String} expression
+   * @param {Array<Collection>} [collections]
+   * @returns Promise
+   */
   eval(expression, collections) {
     return new Promise((resolve, reject) => {
       if (!expression) return reject(new Error('Expression - eval() - expression is required'));
@@ -96,9 +102,8 @@ function _getTime(startTime) {
   return endTime[0], endTime[1] / 1000000;
 }
 
-/** @private */
 /**
- * evaluate a JS expression
+ * @private
  * @param {String} expression
  * @param {Object} scope
  */
