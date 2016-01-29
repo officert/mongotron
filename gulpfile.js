@@ -3,7 +3,6 @@
 const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
-const sh = require('shelljs');
 const runSequence = require('run-sequence');
 const mocha = require('gulp-mocha');
 const _ = require('underscore');
@@ -96,12 +95,10 @@ const JSDOC_SETTINGS = {
 /**
  * List gulp tasks
  */
-gulp.task('?', ['gulp task-list']);
+gulp.task('?', ['task-list']);
 
-gulp.task('clean', (next) => {
-  sh.rm('-rf', appConfig.releasePath);
-  sh.rm('-rf', appConfig.buildPath);
-  next();
+gulp.task('clean', next => {
+  childProcess.exec(`rm -rf ${appConfig.releasePath} && rm -rf ${appConfig.buildPath}`, next);
 });
 
 gulp.task('css', () => {
@@ -127,6 +124,9 @@ gulp.task('fonts', () => {
   });
 });
 
+/* ------------------------------------------------
+ * Code Quality
+ * ------------------------------------------------ */
 gulp.task('jshint', () => {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
     .pipe(jshint())
@@ -134,12 +134,32 @@ gulp.task('jshint', () => {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('jsdoc', (next) => {
+/* ------------------------------------------------
+ * Jsdocs
+ * ------------------------------------------------ */
+gulp.task('jsdoc', next => {
   gulp.src(['README.md', './src/**/*.js'], {
       // gulp.src(['README.md', './src/lib/modules/connection/service.js'], {
       read: false
     })
     .pipe(jsdoc(JSDOC_SETTINGS, next));
+});
+
+gulp.task('open-jsdoc', ['jsdoc'], next => {
+  childProcess.exec('open ./docs/jsdocs/index.html', next);
+});
+
+/* ------------------------------------------------
+ * Release
+ * ------------------------------------------------ */
+gulp.task('pre-release', next => {
+  // Build Steps:
+  //-------------------------------------
+  // run build to cleanup dirs and compile less
+  // run babel to compile ES6 => ES5
+  // run prod-sym-links to change symlinks in node_modules that point to src dir to the build dir (which will contain the compiled ES5 code)
+  //-------------------------------------
+  runSequence('build', 'babel', 'prod-sym-links', next);
 });
 
 gulp.task('release-osx', ['pre-release'], (next) => {
@@ -173,16 +193,6 @@ gulp.task('release', ['pre-release'], (next) => {
   }), next);
 });
 
-gulp.task('pre-release', (next) => {
-  // Build Steps:
-  //-------------------------------------
-  // run build to cleanup dirs and compile less
-  // run babel to compile ES6 => ES5
-  // run prod-sym-links to change symlinks in node_modules that point to src dir to the build dir (which will contain the compiled ES5 code)
-  //-------------------------------------
-  runSequence('build', 'babel', 'prod-sym-links', next);
-});
-
 gulp.task('babel', () => {
   return gulp.src('./src/**/*.js')
     .pipe(babel({
@@ -193,15 +203,18 @@ gulp.task('babel', () => {
     .pipe(gulp.dest(appConfig.buildPath));
 });
 
-gulp.task('remove-link-src', (next) => {
+/* ------------------------------------------------
+ * Sym Links
+ * ------------------------------------------------ */
+gulp.task('remove-link-src', next => {
   unlink('./node_modules/src', next);
 });
 
-gulp.task('remove-link-lib', (next) => {
+gulp.task('remove-link-lib', next => {
   unlink('./node_modules/lib', next);
 });
 
-gulp.task('remove-link-tests', (next) => {
+gulp.task('remove-link-tests', next => {
   unlink('./node_modules/tests', next);
 });
 
@@ -219,9 +232,15 @@ gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-t
     }));
 });
 
+/* ------------------------------------------------
+ * Build
+ * ------------------------------------------------ */
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);
 
-gulp.task('serve', ['build'], (next) => {
+/* ------------------------------------------------
+ * Run
+ * ------------------------------------------------ */
+gulp.task('run', ['build'], next => {
 
   var env = _.extend({}, process.env);
   // env.NODE_ENV = 'production';
@@ -231,16 +250,19 @@ gulp.task('serve', ['build'], (next) => {
   });
 
   child.stdout.on('data', (data) => {
-    console.log('tail output: ' + data);
+    console.log(`tail output: ${data}`);
   });
 
   child.on('exit', (exitCode) => {
     console.log('Child exited with code: ' + exitCode);
-    return next(exitCode === 1 ? new Error('Error running serve task') : null);
+    return next(exitCode === 1 ? new Error('Error running run task') : null);
   });
 });
 
-gulp.task('serve-site', ['site-css'], () => {
+/* ------------------------------------------------
+ * Run Project Site
+ * ------------------------------------------------ */
+gulp.task('run-site', ['site-css'], () => {
   gulp.watch(DOCS_DIR + '/less/*.less', () => {
     gulp.src(DOCS_DIR + '/less/docs.less')
       .pipe(less(LESSOPTIONS))
@@ -248,8 +270,26 @@ gulp.task('serve-site', ['site-css'], () => {
   });
 });
 
-gulp.task('default', ['serve']);
+gulp.task('default', ['run']);
 
+/* ------------------------------------------------
+ * Code Coverage
+ * ------------------------------------------------ */
+gulp.task('coverage', () => {
+  gulp.src(['tests/integration/**/**/**-test.js', 'tests/unit/**/**/**-test.js'])
+    .pipe(istanbul.writeReports());
+});
+
+gulp.task('coveralls', next => {
+  childProcess.exec('cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js', (err) => {
+    if (err) return next(err);
+    return next(null);
+  });
+});
+
+/* ------------------------------------------------
+ * Testing
+ * ------------------------------------------------ */
 gulp.task('pre-test', () => {
   return gulp.src(['src/**/*.js', '!src/ui/**/*.js'])
     .pipe(istanbul({
@@ -258,20 +298,8 @@ gulp.task('pre-test', () => {
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('coverage', () => {
-  gulp.src(['tests/integration/**/**/**-test.js', 'tests/unit/**/**/**-test.js'])
-    .pipe(istanbul.writeReports());
-});
-
-gulp.task('coveralls', (next) => {
-  childProcess.exec('cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js', (err) => {
-    if (err) return next(err);
-    return next(null);
-  });
-});
-
-gulp.task('test', (done) => {
-  runSequence('jshint', 'pre-test', 'test-int', 'test-unit', 'test-unit-ui', 'coverage', done);
+gulp.task('test', next => {
+  runSequence('jshint', 'pre-test', 'test-int', 'test-unit', 'test-unit-ui', 'coverage', next);
 });
 
 gulp.task('test-int', () => {
