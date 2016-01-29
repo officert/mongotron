@@ -20,7 +20,7 @@ afterEach(() => {
 });
 
 describe('modules', () => {
-  describe('expression', () => {
+  describe.only('expression', () => {
     describe('eval', () => {
       describe('when an expression is not passed', () => {
         let expr = null;
