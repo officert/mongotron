@@ -11,7 +11,7 @@ class Expression {
   eval(expression, collections) {
     return new Promise((resolve, reject) => {
       if (!expression) return reject(new Error('Expression - eval() - expression is required'));
-      if (!collections) return reject(new Error('Expression - eval() - collections is required'));
+      if (!collections || !_.isArray(collections)) return reject(new Error('Expression - eval() - collections is required'));
 
       let astTokens = esprima.tokenize(expression);
 
@@ -45,18 +45,43 @@ class Expression {
         .catch(reject);
     });
   }
+
+  getMongoMethodName(expression) {
+    let astTokens = esprima.tokenize(expression);
+    return _getMongoMethodName(astTokens);
+  }
+
+  getMongoCollectionName(expression) {
+    let astTokens = esprima.tokenize(expression);
+    return _getMongoCollectionName(astTokens);
+  }
+
+  getMongoQuery(expression) {
+    let astTokens = esprima.tokenize(expression);
+    return _getMongoQuery(astTokens);
+  }
 }
 
 function _getMongoMethodName(astTokens) {
+  //TODO: need to handle the case of 'db[Cars].find'
   if (!astTokens || astTokens.length < 4) return null;
   if (astTokens[0].value !== 'db') return null;
   return astTokens[4].value;
 }
 
 function _getMongoCollectionName(astTokens) {
+  //TODO: need to handle the case of 'db[Cars].find'
   if (!astTokens || astTokens.length < 2) return null;
   if (astTokens[0].value !== 'db') return null;
   return astTokens[2].value;
+}
+
+function _getMongoQuery() {
+  //TODO: need to handle the case of 'db[Cars].find'
+  // if (!astTokens || astTokens.length < 2) return null;
+  // if (astTokens[0].value !== 'db') return null;
+  // return astTokens[2].value;
+  return null;
 }
 
 function _getTime(startTime) {
