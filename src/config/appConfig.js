@@ -62,4 +62,4 @@ function getConfig(env) {
 }
 
 /** @exports AppConfig */
-module.exports = getConfig(process.env.WERCKER_GIT_BRANCH || process.env.NODE_ENV || 'development');
+module.exports = getConfig(process.env.NODE_ENV || 'development');

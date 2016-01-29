@@ -21,6 +21,42 @@ describe('modules', () => {
           should(value).equal(null);
         });
       });
+
+      describe('when an expression is passed and doesn\'t begin with db Identifier', () => {
+        let expr = 'foooobar';
+
+        it('should return null', () => {
+          let value = expression.getMongoCollectionName(expr);
+          should(value).equal(null);
+        });
+      });
+
+      describe('when an expression is passed and begins with db Identifier but has no collection name', () => {
+        let expr = 'db.';
+
+        it('should return null', () => {
+          let value = expression.getMongoCollectionName(expr);
+          should(value).equal(null);
+        });
+      });
+
+      describe('when an expression is passed and begins with db Identifier and has a collection name in dot notation', () => {
+        let expr = 'db.Cars';
+
+        it('should return the collection name', () => {
+          let value = expression.getMongoCollectionName(expr);
+          should(value).equal('Cars');
+        });
+      });
+
+      describe('when an expression is passed and begins with db Identifier and has a collection name in bracket notation', () => {
+        let expr = `db['Cars']`;
+
+        it('should return the collection name', () => {
+          let value = expression.getMongoCollectionName(expr);
+          should(value).equal('Cars');
+        });
+      });
     });
   });
 });

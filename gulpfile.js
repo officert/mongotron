@@ -1,22 +1,19 @@
 'use strict';
 
+const babel = require('gulp-babel');
+const childProcess = require('child_process');
+const electron = require('electron-prebuilt');
+const electronPackager = require('electron-packager');
+const fs = require('fs');
 const gulp = require('gulp');
+const jsdoc = require('gulp-jsdoc3');
 const jshint = require('gulp-jshint');
 const less = require('gulp-less');
 const runSequence = require('run-sequence');
-const mocha = require('gulp-mocha');
-const _ = require('underscore');
-const childProcess = require('child_process');
-const karma = require('karma');
-const babel = require('gulp-babel');
-const electronPackager = require('electron-packager');
 const symlink = require('gulp-symlink');
-const electron = require('electron-prebuilt');
-const fs = require('fs');
-const jsdoc = require('gulp-jsdoc3');
-const istanbul = require('gulp-istanbul');
+const _ = require('underscore');
 
-const appConfig = require('./src/config/appConfig');
+let appConfig = require('./src/config/appConfig');
 
 require('gulp-task-list')(gulp);
 
@@ -67,13 +64,10 @@ const LESSOPTIONS = {
   compress: false
 };
 
-const MOCHA_SETTINGS = {
-  reporter: 'spec',
-  growl: true,
-  env: {
-    NODE_ENV: 'test'
-  }
-};
+// const MOCHA_SETTINGS = {
+//   reporter: 'spec',
+//   growl: true
+// };
 
 const JSDOC_SETTINGS = {
   access: 'all', //show all access levels (public, private, protected)
@@ -241,13 +235,7 @@ gulp.task('build', ['clean', 'css', 'dev-sym-links']);
  * Run
  * ------------------------------------------------ */
 gulp.task('run', ['build'], next => {
-
-  var env = _.extend({}, process.env);
-  // env.NODE_ENV = 'production';
-
-  var child = childProcess.spawn(electron, ['./'], {
-    env: env
-  });
+  var child = childProcess.spawn(electron, ['./']);
 
   child.stdout.on('data', (data) => {
     console.log(`tail output: ${data}`);
@@ -271,85 +259,6 @@ gulp.task('run-site', ['site-css'], () => {
 });
 
 gulp.task('default', ['run']);
-
-/* ------------------------------------------------
- * Code Coverage
- * ------------------------------------------------ */
-gulp.task('coverage', () => {
-  gulp.src(['tests/integration/**/**/**-test.js', 'tests/unit/**/**/**-test.js'])
-    .pipe(istanbul.writeReports());
-});
-
-gulp.task('coveralls', next => {
-  childProcess.exec('cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js', (err) => {
-    if (err) return next(err);
-    return next(null);
-  });
-});
-
-/* ------------------------------------------------
- * Testing
- * ------------------------------------------------ */
-gulp.task('pre-test', () => {
-  return gulp.src(['src/**/*.js', '!src/ui/**/*.js'])
-    .pipe(istanbul({
-      includeUntested: true
-    }))
-    .pipe(istanbul.hookRequire());
-});
-
-gulp.task('test', next => {
-  runSequence('jshint', 'pre-test', 'test-int', 'test-unit', 'test-unit-ui', 'coverage', next);
-});
-
-gulp.task('test-int', () => {
-  return gulp.src('tests/integration/**/**/**-test.js')
-    .pipe(mocha(MOCHA_SETTINGS));
-});
-
-gulp.task('test-unit', () => {
-  return gulp.src('tests/unit/**/**/**-test.js')
-    .pipe(mocha(MOCHA_SETTINGS));
-});
-
-gulp.task('test-unit-ui', () => {
-  let server = new karma.Server({
-    configFile: __dirname + '/tests/ui/karma.conf.js',
-    singleRun: true,
-    files: [
-      'karma.shim.js',
-      '../../src/ui/vendor/jquery/dist/jquery.min.js',
-      '../../src/ui/vendor/toastr/toastr.min.js',
-      '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
-      '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
-      '../../src/ui/vendor/angular/angular.js',
-      '../../src/ui/vendor/angular-ui-sortable/sortable.js',
-      '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-      '../../src/ui/vendor/underscore/underscore.js',
-      '../../src/ui/vendor/angular-sanitize/angular-sanitize.js',
-      '../../src/ui/vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js',
-      '../../src/ui/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
-      '../../src/ui/vendor/moment/moment.js',
-      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson.js',
-      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
-      '../../src/ui/vendor/Keypress/keypress.js',
-      '../../src/ui/vendor/codemirror/lib/codemirror.js',
-      '../../src/ui/vendor/codemirror/mode/javascript/javascript.js',
-      '../../src/ui/vendor/codemirror/addon/hint/show-hint.js',
-      '../../src/ui/vendorCustom/codemirror-formatting.js',
-      '../../src/ui/vendorCustom/ng-bs-animated-button.js',
-      '../../src/ui/vendor/angular-mocks/angular-mocks.js',
-      '../../src/ui/app.js',
-      '../../src/ui/components/**/*.js',
-      '../../src/ui/directives/**/*.js',
-      '../../src/ui/filters/**/*.js',
-      '../../src/ui/services/**/*.js',
-      './**/*-test.js'
-    ]
-  }, exitCode => process.exit(exitCode));
-
-  server.start();
-});
 
 /* =========================================================================
  * Helper Functions

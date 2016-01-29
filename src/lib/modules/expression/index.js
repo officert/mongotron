@@ -44,16 +44,19 @@ class Expression {
     });
   }
 
-  getMongoMethodName(expression) {
-    if (!expression) return null;
-    let astTokens = esprima.tokenize(expression);
-    return _getMongoMethodName(astTokens);
-  }
-
   getMongoCollectionName(expression) {
     if (!expression) return null;
     let astTokens = esprima.tokenize(expression);
+    console.log('astTokens', astTokens);
     return _getMongoCollectionName(astTokens);
+  }
+
+  getMongoMethodName(expression) {
+    if (!expression) return null;
+    let errors = this.validate(expression);
+    if (errors && errors.length) return null;
+    let astTokens = esprima.tokenize(expression);
+    return _getMongoMethodName(astTokens);
   }
 
   getMongoQuery(expression) {
@@ -61,20 +64,36 @@ class Expression {
     let astTokens = esprima.tokenize(expression);
     return _getMongoQuery(astTokens);
   }
+
+  validate(expression) {
+    let syntax = esprima.parse(expression, {
+      tolerant: true,
+      loc: true
+    });
+
+    return syntax.errors;
+  }
+}
+
+function _getMongoCollectionName(astTokens) {
+  if (!astTokens || astTokens.length < 3) return null;
+  if (astTokens[0].value !== 'db') return null;
+
+  let bracketNotation = astTokens[1].value === '[';
+
+  let value = astTokens[2].value;
+
+  if (bracketNotation) value = _getStringValue(value);
+
+  return value;
 }
 
 function _getMongoMethodName(astTokens) {
   //TODO: need to handle the case of 'db[Cars].find'
   if (!astTokens || astTokens.length < 4) return null;
   if (astTokens[0].value !== 'db') return null;
-  return astTokens[4].value;
-}
 
-function _getMongoCollectionName(astTokens) {
-  //TODO: need to handle the case of 'db[Cars].find'
-  if (!astTokens || astTokens.length < 2) return null;
-  if (astTokens[0].value !== 'db') return null;
-  return astTokens[2].value;
+  return astTokens[4].value;
 }
 
 function _getMongoQuery() {
@@ -144,6 +163,12 @@ function _eval(expression, scope) {
 
 function _isPromise(func) {
   return func && func.then && typeof(func.then) === 'function';
+}
+
+function _getStringValue(str) {
+  let matches = str.match(/(?:\\?\"|\\?\')(.*?)(?:\\?\"|\\?\')/);
+  console.log('matches', matches);
+  return matches && matches.length >= 2 ? matches[1] : null;
 }
 
 module.exports = new Expression();
