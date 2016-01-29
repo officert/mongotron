@@ -44,37 +44,23 @@ class Expression {
     });
   }
 
-  createEvalScopeFromCollections(collections) {
-    if (!collections || !_.isArray(collections)) return null;
-    return _createEvalScope(collections);
-  }
-
   getMongoMethodName(expression) {
+    if (!expression) return null;
     let astTokens = esprima.tokenize(expression);
     return _getMongoMethodName(astTokens);
   }
 
   getMongoCollectionName(expression) {
+    if (!expression) return null;
     let astTokens = esprima.tokenize(expression);
     return _getMongoCollectionName(astTokens);
   }
 
   getMongoQuery(expression) {
+    if (!expression) return null;
     let astTokens = esprima.tokenize(expression);
     return _getMongoQuery(astTokens);
   }
-}
-
-function _createEvalScope(collections) {
-  let evalScope = {
-    db: {}
-  };
-
-  collections.forEach(collection => {
-    evalScope.db[collection.name] = collection;
-  });
-
-  return evalScope;
 }
 
 function _getMongoMethodName(astTokens) {

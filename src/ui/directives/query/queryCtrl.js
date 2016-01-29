@@ -96,7 +96,7 @@ angular.module('app').controller('queryCtrl', [
 
       $scope.changeTabName(rawExpression);
 
-      let evalScope = expression.createEvalScopeFromCollections($scope.database.collections);
+      let evalScope = _createEvalScopeFromCollections($scope.database.collections);
 
       expression.eval(rawExpression, evalScope)
         .then(expressionResult => {
@@ -132,6 +132,18 @@ angular.module('app').controller('queryCtrl', [
             $scope.loading = false;
           });
         });
+    }
+
+    function _createEvalScopeFromCollections(collections) {
+      let evalScope = {
+        db: {}
+      };
+
+      collections.forEach(collection => {
+        evalScope.db[collection.name] = collection;
+      });
+
+      return evalScope;
     }
 
     function _isModifyingMongoMethod(methodName) {
