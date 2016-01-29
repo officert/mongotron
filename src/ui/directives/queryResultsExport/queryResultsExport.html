@@ -27,11 +27,14 @@
     <div class="progress-bar progress-bar-info progress-bar-striped active" ng-style="{ width : '100%' }">
     </div>
   </div>
-  <div class="key-value-pairs clearfix" ng-hide="loading">
-    <div class="alert alert-info italic center" ng-hide="keyValuePairs.length">
+  <div class="key-value-pairs clearfix">
+    <div class="alert alert-danger italic center" ng-hide="error || !loading">
+      {{ error }}
+    </div>
+    <div class="alert alert-info italic center" ng-hide="keyValuePairs.length || loading">
       You don't have any columns added to your export yet...
     </div>
-    <div class="key-value-pair-wrapper" ui-sortable="sortableOptions">
+    <div class="key-value-pair-wrapper" ui-sortable="sortableOptions" ng-hide="loading">
       <div class="key-value-pair" ng-repeat="keyValuePair in keyValuePairs" ng-show="keyValuePairs.length">
         <span class="drag-handle">
           <span class="dots clearfix">

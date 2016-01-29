@@ -65,6 +65,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
     };
 
     function _export() {
+      $scope.loading = true;
+
       let activeTab = tabCache.getActive();
 
       if (!activeTab) throw new Error('editDocumentCtrl - no active tab');
@@ -82,9 +84,49 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           path = _fixExportCsvPath(path);
 
-          // $scope.query.stream = true;
+          let mongoCollectionName = expression.getMongoCollectionName($scope.query);
 
-          expression.eval($scope.query, activeTab.database.collections)
+          if (!mongoCollectionName) {
+            $scope.error = `${$scope.query} does not contain a mongo collection`;
+            return;
+          }
+
+          let collection = activeTab.database[mongoCollectionName];
+
+          if (!collection) {
+            $scope.error = `${mongoCollectionName} is not a valid collection name`;
+            return;
+          }
+
+          let mongoMethodName = expression.getMongoMethodName($scope.query);
+
+          if (!mongoMethodName) {
+            $scope.error = `${$scope.query} does not contain a mongo method`;
+            return;
+          }
+
+          if (mongoMethodName !== 'find' && mongoMethodName !== 'aggregate') {
+            $scope.error = `${mongoMethodName} is a valid mongo method for export. Only find and aggregate are supported`;
+            return;
+          }
+
+          let mongoQuery = expression.getMongoQuery($scope.query);
+
+          if (!mongoQuery) {
+            $scope.error = `${$scope.query} does not contain a mongo query`;
+            return;
+          }
+
+          let fn = collection[mongoMethodName];
+
+          if (!fn) {
+            $scope.error = `${mongoMethodName} is not a valid method name`;
+            return;
+          }
+
+          $scope.mongoQuery.stream = true;
+
+          fn($scope.mongoQuery)
             .then(expressionResult => {
               if (!expressionResult.mongoMethodName) {
                 notificationService.error('Cannot export a non MongoDb expression');
