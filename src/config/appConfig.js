@@ -36,6 +36,7 @@ const local = _.extend(_.clone(defaultSettings), {
 
 const test = _.extend(_.clone(defaultSettings), {
   env: 'test',
+  appConfigDir: 'tests/config',
   logFilePath: 'tests/config/logs.json',
   dbConfigPath: 'tests/config/dbConnections.json',
   keybindingsPath: 'tests/config/keybindings.json',
