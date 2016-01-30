@@ -52,17 +52,10 @@ class Collection {
   find(query, options) {
     options = options || {};
 
-    let stream = options.stream;
-    delete options.stream;
-
     let cursor = this._dbCollection.find(query, options);
 
     if (options.skip) cursor.skip(Number(options.skip));
     cursor.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
-
-    if (stream === true) {
-      cursor.stream();
-    }
 
     return new MongotronCursor(cursor);
   }
