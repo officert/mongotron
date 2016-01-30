@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="key-value-pairs clearfix">
-    <div class="alert alert-danger italic center" ng-hide="error || !loading">
+    <div class="alert alert-danger italic center" ng-show="error && !loading">
       {{ error }}
     </div>
     <div class="alert alert-info italic center" ng-hide="keyValuePairs.length || loading">

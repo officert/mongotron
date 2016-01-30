@@ -65,8 +65,6 @@ angular.module('app').controller('queryResultsExportCtrl', [
     };
 
     function _export() {
-      $scope.loading = true;
-
       let activeTab = tabCache.getActive();
 
       if (!activeTab) throw new Error('editDocumentCtrl - no active tab');
@@ -81,6 +79,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
       dialogService.showSaveDialog()
         .then((path) => {
           if (!path) return;
+
+        $scope.loading = true;
 
           path = _fixExportCsvPath(path);
 
