@@ -12,10 +12,14 @@ class MongotronCursor {
 
   promise() {
     return new Promise((resolve, reject) => {
-      this._cursor.toArray((err, documents) => {
-        if (err) return reject(err);
-        return resolve(documents);
-      });
+      if (this._stream === true) {
+        return resolve(this._cursor);
+      } else {
+        this._cursor.toArray((err, documents) => {
+          if (err) return reject(err);
+          return resolve(documents);
+        });
+      }
     });
   }
 
@@ -26,6 +30,12 @@ class MongotronCursor {
 
   skip(skip) {
     this._cursor.skip(skip);
+    return this;
+  }
+
+  stream() {
+    this._stream = true;
+    this._cursor.stream();
     return this;
   }
 
