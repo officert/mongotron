@@ -68,12 +68,6 @@ class Expression {
     return _getMongoMethodName(astTokens);
   }
 
-  getMongoQuery(expression) {
-    if (!expression) return null;
-    let astTokens = esprima.tokenize(expression);
-    return _getMongoQuery(astTokens);
-  }
-
   validate(expression) {
     let syntax;
     try {
@@ -113,14 +107,6 @@ function _getMongoMethodName(astTokens) {
   if (bracketNotation) value = _getStringValue(value);
 
   return value;
-}
-
-function _getMongoQuery() {
-  //TODO: need to handle the case of 'db[Cars].find'
-  // if (!astTokens || astTokens.length < 2) return null;
-  // if (astTokens[0].value !== 'db') return null;
-  // return astTokens[2].value;
-  return null;
 }
 
 function _getTime(startTime) {
