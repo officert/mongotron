@@ -141,16 +141,16 @@ angular.module('app').directive('codemirror', [
 ]);
 
 (function() {
-  const hinter = require('lib/modules/query/hinter');
+  const automcomplete = require('lib/modules/automcomplete');
 
   CodeMirror.registerHelper('hint', 'javascript', (codemirror) => {
     let cursor = codemirror.getCursor();
-    let currentQuery = codemirror.getValue();
+    let currentExpression = codemirror.getValue();
     let currentWordRange = codemirror.findWordAt(cursor);
     let currentWord = codemirror.getRange(currentWordRange.anchor, currentWordRange.head).replace(/[^\w\s]/gi, '');
     let customData = codemirror.customData || [];
 
-    let results = hinter.getHintsByValue(currentQuery, currentWord, {
+    let results = automcomplete.getHintsByValue(currentExpression, currentWord, {
       collectionNames: customData.collectionNames
     });
 

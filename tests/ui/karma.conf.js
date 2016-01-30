@@ -25,6 +25,36 @@ module.exports = config => {
     captureTimeout: 60000,
     // // Continuous Integration mode
     // // if true, it capture browsers, run tests and exit
-    // singleRun: true
+    singleRun: true,
+    files: [
+      'karma.shim.js',
+      '../../src/ui/vendor/jquery/dist/jquery.min.js',
+      '../../src/ui/vendor/toastr/toastr.min.js',
+      '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
+      '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
+      '../../src/ui/vendor/angular/angular.js',
+      '../../src/ui/vendor/angular-ui-sortable/sortable.js',
+      '../../src/ui/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+      '../../src/ui/vendor/underscore/underscore.js',
+      '../../src/ui/vendor/angular-sanitize/angular-sanitize.js',
+      '../../src/ui/vendor/angular-auto-grow-input/dist/angular-auto-grow-input.js',
+      '../../src/ui/vendor/jquery.splitter/js/jquery.splitter-0.15.0.js',
+      '../../src/ui/vendor/moment/moment.js',
+      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson.js',
+      '../../src/ui/vendor/ng-prettyjson/src/ng-prettyjson-tmpl.js',
+      '../../src/ui/vendor/Keypress/keypress.js',
+      '../../src/ui/vendor/codemirror/lib/codemirror.js',
+      '../../src/ui/vendor/codemirror/mode/javascript/javascript.js',
+      '../../src/ui/vendor/codemirror/addon/hint/show-hint.js',
+      '../../src/ui/vendorCustom/codemirror-formatting.js',
+      '../../src/ui/vendorCustom/ng-bs-animated-button.js',
+      '../../src/ui/vendor/angular-mocks/angular-mocks.js',
+      '../../src/ui/app.js',
+      '../../src/ui/components/**/*.js',
+      '../../src/ui/directives/**/*.js',
+      '../../src/ui/filters/**/*.js',
+      '../../src/ui/services/**/*.js',
+      './**/*-test.js'
+    ]
   });
 };

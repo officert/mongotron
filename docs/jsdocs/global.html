@@ -32,21 +32,21 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-AppConfig.html">AppConfig</a></li><li><a href="module-Connection.html">Connection</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-Keybindings.html">Keybindings</a></li><li><a href="module-Logger.html">Logger</a></li><li><a href="module-Query.html">Query</a></li><li><a href="module-Themes.html">Themes</a></li>
+					<li><a href="module-AppConfig.html">AppConfig</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-Connection.html">Connection</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-Keybindings.html">Keybindings</a></li><li><a href="module-Logger.html">Logger</a></li><li><a href="module-Themes.html">Themes</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="AbstractError.html">AbstractError</a></li><li><a href="Collection.html">Collection</a></li><li><a href="Connection.html">Connection</a></li><li><a href="ConnectionError.html">ConnectionError</a></li><li><a href="CsvStream.html">CsvStream</a></li><li><a href="Database.html">Database</a></li><li><a href="DatabaseError.html">DatabaseError</a></li><li><a href="FileUtils.html">FileUtils</a></li><li><a href="InternalServiceError.html">InternalServiceError</a></li><li><a href="InvalidArugmentError.html">InvalidArugmentError</a></li><li><a href="KeyVaueUtils.html">KeyVaueUtils</a></li><li><a href="module-Connection-ConnectionRepository.html">Connection~ConnectionRepository</a></li><li><a href="module-Connection-ConnectionService.html">Connection~ConnectionService</a></li><li><a href="module-Connection-ConnectionValidator.html">Connection~ConnectionValidator</a></li><li><a href="module-Keybindings-KeybindingsService.html">Keybindings~KeybindingsService</a></li><li><a href="module-Logger-LoggerService.html">Logger~LoggerService</a></li><li><a href="module-Query-BracketMatcher.html">Query~BracketMatcher</a></li><li><a href="module-Query-Evaluator.html">Query~Evaluator</a></li><li><a href="module-Query-Hinter.html">Query~Hinter</a></li><li><a href="module-Query-Query.html">Query~Query</a></li><li><a href="module-Query-QueryParser.html">Query~QueryParser</a></li><li><a href="module-Query-QueryService.html">Query~QueryService</a></li><li><a href="module-Themes-ThemesService.html">Themes~ThemesService</a></li><li><a href="Mongotron.html">Mongotron</a></li><li><a href="MongoUtils.html">MongoUtils</a></li><li><a href="ObjectNotFoundError.html">ObjectNotFoundError</a></li>
+					<li><a href="AbstractError.html">AbstractError</a></li><li><a href="AutoComplete.html">AutoComplete</a></li><li><a href="Collection.html">Collection</a></li><li><a href="Connection.html">Connection</a></li><li><a href="ConnectionError.html">ConnectionError</a></li><li><a href="CsvStream.html">CsvStream</a></li><li><a href="Database.html">Database</a></li><li><a href="DatabaseError.html">DatabaseError</a></li><li><a href="FileUtils.html">FileUtils</a></li><li><a href="InternalServiceError.html">InternalServiceError</a></li><li><a href="InvalidArugmentError.html">InvalidArugmentError</a></li><li><a href="KeyVaueUtils.html">KeyVaueUtils</a></li><li><a href="module-Connection-ConnectionRepository.html">Connection~ConnectionRepository</a></li><li><a href="module-Connection-ConnectionService.html">Connection~ConnectionService</a></li><li><a href="module-Connection-ConnectionValidator.html">Connection~ConnectionValidator</a></li><li><a href="module-Keybindings-KeybindingsService.html">Keybindings~KeybindingsService</a></li><li><a href="module-Logger-LoggerService.html">Logger~LoggerService</a></li><li><a href="module-Themes-ThemesService.html">Themes~ThemesService</a></li><li><a href="Mongotron.html">Mongotron</a></li><li><a href="MongoUtils.html">MongoUtils</a></li><li><a href="ObjectNotFoundError.html">ObjectNotFoundError</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#compile">compile</a></li><li><a href="global.html#post">post</a></li>
+					<li><a href="global.html#_eval">_eval</a></li>
 				</ul>
 			</li>
 			
@@ -157,7 +157,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="compile"><span class="type-signature"></span>compile(element, <span class="optional">link</span>)</h4>
+    <h4 class="name" id="_eval"><span class="type-signature"></span>_eval(expression, scope)</h4>
     
     
 </dt>
@@ -165,7 +165,7 @@
 
     
     <div class="description">
-        Manually compiles the element, fixing the recursion loop.
+        evaluate a JS expression
     </div>
     
 
@@ -188,8 +188,6 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
         
 
@@ -202,21 +200,19 @@
 
         <tr>
             
-                <td class="name"><code>element</code></td>
+                <td class="name"><code>expression</code></td>
             
 
             <td class="type">
             
-            </td>
+                
+<span class="param-type">String</span>
+
+
 
             
-                <td class="attributes">
-                
+            </td>
 
-                
-
-                
-                </td>
             
 
             
@@ -228,123 +224,30 @@
 
         <tr>
             
-                <td class="name"><code>link</code></td>
+                <td class="name"><code>scope</code></td>
             
 
             <td class="type">
             
+                
+<span class="param-type">Object</span>
+
+
+
+            
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">A post-link function, or an object with function(s) registered via pre and post properties.</td>
+            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
 
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    An object containing the linking functions.
-</div>
-
-
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="post"><span class="type-signature"></span>post()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Compiles and re-adds the contents
-    </div>
-    
-
-    
-
-    
-
-    
     
 
     
@@ -450,7 +353,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-01-15T16:47:30-05:00
+		on 2016-01-29T11:28:13-05:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

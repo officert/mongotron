@@ -36,6 +36,7 @@ const local = _.extend(_.clone(defaultSettings), {
 
 const test = _.extend(_.clone(defaultSettings), {
   env: 'test',
+  appConfigDir: 'tests/config',
   logFilePath: 'tests/config/logs.json',
   dbConfigPath: 'tests/config/dbConnections.json',
   keybindingsPath: 'tests/config/keybindings.json',
@@ -52,7 +53,7 @@ const configs = {
 function getConfig(env) {
   let envConfig = configs[env];
 
-  if (!envConfig) throw new Error(env + ' is not a valid environment');
+  if (!envConfig) throw new Error(`${env} is not a valid environment`);
 
   console.log('\nENVIRONMENT\n------------------');
   console.log(envConfig);
@@ -62,4 +63,4 @@ function getConfig(env) {
 }
 
 /** @exports AppConfig */
-module.exports = getConfig(process.env.WERCKER_GIT_BRANCH || process.env.NODE_ENV || 'development');
+module.exports = getConfig(process.env.NODE_ENV || 'development');

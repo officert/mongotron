@@ -1,4 +1,4 @@
-<div class="result" ng-repeat="result in results" ng-init="result.__index = $index" ng-right-click="$parent.openDocumentContextMenu(result)">
+<div class="result" ng-repeat="result in results track by $index" ng-init="result.__index = $index" ng-right-click="$parent.openDocumentContextMenu(result)">
   <ul class="menu">
     <li>
       <button class="btn btn-default" ng-click="editDocument(result.original)">

@@ -43,16 +43,13 @@ angular.module('app').service('modalService', [
       });
     };
 
-    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(collection, query) {
+    ModalService.prototype.openQueryResultsExport = function openQueryResultsExport(query) {
       return openModal({
         templateUrl: __dirname + '/components/queryResultsExportModal/queryResultsExportModal.html',
         controller: 'queryResultsExportModalCtrl',
         resolve: {
           query: [() => {
             return query;
-          }],
-          collection: [() => {
-            return collection;
           }]
         },
         size: 'lg'
@@ -94,19 +91,24 @@ angular.module('app').service('modalService', [
 
       return new Promise((resolve, reject) => {
         _this.confirm({
-          message: 'Are you sure you want to delete this document?',
-          confirmButtonMessage: 'Yes',
-          cancelButtonMessage: 'No'
-        }).result.then(() => {
-          collection.deleteById(doc._id)
-            .then(resolve)
-            .catch(reject);
-        });
+            message: 'Are you sure you want to delete this document?',
+            confirmButtonMessage: 'Yes',
+            cancelButtonMessage: 'No'
+          }).result.then(() => {
+            collection.deleteById(doc._id)
+              .then(resolve)
+              .catch(reject);
+          })
+          .catch(err => {
+            if (err === 'cancel' || err === 'escape key press') return reject(null); //eat the cancel button "error" and esc keypress
+            return reject(err);
+          });
       });
     };
 
-    ModalService.prototype.openEditDocument = function openEditDocument(doc) {
+    ModalService.prototype.openEditDocument = function openEditDocument(doc, collection) {
       if (!doc) throw new Error('modalService - openEditDocument() - doc is required');
+      if (!collection) throw new Error('modalService - openDeleteDocument() - collection is required');
 
       return new Promise((resolve, reject) => {
         openModal({
@@ -118,9 +120,11 @@ angular.module('app').service('modalService', [
               }
             },
             size: 'lg'
+          }).result.then((updates) => {
+            collection.updateById(doc._id, updates)
+              .then(resolve)
+              .catch(reject);
           })
-          .result
-          .then(resolve)
           .catch(reject);
       });
     };

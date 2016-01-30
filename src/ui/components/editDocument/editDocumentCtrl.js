@@ -2,13 +2,9 @@
 
 angular.module('app').controller('editDocumentCtrl', [
   '$scope',
-  'queryRunnerService',
   '$uibModalInstance',
   'doc',
-  'tabCache',
-  'notificationService', ($scope, queryRunnerService, $uibModalInstance, doc, tabCache, notificationService) => {
-    // const mongoUtils = require('lib/utils/mongoUtils');
-
+  'tabCache', ($scope, $uibModalInstance, doc, tabCache) => {
     $scope.doc = doc;
 
     //editor
@@ -39,18 +35,9 @@ angular.module('app').controller('editDocumentCtrl', [
     $scope.saveChanges = () => {
       if (!activeTab) return;
 
-      let fullQuery = _getFullQuery(activeTab.collection.name);
+      //TODO : pass updates
 
-      queryRunnerService.runQuery(fullQuery, activeTab.database.collections)
-        .then(() => {})
-        .catch((err) => {
-          notificationService.error(err);
-        });
+      $uibModalInstance.close();
     };
-
-    function _getFullQuery(collectionName) {
-      return `db.${collectionName}.updateOne({ id : ${$scope.doc._id.toString()} }, { $set : { ${$scope.inlineEditorKey} : ${$scope.newValue} } })`;
-      // return 'db.' + collectionName + '.updateOne({ id : ' + $scope.doc._id.toString() + ' }, { $set : { ' + $scope.inlineEditorKey + ' : \'' + $scope.newValue + '\' } })';
-    }
   }
 ]);

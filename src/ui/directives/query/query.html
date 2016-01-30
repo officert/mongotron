@@ -3,42 +3,43 @@
     <div class="collection-info pull-left">
       <ul>
         <li>
-          <i class="icon-server"></i> {{ ::currentCollection.serverName }}
+          <i class="icon-server"></i> {{ ::serverName }}
         </li>
         <li>
-          <i class="fa fa-database"></i> {{ ::currentCollection.databaseName }}
+          <i class="fa fa-database"></i> {{ ::databaseName }}
         </li>
         <li ng-show="queryTime">
           <i class="fa fa-clock-o"></i> {{ queryTime }} ms.
         </li>
         <li>
-          {{ results.length }} Count
+          {{ result.length }} Count
         </li>
       </ul>
     </div>
     <div class="right-btns">
       <div class="query-btn-list btn-group clearfix">
-        <!-- <input class="number-input form-control pull-left" type="number" ng-model="form.skip" placeholder="Skip" auto-grow-input>
-        <input class="number-input form-control pull-left" type="number" ng-model="form.limit" placeholder="Limit" auto-grow-input> -->
-        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="runQuery()">Run</button>
+        <button type="button" class="search-btn btn btn-primary btn-sm pull-left" ng-click="evaluateExpression()">Run</button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" ng-disabled="currentQuery.mongoMethod === 'count'" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
-        tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" ng-disabled="currentQuery.mongoMethod === 'count'" uib-tooltip="Key Value View" tooltip-placement="bottom"
-        tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        tooltip-append-to-body="true">
+          <i class="fa fa-file-text-o"></i>
+        </button>
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentQuery.mongoMethod === 'count' || currentView === VIEWS.TEXT" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentView !== VIEWS.KEYVALUE" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-compress"></i>
         </button>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default btn-sm" ng-click="exportResults()" uib-tooltip="Export Results" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true" ng-disabled="!results.length || (currentQuery.mongoMethod !== 'find' && currentQuery.mongoMethod !== 'aggregate')">
+        <button type="button" class="btn btn-default btn-sm" ng-click="exportResults()" uib-tooltip="Export Results" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true" ng-disabled="!result.length">
           <i class="fa fa-external-link-square"></i>
         </button>
       </div>
@@ -47,7 +48,7 @@
   <div class="query-content">
     <form class="query-form" name="query-form" novalidate>
       <div class="query-input">
-        <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" custom-data="codeEditorCustomData" has-focus="editorHasFocus" ng-model="form.query">
+        <div class="query-editor" codemirror="codeEditorOptions" handle="editorHandle" custom-data="codeEditorCustomData" has-focus="editorHasFocus" ng-model="form.expression">
         </div>
       </div>
     </form>
@@ -57,16 +58,16 @@
         <div class="query-error alert alert-danger" ng-show="!loading && error">
           {{ error }}
         </div>
-        <div class="alert alert-info" ng-show="!loading && !error && (!results || !results.length) && currentQuery.mongoMethod !== 'count'">
-          Your search did not return any results.
-        </div>
-        <div ng-show="!loading && !error && (results !== null && results !== undefined)">
-          <div class="query-results" ng-if="currentView === VIEWS.RAW" ng-bind-html="results">
+        <div ng-show="(!loading && !error)">
+          <div class="query-results" ng-if="currentView === VIEWS.RAW && !loading">
+            <div class="raw-view">
+              <pre>{{ ::result | json }}</pre>
+            </div>
           </div>
-          <div class="query-results" ng-if="currentView === VIEWS.TEXT">
+          <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
             <div class="text-view">
-              <div class="results-list" ng-if="currentQuery.mongoMethod !== 'count'">
-                <div class="result" ng-repeat="result in results track by result._id">
+              <div class="results-list">
+                <div class="result" ng-repeat="result in result track by $index">
                   <ul class="menu">
                     <li>
                       <button class="btn btn-default" ng-click="deleteDocument(result)">
@@ -79,7 +80,7 @@
               </div>
             </div>
           </div>
-          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE">
+          <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE && !loading">
             <div class="key-value-view">
               <div class="top-header clearfix">
                 <span class="table-cell col-sm-3 key">
@@ -95,6 +96,9 @@
               <key-value-results results="keyValueResults" delete-document="deleteDocument" edit-document="editDocument"></key-value-results>
             </div>
           </div>
+        </div>
+        <div class="alert alert-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
+          Your search did not return any results.
         </div>
       </div>
     </div>

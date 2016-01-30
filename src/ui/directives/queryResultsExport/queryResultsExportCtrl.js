@@ -6,21 +6,15 @@ angular.module('app').controller('queryResultsExportCtrl', [
   '$log',
   '$timeout',
   'notificationService',
-  function($scope, dialogService, $log, $timeout, notificationService) {
-    const Query = require('lib/modules/query/query');
-
-    if (!$scope.collection) throw new Error('queryResultsExportCtrl - collection is required on scope');
-    if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
-    if (!($scope.query instanceof Query)) throw new Error('queryResultsExport directive - $scope.query must be an instance of Query');
-
-    if ($scope.query.mongoMethod !== 'find' && $scope.query.mongoMethod !== 'aggregate') throw new Error('queryResultsExport directive - query type can only be find or aggregate query');
-
-    $scope.limit = null;
-
+  'tabCache', ($scope, dialogService, $log, $timeout, notificationService, tabCache) => {
     const fs = require('fs');
     const csv = require('csv');
-
     const CsvStream = require('lib/utils/csvStream');
+    const expression = require('lib/modules/expression');
+
+    if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
+
+    $scope.limit = null;
 
     $scope.keyValuePairs = [];
 
@@ -30,8 +24,8 @@ angular.module('app').controller('queryResultsExportCtrl', [
       delay: 0,
       appendTo: '.key-value-pair-wrapper',
       revert: 50,
-      helper: function(e, item) {
-        $timeout(function() {
+      helper: (e, item) => {
+        $timeout(() => {
           //force the element to show, race condition :(
           item.attr('style', 'display: block !important');
         });
@@ -71,6 +65,10 @@ angular.module('app').controller('queryResultsExportCtrl', [
     };
 
     function _export() {
+      let activeTab = tabCache.getActive();
+
+      if (!activeTab) throw new Error('editDocumentCtrl - no active tab');
+
       let nameProps = $scope.keyValuePairs.map((kvp) => {
         return {
           name: kvp.key,
@@ -82,38 +80,70 @@ angular.module('app').controller('queryResultsExportCtrl', [
         .then((path) => {
           if (!path) return;
 
+        $scope.loading = true;
+
           path = _fixExportCsvPath(path);
 
-          $timeout(() => {
-            $scope.loading = true;
+          let mongoMethodName = expression.getMongoMethodName($scope.query);
 
-            $scope.query.queryOptions = {
-              stream: true,
-              limit: $scope.limit || 50
-            };
+          if (!mongoMethodName) {
+            $scope.error = `${$scope.query} does not contain a mongo method`;
+            $scope.loading = false;
+            return;
+          }
 
-            let startTime = performance.now();
+          if (mongoMethodName !== 'find' && mongoMethodName !== 'aggregate') {
+            $scope.error = `${mongoMethodName} is a valid mongo method for export. Only find and aggregate are supported`;
+            $scope.loading = false;
+            return;
+          }
 
-            $scope.collection.execQuery($scope.query)
-              .then((results) => {
-                results.result
-                  .pipe(new CsvStream(nameProps))
-                  .on('error', handleError)
-                  .pipe(fs.createWriteStream(path))
-                  .on('error', handleError)
-                  .on('finish', () => {
-                    let ellapsed = (performance.now() - startTime).toFixed(5);
+          $scope.query += '.stream()';
 
-                    $timeout(() => {
-                      $scope.loading = false;
-                      notificationService.success('Finished exporting');
-                    }, (ellapsed >= 1000 ? 0 : 1000));
-                  });
-              })
-              .catch(handleError);
-          });
+          let evalScope = _createEvalScopeFromCollections(activeTab.database.collections);
+
+          expression.eval($scope.query, evalScope)
+            .then(expressionResult => {
+              if (!expressionResult.mongoMethodName) {
+                notificationService.error('Cannot export a non MongoDb expression');
+                return;
+              }
+              if (expressionResult.mongoMethodName !== 'find' && expressionResult.mongoMethodName !== 'aggregate') {
+                notificationService.error('Cannot export a MongoDb expression that is not find or aggregate');
+                return;
+              }
+
+              let startTime = performance.now();
+
+              expressionResult.result
+                .pipe(new CsvStream(nameProps))
+                .on('error', handleError)
+                .pipe(fs.createWriteStream(path))
+                .on('error', handleError)
+                .on('finish', () => {
+                  let ellapsed = (performance.now() - startTime).toFixed(5);
+
+                  $timeout(() => {
+                    $scope.loading = false;
+                    notificationService.success('Finished exporting');
+                  }, (ellapsed >= 1000 ? 0 : 1000));
+                });
+            })
+            .catch(handleError);
         })
         .catch(handleError);
+    }
+
+    function _createEvalScopeFromCollections(collections) {
+      let evalScope = {
+        db: {}
+      };
+
+      collections.forEach(collection => {
+        evalScope.db[collection.name] = collection;
+      });
+
+      return evalScope;
     }
 
     function _fixExportCsvPath(path) {
@@ -166,8 +196,6 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           parser
             .on('data', (chunk) => {
-              console.log(chunk);
-
               $timeout(() => {
                 if (chunk && chunk.length >= 2) {
                   $scope.keyValuePairs.push({

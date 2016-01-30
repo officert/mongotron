@@ -4,14 +4,11 @@ const MongoDb = require('mongodb').Db;
 const Promise = require('bluebird');
 const _ = require('underscore');
 
-const mongoUtils = require('src/lib/utils/mongoUtils');
+const MongotronCursor = require('lib/utils/mongotronCursor');
+const mongoUtils = require('lib/utils/mongoUtils');
 const errors = require('lib/errors');
-const Query = require('lib/modules/query/query');
 
 const DEFAULT_PAGE_SIZE = 50;
-
-const QUERY_TYPES = require('lib/modules/query/queryTypes');
-const VALID_QUERY_TYPES = _.keys(QUERY_TYPES);
 
 /** @class */
 class Collection {
@@ -37,79 +34,30 @@ class Collection {
     _this._dbCollection = database.collection(_this.name);
   }
 
-  execQuery(query) {
-    var _this = this;
-
-    return new Promise((resolve, reject) => {
-      if (!query) return reject(new Error('query is required'));
-      if (!(query instanceof Query)) return reject(new Error('query must be an instanceof Query'));
-      if (!query.query) return reject(new Error('query must have a query'));
-
-      var mongoMethod = query.mongoMethod;
-
-      if (!mongoMethod) return reject(new Error('collection - exec() : query does not have a mongoMethod'));
-      if (!_.contains(VALID_QUERY_TYPES, mongoMethod)) return reject(new Error(`collection - exec() : ${mongoMethod} is not a supported mongo method`));
-
-      var method = _this[mongoMethod];
-
-      if (!method) return reject(new Error(`collection - exec() : ${mongoMethod} is not implemented`));
-
-      var startTime = performance.now();
-
-      method.call(_this, query.query, query.queryOptions)
-        .then((result) => {
-          var endTime = performance.now();
-
-          return resolve({
-            result: result,
-            time: (endTime - startTime).toFixed(5)
-          });
-        })
-        .catch(reject);
-    });
-  }
-
   /**
    * @param {Object} doc
    */
   insertOne(doc) {
-    var _this = this;
+    if (!doc) return Promise.reject(new errors.InvalidArugmentError('doc is required'));
 
-    return new Promise(function(resolve, reject) {
-      _this._dbCollection.insertOne(doc, function(err) {
-        if (err) return reject(err);
-        return resolve(null);
-      });
-    });
+    let cursor = this._dbCollection.insertOne(doc);
+
+    return new MongotronCursor(cursor);
   }
 
   /**
-   * @param {Object} query - mongo query
+   * @param {Object} [query] - mongo query
    * @param {Object} [options] - mongo query options
    */
   find(query, options) {
-    var _this = this;
     options = options || {};
 
-    return new Promise(function(resolve, reject) {
-      let stream = options.stream;
-      delete options.stream;
+    let cursor = this._dbCollection.find(query, options);
 
-      let dbQuery = _this._dbCollection.find(query, options);
+    if (options.skip) cursor.skip(Number(options.skip));
+    cursor.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
 
-      if (options.skip) dbQuery.skip(Number(options.skip));
-
-      dbQuery.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
-
-      if (stream === true) {
-        return resolve(dbQuery.stream());
-      } else {
-        dbQuery.toArray(function(err, docs) {
-          if (err) return reject(err);
-          return resolve(docs);
-        });
-      }
-    });
+    return new MongotronCursor(cursor);
   }
 
   /**
@@ -117,17 +65,15 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   count(query, options) {
-    var _this = this;
+    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
+    options = options || {};
 
-    return new Promise(function(resolve, reject) {
-      if (options && options.skip) options.skip = Number(options.skip);
-      if (options && options.limit) options.limit = Number(options.limit);
+    let cursor = this._dbCollection.count(query, options);
 
-      _this._dbCollection.count(query, options, function(error, result) {
-        if (error) return reject(error);
-        return resolve(result);
-      });
-    });
+    if (options.skip) cursor.skip(Number(options.skip));
+    cursor.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
+
+    return new MongotronCursor(cursor);
   }
 
   /**
@@ -135,15 +81,13 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   deleteMany(query, options) {
-    var _this = this;
-    options = options || {};
-
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      options = options || {};
 
-      _this._dbCollection.deleteMany(query, options, function(err) {
+      this._dbCollection.deleteMany(query, options, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
@@ -152,16 +96,14 @@ class Collection {
    * @param {Object} Mongo ObjectId
    */
   deleteById(objectId) {
-    var _this = this;
+    return new Promise((resolve, reject) => {
+      if (!objectId) return reject(new errors.InvalidArugmentError('objectId is required'));
 
-    return new Promise(function(resolve, reject) {
-      if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
-
-      _this._dbCollection.deleteOne({
+      this._dbCollection.deleteOne({
         _id: objectId
-      }, function(err) {
+      }, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
@@ -170,46 +112,40 @@ class Collection {
    * @param {Object} query - mongo query
    */
   deleteOne(query) {
-    var _this = this;
-
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
 
-      _this._dbCollection.deleteOne(query, function(err) {
+      this._dbCollection.deleteOne(query, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
 
   /**
-   * @param {Object} query - mongo query
+   * @param {Object} [pipeline] - mongo pipeline
+   * @param {Object} [options] - mongo pipeline options
    */
-  aggregate(query, options) {
-    var _this = this;
+  aggregate(pipeline, options) {
+    if (!_.isArray(pipeline)) return Promise.reject('pipeline must be an array');
     options = options || {};
 
-    return new Promise(function(resolve, reject) {
-      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+    let stream = options.stream;
+    delete options.stream;
 
-      let stream = options.stream;
-      delete options.stream;
+    //always return as a cursor
+    options.cursor = {};
 
-      let dbQuery = _this._dbCollection.aggregate(query, options);
+    let cursor = this._dbCollection.aggregate(pipeline, options);
 
-      if (options.skip) dbQuery.skip(Number(options.skip));
+    if (options.skip) cursor.skip(Number(options.skip));
+    cursor.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
 
-      dbQuery.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
+    if (stream === true) {
+      cursor.stream();
+    }
 
-      if (stream === true) {
-        return resolve(dbQuery.stream());
-      } else {
-        dbQuery.toArray(function(err, docs) {
-          if (err) return reject(err);
-          return resolve(docs);
-        });
-      }
-    });
+    return new MongotronCursor(cursor);
   }
 
   /**
@@ -218,16 +154,14 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   updateMany(query, updates, options) {
-    var _this = this;
-    options = options || {};
-
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      options = options || {};
 
-      _this._dbCollection.updateMany(query, updates, options, function(err) {
+      this._dbCollection.updateMany(query, updates, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
@@ -235,20 +169,20 @@ class Collection {
   /**
    * @param {Object} Mongo ObjectId
    * @param {Object} updates - updates to apply
+   * @param {Object} [options] - mongo query options
    */
-  updateById(objectId, updates) {
-    var _this = this;
-
-    return new Promise(function(resolve, reject) {
-      if (!objectId) return reject(new errors.InvalidArugmentError('id is required'));
+  updateById(objectId, updates, options) {
+    return new Promise((resolve, reject) => {
+      if (!objectId) return reject(new errors.InvalidArugmentError('objectId is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
       if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
+      options = options || {};
 
-      _this._dbCollection.updateOne({
+      this._dbCollection.updateOne({
         _id: objectId
-      }, updates, function(err) {
+      }, updates, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
@@ -256,17 +190,17 @@ class Collection {
   /**
    * @param {Object} query - mongo query
    * @param {Object} updates - updates to apply
+   * @param {Object} [options] - mongo query options
    */
-  updateOne(query, updates) {
-    var _this = this;
-
-    return new Promise(function(resolve, reject) {
+  updateOne(query, updates, options) {
+    return new Promise((resolve, reject) => {
       if (!query) return reject(new errors.InvalidArugmentError('query is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
+      options = options || {};
 
-      _this._dbCollection.updateOne(query, updates, function(err) {
+      this._dbCollection.updateOne(query, updates, (err, result) => {
         if (err) return reject(err);
-        return resolve(null);
+        return resolve(result);
       });
     });
   }
@@ -275,10 +209,8 @@ class Collection {
    * Drop the collection
    */
   drop() {
-    var _this = this;
-
-    return new Promise(function(resolve, reject) {
-      _this._dbCollection.drop(function(err) {
+    return new Promise((resolve, reject) => {
+      this._dbCollection.drop((err) => {
         if (err) return reject(err);
         return resolve(null);
       });
