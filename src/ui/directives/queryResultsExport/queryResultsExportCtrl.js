@@ -84,49 +84,25 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           path = _fixExportCsvPath(path);
 
-          let mongoCollectionName = expression.getMongoCollectionName($scope.query);
-
-          if (!mongoCollectionName) {
-            $scope.error = `${$scope.query} does not contain a mongo collection`;
-            return;
-          }
-
-          let collection = activeTab.database[mongoCollectionName];
-
-          if (!collection) {
-            $scope.error = `${mongoCollectionName} is not a valid collection name`;
-            return;
-          }
-
           let mongoMethodName = expression.getMongoMethodName($scope.query);
 
           if (!mongoMethodName) {
             $scope.error = `${$scope.query} does not contain a mongo method`;
+            $scope.loading = false;
             return;
           }
 
           if (mongoMethodName !== 'find' && mongoMethodName !== 'aggregate') {
             $scope.error = `${mongoMethodName} is a valid mongo method for export. Only find and aggregate are supported`;
+            $scope.loading = false;
             return;
           }
 
-          let mongoQuery = expression.getMongoQuery($scope.query);
+          $scope.query += '.stream()';
 
-          if (!mongoQuery) {
-            $scope.error = `${$scope.query} does not contain a mongo query`;
-            return;
-          }
+          let evalScope = _createEvalScopeFromCollections(activeTab.database.collections);
 
-          let fn = collection[mongoMethodName];
-
-          if (!fn) {
-            $scope.error = `${mongoMethodName} is not a valid method name`;
-            return;
-          }
-
-          $scope.mongoQuery.stream = true;
-
-          fn($scope.mongoQuery)
+          expression.eval($scope.query, evalScope)
             .then(expressionResult => {
               if (!expressionResult.mongoMethodName) {
                 notificationService.error('Cannot export a non MongoDb expression');
@@ -156,6 +132,18 @@ angular.module('app').controller('queryResultsExportCtrl', [
             .catch(handleError);
         })
         .catch(handleError);
+    }
+
+    function _createEvalScopeFromCollections(collections) {
+      let evalScope = {
+        db: {}
+      };
+
+      collections.forEach(collection => {
+        evalScope.db[collection.name] = collection;
+      });
+
+      return evalScope;
     }
 
     function _fixExportCsvPath(path) {
