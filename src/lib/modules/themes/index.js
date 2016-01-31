@@ -31,6 +31,8 @@ class ThemesService {
     var _this = this;
     var newActiveTheme;
 
+    if (!themeName) return Promise.reject(new Error('theme - changeActive() - themeName is required'));
+
     return _this.list()
       .then((themes) => {
         return new Promise((resolve, reject) => {
@@ -38,9 +40,9 @@ class ThemesService {
             name: themeName
           });
 
-          if (!newActiveTheme) return reject(new Error(themeName + ' is not a valid theme'));
+          if (!newActiveTheme) return reject(new Error(`theme - changeActive() - ${themeName} is not a valid theme`));
 
-          themes = themes.map(function(theme) {
+          themes = themes.map(theme => {
             theme.active = false;
             return theme;
           });
@@ -76,7 +78,7 @@ function writeThemesFile(fileData) {
  */
 function parseThemesFileData(data) {
   return new Promise((resolve, reject) => {
-    if (!data || !_.isArray(data)) return reject('error parsing themes file data');
+    if (!data || !_.isArray(data)) return reject(new Error('themes - list() - error parsing themes file data'));
 
     return resolve(data);
   });
