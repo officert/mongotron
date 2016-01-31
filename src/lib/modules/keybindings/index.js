@@ -36,13 +36,13 @@ function readKeybindingsFile() {
  */
 function parseKeybindingsFileData(data) {
   return new Promise((resolve, reject) => {
-    if (!data || !_.isArray(data)) return reject('error parsing keybindings file data');
+    if (!data || !_.isArray(data)) return reject(new Error('keybindings - list() - error parsing keybindings file data'));
 
     //TODO: should we group these by context name to avoid duplicates??
 
     var commands = [];
 
-    _.each(data, function(context) {
+    _.each(data, context => {
       if (context.commands) {
         for (let key in context.commands) {
           commands.push({

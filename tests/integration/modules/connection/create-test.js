@@ -179,7 +179,7 @@ describe('modules', () => {
       });
 
       describe('when replica set set is passed with invalid port', () => {
-        it('should return an error', (next) => {
+        it('should return an error', next => {
           connectionService.create({
               name: '123',
               databaseName: 'foobar',
@@ -191,7 +191,7 @@ describe('modules', () => {
                 }]
               }
             })
-            .catch((err) => {
+            .catch(err => {
               should.exist(err);
               err.message.should.equal('data.replicaSet.servers[0].port number must be between 0 and 65535.');
             })

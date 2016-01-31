@@ -4,38 +4,39 @@ require('tests/unit/before-all');
 
 const should = require('should');
 const sinon = require('sinon');
-const jsonfile = require('jsonfile');
+require('sinon-as-promised');
 
-var connectionRepository;
-var sandbox;
+let connectionRepository;
+let sandbox;
+let fileUtils;
 
-before(function() {
+before(() => {
   sandbox = sinon.sandbox.create();
 
   connectionRepository = require('lib/modules/connection/repository');
+  fileUtils = require('lib/utils/fileUtils');
 });
 
-afterEach(function() {
+afterEach(() => {
   sandbox.restore();
 });
 
-describe('modules', function() {
-  describe('connection', function() {
-    describe('repository', function() {
-      describe('list', function() {
-        describe('dbConnections config file', function() {
-          describe('if there is an error reading the config file contain mongo connnections', function() {
-            var error = new Error('Error reading file');
+describe('modules', () => {
+  describe('connection', () => {
+    describe('repository', () => {
+      describe('list', () => {
+        describe('dbConnections config file', () => {
+          describe('if there is an error reading the config file contain mongo connnections', () => {
+            let error = new Error('Error reading file');
 
-            before(function() {
-              sandbox.stub(jsonfile, 'readFile', function(dbName, done) {
-                return done(error);
-              });
+            before(() => {
+              sandbox.stub(fileUtils, 'readJsonFile')
+                .rejects(error);
             });
 
-            it('should return an error', function(next) {
+            it('should return an error', next => {
               connectionRepository.list()
-                .catch(function(err) {
+                .catch(err => {
                   should.exist(err);
                   error.should.equal(err);
                   return next(null);
@@ -44,23 +45,23 @@ describe('modules', function() {
           });
         });
 
-        describe('no issues', function() {
-          var connections = [{
+        describe('no issues', () => {
+          let connections = [{
             foo: 'bar'
           }];
 
-          before(function() {
-            sandbox.stub(jsonfile, 'readFile', function(dbName, done) {
-              return done(null, connections);
-            });
+          before(() => {
+            sandbox.stub(fileUtils, 'readJsonFile')
+              .resolves(connections);
           });
 
-          it('should return an array of connections', function(next) {
+          it('should return an array of connections', next => {
             connectionRepository.list()
-              .then(function(connections) {
+              .then(connections => {
                 should.exist(connections);
                 connections.should.equal(connections);
-              }).done(next);
+                return next(null);
+              });
           });
         });
       });
