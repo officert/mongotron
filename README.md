@@ -32,12 +32,12 @@ npm install -g gulp
 * Start the app
 
 ```shell
-gulp serve
+gulp run
 ```
 
 ### Tests
 ```shell
-gulp test
+make test
 ```
 
 ###Troubleshooting
@@ -50,7 +50,3 @@ this will create a release directory and package the app into an executable
 ```shell
 gulp release
 ```
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/officert/mongotron/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
