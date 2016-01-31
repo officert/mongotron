@@ -150,10 +150,6 @@ angular.module('app').directive('codemirror', [
 })(function(CodeMirror) {
   var Pos = CodeMirror.Pos;
 
-  function forEach(arr, f) {
-    for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
-  }
-
   function arrayContains(arr, item) {
     if (!Array.prototype.indexOf) {
       var i = arr.length;
@@ -208,6 +204,11 @@ angular.module('app').directive('codemirror', [
           find: () => {},
           aggregate: () => {},
           count: () => {}
+        },
+        DaysOfTheWeek: {
+          find: () => {},
+          aggregate: () => {},
+          count: () => {}
         }
       }
     };
@@ -247,9 +248,9 @@ angular.module('app').directive('codemirror', [
     }
 
     function gatherCompletions(obj) {
-      if (typeof obj === "string") forEach(stringProps, maybeAdd);
-      else if (obj instanceof Array) forEach(arrayProps, maybeAdd);
-      else if (obj instanceof Function) forEach(funcProps, maybeAdd);
+      if (typeof obj === "string") _.each(stringProps, maybeAdd);
+      else if (obj instanceof Array) _.each(arrayProps, maybeAdd);
+      else if (obj instanceof Function) _.each(funcProps, maybeAdd);
       for (var name in obj) maybeAdd(name);
     }
 
@@ -284,7 +285,7 @@ angular.module('app').directive('codemirror', [
       for (let v = token.state.globalVars; v; v = v.next) maybeAdd(v.name);
       if (!options || options.useGlobalScope !== false)
         gatherCompletions(global);
-      forEach(keywords, maybeAdd);
+      _.each(keywords, maybeAdd);
     }
     return found;
   }
