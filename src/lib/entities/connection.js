@@ -22,7 +22,7 @@ class Connection {
    * @param {String} [options.port]
    * @param {Object} [options.replicaSet]
    * @param {String} [options.replicaSet.name]
-   * @param {Array<Object>} [options.replicaSet.sets]
+   * @param {Array<Object>} [options.replicaSet.servers]
    */
   constructor(options) {
     options = options || {};
@@ -178,17 +178,17 @@ function _getConnectionString(connection) {
   let connectionString = 'mongodb://';
   let hasReplSet = false;
 
-  if (connection && connection.replicaSet && connection.replicaSet.name && (connection.replicaSet.sets && connection.replicaSet.sets.length)) {
+  if (connection && connection.replicaSet && connection.replicaSet.name && (connection.replicaSet.servers && connection.replicaSet.servers.length)) {
     hasReplSet = true;
 
     connectionString += auth;
 
-    for (let i = 0; i < connection.replicaSet.sets.length; i++) {
-      let set = connection.replicaSet.sets[i];
+    for (let i = 0; i < connection.replicaSet.servers.length; i++) {
+      let set = connection.replicaSet.servers[i];
 
       connectionString += `${set.host}:${set.port}`;
 
-      if (i < (connection.replicaSet.sets.length - 1)) {
+      if (i < (connection.replicaSet.servers.length - 1)) {
         connectionString += ',';
       }
     }

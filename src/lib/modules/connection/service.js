@@ -36,7 +36,7 @@ class ConnectionService {
    * @param {string} [options.databaseName] - Database name
    * @param {object} [options.replicaSet] - Replica set config
    * @param {string} options.replicaSet.name - Replica set name
-   * @param {array<object>} options.replicaSet.sets - Replica set servers
+   * @param {array<object>} options.replicaSet.servers - Replica set servers
    * @param {object} [options.auth]
    */
   create(options) {
@@ -87,7 +87,7 @@ class ConnectionService {
    * @param {string} [updates.databaseName] - Database name
    * @param {object} [updates.replicaSet] - Replica set config
    * @param {string} [updates.replicaSet.name] - Replica set name
-   * @param {array<object>} [updates.replicaSet.sets] - Replica set servers
+   * @param {array<object>} [updates.replicaSet.servers] - Replica set servers
    * @param {object} [updates.auth]
    */
   update(id, updates) {
@@ -156,7 +156,7 @@ function _applyConnectionUpdatesPreValidation(connection, updates) {
         delete connection.host;
         delete connection.port;
         if ('name' in updates.replicaSet) connection.replicaSet.name = updates.replicaSet.name;
-        if ('sets' in updates.replicaSet) connection.replicaSet.sets = updates.replicaSet.sets;
+        if ('servers' in updates.replicaSet) connection.replicaSet.servers = updates.replicaSet.servers;
       } else {
         connection.replicaSet = updates.replicaSet;
       }

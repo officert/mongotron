@@ -44,7 +44,7 @@ class ConnectionRepository {
    * @param {string} [options.databaseName] - Database name
    * @param {object} [options.replicaSet] - Replica set config
    * @param {string} options.replicaSet.name - Replica set name
-   * @param {array<object>} options.replicaSet.sets - Replica set servers
+   * @param {array<object>} options.replicaSet.servers - Replica set servers
    * @param {object} [options.auth]
    */
   create(options) {
@@ -96,7 +96,7 @@ class ConnectionRepository {
    * @param {string} [updates.databaseName] - Database name
    * @param {object} [updates.replicaSet] - Replica set config
    * @param {string} [updates.replicaSet.name] - Replica set name
-   * @param {array<object>} [updates.replicaSet.sets] - Replica set servers
+   * @param {array<object>} [updates.replicaSet.servers] - Replica set servers
    * @param {object} [updates.auth]
    */
   update(id, updatedConnection) {

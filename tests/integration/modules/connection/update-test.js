@@ -220,7 +220,7 @@ describe('modules', () => {
         let connection;
         let updates = {
           replicaSet: {
-            sets: [{
+            servers: [{
               host: 'host1.com',
               port: 27017
             }]
@@ -263,7 +263,7 @@ describe('modules', () => {
         let updates = {
           replicaSet: {
             name: 'repl1',
-            sets: [{
+            servers: [{
               port: 27017
             }]
           }
@@ -294,7 +294,7 @@ describe('modules', () => {
           connectionService.update(connection.id, updates)
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets[0].host is required');
+              err.message.should.equal('data.replicaSet.servers[0].host is required');
             })
             .done(next);
         });
@@ -305,7 +305,7 @@ describe('modules', () => {
         let updates = {
           replicaSet: {
             name: 'repl1',
-            sets: [{
+            servers: [{
               host: 'host1.com'
             }]
           }
@@ -335,7 +335,7 @@ describe('modules', () => {
         it('should return an error', (next) => {
           connectionService.update(connection.id, updates)
             .catch((err) => {
-              err.message.should.equal('data.replicaSet.sets[0].port is required');
+              err.message.should.equal('data.replicaSet.servers[0].port is required');
             })
             .done(next);
         });
@@ -345,7 +345,7 @@ describe('modules', () => {
         let connection;
         let updates = {
           replicaSet: {
-            sets: [{
+            servers: [{
               host: 'foobar',
               port: 21222
             }]
@@ -757,7 +757,7 @@ describe('modules', () => {
           let updates = {
             replicaSet: {
               name: 'repl1',
-              sets: [{
+              servers: [{
                 host: 'host1',
                 port: 27017
               }]
@@ -797,10 +797,10 @@ describe('modules', () => {
                 should.exist(updatedConnection.databases[0]);
                 should.exist(updatedConnection.replicaSet);
                 updatedConnection.replicaSet.name.should.equal(updates.replicaSet.name);
-                should.exist(updatedConnection.replicaSet.sets);
-                updatedConnection.replicaSet.sets.length.should.equal(1);
-                updatedConnection.replicaSet.sets[0].host.should.equal(updates.replicaSet.sets[0].host);
-                updatedConnection.replicaSet.sets[0].port.should.equal(updates.replicaSet.sets[0].port);
+                should.exist(updatedConnection.replicaSet.servers);
+                updatedConnection.replicaSet.servers.length.should.equal(1);
+                updatedConnection.replicaSet.servers[0].host.should.equal(updates.replicaSet.servers[0].host);
+                updatedConnection.replicaSet.servers[0].port.should.equal(updates.replicaSet.servers[0].port);
               })
               .done(next);
           });
@@ -822,7 +822,7 @@ describe('modules', () => {
                 databaseName: 'db',
                 replicaSet: {
                   name: 'repl1',
-                  sets: [{
+                  servers: [{
                     host: 'host1.com',
                     port: 27017
                   }]
@@ -855,11 +855,11 @@ describe('modules', () => {
           });
         });
 
-        describe('when replicaSet.sets is updated and existing connection already has a replicaSet', () => {
+        describe('when replicaSet.servers is updated and existing connection already has a replicaSet', () => {
           let connection;
           let updates = {
             replicaSet: {
-              sets: [{
+              servers: [{
                 host: 'new host.com',
                 port: 44444
               }]
@@ -874,7 +874,7 @@ describe('modules', () => {
                 databaseName: 'db',
                 replicaSet: {
                   name: 'repl1',
-                  sets: [{
+                  servers: [{
                     host: 'host1.com',
                     port: 27017
                   }]
@@ -895,15 +895,15 @@ describe('modules', () => {
               .catch(done);
           });
 
-          it('should update the replicaSet.sets return the connection', (next) => {
+          it('should update the replicaSet.servers return the connection', (next) => {
             connectionService.update(connection.id, updates)
               .then((updatedConnection) => {
                 should.exist(updatedConnection);
                 should.exist(updatedConnection.databases[0]);
                 should.exist(updatedConnection.replicaSet);
-                should.exist(updatedConnection.replicaSet.sets);
-                updatedConnection.replicaSet.sets[0].host.should.equal(updates.replicaSet.sets[0].host);
-                updatedConnection.replicaSet.sets[0].port.should.equal(updates.replicaSet.sets[0].port);
+                should.exist(updatedConnection.replicaSet.servers);
+                updatedConnection.replicaSet.servers[0].host.should.equal(updates.replicaSet.servers[0].host);
+                updatedConnection.replicaSet.servers[0].port.should.equal(updates.replicaSet.servers[0].port);
               })
               .done(next);
           });
@@ -923,7 +923,7 @@ describe('modules', () => {
                 databaseName: 'db',
                 replicaSet: {
                   name: 'repl1',
-                  sets: [{
+                  servers: [{
                     host: 'host1.com',
                     port: 27017
                   }]
@@ -969,7 +969,7 @@ describe('modules', () => {
                 databaseName: 'db',
                 replicaSet: {
                   name: 'repl1',
-                  sets: [{
+                  servers: [{
                     host: 'host1.com',
                     port: 27017
                   }]

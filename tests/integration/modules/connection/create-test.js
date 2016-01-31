@@ -101,37 +101,37 @@ describe('modules', () => {
         });
       });
 
-      describe('when replica set is passed with no sets', () => {
+      describe('when replica set is passed with no servers', () => {
         it('should return an error', (next) => {
           connectionService.create({
               name: '123',
               databaseName: 'foobar',
               replicaSet: {
                 name: 'Replica Set 1',
-                sets: null
+                servers: null
               }
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets is required');
+              err.message.should.equal('data.replicaSet.servers is required');
               return next(null);
             });
         });
       });
 
-      describe('when replica set is passed with empty sets', () => {
+      describe('when replica set is passed with empty servers', () => {
         it('should return an error', (next) => {
           connectionService.create({
               name: '123',
               databaseName: 'foobar',
               replicaSet: {
                 name: 'Replica Set 1',
-                sets: []
+                servers: []
               }
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets is required');
+              err.message.should.equal('data.replicaSet.servers is required');
               return next(null);
             });
         });
@@ -144,14 +144,14 @@ describe('modules', () => {
               databaseName: 'foobar',
               replicaSet: {
                 name: 'Replica Set 1',
-                sets: [{
+                servers: [{
                   host: null
                 }]
               }
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets[0].host is required');
+              err.message.should.equal('data.replicaSet.servers[0].host is required');
               return next(null);
             });
         });
@@ -164,7 +164,7 @@ describe('modules', () => {
               databaseName: 'foobar',
               replicaSet: {
                 name: 'Replica Set 1',
-                sets: [{
+                servers: [{
                   host: 'foobar',
                   port: null
                 }]
@@ -172,7 +172,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets[0].port is required');
+              err.message.should.equal('data.replicaSet.servers[0].port is required');
               return next(null);
             });
         });
@@ -185,7 +185,7 @@ describe('modules', () => {
               databaseName: 'foobar',
               replicaSet: {
                 name: 'Replica Set 1',
-                sets: [{
+                servers: [{
                   host: 'foobar',
                   port: 999999
                 }]
@@ -193,7 +193,7 @@ describe('modules', () => {
             })
             .catch((err) => {
               should.exist(err);
-              err.message.should.equal('data.replicaSet.sets[0].port number must be between 0 and 65535.');
+              err.message.should.equal('data.replicaSet.servers[0].port number must be between 0 and 65535.');
             })
             .done(next);
         });
@@ -414,7 +414,7 @@ describe('modules', () => {
             databaseName: 'foobar',
             replicaSet: {
               name: 'Replica Set 1',
-              sets: [{
+              servers: [{
                 host: 'Host 1',
                 port: 12345
               }, {
@@ -446,11 +446,11 @@ describe('modules', () => {
                 should.exist(newConnection.databases);
                 should.exist(newConnection.replicaSet);
                 newConnection.replicaSet.name.should.equal(newConnectionData.replicaSet.name);
-                newConnection.replicaSet.sets.length.should.equal(newConnectionData.replicaSet.sets.length);
-                newConnection.replicaSet.sets[0].host.should.equal(newConnectionData.replicaSet.sets[0].host);
-                newConnection.replicaSet.sets[0].port.should.equal(newConnectionData.replicaSet.sets[0].port);
-                newConnection.replicaSet.sets[1].host.should.equal(newConnectionData.replicaSet.sets[1].host);
-                newConnection.replicaSet.sets[1].port.should.equal(newConnectionData.replicaSet.sets[1].port);
+                newConnection.replicaSet.servers.length.should.equal(newConnectionData.replicaSet.servers.length);
+                newConnection.replicaSet.servers[0].host.should.equal(newConnectionData.replicaSet.servers[0].host);
+                newConnection.replicaSet.servers[0].port.should.equal(newConnectionData.replicaSet.servers[0].port);
+                newConnection.replicaSet.servers[1].host.should.equal(newConnectionData.replicaSet.servers[1].host);
+                newConnection.replicaSet.servers[1].port.should.equal(newConnectionData.replicaSet.servers[1].port);
                 newConnection.databases.length.should.equal(1);
                 newConnection.databases[0].name.should.equal(newConnectionData.databaseName);
                 should.not.exist(newConnection.databases[0].host);

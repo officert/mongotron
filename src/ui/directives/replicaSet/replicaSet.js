@@ -13,7 +13,7 @@ angular.module('app').directive('replicaSet', [
       },
       link: function(scope, element, attrs, ngModelCtrl) {
         scope.replicaSet = {
-          sets: [{
+          servers: [{
             host: '',
             port: ''
           }]
@@ -22,7 +22,7 @@ angular.module('app').directive('replicaSet', [
         scope.addSet = function($event) {
           if ($event) $event.preventDefault();
 
-          scope.replicaSet.sets.push({
+          scope.replicaSet.servers.push({
             host: '',
             port: ''
           });
@@ -31,18 +31,18 @@ angular.module('app').directive('replicaSet', [
         scope.removeSet = function(set) {
           if (!set) return;
 
-          let index = scope.replicaSet.sets.indexOf(set);
+          let index = scope.replicaSet.servers.indexOf(set);
 
           if (index < 0) return;
 
-          scope.replicaSet.sets.splice(index, 1);
+          scope.replicaSet.servers.splice(index, 1);
         };
 
         //take initial model value and set editor with it
         ngModelCtrl.$formatters.push((modelValue) => {
           if (modelValue) {
             scope.replicaSet = modelValue;
-            scope.replicaSet.sets = scope.replicaSet.sets || [];
+            scope.replicaSet.servers = scope.replicaSet.servers || [];
           }
 
           return modelValue;
