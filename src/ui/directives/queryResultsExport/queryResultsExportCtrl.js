@@ -98,6 +98,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
             return;
           }
 
+          if ($scope.limit > 0) $scope.query += `.limit(${$scope.limit})`;
           $scope.query += '.stream()';
 
           let evalScope = _createEvalScopeFromCollections(activeTab.database.collections);
