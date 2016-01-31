@@ -3,11 +3,11 @@
 angular.module('app').controller('listConnectionsCtrl', [
   '$scope',
   '$timeout',
-  '$log',
   'connectionCache',
   'notificationService',
-  function($scope, $timeout, $log, connectionCache, notificationService) {
+  function($scope, $timeout, connectionCache, notificationService) {
     const connectionModule = require('lib/modules/connection');
+    const logger = require('lib/modules/logger');
 
     $scope.connections = [];
 
@@ -115,7 +115,7 @@ angular.module('app').controller('listConnectionsCtrl', [
         })
         .catch((response) => {
           $timeout(() => {
-            $log.error(response);
+            logger.error(response);
           });
         })
         .finally(() => {

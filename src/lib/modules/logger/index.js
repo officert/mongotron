@@ -5,8 +5,6 @@ const Promise = require('bluebird');
 
 const appConfig = require('src/config/appConfig');
 
-const isElectron = process.versions.electron;
-
 var logger = new winston.Logger({
   level: appConfig.logLevel,
   colorize: true,
@@ -24,25 +22,11 @@ class LoggerService {
   constructor() {}
 
   /**
-   * Log a log message
-   * @param {string} msg - Message to log
-   */
-  log(msg) {
-    logger.log(msg);
-    if (isElectron) {
-      console.log(msg);
-    }
-  }
-
-  /**
    * Log a debug message
    * @param {string} msg - Message to log
    */
   debug(msg) {
     logger.debug(msg);
-    if (isElectron) {
-      console.log(msg);
-    }
   }
 
   /**
@@ -51,9 +35,6 @@ class LoggerService {
    */
   info(msg) {
     logger.info(msg);
-    if (isElectron) {
-      console.info(msg);
-    }
   }
 
   /**
@@ -62,9 +43,6 @@ class LoggerService {
    */
   warn(msg) {
     logger.warn(msg);
-    if (isElectron) {
-      console.warn(msg);
-    }
   }
 
   /**
@@ -73,9 +51,6 @@ class LoggerService {
    */
   error(msg) {
     logger.error(msg);
-    if (isElectron) {
-      console.error(msg);
-    }
   }
 
   /**

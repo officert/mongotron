@@ -17,7 +17,7 @@
     "path-extra": "3.0.0",
     "tunnel-ssh": "3.0.0-alpha",
     "underscore": "1.8.3",
-    "winston": "2.1.1"
+    "winston": "https://github.com/dustinblackman/winston.git"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.3.13",

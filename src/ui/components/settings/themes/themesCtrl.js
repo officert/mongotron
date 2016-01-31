@@ -2,10 +2,10 @@
 
 angular.module('app').controller('themesCtrl', [
   '$scope',
-  '$log',
   'themeService',
-  '$timeout',
-  function($scope, $log, themeService, $timeout) {
+  '$timeout', ($scope, themeService, $timeout) => {
+    const logger = require('lib/modules/logger');
+
     themeService.list()
       .then((themes) => {
         $scope.themes = themes;
@@ -14,10 +14,10 @@ angular.module('app').controller('themesCtrl', [
         });
       })
       .catch((err) => {
-        $log.error(err);
+        logger.error(err);
       });
 
-    $scope.selectTheme = function(theme) {
+    $scope.selectTheme = theme => {
       if (!theme) return;
 
       $scope.themes.forEach((th) => {
@@ -31,17 +31,8 @@ angular.module('app').controller('themesCtrl', [
           });
         })
         .catch((err) => {
-          $log.error(err);
+          logger.error(err);
         });
     };
-
-    // $scope.$watch('currentTheme', function(theme) {
-    //   if (!theme) return;
-    //
-    //   themeService.changeActive(theme.name)
-    //     .catch(function(err) {
-    //       $log.error(err);
-    //     });
-    // });
   }
 ]);

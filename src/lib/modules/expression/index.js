@@ -7,6 +7,7 @@ const vm = require('vm');
 const ObjectId = require('mongodb').ObjectId;
 
 const keyValueUtils = require('src/lib/utils/keyValueUtils');
+const typeUtils = require('src/lib/utils/typeUtils');
 
 class Expression {
   /**
@@ -154,20 +155,18 @@ function _eval(expression, scope) {
       return reject(err);
     }
 
-    if (_isPromise(result)) {
+    if (typeUtils.isPromise(result)) {
       result.then(promiseResult => {
         return resolve(promiseResult);
       });
 
       if (result.catch) result.catch(reject);
+    } else if (typeUtils.isStream(result)) {
+      // result.on('end', )
     } else {
       return resolve(result);
     }
   });
-}
-
-function _isPromise(func) {
-  return func && func.then && typeof(func.then) === 'function';
 }
 
 function _getStringValue(str) {

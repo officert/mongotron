@@ -3,14 +3,14 @@
 angular.module('app').controller('queryResultsExportCtrl', [
   '$scope',
   'dialogService',
-  '$log',
   '$timeout',
   'notificationService',
-  'tabCache', ($scope, dialogService, $log, $timeout, notificationService, tabCache) => {
+  'tabCache', ($scope, dialogService, $timeout, notificationService, tabCache) => {
     const fs = require('fs');
     const csv = require('csv');
     const CsvStream = require('lib/utils/csvStream');
     const expression = require('lib/modules/expression');
+    const logger = require('lib/modules/logger');
 
     if (!$scope.query) throw new Error('queryResultsExportCtrl - query is required on scope');
 
@@ -80,7 +80,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
         .then((path) => {
           if (!path) return;
 
-        $scope.loading = true;
+          $scope.loading = true;
 
           path = _fixExportCsvPath(path);
 
@@ -219,7 +219,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
     function handleError(error) {
       $scope.loading = false;
-      $log.error(error);
+      logger.error(error);
     }
   }
 ]);

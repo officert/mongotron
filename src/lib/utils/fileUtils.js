@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const jsonfile = require('jsonfile');
 
 const fs = require('fs');
+const logger = require('lib/modules/logger');
 
 /** @class */
 class FileUtils {
@@ -19,7 +20,7 @@ class FileUtils {
     } catch (e) {
       //eat the error because you'll get an error if the dir doesn't exists,
       //in which case we should create the dir
-      console.log(e);
+      logger.warn(e);
     }
 
     if (!dirExists) {
@@ -27,7 +28,7 @@ class FileUtils {
         fs.mkdirSync(path);
       } catch (e) {
         //eat the error
-        console.log(e);
+        logger.warn(e);
       }
     }
   }
@@ -52,7 +53,7 @@ class FileUtils {
         fs.writeFileSync(path, fileData);
       } catch (e) {
         //eat the error
-        console.log(e);
+        logger.warn(e);
       }
     }
   }

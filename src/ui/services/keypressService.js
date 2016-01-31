@@ -3,9 +3,9 @@
 angular.module('app').factory('keypressService', [
   '$window',
   '$rootScope',
-  '$log',
-  '$timeout', ($window, $rootScope, $log, $timeout) => {
+  '$timeout', ($window, $rootScope, $timeout) => {
     const keybindings = require('lib/modules/keybindings');
+    const logger = require('lib/modules/logger');
 
     function KeypressService() {
       let _this = this;
@@ -26,7 +26,7 @@ angular.module('app').factory('keypressService', [
                 let commandHandler = _this.registeredCommandHandlers[binding.command];
 
                 if (!commandHandler) {
-                  $log.warn('KeypressService - constructor - no command handler registered for command : ' + binding.command);
+                  logger.warn('KeypressService - constructor - no command handler registered for command : ' + binding.command);
                 } else {
                   _this.registerCombo(key, binding.context, commandHandler);
                 }
@@ -36,7 +36,7 @@ angular.module('app').factory('keypressService', [
         })
         .catch((err) => {
           $timeout(() => {
-            $log.error(err);
+            logger.error(err);
           });
         });
     }
@@ -92,7 +92,7 @@ angular.module('app').factory('keypressService', [
           callback: callback
         }];
 
-        $log.debug('Registering keypress combo : ' + combo);
+        logger.info('Registering keypress combo : ' + combo);
 
         _this.listener.counting_combo(convertCommand(combo), callbackWrapper, true); // jshint ignore:line
       }
@@ -113,7 +113,7 @@ angular.module('app').factory('keypressService', [
     KeypressService.prototype.changeCurrentContext = function changeCurrentContext(context) {
       if (!context) return;
 
-      $log.debug('keybinding context changed', context);
+      logger.info('keybinding context changed', context);
 
       this.keybindingContext = context;
     };

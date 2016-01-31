@@ -68,7 +68,7 @@ class Connection {
     var _this = this;
 
     return new Promise((resolve, reject) => {
-      logger.log(`Connecting to ${_this.name} server @ ${_this.connectionString}...`);
+      logger.debug(`Connecting to ${_this.name} server @ ${_this.connectionString}...`);
 
       let client = new MongoClient();
 
@@ -79,7 +79,7 @@ class Connection {
       client.connect(_this.connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
 
-        logger.log(`Connected to ${_this.name} server @ ${_this.connectionString}`);
+        logger.debug(`Connected to ${_this.name} server @ ${_this.connectionString}`);
 
         if (mongoUtils.isLocalHost(_this.host)) {
           _getDbsForLocalhostConnection(_this, () => {

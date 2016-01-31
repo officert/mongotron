@@ -1,37 +1,38 @@
+'use strict';
+
 angular.module('app').controller('keybindingsCtrl', [
   '$scope',
-  '$timeout',
-  '$log',
-  function($scope, $timeout, $log) {
+  '$timeout', ($scope, $timeout) => {
     const keybindings = require('lib/modules/keybindings');
+    const logger = require('lib/modules/logger');
 
     $scope.searchForm = {
       searchQuery: ''
     };
 
     keybindings.list()
-      .then(function(keybindings) {
-        $timeout(function() {
-          $scope.keybindings = keybindings.map(function(keybinding) {
+      .then(keybindings => {
+        $timeout(() => {
+          $scope.keybindings = keybindings.map(keybinding => {
             keybinding.keystrokeSpaced = keybinding.keystroke ? keybinding.keystroke.replace(/-/g, ' ') : '';
             return keybinding;
           });
         });
       })
-      .catch(function(err) {
-        $timeout(function() {
-          $log.error(err);
+      .catch(err => {
+        $timeout(() => {
+          logger.error(err);
         });
       });
 
-    $scope.getHtmlForKeystroke = function(keystroke) {
+    $scope.getHtmlForKeystroke = keystroke => {
       if (!keystroke) return null;
 
-      var parts = keystroke.split('-');
+      let parts = keystroke.split('-');
 
-      var html = '';
+      let html = '';
 
-      parts.forEach(function(part) {
+      parts.forEach(part => {
         html += ('<span class="keystroke-key">' + part + '</span>');
       });
 

@@ -9,23 +9,24 @@ const path = require('path');
 require('src/mongotron').init();
 
 const appConfig = require('src/config/appConfig');
+const logger = require('lib/modules/logger');
 
 /* ------------------------------------------------
  * App initialization
  * ------------------------------------------------ */
-var mainWindow;
+let mainWindow;
 
 crashReporter.start(); // Report crashes to our server.
 
-ipcMain.on('set-title', function(event, title) {
+ipcMain.on('set-title', (event, title) => {
   mainWindow.setTitle(title || appConfig.name);
 });
 
-ipcMain.on('quit', function() {
+ipcMain.on('quit', () => {
   app.quit();
 });
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () => {
   // Quit when all windows are closed.
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -34,7 +35,7 @@ app.on('window-all-closed', function() {
   }
 });
 
-app.on('ready', function() {
+app.on('ready', () => {
   mainWindow = new BrowserWindow({
     center: true
   });
@@ -47,11 +48,11 @@ app.on('ready', function() {
 
   // if (appConfig.env !== 'production') mainWindow.openDevTools();
 
-  mainWindow.on('close', function() {
+  mainWindow.on('close', () => {
     app.quit();
   });
 
-  mainWindow.on('closed', function() {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -59,7 +60,7 @@ app.on('ready', function() {
   });
 });
 
-process.on('uncaughtException', function() {
-  console.log('\n\nUNCAUGHT ERROR\n');
-  console.log("caught from process");
+process.on('uncaughtException', () => {
+  logger.error('\n\nUNCAUGHT ERROR\n');
+  logger.error('caught from process');
 });

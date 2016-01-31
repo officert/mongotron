@@ -1,31 +1,32 @@
 'use strict';
+
 angular.module('app').factory('menuService', [
   '$window',
   '$rootScope',
   '$timeout',
   'dialogService',
   'tabCache',
-  'navUtils',
-  function($window, $rootScope, $timeout, dialogService, tabCache, navUtils) {
+  'navUtils', ($window, $rootScope, $timeout, dialogService, tabCache, navUtils) => {
     const ipcRenderer = require('electron').ipcRenderer;
     const shell = require('shell');
     const remote = require('remote');
     const Menu = remote.require('menu');
     const MenuItem = remote.require('menu-item');
     const appConfig = require('src/config/appConfig');
+    const logger = require('lib/modules/logger');
 
     function MenuService() {
       initMainMenu();
     }
 
-    MenuService.prototype.showMenu = function(menuItems) {
-      var menu = new Menu();
+    MenuService.prototype.showMenu = menuItems => {
+      let menu = new Menu();
 
       for (let i = 0; i < menuItems.length; i++) {
-        var menuItem = menuItems[i];
+        let menuItem = menuItems[i];
 
         if (!menuItem.label || !menuItem.click) {
-          console.warn('MenuService - registerContextMenu - skipping menu item because it does not have either a label or a click function');
+          logger.warn('MenuService - registerContextMenu - skipping menu item because it does not have either a label or a click function');
           continue;
         }
 
@@ -35,12 +36,12 @@ angular.module('app').factory('menuService', [
       menu.popup(remote.getCurrentWindow());
     };
 
-    var mongotronMenu = {
+    let mongotronMenu = {
       label: appConfig.name,
       submenu: [{
         label: 'About ' + appConfig.name,
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             navUtils.showAbout();
           });
         }
@@ -49,8 +50,8 @@ angular.module('app').factory('menuService', [
       }, {
         label: 'Preferences...',
         accelerator: 'CmdOrCtrl+,',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             navUtils.showSettings();
           });
         }
@@ -78,19 +79,19 @@ angular.module('app').factory('menuService', [
       }, {
         label: 'Quit',
         accelerator: 'Command+Q',
-        click: function() {
+        click: () => {
           ipcRenderer.send('quit');
         }
       }, ]
     };
 
-    var fileMenu = {
+    let fileMenu = {
       label: 'File',
       submenu: [{
         label: 'Connect',
         accelerator: 'CmdOrCtrl+O',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             navUtils.showConnections();
           });
         }
@@ -99,11 +100,11 @@ angular.module('app').factory('menuService', [
       }, {
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             dialogService.showSaveDialog()
-              .then(function(fileNames) {
-                console.log(fileNames);
+              .then(fileNames => {
+                logger.debug(fileNames);
               });
           });
         }
@@ -112,22 +113,22 @@ angular.module('app').factory('menuService', [
       }, {
         label: 'Close Tab',
         accelerator: 'CmdOrCtrl+W',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             tabCache.removeActive();
           });
         }
       }, {
         label: 'Close All Tabs',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             tabCache.removeAll();
           });
         }
       }]
     };
 
-    var editMenu = {
+    let editMenu = {
       label: 'Edit',
       submenu: [{
         label: 'Cut',
@@ -148,63 +149,63 @@ angular.module('app').factory('menuService', [
       }]
     };
 
-    var viewMenu = {
+    let viewMenu = {
       label: 'View',
       submenu: [{
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click: function(item, focusedWindow) {
+        click: (item, focusedWindow) => {
           if (focusedWindow)
             focusedWindow.reload();
         }
       }, {
         label: 'Logs',
         accelerator: 'CmdOrCtrl+L',
-        click: function() {
-          $timeout(function() {
+        click: () => {
+          $timeout(() => {
             navUtils.showLogs();
           });
         }
       }, {
         label: 'Toggle Full Screen',
-        accelerator: (function() {
+        accelerator: (() => {
           if (process.platform === 'darwin')
             return 'Ctrl+Command+F';
           else
             return 'F11';
         })(),
-        click: function(item, focusedWindow) {
+        click: (item, focusedWindow) => {
           if (focusedWindow)
             focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
         }
       }, {
         label: 'Toggle Developer Tools',
-        accelerator: (function() {
+        accelerator: (() => {
           if (process.platform === 'darwin')
             return 'Alt+Command+I';
           else
             return 'Ctrl+Shift+I';
         })(),
-        click: function(item, focusedWindow) {
+        click: (item, focusedWindow) => {
           if (focusedWindow)
             focusedWindow.toggleDevTools();
         }
       }, ]
     };
 
-    var helpMenu = {
+    let helpMenu = {
       label: 'Help',
       role: 'help',
       submenu: [{
         label: 'Learn More',
-        click: function() {
+        click: () => {
           shell.openExternal(appConfig.website);
         }
       }]
     };
 
     function initMainMenu() {
-      var template = [
+      let template = [
         mongotronMenu,
         fileMenu,
         editMenu,
@@ -212,7 +213,7 @@ angular.module('app').factory('menuService', [
         helpMenu
       ];
 
-      var menu = Menu.buildFromTemplate(template);
+      let menu = Menu.buildFromTemplate(template);
 
       Menu.setApplicationMenu(menu);
     }
@@ -222,6 +223,5 @@ angular.module('app').factory('menuService', [
 ]);
 
 angular.module('app').run([
-  'menuService',
-  function() {}
+  'menuService', () => {}
 ]);

@@ -3,13 +3,13 @@
 angular.module('app').controller('addConnectionCtrl', [
   '$scope',
   '$timeout',
-  '$log',
   'notificationService',
   'connectionCache',
-  function($scope, $timeout, $log, notificationService, connectionCache) {
+  function($scope, $timeout, notificationService, connectionCache) {
     const connectionModule = require('lib/modules/connection');
     const Connection = require('lib/entities/connection');
     const mongoUtils = require('src/lib/utils/mongoUtils');
+    const logger = require('lib/modules/logger');
 
     $scope.currentSubPage = 'server';
 
@@ -90,7 +90,7 @@ angular.module('app').controller('addConnectionCtrl', [
               title: 'Error adding connection',
               message: err
             });
-            $log.log(err);
+            logger.error(err);
           });
         });
     };
@@ -112,7 +112,7 @@ angular.module('app').controller('addConnectionCtrl', [
               title: 'Error updating connection',
               message: err
             });
-            $log.log(err);
+            logger.error(err);
           });
         });
     };

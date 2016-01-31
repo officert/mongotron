@@ -2,11 +2,10 @@
 
 angular.module('app').controller('appCtrl', [
   '$scope',
-  '$log',
   'modalService',
   'tabCache',
   'navUtils',
-  function($scope, $log, modalService, tabCache, navUtils) {
+  ($scope, modalService, tabCache, navUtils) => {
     $scope.currentQuery = null;
     $scope.showConnections = showConnections;
     $scope.showSettings = showSettings;
