@@ -37,7 +37,10 @@ angular.module('app').controller('queryCtrl', [
 
     defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    let defaultExpression = `db.${defaultCollection.name}.find({\n  \n})`;
+    //check for bracket notation
+    let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
+    
+    let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
 
     $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
