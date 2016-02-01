@@ -14,11 +14,13 @@ class MongotronCursor {
     return new Promise((resolve, reject) => {
       if (this._stream === true) {
         return resolve(this._cursor);
-      } else {
+      } else if (this._cursor.toArray) {
         this._cursor.toArray((err, documents) => {
           if (err) return reject(err);
           return resolve(documents);
         });
+      } else {
+        return resolve(null);
       }
     });
   }
