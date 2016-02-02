@@ -148,6 +148,8 @@ angular.module('app').directive('codemirror', [
 (function(mod) {
   mod(CodeMirror);
 })(function(CodeMirror) {
+  const esprima = require('esprima');
+
   var Pos = CodeMirror.Pos;
 
   function arrayContains(arr, item) {
@@ -195,6 +197,7 @@ angular.module('app').directive('codemirror', [
       context.push(tprop);
     }
 
+    //add some additional global variables
     options.globalScope = {
       db: {}
     };
@@ -213,8 +216,13 @@ angular.module('app').directive('codemirror', [
       }
     };
 
+    let tokens = esprima.tokenize(editor.getValue());
+    let lastToken = tokens[tokens.length - 1];
+
+    // if()
+
     return {
-      list: token.string ? getCompletions(token, context, keywords, options) : [],
+      list: (lastToken && lastToken.type !== 'Punctuator' || (lastToken.type === 'Punctuator' && lastToken.value === '.')) ? getCompletions(token, context, keywords, options) : [],
       from: new Pos(cur.line, token.start),
       to: new Pos(cur.line, token.end)
     };
