@@ -10,11 +10,16 @@ require('src/mongotron').init();
 
 const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
+const AutoUpdater = require('lib/modules/autoupdater');
 
 /* ------------------------------------------------
  * App initialization
  * ------------------------------------------------ */
 let mainWindow;
+let autoUpdater = new AutoUpdater({
+  repository: appConfig.repositoryName,
+  repositoryOwner: appConfig.repositoryOwner
+});
 
 crashReporter.start(); // Report crashes to our server.
 
@@ -36,6 +41,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
+  autoUpdater.checkForUpdates();
+
   mainWindow = new BrowserWindow({
     center: true
   });
