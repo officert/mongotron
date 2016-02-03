@@ -12,6 +12,7 @@
     "electron-packager": "5.2.1",
     "escodegen": "1.8.0",
     "esprima": "2.7.1",
+    "github": "0.2.4",
     "jsonfile": "2.2.3",
     "mongodb": "2.1.2",
     "node-uuid": "1.4.7",
