@@ -19,7 +19,8 @@ let mainWindow;
 let autoUpdater = new AutoUpdater({
   repository: appConfig.repositoryName,
   repositoryOwner: appConfig.repositoryOwner,
-  version: appConfig.version
+  version: appConfig.version,
+  updateWindowHtml: path.join(`file://${__dirname}`, '../ui/views/autoUpdate.html')
 });
 
 crashReporter.start(); // Report crashes to our server.
@@ -42,30 +43,37 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdates();
+  autoUpdater.on('ready', () => {
+    mainWindow = new BrowserWindow({
+      center: true
+    });
 
-  mainWindow = new BrowserWindow({
-    center: true
+    mainWindow.maximize();
+
+    mainWindow.setMinimumSize(770, 400);
+
+    mainWindow.loadUrl(path.join(`file://${__dirname}`, '../ui/index.html'));
+
+    // if (appConfig.env !== 'production') mainWindow.openDevTools();
+
+    mainWindow.on('close', () => {
+      app.quit();
+    });
+
+    mainWindow.on('closed', () => {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      mainWindow = null;
+    });
   });
 
-  mainWindow.maximize();
-
-  mainWindow.setMinimumSize(770, 400);
-
-  mainWindow.loadUrl(path.join(`file://${__dirname}`, '../ui/index.html'));
-
-  // if (appConfig.env !== 'production') mainWindow.openDevTools();
-
-  mainWindow.on('close', () => {
-    app.quit();
+  autoUpdater.on('update-available', () => {
+    console.log('UPDATE AVAILABLE');
+    autoUpdater.showNewReleaseWindow();
   });
 
-  mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+  autoUpdater.init();
 });
 
 process.on('uncaughtException', () => {
