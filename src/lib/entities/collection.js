@@ -68,9 +68,7 @@ class Collection {
     query = query || {};
     options = options || {};
 
-    let cursor = this._dbCollection.count(query, options);
-
-    return new MongotronCursor(cursor);
+    return this._dbCollection.count(query, options);
   }
 
   /**
