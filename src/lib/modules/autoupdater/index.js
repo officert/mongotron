@@ -5,6 +5,7 @@ const EventEmitter = require('events');
 const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
+const path = require('path');
 
 const logger = require('lib/modules/logger');
 
@@ -33,7 +34,7 @@ class AutoUpdater extends EventEmitter {
     this._version = options.version;
     this._initialized = false;
     this._newestRelease = null;
-    this._updateWindowHtml = options.updateWindowHtml;
+    this._updateWindowHtml = `file://${options.updateWindowHtml}`;
   }
 
   /** @method */
@@ -77,17 +78,23 @@ class AutoUpdater extends EventEmitter {
     if (!this._initialized) throw new Error(new Error('AutoUpdater - checkForUpdates() - must call init() before using AutoUpdater'));
 
     let updateWindow = new BrowserWindow({
-      center: true
+      center: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'scripts/update.js')
+      }
     });
 
     updateWindow.setMinimumSize(770, 400);
 
     updateWindow.loadUrl(this._updateWindowHtml);
 
-    updateWindow.on('close', () => {});
+    updateWindow.on('close', () => {
+      console.log('window close');
+    });
 
     //dereference the updateWindow
     updateWindow.on('closed', () => {
+      console.log('window closed');
       updateWindow = null;
     });
   }

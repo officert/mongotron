@@ -20,7 +20,7 @@ let autoUpdater = new AutoUpdater({
   repository: appConfig.repositoryName,
   repositoryOwner: appConfig.repositoryOwner,
   version: appConfig.version,
-  updateWindowHtml: path.join(`file://${__dirname}`, '../ui/views/autoUpdate.html')
+  updateWindowHtml: path.join(__dirname, '../ui/views/autoUpdate.html')
 });
 
 crashReporter.start(); // Report crashes to our server.
