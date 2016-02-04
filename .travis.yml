@@ -11,4 +11,6 @@ before_script:
   - 'export DISPLAY=:99.0'
   - sh -e /etc/init.d/xvfb start
 
-script: make test && make coverage && make coveralls
+script:
+  - if [ "$TRAVIS_BRANCH" = "master" ] then make test && make coverage && make coveralls
+  - else then make test
