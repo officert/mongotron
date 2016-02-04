@@ -1,10 +1,20 @@
 'use strict';
 
-let Promise = require('bluebird');
-let githubApi = require('lib/libs/githubApi');
+const Promise = require('bluebird');
+const githubApi = require('lib/libs/githubApi');
+const _ = require('underscore');
+
+const logger = require('lib/modules/logger');
 
 /** @exports AutoUpdater */
 class AutoUpdater {
+  /** @constructor */
+  /**
+   * @param {object} options
+   * @param {string} options.repository - Github repository name
+   * @param {string} options.repositoryOwner - Github repository owner username
+   * @param {string} options.version - Current Github release version that your app is running
+   */
   constructor(options) {
     if (!options) throw new Error('AutoUpdater - constructor - options is required');
     if (!options.repository) throw new Error('AutoUpdater - constructor - options.repository is required');
@@ -12,18 +22,45 @@ class AutoUpdater {
 
     this._repository = options.repository;
     this._repositoryOwner = options.repositoryOwner;
+    this._version = options.version;
   }
 
+  /** @method */
+  /**
+   * @return Promise<>
+   */
   checkForUpdates() {
     return new Promise((resolve, reject) => {
       githubApi.listReleases(this._repositoryOwner, this._repository)
         .then(releases => {
-          console.log('releases', releases);
+          let newRelease = _getNewerRelease(releases, this._version);
 
-          return resolve(null);
+          return resolve(newRelease);
         })
         .catch(reject);
     });
+  }
+}
+
+function _getNewerRelease(releases, currentVersion) {
+  releases = _.sortBy(releases, 'version');
+
+  let currentRelease = _.findWhere(releases, {
+    name: `v${currentVersion}` //TODO: shouldn't have to use the naming pattern 'v1.0.0'
+  });
+
+  if (!currentRelease) {
+    logger.warn(`autoupdater - checkForUpdates() - no release matches the name v${currentRelease}`);
+    return null;
+  }
+
+  let currentReleaseIndex = releases.indexOf(currentRelease);
+
+  if (currentReleaseIndex !== 0) {
+    let latestRelease = releases[0];
+    return latestRelease;
+  } else {
+    return null;
   }
 }
 

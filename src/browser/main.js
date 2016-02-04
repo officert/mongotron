@@ -18,7 +18,8 @@ const AutoUpdater = require('lib/modules/autoupdater');
 let mainWindow;
 let autoUpdater = new AutoUpdater({
   repository: appConfig.repositoryName,
-  repositoryOwner: appConfig.repositoryOwner
+  repositoryOwner: appConfig.repositoryOwner,
+  version: appConfig.version
 });
 
 crashReporter.start(); // Report crashes to our server.
