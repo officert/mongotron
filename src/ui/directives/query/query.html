@@ -24,11 +24,11 @@
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
         tooltip-append-to-body="true">
           <i class="fa fa-file-text-o"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800"
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800"
         tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
