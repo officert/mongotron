@@ -11,6 +11,7 @@ const mongoUtils = require('src/lib/utils/mongoUtils');
 
 /** @class */
 class Database {
+  /** @constructor */
   /**
    * @param {Object} options
    * @param {String} options.name - name of the database
@@ -23,48 +24,43 @@ class Database {
   constructor(options) {
     options = options || {};
 
-    var _this = this;
-    _this.id = options.id;
-    _this.name = options.name; //TODO: validate name doesn't contain spaces
-    _this.host = options.host;
-    _this.port = options.port;
-    _this.auth = options.auth;
-    _this.connection = options.connection;
+    this.id = options.id;
+    this.name = options.name; //TODO: validate name doesn't contain spaces
+    this.host = options.host;
+    this.port = options.port;
+    this.auth = options.auth;
+    this.connection = options.connection;
 
-    _this.isOpen = false;
+    this.collections = [];
 
-    _this.collections = [];
-
-    if (mongoUtils.isLocalHost(_this.host)) {
-      _this._dbConnection = new MongoDb(_this.name, new MongoServer(_this.host, _this.port));
+    if (mongoUtils.isLocalHost(this.host)) {
+      this._dbConnection = new MongoDb(this.name, new MongoServer(this.host, this.port));
     } else {
-      _this._dbConnection = null; //this is set by the parent connection once we've connect to it
+      this._dbConnection = null; //this is set by the parent connection once we've connect to it
     }
   }
 
+  /** @method */
   /**
-   * Open the database
-   * @param {Function} next - callback function
+   * @return Promise
    */
   open() {
-    var _this = this;
-
     return new Promise((resolve, reject) => {
       //TODO: need to do some research and see if connecting to a database
       //over and over like this is a performance issue or causes memory leaks
-      if (mongoUtils.isLocalHost(_this.host)) {
-        _this._dbConnection.open((err) => {
+      if (mongoUtils.isLocalHost(this.host)) {
+        this._dbConnection.open((err) => {
           if (err) return reject(new errors.DatabaseError(err.message));
 
           return resolve(null);
         });
       } else {
-        _this.connection.connect()
+        this.connection.connect()
           .then((database) => {
             if (!database) {
               return reject(new Error('error connecting to database'));
             } else {
-              _this._dbConnection = database;
+              this._dbConnection = database;
             }
             return resolve(null);
           })
@@ -75,68 +71,72 @@ class Database {
     });
   }
 
+  /** @method */
   /**
-   * List collections in the database
+   * @return Promise
    */
   listCollections() {
-    var _this = this;
-
     return new Promise((resolve, reject) => {
-      if (!_this.open) return reject(new Error('Database is not open'));
+      if (!this._dbConnection) return reject(new Error('database - listCollections() - database is not connected yet'));
 
-      if (_this.collections && _this.collections.length) {
-        return resolve(_this.collections);
+      if (this.collections && this.collections.length) {
+        return resolve(this.collections);
       }
 
-      _this._dbConnection.collections((err, collections) => {
+      this._dbConnection.collections((err, collections) => {
         if (err) return reject(new errors.DatabaseError(err.message));
 
         _.each(collections, (collection) => {
-          _this.addCollection({
+          this.addCollection({
             name: collection.collectionName
           });
         });
 
-        return resolve(_this.collections);
+        return resolve(this.collections);
       });
     });
   }
 
+  /** @method */
   /**
-   * Add a new collection to the database
-   * @param {Object} options
+   * @return Promise
    */
   addCollection(options) {
-    options = options || {};
+    return new Promise((resolve, reject) => {
+      if (!options) return reject(new Error('database - addCollection() - options is required'));
+      if (!options.name) return reject(new Error('database - addCollection() - options.name is required'));
 
-    var _this = this;
+      if (!this._dbConnection) return reject(new Error('database - addCollection() - database is not connected yet'));
 
-    var existingCollection = _.findWhere(_this.collections, {
-      name: options.name
+      let existingCollection = _.findWhere(this.collections, {
+        name: options.name
+      });
+
+      if (existingCollection) return reject(new Error(`database -addCollection() - the collection name ${options.name} is already used`));
+
+      options.serverName = `${this.host}:${this.port}`;
+      options.databaseName = this.name;
+      options.connection = this.connection;
+      options.database = this;
+
+      this._dbConnection.createCollection(options.name, (err) => {
+        if (err) return reject(err);
+
+        let collection = new Collection(this._dbConnection, options);
+
+        this.collections.push(collection);
+
+        return resolve(collection);
+      });
     });
-
-    if (existingCollection) return;
-
-    options.serverName = `${_this.host}:${_this.port}`;
-    options.databaseName = _this.name;
-    options.connection = _this.connection;
-    options.database = _this;
-
-    var collection = new Collection(_this._dbConnection, options);
-
-    _this.collections.push(collection);
-
-    return collection;
   }
 
   /**
    * Drop the database
    */
   drop() {
-    var _this = this;
-
-    return new Promise(function(resolve, reject) {
-      _this._dbConnection.dropDatabase(function(err) {
+    return new Promise((resolve, reject) => {
+      this._dbConnection.dropDatabase(err => {
         if (err) return reject(err);
         return resolve();
       });
