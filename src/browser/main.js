@@ -17,16 +17,15 @@ let autoUpdateOptions = {
   currentVersion: app.getVersion()
 };
 
+console.log('autoUpdateOptions', autoUpdateOptions);
+
 const updater = new GhReleases(autoUpdateOptions);
 
-// Check for updates
-// `status` returns true if there is a new update available
 updater.check((err, status) => {
   console.log('updater check', err, status);
 
   if (!err && status) {
-    // Download the update
-    updater.download();
+    updater.download(); // Download the update
   }
 });
 
@@ -34,8 +33,7 @@ updater.check((err, status) => {
 updater.on('update-downloaded', (info) => {
   console.log('updater downloaded', info);
 
-  // Restart the app and install the update
-  updater.install();
+  updater.install(); // Restart the app and install the update
 });
 
 /* ------------------------------------------------
