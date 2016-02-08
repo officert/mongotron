@@ -1,6 +1,5 @@
 'use strict';
 
-const app = require('app');
 const EventEmitter = require('events');
 const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
@@ -8,6 +7,10 @@ const _ = require('underscore');
 
 const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
+
+const EVENTS = {
+  UPDATE_AVAILABLE: 'update-available'
+};
 
 /** @exports AutoUpdater */
 /**
@@ -22,11 +25,21 @@ class AutoUpdater extends EventEmitter {
     return new Promise((resolve, reject) => {
       githubApi.listReleases(appConfig.repositoryOwner, appConfig.repositoryName)
         .then(releases => {
-          let newRelease = _getNewestRelease(releases, app.getVersion());
-          return resolve(newRelease);
+          let newRelease = _getNewestRelease(releases, appConfig.version);
+          let releaseAvailable = newRelease ? true : false;
+
+          if (releaseAvailable) this.emit(this.EVENTS.UPDATE_AVAILABLE, newRelease);
+
+          console.log('UPDATE_AVAILABLE', newRelease);
+
+          return resolve(releaseAvailable);
         })
         .catch(reject);
     });
+  }
+
+  get EVENTS() {
+    return EVENTS;
   }
 
   get newestRelease() {

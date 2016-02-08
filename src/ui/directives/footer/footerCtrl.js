@@ -6,18 +6,14 @@ angular.module('app').controller('footerCtrl', [
     const autoUpdater = require('lib/modules/autoUpdater');
     const logger = require('lib/modules/logger');
 
-    autoUpdater.checkForUpdates()
-      .then(updateAvailable => {
-        $scope.$apply(() => {
-          logger.debug('UPDATE AVAILABLE');
+    autoUpdater.checkForUpdates();
 
-          $scope.updateAvailable = updateAvailable;
-        });
-      })
-      .catch(err => {
-        $scope.$apply(() => {
-          logger.error(err);
-        });
+    autoUpdater.on(autoUpdater.EVENTS.UPDATE_AVAILABLE, () => {
+      $scope.$apply(() => {
+        logger.debug('UPDATE AVAILABLE');
+
+        $scope.updateAvailable = true;
       });
+    });
   }
 ]);
