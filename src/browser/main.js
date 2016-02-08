@@ -10,18 +10,11 @@ require('src/mongotron').init();
 
 const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
-const AutoUpdater = require('lib/modules/autoupdater');
 
 /* ------------------------------------------------
  * App initialization
  * ------------------------------------------------ */
 let mainWindow;
-let autoUpdater = new AutoUpdater({
-  repository: appConfig.repositoryName,
-  repositoryOwner: appConfig.repositoryOwner,
-  version: appConfig.version,
-  updateWindowHtml: path.join(__dirname, '../ui/views/autoUpdate.html')
-});
 
 crashReporter.start(); // Report crashes to our server.
 
@@ -43,37 +36,28 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-  autoUpdater.on('ready', () => {
-    mainWindow = new BrowserWindow({
-      center: true
-    });
-
-    mainWindow.maximize();
-
-    mainWindow.setMinimumSize(770, 400);
-
-    mainWindow.loadUrl(path.join(`file://${__dirname}`, '../ui/index.html'));
-
-    // if (appConfig.env !== 'production') mainWindow.openDevTools();
-
-    mainWindow.on('close', () => {
-      app.quit();
-    });
-
-    mainWindow.on('closed', () => {
-      // Dereference the window object, usually you would store windows
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
-      mainWindow = null;
-    });
+  mainWindow = new BrowserWindow({
+    center: true
   });
 
-  autoUpdater.on('update-available', () => {
-    console.log('UPDATE AVAILABLE');
-    autoUpdater.showNewReleaseWindow();
+  mainWindow.maximize();
+
+  mainWindow.setMinimumSize(770, 400);
+
+  mainWindow.loadUrl(path.join(`file://${__dirname}`, '../ui/index.html'));
+
+  // if (appConfig.env !== 'production') mainWindow.openDevTools();
+
+  mainWindow.on('close', () => {
+    app.quit();
   });
 
-  autoUpdater.init();
+  mainWindow.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null;
+  });
 });
 
 process.on('uncaughtException', () => {

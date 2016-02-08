@@ -1,11 +1,9 @@
 'use strict';
 
-const BrowserWindow = require('browser-window');
 const EventEmitter = require('events');
 const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
-const path = require('path');
 
 const logger = require('lib/modules/logger');
 
@@ -14,88 +12,18 @@ const logger = require('lib/modules/logger');
  * @property newestRelease - the newest release, if available
  */
 class AutoUpdater extends EventEmitter {
-  /** @constructor */
-  /**
-   * @param {object} options
-   * @param {string} options.repository - Github repository name
-   * @param {string} options.repositoryOwner - Github repository owner username
-   * @param {string} options.version - Current Github release version that your app is running
-   */
-  constructor(options) {
-    if (!options) throw new Error('AutoUpdater - constructor - options is required');
-    if (!options.repository) throw new Error('AutoUpdater - constructor - options.repository is required');
-    if (!options.repositoryOwner) throw new Error('AutoUpdater - constructor - options.repositoryOwner is required');
-    if (!options.updateWindowHtml) throw new Error('AutoUpdater - constructor - options.updateWindowHtml is required');
-
-    super();
-
-    this._repository = options.repository;
-    this._repositoryOwner = options.repositoryOwner;
-    this._version = options.version;
-    this._initialized = false;
-    this._newestRelease = null;
-    this._updateWindowHtml = `file://${options.updateWindowHtml}`;
-  }
-
   /** @method */
   /**
-   * @return Promise<>
-   */
-  init() {
-    this._initialized = true;
-
-    this.checkForUpdates()
-      .then(newestRelease => {
-        this._newestRelease = newestRelease;
-
-        this.emit('update-available');
-      })
-      .catch(err => {
-        console.log('ERROR CHECKING FOR UPDATES', err);
-      });
-
-    this.emit('ready');
-  }
-
-  /** @method */
-  /**
-   * @return Promise<>
+   * @return Promise
    */
   checkForUpdates() {
-    if (!this._initialized) throw new Error(new Error('AutoUpdater - checkForUpdates() - must call init() before using AutoUpdater'));
-
     return new Promise((resolve, reject) => {
       githubApi.listReleases(this._repositoryOwner, this._repository)
         .then(releases => {
-          let newRelease = _getNewerRelease(releases, this._version);
+          let newRelease = _getNewestRelease(releases, this._version);
           return resolve(newRelease);
         })
         .catch(reject);
-    });
-  }
-
-  showNewReleaseWindow() {
-    if (!this._initialized) throw new Error(new Error('AutoUpdater - checkForUpdates() - must call init() before using AutoUpdater'));
-
-    let updateWindow = new BrowserWindow({
-      center: true,
-      webPreferences: {
-        preload: path.join(__dirname, 'scripts/update.js')
-      }
-    });
-
-    updateWindow.setMinimumSize(770, 400);
-
-    updateWindow.loadUrl(this._updateWindowHtml);
-
-    updateWindow.on('close', () => {
-      console.log('window close');
-    });
-
-    //dereference the updateWindow
-    updateWindow.on('closed', () => {
-      console.log('window closed');
-      updateWindow = null;
     });
   }
 
@@ -104,7 +32,7 @@ class AutoUpdater extends EventEmitter {
   }
 }
 
-function _getNewerRelease(releases, currentVersion) {
+function _getNewestRelease(releases, currentVersion) {
   releases = _.sortBy(releases, 'version');
 
   let currentRelease = _.findWhere(releases, {
@@ -126,4 +54,4 @@ function _getNewerRelease(releases, currentVersion) {
   }
 }
 
-module.exports = AutoUpdater;
+module.exports = new AutoUpdater();
