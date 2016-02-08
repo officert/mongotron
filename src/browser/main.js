@@ -5,36 +5,11 @@ const BrowserWindow = require('browser-window');
 const crashReporter = require('crash-reporter');
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
-const GhReleases = require('electron-gh-releases');
 
 require('src/mongotron').init();
 
 const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
-
-let autoUpdateOptions = {
-  repo: 'officert/mongotron',
-  currentVersion: app.getVersion()
-};
-
-console.log('autoUpdateOptions', autoUpdateOptions);
-
-const updater = new GhReleases(autoUpdateOptions);
-
-updater.check((err, status) => {
-  console.log('updater check', err, status);
-
-  if (!err && status) {
-    updater.download(); // Download the update
-  }
-});
-
-// When an update has been downloaded
-updater.on('update-downloaded', (info) => {
-  console.log('updater downloaded', info);
-
-  updater.install(); // Restart the app and install the update
-});
 
 /* ------------------------------------------------
  * App initialization
