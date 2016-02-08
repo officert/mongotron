@@ -4,8 +4,8 @@ angular.module('app').controller('addCollectionCtrl', [
   '$scope',
   '$uibModalInstance',
   'database',
-  'notificationService',
-  function($scope, $uibModalInstance, database, notificationService) {
+  'notificationService', ($scope, $uibModalInstance, database, notificationService) => {
+    const logger = require('lib/modules/logger');
 
     $scope.close = function() {
       $uibModalInstance.close(1);
@@ -18,11 +18,15 @@ angular.module('app').controller('addCollectionCtrl', [
 
       if (!addCollectionForm.$valid) return;
 
-      database.addCollection($scope.form);
+      database.addCollection($scope.form)
+        .then(() => {
+          notificationService.success('New collection added');
 
-      notificationService.success('New collection added');
-
-      $scope.close();
+          $scope.close();
+        })
+        .catch(err => {
+          logger.error(err);
+        });
     };
   }
 ]);

@@ -5,6 +5,8 @@ angular.module('app').controller('inlineEditorCtrl', [
   'tabCache',
   'notificationService',
   '$timeout', ($scope, tabCache, notificationService, $timeout) => {
+    const expression = require('lib/modules/expression');
+
     $scope.show = false;
     $scope.doc = $scope.inlineEditorDoc;
     $scope.newValue = $scope.inlineEditorValue;
@@ -40,26 +42,38 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       if (!activeTab) return;
 
-      let set = {};
-      set[$scope.inlineEditorKey] = $scope.newValue;
+      let evalScope = {
+        doc: $scope.doc
+      };
 
-      activeTab.collection.updateOne({
-          _id: $scope.doc._id
-        }, {
-          $set: set
+      expression.eval($scope.newValue, evalScope)
+        .then(expressionResult => {
+          let set = {};
+          set[$scope.inlineEditorKey] = expressionResult.result;
+
+          activeTab.collection.updateOne({
+              _id: $scope.doc._id
+            }, {
+              $set: set
+            })
+            .then(() => {
+              $timeout(() => {
+                $scope.show = false;
+
+                _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, expressionResult.result);
+
+                $scope.inlineEditorValue = expressionResult.result;
+
+                notificationService.success('Updates saved.');
+              });
+            })
+            .catch((err) => {
+              $timeout(() => {
+                notificationService.error(err);
+              });
+            });
         })
-        .then(() => {
-          $timeout(() => {
-            $scope.show = false;
-
-            _setPropertyValueByKey($scope.doc, $scope.inlineEditorKey, $scope.newValue);
-
-            $scope.inlineEditorValue = $scope.newValue;
-
-            notificationService.success('Updates saved.');
-          });
-        })
-        .catch((err) => {
+        .catch(err => {
           $timeout(() => {
             notificationService.error(err);
           });

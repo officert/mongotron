@@ -13,7 +13,7 @@ const runSequence = require('run-sequence');
 const symlink = require('gulp-symlink');
 const _ = require('underscore');
 
-let appConfig = require('./src/config/appConfig');
+let appConfig = require('src/config/appConfig');
 const packageJson = require('./package.json');
 
 require('gulp-task-list')(gulp);

@@ -1,6 +1,6 @@
 {
   "name": "Mongotron",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "mongotron",
   "main": "src/browser/main.js",
   "engine": "node 5.3.0",
@@ -9,6 +9,7 @@
     "bluebird": "3.0.6",
     "bson": "https://github.com/officert/js-bson/tarball/master",
     "csv": "0.4.6",
+    "electron-gh-releases": "2.0.2",
     "electron-packager": "5.2.1",
     "escodegen": "1.8.0",
     "esprima": "2.7.1",

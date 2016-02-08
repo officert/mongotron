@@ -35,6 +35,11 @@ class MongotronCursor {
     return this;
   }
 
+  sort(sort) {
+    this._cursor.sort(sort);
+    return this;
+  }
+
   stream() {
     this._stream = true;
     this._cursor.stream();

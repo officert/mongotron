@@ -65,15 +65,10 @@ class Collection {
    * @param {Object} [options] - mongo query options
    */
   count(query, options) {
-    if (!query) return Promise.reject(new errors.InvalidArugmentError('query is required'));
+    query = query || {};
     options = options || {};
 
-    let cursor = this._dbCollection.count(query, options);
-
-    if (options.skip) cursor.skip(Number(options.skip));
-    cursor.limit(options.limit ? Number(options.limit) : DEFAULT_PAGE_SIZE);
-
-    return new MongotronCursor(cursor);
+    return this._dbCollection.count(query, options);
   }
 
   /**
@@ -82,7 +77,7 @@ class Collection {
    */
   deleteMany(query, options) {
     return new Promise((resolve, reject) => {
-      if (!query) return reject(new errors.InvalidArugmentError('query is required'));
+      query = query || {};
       options = options || {};
 
       this._dbCollection.deleteMany(query, options, (err, result) => {
