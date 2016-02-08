@@ -82,6 +82,8 @@
   <script src="./directives/sidebar/sidebarCtrl.js"></script>
   <script src="./directives/sidenav/sidenav.js"></script>
   <script src="./directives/sidenav/sidenavCtrl.js"></script>
+  <script src="./directives/footer/footer.js"></script>
+  <script src="./directives/footer/footerCtrl.js"></script>
   <script src="./directives/tabView/tabView.js"></script>
   <script src="./directives/tabView/tabViewCtrl.js"></script>
   <script src="./directives/keybindingContext.js"></script>
@@ -104,16 +106,16 @@
 <body theme-class>
   <!-- need for ngAnimate -->
   <base href="/" />
-  <!-- APP -->
   <div class="app" ng-controller="appCtrl" keybinding-context="mongotron-workspace" has-connections>
     <div class="sidebar-wrapper">
-      <sidenav></sidenav>
-      <sidebar></sidebar>
+      <mongotron-sidenav></mongotron-sidenav>
+      <mongotron-sidebar></mongotron-sidebar>
     </div>
     <div class="content-wrapper">
       <div class="content">
         <tab-view keybinding-context="mongotron-tab-view"></tab-view>
       </div>
+      <mongotron-footer></mongotron-footer>
     </div>
   </div>
   <notifications></notifications>
