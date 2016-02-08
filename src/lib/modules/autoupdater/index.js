@@ -1,10 +1,12 @@
 'use strict';
 
+const app = require('app');
 const EventEmitter = require('events');
 const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
 
+const appConfig = require('src/config/appConfig');
 const logger = require('lib/modules/logger');
 
 /** @exports AutoUpdater */
@@ -18,9 +20,9 @@ class AutoUpdater extends EventEmitter {
    */
   checkForUpdates() {
     return new Promise((resolve, reject) => {
-      githubApi.listReleases(this._repositoryOwner, this._repository)
+      githubApi.listReleases(appConfig.repositoryOwner, appConfig.repositoryName)
         .then(releases => {
-          let newRelease = _getNewestRelease(releases, this._version);
+          let newRelease = _getNewestRelease(releases, app.getVersion());
           return resolve(newRelease);
         })
         .catch(reject);
