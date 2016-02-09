@@ -1,5 +1,17 @@
 <div id="updates" ng-controller="updatesCtrl">
   <div class="panel-header">
     <h3><i class="fa fa-bell-o"></i>Updates</h3>
+    <p class="version">
+      Current Version : {{ version }}
+    </p>
+    <div class="update-available" ng-show="updateAvailable">
+      <p>
+        An update is available for download. Click here to update to version
+        <strong>{{ latestRelease.version }}</strong>
+      </p>
+      <button class="btn btn-primary" ng-click="downloadUpdate()">
+        Update
+      </button>
+    </div>
   </div>
 </div>

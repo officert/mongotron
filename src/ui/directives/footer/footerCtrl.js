@@ -6,12 +6,16 @@ angular.module('app').controller('footerCtrl', [
     const autoUpdater = require('lib/modules/autoUpdater');
     const logger = require('lib/modules/logger');
 
-    autoUpdater.checkForNewRelease()
-      .then(newRelease => {
-        $scope.$apply(() => {
-          logger.info('UPDATE AVAILABLE', newRelease);
+    $scope.downloadUpdate = function($event) {
+      if ($event) $event.preventDefault();
 
-          $scope.updateAvailable = true;
+      autoUpdater.downloadNewRelease();
+    };
+
+    autoUpdater.checkForNewRelease()
+      .then(updateAvailable => {
+        $scope.$apply(() => {
+          $scope.updateAvailable = updateAvailable;
         });
       })
       .catch(err => {
