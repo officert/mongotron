@@ -1,72 +1,54 @@
 'use strict';
 
-const EventEmitter = require('events');
 const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
+const semver = require('semver');
 
 const appConfig = require('src/config/appConfig');
-const logger = require('lib/modules/logger');
-
-const EVENTS = {
-  UPDATE_AVAILABLE: 'update-available'
-};
 
 /** @exports AutoUpdater */
 /**
  * @property newestRelease - the newest release, if available
  */
-class AutoUpdater extends EventEmitter {
+class AutoUpdater {
   /** @method */
   /**
    * @return Promise
    */
-  checkForUpdates() {
+  checkForNewRelease() {
     return new Promise((resolve, reject) => {
-      githubApi.listReleases(appConfig.repositoryOwner, appConfig.repositoryName)
-        .then(releases => {
-          let newRelease = _getNewestRelease(releases, appConfig.version);
-          let releaseAvailable = newRelease ? true : false;
+      _getLatestRelease()
+        .then(latestRelease => {
+          let updateAvailable = semver.lt(appConfig.version, latestRelease.version);
 
-          if (releaseAvailable) this.emit(this.EVENTS.UPDATE_AVAILABLE, newRelease);
-
-          console.log('UPDATE_AVAILABLE', newRelease);
-
-          return resolve(releaseAvailable);
+          return resolve(updateAvailable ? latestRelease : null);
         })
         .catch(reject);
     });
   }
-
-  get EVENTS() {
-    return EVENTS;
-  }
-
-  get newestRelease() {
-    return this._newestRelease;
-  }
 }
 
-function _getNewestRelease(releases, currentVersion) {
-  releases = _.sortBy(releases, 'version');
+function _getLatestRelease() {
+  return new Promise((resolve, reject) => {
+    githubApi.listReleases(appConfig.repositoryOwner, appConfig.repositoryName)
+      .then(releases => {
+        let newestRelease = releases[0];
 
-  let currentRelease = _.findWhere(releases, {
-    name: `v${currentVersion}` //TODO: shouldn't have to use the naming pattern 'v1.0.0'
+        let assetName = `${appConfig.name}-${process.platform}-${process.arch}.zip`;
+
+        //find the download using the naming schema 'Mongotron-darwin-x64.zip'
+        let asset = _.find(newestRelease.assets, asset => {
+          return asset.name && asset.name.toLowerCase() === assetName.toLowerCase();
+        });
+
+        return resolve({
+          url: asset.browser_download_url, //jshint ignore:line
+          version: newestRelease.tag_name //jshint ignore:line
+        });
+      })
+      .catch(reject);
   });
-
-  if (!currentRelease) {
-    logger.warn(`autoupdater - checkForUpdates() - no release matches the name v${currentRelease}`);
-    return null;
-  }
-
-  let currentReleaseIndex = releases.indexOf(currentRelease);
-
-  if (currentReleaseIndex !== 0) {
-    let latestRelease = releases[0];
-    return latestRelease;
-  } else {
-    return null;
-  }
 }
 
 module.exports = new AutoUpdater();
