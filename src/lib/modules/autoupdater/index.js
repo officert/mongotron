@@ -30,7 +30,7 @@ class AutoUpdater {
         .then(latestRelease => {
           let updateAvailable = semver.lt(appConfig.version, latestRelease.version);
 
-          this._latestRelease = latestRelease;
+          if (updateAvailable) this._latestRelease = latestRelease;
 
           return resolve(updateAvailable);
         })

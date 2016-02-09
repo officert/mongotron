@@ -2,9 +2,16 @@
 
 angular.module('app').controller('footerCtrl', [
   '$scope',
-  ($scope) => {
+  '$timeout',
+  ($scope, $timeout) => {
     const autoUpdater = require('lib/modules/autoUpdater');
     const logger = require('lib/modules/logger');
+
+    $scope.showPulse = true; //animate the update link
+
+    $timeout(() => {
+      $scope.showPulse = false;
+    }, 20000);
 
     $scope.downloadUpdate = function($event) {
       if ($event) $event.preventDefault();

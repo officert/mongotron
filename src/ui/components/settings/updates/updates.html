@@ -4,10 +4,17 @@
     <p class="version">
       Current Version : {{ version }}
     </p>
-    <div class="update-available" ng-show="updateAvailable">
+    <div class="alert alert-info" ng-hide="updateAvailable">
       <p>
-        An update is available for download. Click here to update to version
-        <strong>{{ latestRelease.version }}</strong>
+        There are no updates available
+      </p>
+    </div>
+    <div class="alert alert-warning update-available" ng-show="updateAvailable">
+      <p>
+        <strong>An update is available for download.</strong>
+      </p>
+      <p>
+        Click here to update to version {{ latestRelease.version }}.
       </p>
       <button class="btn btn-primary" ng-click="downloadUpdate()">
         Update

@@ -14,8 +14,8 @@ angular.module('app').controller('updatesCtrl', [
     };
 
     autoUpdater.checkForNewRelease()
-      .then(() => {
-        $scope.$apply(updateAvailable => {
+      .then(updateAvailable => {
+        $scope.$apply(() => {
           $scope.updateAvailable = updateAvailable;
 
           $scope.latestRelease = autoUpdater.latestRelease;
