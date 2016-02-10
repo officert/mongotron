@@ -7,17 +7,16 @@ angular.module('app').controller('sidebarCtrl', [
   'tabCache',
   'connectionCache',
   'menuService',
-  'modalService',
-  function($scope, $timeout, notificationService, tabCache, connectionCache, menuService, modalService) {
+  'modalService', ($scope, $timeout, notificationService, tabCache, connectionCache, menuService, modalService) => {
     const logger = require('lib/modules/logger');
 
     $scope.activeConnections = connectionCache.list();
 
-    _.each($scope.activeConnections, function(connection) {
+    _.each($scope.activeConnections, connection => {
       _collapseConnection(connection);
     });
 
-    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, function(updatedCache) {
+    connectionCache.on(connectionCache.EVENTS.CONNECTION_CACHE_CHANGED, updatedCache => {
       $scope.activeConnections = updatedCache;
     });
 
@@ -79,7 +78,7 @@ angular.module('app').controller('sidebarCtrl', [
 
                   tabCache.removeByDatabase(database);
 
-                  var index = connection.databases.indexOf(database);
+                  let index = connection.databases.indexOf(database);
                   if (index >= 0) {
                     connection.databases.splice(index, 1);
                   }
@@ -111,12 +110,11 @@ angular.module('app').controller('sidebarCtrl', [
         label: 'Refresh',
         click: () => {
           $timeout(() => {
-            database.collections=[];
+            database.collections = [];
             _listConnections(database);
           });
         }
-      }
-    ]);
+      }]);
     };
 
     $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(collection, database) {
@@ -144,12 +142,12 @@ angular.module('app').controller('sidebarCtrl', [
 
                   tabCache.removeByCollection(collection);
 
-                  var index = database.collections.indexOf(collection);
+                  let index = database.collections.indexOf(collection);
                   if (index >= 0) {
                     database.collections.splice(index, 1);
                   }
                 })
-                .catch(function(err) {
+                .catch(err => {
                   logger.error(err);
                   notificationService.error({
                     title: 'Error dropping collection',
@@ -230,7 +228,7 @@ angular.module('app').controller('sidebarCtrl', [
     function _addQueryTab(collection) {
       if (!collection || !collection.database) return;
 
-      var queryTab = {
+      let queryTab = {
         type: tabCache.TYPES.QUERY,
         name: collection.database.name,
         database: collection.database,
@@ -246,7 +244,7 @@ angular.module('app').controller('sidebarCtrl', [
     function _collapseConnection(connection) {
       connection.isOpen = false;
 
-      _.each(connection.databases, function(database) {
+      _.each(connection.databases, database => {
         _collapseDatabase(database);
       });
     }
@@ -255,7 +253,7 @@ angular.module('app').controller('sidebarCtrl', [
       database.isOpen = false;
     }
 
-    function _listConnections(database){
+    function _listConnections(database) {
       database.loadingCollections = true;
       database.listCollections()
         .then((collections) => {
