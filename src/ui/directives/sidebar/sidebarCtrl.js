@@ -107,7 +107,16 @@ angular.module('app').controller('sidebarCtrl', [
             modalService.openAddCollection(database);
           });
         }
-      }]);
+      }, {
+        label: 'Refresh',
+        click: () => {
+          $timeout(() => {
+            database.collections=[];
+            _listConnections(database);
+          });
+        }
+      }
+    ]);
     };
 
     $scope.openDatabaseCollectionContextMenu = function openDatabaseCollectionContextMenu(collection, database) {
@@ -196,31 +205,7 @@ angular.module('app').controller('sidebarCtrl', [
       if (!database) return;
 
       if (!database.collections || !database.collections.length) {
-        database.loadingCollections = true;
-        database.listCollections()
-          .then((collections) => {
-            $timeout(() => {
-              database.collections = collections.map((collection) => {
-                collection.databaseName = database.name;
-                collection.databaseHost = database.host;
-                collection.databasePort = database.port;
-                return collection;
-              });
-            });
-          })
-          .catch((err) => {
-            $timeout(() => {
-              notificationService.error({
-                title: 'Error opening collections',
-                message: err
-              });
-            });
-          })
-          .finally(() => {
-            $timeout(() => {
-              database.loadingCollections = false;
-            });
-          });
+        _listConnections(database);
       }
 
       database.showCollections = !database.showCollections;
@@ -268,6 +253,34 @@ angular.module('app').controller('sidebarCtrl', [
 
     function _collapseDatabase(database) {
       database.isOpen = false;
+    }
+
+    function _listConnections(database){
+      database.loadingCollections = true;
+      database.listCollections()
+        .then((collections) => {
+          $timeout(() => {
+            database.collections = collections.map((collection) => {
+              collection.databaseName = database.name;
+              collection.databaseHost = database.host;
+              collection.databasePort = database.port;
+              return collection;
+            });
+          });
+        })
+        .catch((err) => {
+          $timeout(() => {
+            notificationService.error({
+              title: 'Error opening collections',
+              message: err
+            });
+          });
+        })
+        .finally(() => {
+          $timeout(() => {
+            database.loadingCollections = false;
+          });
+        });
     }
   }
 ]);
