@@ -171,8 +171,7 @@ gulp.task('babel', () => {
   return gulp.src('./src/**/*.js')
     .pipe(babel({
       presets: ['es2015'],
-      ignore: 'src/ui/vendor/*',
-
+      ignore: 'src/ui/vendor/*'
     }))
     .pipe(gulp.dest(appConfig.buildPath));
 });

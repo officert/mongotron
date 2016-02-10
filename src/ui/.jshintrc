@@ -17,7 +17,8 @@
     "CodeMirror": true,
     "performance": true,
     "alert": true,
-    "window": true
+    "window": true,
+    "marked": true
   },
   "camelcase": true,
   "bitwise": true,
