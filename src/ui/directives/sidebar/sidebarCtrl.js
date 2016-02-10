@@ -207,8 +207,6 @@ angular.module('app').controller('sidebarCtrl', [
       }
 
       database.showCollections = !database.showCollections;
-
-      $scope.activateItem(database);
     };
 
     $scope.activateItem = function activateItem(item, type) {
