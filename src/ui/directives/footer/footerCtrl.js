@@ -6,6 +6,7 @@ angular.module('app').controller('footerCtrl', [
   ($scope, $timeout) => {
     const autoUpdater = require('lib/modules/autoUpdater');
     const logger = require('lib/modules/logger');
+    const shell = require('electron').shell;
 
     $scope.showPulse = true; //animate the update link
 
@@ -13,10 +14,12 @@ angular.module('app').controller('footerCtrl', [
       $scope.showPulse = false;
     }, 20000);
 
-    $scope.downloadUpdate = function($event) {
-      if ($event) $event.preventDefault();
+    $scope.downloadUpdate = function() {
+      let latestRelease = autoUpdater.latestRelease;
 
-      autoUpdater.downloadNewRelease();
+      if (!latestRelease) return;
+
+      shell.openExternal(latestRelease.url);
     };
 
     autoUpdater.checkForNewRelease()

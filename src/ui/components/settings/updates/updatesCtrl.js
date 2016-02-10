@@ -5,12 +5,17 @@ angular.module('app').controller('updatesCtrl', [
     const autoUpdater = require('lib/modules/autoUpdater');
     const logger = require('lib/modules/logger');
     const appConfig = require('src/config/appConfig');
+    const shell = require('electron').shell;
 
     $scope.version = appConfig.version;
     $scope.latestRelease = null;
 
     $scope.downloadUpdate = function() {
-      autoUpdater.downloadNewRelease();
+      let latestRelease = autoUpdater.latestRelease;
+
+      if (!latestRelease) return;
+
+      shell.openExternal(latestRelease.url);
     };
 
     autoUpdater.checkForNewRelease()

@@ -13,8 +13,6 @@ before(() => {
   sandbox = sinon.sandbox.create();
 
   githubApi = require('lib/libs/githubApi');
-
-  console.log('githubApi', githubApi);
 });
 
 afterEach(() => {

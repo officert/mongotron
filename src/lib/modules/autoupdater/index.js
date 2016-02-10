@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
 const semver = require('semver');
-const shell = require('electron').shell;
 
 const appConfig = require('src/config/appConfig');
 
@@ -24,10 +23,12 @@ class AutoUpdater {
    */
   checkForNewRelease() {
     return new Promise((resolve, reject) => {
-      if (this._latestRelease) return resolve(this._latestRelease);
+      if (this._latestRelease) return resolve(true);
 
       _getLatestRelease()
         .then(latestRelease => {
+          if (!latestRelease) return resolve(false);
+
           let updateAvailable = semver.lt(appConfig.version, latestRelease.version);
 
           if (updateAvailable) this._latestRelease = latestRelease;
@@ -36,13 +37,6 @@ class AutoUpdater {
         })
         .catch(reject);
     });
-  }
-
-  downloadNewRelease() {
-    if (!this._latestRelease) return null;
-    // if (!this._latestRelease) throw new Error('autoUpdater - downloadNewRelease() - no new release to download');
-
-    shell.openExternal(this._latestRelease.url);
   }
 
   get latestRelease() {
@@ -54,6 +48,8 @@ function _getLatestRelease() {
   return new Promise((resolve, reject) => {
     githubApi.listReleases(appConfig.repositoryOwner, appConfig.repositoryName)
       .then(releases => {
+        if (!releases || !releases.length) return resolve(null);
+
         let newestRelease = releases[0];
 
         let assetName = `${appConfig.name}-${process.platform}-${process.arch}.zip`;
@@ -64,7 +60,7 @@ function _getLatestRelease() {
         });
 
         return resolve({
-          url: asset.browser_download_url, //jshint ignore:line
+          url: asset ? asset.browser_download_url : null, //jshint ignore:line
           version: newestRelease.tag_name, //jshint ignore:line
           releaseNotes: newestRelease.body
         });
