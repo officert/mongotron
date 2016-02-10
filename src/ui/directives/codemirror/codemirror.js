@@ -2,8 +2,7 @@
 
 angular.module('app').directive('codemirror', [
   '$window',
-  '$timeout',
-  function($window, $timeout) {
+  '$timeout', ($window, $timeout) => {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -31,6 +30,7 @@ angular.module('app').directive('codemirror', [
         options.extraKeys = options.extraKeys || {};
         options.tabSize = TAB.length;
         options.indentWithTabs = false;
+        options.autofocus = true;
         options.mode = {
           name: 'javascript',
           globalVars: true
@@ -103,9 +103,11 @@ angular.module('app').directive('codemirror', [
 
         function _registerEditorEvents() {
           editor.on('keyup', (cm, event) => {
-            $timeout(() => {
-              _showAutoComplete(cm, event);
-            });
+            if (!cm.state.completionActive && (event.keyCode !== 13 && event.keyCode !== 27)) {
+              CodeMirror.commands.autocomplete(cm, null, {
+                completeSingle: false
+              });
+            }
           });
 
           editor.on('change', () => {
@@ -140,69 +142,144 @@ angular.module('app').directive('codemirror', [
   }
 ]);
 
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function() {
-  const automcomplete = require('lib/modules/automcomplete');
+  const esprima = require('esprima');
 
-  CodeMirror.registerHelper('hint', 'javascript', (codemirror) => {
-    let cursor = codemirror.getCursor();
-    let currentExpression = codemirror.getValue();
-    let currentWordRange = codemirror.findWordAt(cursor);
-    let currentWord = codemirror.getRange(currentWordRange.anchor, currentWordRange.head).replace(/[^\w\s]/gi, '');
-    let customData = codemirror.customData || [];
+  var Pos = CodeMirror.Pos;
 
-    let results = automcomplete.getHintsByValue(currentExpression, currentWord, {
-      collectionNames: customData.collectionNames
-    });
-
-    let inner = {
-      from: cursor,
-      to: cursor,
-      currentWord: currentWord,
-      list: _filterAutoCompleteHintsByInput(results.value, results.hints || []) || []
-    };
-
-    return inner;
-  });
-
-  // https://github.com/codemirror/CodeMirror/issues/3092
-  let javascriptHint = CodeMirror.hint.javascript;
-  CodeMirror.hint.javascript = (codemirror, options) => {
-    let codemirrorInstance = codemirror;
-
-    let result = javascriptHint(codemirror, options);
-
-    if (result) {
-      CodeMirror.on(result, 'pick', (selectedHint) => {
-        let cursor = codemirrorInstance.getCursor();
-        let currentValue = codemirrorInstance.getValue();
-        let newValue = currentValue.replace(result.currentWord + selectedHint, selectedHint);
-
-        codemirrorInstance.setValue(newValue);
-
-        let newChar = newValue.length;
-        codemirrorInstance.setCursor(cursor.line, newChar);
-      });
+  function arrayContains(arr, item) {
+    if (!Array.prototype.indexOf) {
+      var i = arr.length;
+      while (i--) {
+        if (arr[i] === item) {
+          return true;
+        }
+      }
+      return false;
     }
-    return result;
-  };
+    return arr.indexOf(item) !== -1;
+  }
 
-  function _filterAutoCompleteHintsByInput(input, hints) {
-    if (typeof input !== 'string') return null;
-    if (!hints || !hints.length) return null;
+  function scriptHint(editor, keywords, getToken, options) {
+    // Find the token at the cursor
+    var cur = editor.getCursor(),
+      token = getToken(editor, cur);
+    if (/\b(?:string|comment)\b/.test(token.type)) return;
+    token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
 
-    var term = $.ui.autocomplete.escapeRegex(input);
+    console.log('CUSTOM DATA', editor.customData);
 
-    var startsWithMatcher = new RegExp('^' + term, 'i');
-    var startsWith = $.grep(hints, function(value) {
-      return startsWithMatcher.test(value.label || value.value || value);
-    });
+    // If it's not a 'word-style' token, ignore the token.
+    if (!/^[\w$_]*$/.test(token.string)) {
+      token = {
+        start: cur.ch,
+        end: cur.ch,
+        string: "",
+        state: token.state,
+        type: token.string === "." ? "property" : null
+      };
+    } else if (token.end > cur.ch) {
+      token.end = cur.ch;
+      token.string = token.string.slice(0, cur.ch - token.start);
+    }
 
-    var containsMatcher = new RegExp(term, 'i');
-    var contains = $.grep(hints, function(value) {
-      return $.inArray(value, startsWith) < 0 &&
-        containsMatcher.test(value.label || value.value || value);
-    });
+    var tprop = token;
+    let context = [];
+    // If it is a property, find out what it is a property of.
+    while (tprop.type === "property") {
+      tprop = getToken(editor, new Pos(cur.line, tprop.start));
+      if (tprop.string !== ".") return;
+      tprop = getToken(editor, new Pos(cur.line, tprop.start));
+      if (!context) context = [];
+      context.push(tprop);
+    }
 
-    return startsWith.concat(contains);
+    //add some additional global variables
+    options.globalScope = {
+      db: editor.customData.db
+    };
+    options.additionalContext = {};
+
+    let tokens = esprima.tokenize(editor.getValue());
+    let lastToken = tokens[tokens.length - 1];
+
+    return {
+      list: (lastToken && lastToken.type !== 'Punctuator' || (lastToken.type === 'Punctuator' && lastToken.value === '.')) ? getCompletions(token, context, keywords, options) : [],
+      from: new Pos(cur.line, token.start),
+      to: new Pos(cur.line, token.end)
+    };
+  }
+
+  function javascriptHint(editor, options) {
+    return scriptHint(editor, javascriptKeywords,
+      function(e, cur) {
+        return e.getTokenAt(cur);
+      },
+      options);
+  }
+
+  CodeMirror.registerHelper("hint", "javascript", javascriptHint);
+
+  var stringProps = ("charAt charCodeAt indexOf lastIndexOf substring substr slice trim trimLeft trimRight " +
+    "toUpperCase toLowerCase split concat match replace search").split(" ");
+  var arrayProps = ("length concat join splice push pop shift unshift slice reverse sort indexOf " +
+    "lastIndexOf every some filter forEach map reduce reduceRight ").split(" ");
+  var funcProps = "prototype apply call bind".split(" ");
+  var javascriptKeywords = ("break case catch continue debugger default delete do else false finally for function " +
+    "if in instanceof new null return switch throw true try typeof var void while with").split(" ");
+
+  function getCompletions(token, context, keywords, options) {
+    var found = [],
+      start = token.string,
+      global = options && options.globalScope || window;
+
+    function maybeAdd(str) {
+      if (str.lastIndexOf(start, 0) === 0 && !arrayContains(found, str)) found.push(str);
+    }
+
+    function gatherCompletions(obj) {
+      if (typeof obj === "string") _.each(stringProps, maybeAdd);
+      else if (obj instanceof Array) _.each(arrayProps, maybeAdd);
+      else if (obj instanceof Function) _.each(funcProps, maybeAdd);
+      for (var name in obj) maybeAdd(name);
+    }
+
+    if (context && context.length) {
+      // If this is a property, see if it belongs to some object we can
+      // find in the current environment.
+      var obj = context.pop(),
+        base;
+      if (obj.type && obj.type.indexOf("variable") === 0) {
+        if (options && options.additionalContext)
+          base = options.additionalContext[obj.string];
+        if (!options || options.useGlobalScope !== false)
+          base = base || global[obj.string];
+      } else if (obj.type === "string") {
+        base = "";
+      } else if (obj.type === "atom") {
+        base = 1;
+      } else if (obj.type === "function") {
+        if (global.jQuery !== null && (obj.string === '$' || obj.string === 'jQuery') &&
+          (typeof global.jQuery === 'function'))
+          base = global.jQuery();
+        else if (global._ !== null && (obj.string === '_') && (typeof global._ === 'function'))
+          base = global._();
+      }
+      while (base !== null && context.length)
+        base = base[context.pop().string];
+      if (base !== null) gatherCompletions(base);
+    } else {
+      // If not, just look in the global object and any local scope
+      // (reading into JS mode internals to get at the local and global variables)
+      for (let v = token.state.localVars; v; v = v.next) maybeAdd(v.name);
+      for (let v = token.state.globalVars; v; v = v.next) maybeAdd(v.name);
+      if (!options || options.useGlobalScope !== false)
+        gatherCompletions(global);
+      _.each(keywords, maybeAdd);
+    }
+    return found;
   }
 }());

@@ -20,9 +20,15 @@ angular.module('app').controller('queryCtrl', [
     //editor
     $scope.editorHandle = {};
     $scope.codeEditorOptions = {};
+
     $scope.codeEditorCustomData = {
-      collectionNames: _.pluck($scope.database.collections, 'name')
+      db: {}
     };
+
+    $scope.database.collections.forEach(collection => {
+      $scope.codeEditorCustomData.db[collection.name] = collection.autoCompleteOptions;
+    });
+
     $scope.editorHasFocus = false;
 
     $scope.results = [];
@@ -126,7 +132,7 @@ angular.module('app').controller('queryCtrl', [
         })
         .catch((error) => {
           $scope.$apply(() => {
-            $scope.error = error && error.message ? `Error : ${error.message}` : error;
+            $scope.error = error && error.message ? `Error : ${error.message} \n\n ${error.stack}` : error;
             $scope.loading = false;
           });
         })

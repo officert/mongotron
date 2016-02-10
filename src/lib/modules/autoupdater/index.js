@@ -1,10 +1,10 @@
 'use strict';
 
 const Promise = require('bluebird');
-const githubApi = require('lib/libs/githubApi');
 const _ = require('underscore');
 const semver = require('semver');
 
+const githubApi = require('lib/libs/githubApi');
 const appConfig = require('src/config/appConfig');
 
 /** @exports AutoUpdater */

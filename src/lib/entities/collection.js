@@ -211,6 +211,22 @@ class Collection {
       });
     });
   }
+
+  get autoCompleteOptions() {
+    return {
+      find: 'find',
+      insertOne: 'insertOne',
+      count: 'count',
+      deleteMany: 'deleteMany',
+      deleteById: 'deleteById',
+      deleteOne: 'deleteOne',
+      aggregate: 'aggregate',
+      updateMany: 'updateMany',
+      updateById: 'updateById',
+      updateOne: 'updateOne',
+      drop: 'drop'
+    };
+  }
 }
 
 module.exports = Collection;
