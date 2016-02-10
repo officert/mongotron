@@ -111,7 +111,7 @@ angular.module('app').controller('sidebarCtrl', [
         click: () => {
           $timeout(() => {
             database.collections = [];
-            _listConnections(database);
+            _listCollections(database);
           });
         }
       }]);
@@ -203,7 +203,7 @@ angular.module('app').controller('sidebarCtrl', [
       if (!database) return;
 
       if (!database.collections || !database.collections.length) {
-        _listConnections(database);
+        _listCollections(database);
       }
 
       database.showCollections = !database.showCollections;
@@ -253,7 +253,7 @@ angular.module('app').controller('sidebarCtrl', [
       database.isOpen = false;
     }
 
-    function _listConnections(database) {
+    function _listCollections(database) {
       database.loadingCollections = true;
       database.listCollections()
         .then((collections) => {
