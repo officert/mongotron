@@ -13,7 +13,7 @@ const runSequence = require('run-sequence');
 const symlink = require('gulp-symlink');
 const _ = require('underscore');
 
-let appConfig = require('src/config/appConfig');
+const appConfig = require('./src/config/appConfig');
 const packageJson = require('./package.json');
 
 require('gulp-task-list')(gulp);
@@ -200,6 +200,8 @@ gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
 });
 
 gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests'], () => {
+  console.log('\n------------------------\n SYMLINKS \n------------------------\n');
+
   return gulp.src(['src/', 'src/lib/', 'tests/', 'package.json'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests', './node_modules/package.json'], {
       force: true

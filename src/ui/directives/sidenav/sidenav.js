@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').directive('sidenav', [
+angular.module('app').directive('mongotronSidenav', [
   () => {
     return {
       restrict: 'E',
