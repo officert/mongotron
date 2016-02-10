@@ -79,10 +79,6 @@ class Database {
     return new Promise((resolve, reject) => {
       if (!this._dbConnection) return reject(new Error('database - listCollections() - database is not connected yet'));
 
-      if (this.collections && this.collections.length) {
-        return resolve(this.collections);
-      }
-
       this._dbConnection.collections((err, collections) => {
         if (err) return reject(new errors.DatabaseError(err.message));
 
