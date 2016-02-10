@@ -55,8 +55,7 @@
     <div class="query-results">
       <div class="query-results-inner">
         <loading loading="loading"></loading>
-        <div class="query-error alert alert-danger" ng-show="!loading && error">
-          {{ error }}
+        <div class="query-error alert alert-danger" ng-show="!loading && error" ng-bind-html="error">
         </div>
         <div ng-show="(!loading && !error)">
           <div class="query-results" ng-if="currentView === VIEWS.RAW && !loading">
@@ -97,7 +96,7 @@
             </div>
           </div>
         </div>
-        <div class="alert alert-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
+        <div class="alert alert-info query-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
           Your search did not return any results.
         </div>
       </div>

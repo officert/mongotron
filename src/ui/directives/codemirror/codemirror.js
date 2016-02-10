@@ -145,9 +145,7 @@ angular.module('app').directive('codemirror', [
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
-(function(mod) {
-  mod(CodeMirror);
-})(function(CodeMirror) {
+(function() {
   const esprima = require('esprima');
 
   var Pos = CodeMirror.Pos;
@@ -171,6 +169,8 @@ angular.module('app').directive('codemirror', [
       token = getToken(editor, cur);
     if (/\b(?:string|comment)\b/.test(token.type)) return;
     token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
+
+    console.log('CUSTOM DATA', editor.customData);
 
     // If it's not a 'word-style' token, ignore the token.
     if (!/^[\w$_]*$/.test(token.string)) {
@@ -199,27 +199,12 @@ angular.module('app').directive('codemirror', [
 
     //add some additional global variables
     options.globalScope = {
-      db: {}
+      db: editor.customData.db
     };
-    options.additionalContext = {
-      db: {
-        Cars: {
-          find: () => {},
-          aggregate: () => {},
-          count: () => {}
-        },
-        DaysOfTheWeek: {
-          find: () => {},
-          aggregate: () => {},
-          count: () => {}
-        }
-      }
-    };
+    options.additionalContext = {};
 
     let tokens = esprima.tokenize(editor.getValue());
     let lastToken = tokens[tokens.length - 1];
-
-    // if()
 
     return {
       list: (lastToken && lastToken.type !== 'Punctuator' || (lastToken.type === 'Punctuator' && lastToken.value === '.')) ? getCompletions(token, context, keywords, options) : [],
@@ -297,4 +282,4 @@ angular.module('app').directive('codemirror', [
     }
     return found;
   }
-});
+}());
