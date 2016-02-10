@@ -14,7 +14,7 @@ let sandbox;
 before(() => {
   sandbox = sinon.sandbox.create();
 
-  autoUpdater = require('lib/modules/autoUpdater');
+  autoUpdater = require('lib/modules/autoupdater');
 
   appConfig = require('src/config/appConfig');
 });

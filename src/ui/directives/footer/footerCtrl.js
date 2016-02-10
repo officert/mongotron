@@ -4,7 +4,7 @@ angular.module('app').controller('footerCtrl', [
   '$scope',
   '$timeout',
   ($scope, $timeout) => {
-    const autoUpdater = require('lib/modules/autoUpdater');
+    const autoUpdater = require('lib/modules/autoupdater');
     const logger = require('lib/modules/logger');
     const shell = require('electron').shell;
 

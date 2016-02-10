@@ -2,7 +2,7 @@
 
 angular.module('app').controller('updatesCtrl', [
   '$scope', ($scope) => {
-    const autoUpdater = require('lib/modules/autoUpdater');
+    const autoUpdater = require('lib/modules/autoupdater');
     const logger = require('lib/modules/logger');
     const appConfig = require('src/config/appConfig');
     const shell = require('electron').shell;
