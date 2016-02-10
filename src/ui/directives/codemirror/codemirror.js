@@ -147,6 +147,7 @@ angular.module('app').directive('codemirror', [
 
 (function() {
   const esprima = require('esprima');
+  const ObjectId = require('mongodb').ObjectId;
 
   var Pos = CodeMirror.Pos;
 
@@ -169,8 +170,6 @@ angular.module('app').directive('codemirror', [
       token = getToken(editor, cur);
     if (/\b(?:string|comment)\b/.test(token.type)) return;
     token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
-
-    console.log('CUSTOM DATA', editor.customData);
 
     // If it's not a 'word-style' token, ignore the token.
     if (!/^[\w$_]*$/.test(token.string)) {
@@ -199,7 +198,8 @@ angular.module('app').directive('codemirror', [
 
     //add some additional global variables
     options.globalScope = {
-      db: editor.customData.db
+      db: editor.customData.db,
+      ObjectId: ObjectId
     };
     options.additionalContext = {};
 

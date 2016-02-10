@@ -48,14 +48,12 @@ angular.module('app').controller('inlineEditorCtrl', [
 
       expression.eval($scope.newValue, evalScope)
         .then(expressionResult => {
-          let set = {};
-          set[$scope.inlineEditorKey] = expressionResult.result;
+          let updates = {};
+          updates[$scope.inlineEditorKey] = expressionResult.result;
 
           activeTab.collection.updateOne({
               _id: $scope.doc._id
-            }, {
-              $set: set
-            })
+            }, updates)
             .then(() => {
               $timeout(() => {
                 $scope.show = false;

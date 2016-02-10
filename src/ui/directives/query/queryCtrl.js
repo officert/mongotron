@@ -113,7 +113,7 @@ angular.module('app').controller('queryCtrl', [
             $scope.result = expressionResult.result;
             $scope.resultMongoMethodName = expressionResult.mongoMethodName;
             $scope.queryTime = expressionResult.time;
-            $scope.keyValueResults = expressionResult.keyValueResults;
+            $scope.keyValueResults = expressionResult.keyValueResults || [];
 
             if (expressionResult.mongoCollectionName && expressionResult.mongoMethodName !== 'count') {
               $scope.currentCollection = _.findWhere($scope.database.collections, {
