@@ -1,4 +1,4 @@
-angular.module('app').directive('sidebar', [
+angular.module('app').directive('mongotronSidebar', [
   function() {
     return {
       restrict: 'E',

@@ -39,7 +39,7 @@ angular.module('app').controller('queryCtrl', [
 
     //check for bracket notation
     let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
-    
+
     let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
 
     $scope.changeTabName = (name) => {
@@ -109,7 +109,7 @@ angular.module('app').controller('queryCtrl', [
             $scope.queryTime = expressionResult.time;
             $scope.keyValueResults = expressionResult.keyValueResults;
 
-            if (expressionResult.mongoCollectionName) {
+            if (expressionResult.mongoCollectionName && expressionResult.mongoMethodName !== 'count') {
               $scope.currentCollection = _.findWhere($scope.database.collections, {
                 name: expressionResult.mongoCollectionName
               });

@@ -13,7 +13,8 @@ const runSequence = require('run-sequence');
 const symlink = require('gulp-symlink');
 const _ = require('underscore');
 
-let appConfig = require('./src/config/appConfig');
+const appConfig = require('./src/config/appConfig');
+const packageJson = require('./package.json');
 
 require('gulp-task-list')(gulp);
 
@@ -22,22 +23,7 @@ require('gulp-task-list')(gulp);
  * ========================================================================= */
 const SRC_DIR = 'src';
 const DOCS_DIR = 'docs';
-const RELEASE_IGNORE_PKGS = [ //any npm packages that should not be included in the release
-  'bower',
-  'babel-preset-es2015',
-  'electron-packager',
-  'electron-prebuilt',
-  'fontcustom',
-  'gulp|gulp-*',
-  'jasmine-core',
-  'jshint|jshint-*',
-  'karma|karma-*',
-  'run-sequence',
-  'shelljs',
-  'should',
-  'sinon|sinon-*',
-  'supertest'
-];
+const RELEASE_IGNORE_PKGS = _.keys(packageJson.devDependencies);
 const RELEASE_IMAGE_ICON = __dirname + '/resources/icon/logo_icon';
 const RELEASE_OSX_IMAGE_ICON = RELEASE_IMAGE_ICON + '.icns';
 const RELEASE_WIN_IMAGE_ICON = RELEASE_IMAGE_ICON + '.ico';
@@ -214,6 +200,8 @@ gulp.task('prod-sym-links', ['remove-link-src', 'remove-link-lib'], () => {
 });
 
 gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-tests'], () => {
+  console.log('\n------------------------\n SYMLINKS \n------------------------\n');
+
   return gulp.src(['src/', 'src/lib/', 'tests/', 'package.json'])
     .pipe(symlink(['./node_modules/src', './node_modules/lib', './node_modules/tests', './node_modules/package.json'], {
       force: true

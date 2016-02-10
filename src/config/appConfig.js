@@ -12,6 +12,8 @@ const defaultSettings = {
   name: packageJson.name,
   website: 'http://mongotron.io/',
   repository: packageJson.repository.url,
+  repositoryName: 'mongotron',
+  repositoryOwner: 'officert',
   logLevel: 'debug',
   buildPath: 'build',
   releasePath: 'release',
