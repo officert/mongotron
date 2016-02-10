@@ -14,7 +14,6 @@ angular.module('app').controller('queryCtrl', [
     $scope.loading = false;
     $scope.queryTime = null;
 
-    $scope.serverName = `${$scope.database.host}:${$scope.database.port}`;
     $scope.databaseName = $scope.database.name;
 
     //editor
