@@ -1,114 +1,65 @@
+'use strict';
+
 (function() {
+  const esprima = require('esprima');
+  const escodegen = require('escodegen');
 
-  CodeMirror.extendMode("css", {
-    commentStart: "/*",
-    commentEnd: "*/",
-    newlineAfterToken: function(type, content) {
-      return /^[;{}]$/.test(content);
-    }
-  });
+  const logger = require('lib/modules/logger');
 
-  CodeMirror.extendMode("javascript", {
-    commentStart: "/*",
-    commentEnd: "*/",
-    // FIXME semicolons inside of for
-    newlineAfterToken: function(type, content, textAfter, state) {
-      if (this.jsonMode) {
-        return /^[\[,{]$/.test(content) || /^}/.test(textAfter);
-      } else {
-        if (content === ";" && state.lexical && state.lexical.type === ")") return false;
-        return /^[;{}]$/.test(content) && !/^;/.test(textAfter);
-      }
-    }
-  });
-
-  CodeMirror.extendMode("xml", {
-    commentStart: "<!--",
-    commentEnd: "-->",
-    newlineAfterToken: function(type, content, textAfter) {
-      return type === "tag" && />$/.test(content) || /^</.test(textAfter);
-    }
-  });
-
-  // Comment/uncomment the specified range
-  CodeMirror.defineExtension("commentRange", function(isComment, from, to) {
-    var cm = this,
-      curMode = CodeMirror.innerMode(cm.getMode(), cm.getTokenAt(from).state).mode;
-    cm.operation(function() {
-      if (isComment) { // Comment range
-        cm.replaceRange(curMode.commentEnd, to);
-        cm.replaceRange(curMode.commentStart, from);
-        if (from.line === to.line && from.ch === to.ch) // An empty comment inserted - put cursor inside
-          cm.setCursor(from.line, from.ch + curMode.commentStart.length);
-      } else { // Uncomment range
-        var selText = cm.getRange(from, to);
-        var startIndex = selText.indexOf(curMode.commentStart);
-        var endIndex = selText.lastIndexOf(curMode.commentEnd);
-        if (startIndex > -1 && endIndex > -1 && endIndex > startIndex) {
-          // Take string till comment start
-          selText = selText.substr(0, startIndex)
-            // From comment start till comment end
-            + selText.substring(startIndex + curMode.commentStart.length, endIndex) // jshint ignore:line
-            // From comment end till string end
-            + selText.substr(endIndex + curMode.commentEnd.length); // jshint ignore:line
+  CodeMirror.defineExtension('autoFormatRange', function(from, to) {
+    try {
+      let code = this.getRange(from, to);
+      let options = {
+        comment: true,
+        format: {
+          indent: {
+            style: '  '
+          }
         }
-        cm.replaceRange(selText, from, to);
-      }
-    });
-  });
+      };
 
-  // Applies automatic mode-aware indentation to the specified range
-  CodeMirror.defineExtension("autoIndentRange", function(from, to) {
-    var cmInstance = this;
-    this.operation(function() {
-      for (var i = from.line; i <= to.line; i++) {
-        cmInstance.indentLine(i, "smart");
-      }
-    });
-  });
+      let syntax = esprima.parse(code, {
+        raw: true,
+        tokens: true,
+        range: true,
+        comment: true
+      });
 
-  // Applies automatic formatting to the specified range
-  CodeMirror.defineExtension("autoFormatRange", function(from, to) {
-    var cm = this;
-    var outer = cm.getMode(),
-      text = cm.getRange(from, to).split("\n");
-    var state = CodeMirror.copyState(outer, cm.getTokenAt(from).state);
-    var tabSize = cm.getOption("tabSize");
+      syntax = escodegen.attachComments(syntax, syntax.comments, syntax.tokens);
 
-    var out = "",
-      lines = 0,
-      atSol = from.ch === 0;
+      code = escodegen.generate(syntax, options);
 
-    function newline() {
-      out += "\n";
-      atSol = true;
-      ++lines;
+      this.operation(() => {
+        this.replaceRange(code, from, to);
+      });
+    } catch (err) {
+      logger.error(err);
     }
-
-    for (var i = 0; i < text.length; ++i) {
-      var stream = new CodeMirror.StringStream(text[i], tabSize);
-      while (!stream.eol()) {
-        var inner = CodeMirror.innerMode(outer, state);
-        var style = outer.token(stream, state),
-          cur = stream.current();
-        stream.start = stream.pos;
-        if (!atSol || /\S/.test(cur)) {
-          out += cur;
-          atSol = false;
-        }
-        if (!atSol && inner.mode.newlineAfterToken &&
-          inner.mode.newlineAfterToken(style, cur, stream.string.slice(stream.pos) || text[i + 1] || "", inner.state))
-          newline();
-      }
-      if (!stream.pos && outer.blankLine) outer.blankLine(state);
-      if (!atSol) newline();
-    }
-
-    cm.operation(function() {
-      cm.replaceRange(out, from, to);
-      for (var cur = from.line + 1, end = from.line + lines; cur <= end; ++cur)
-        cm.indentLine(cur, "smart");
-      cm.setSelection(from, cm.getCursor(false));
-    });
   });
+
+  // CodeMirror.defineExtension('commentRange', function(isComment, from, to) {
+  //   let curMode = CodeMirror.innerMode(this.getMode(), this.getTokenAt(from).state).mode;
+  //
+  //   this.operation(() => {
+  //     if (isComment) { // Comment range
+  //       this.replaceRange(curMode.commentEnd, to);
+  //       this.replaceRange(curMode.commentStart, from);
+  //       if (from.line === to.line && from.ch === to.ch) // An empty comment inserted - put cursor inside
+  //         this.setCursor(from.line, from.ch + curMode.commentStart.length);
+  //     } else { // Uncomment range
+  //       let selText = this.getRange(from, to);
+  //       let startIndex = selText.indexOf(curMode.commentStart);
+  //       let endIndex = selText.lastIndexOf(curMode.commentEnd);
+  //       if (startIndex > -1 && endIndex > -1 && endIndex > startIndex) {
+  //         // Take string till comment start
+  //         selText = selText.substr(0, startIndex)
+  //           // From comment start till comment end
+  //           + selText.substring(startIndex + curMode.commentStart.length, endIndex) // jshint ignore:line
+  //           // From comment end till string end
+  //           + selText.substr(endIndex + curMode.commentEnd.length); // jshint ignore:line
+  //       }
+  //       this.replaceRange(selText, from, to);
+  //     }
+  //   });
+  // });
 })();

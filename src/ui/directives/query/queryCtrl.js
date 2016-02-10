@@ -83,7 +83,8 @@ angular.module('app').controller('queryCtrl', [
         //used for keybindings
         $rootScope.currentQuery = {
           runQuery: $scope.evaluateExpression,
-          autoformat: $scope.autoformat
+          autoformat: $scope.autoformat,
+          comment: $scope.comment
         };
       } else {
         $rootScope.currentQuery = null;
