@@ -3,7 +3,7 @@
     <div class="result-header clearfix" ng-hide="result.type === 'object' || result.type === 'array'">
       <div class="result-cell first-cell col-sm-3">
         <i class="" ng-class="{ 'icon-chevron-right' : !result.isOpen, 'icon-chevron-down' : result.isOpen }"></i>
-        <span>({{ result.__index + 1 }}) {{ ::result.original._id }}</span>
+        <span>({{ result._index + 1 }}) {{ ::result.original._id }}</span>
       </div>
       <div class="result-cell col-sm-6">
         { {{ ::result.keyValues.length }} fields }

@@ -3,5 +3,6 @@ angular.module('app', [
   'ui.sortable',
   'ngSanitize',
   'autoGrowInput',
-  'ng-bs-animated-button'
+  'ng-bs-animated-button',
+  'vs-repeat'
 ]);

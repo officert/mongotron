@@ -21,12 +21,12 @@
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom" tooltip-popup-delay="800"
-        tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom"
+          tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-file-text-o"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View" tooltip-placement="bottom" tooltip-popup-delay="800"
-        tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View"
+          tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
       </div>
@@ -61,8 +61,8 @@
             </div>
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
-            <div class="text-view">
-              <div class="results-list">
+            <div class="text-view query-results-list">
+              <div class="results-list" vs-repeat="28" vs-scroll-parent=".query-results-list" vs-autoresize>
                 <div class="result" ng-repeat="result in result track by $index">
                   <ul class="menu">
                     <li>
@@ -77,7 +77,7 @@
             </div>
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.KEYVALUE && !loading">
-            <div class="key-value-view">
+            <div class="key-value-view query-results-list">
               <div class="top-header clearfix">
                 <span class="table-cell col-sm-3 key">
                   Key
@@ -89,7 +89,23 @@
                   Type
                 </span>
               </div>
-              <key-value-results results="keyValueResults" delete-document="deleteDocument" edit-document="editDocument"></key-value-results>
+              <div class="result-list" vs-repeat="28" vs-scroll-parent=".query-results-list" vs-autoresize>
+                <div class="result" ng-repeat="result in keyValueResults track by result._index" ng-right-click="openDocumentContextMenu(result)">
+                  <ul class="menu">
+                    <li>
+                      <button class="btn btn-default" ng-click="editDocument(result.original)">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button class="btn btn-default" ng-click="deleteDocument(result.original)">
+                        <i class="fa fa-plus rotate-45"></i>
+                      </button>
+                    </li>
+                  </ul>
+                  <key-value-result result="result" result-original="result.original"></key-value-result>
+                </div>
+              </div>
             </div>
           </div>
         </div>

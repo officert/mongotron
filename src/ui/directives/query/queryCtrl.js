@@ -5,7 +5,8 @@ angular.module('app').controller('queryCtrl', [
   '$rootScope',
   'notificationService',
   'modalService',
-  '$timeout', ($scope, $rootScope, notificationService, modalService, $timeout) => {
+  '$timeout',
+  'menuService', ($scope, $rootScope, notificationService, modalService, $timeout, menuService) => {
     const expression = require('lib/modules/expression');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
@@ -46,6 +47,26 @@ angular.module('app').controller('queryCtrl', [
     let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
 
     let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
+
+    $scope.openDocumentContextMenu = (doc) => {
+      if (!doc) return;
+
+      menuService.showMenu([{
+        label: 'Edit Document',
+        click: () => {
+          $timeout(() => {
+            $scope.editDocument(doc.original);
+          });
+        }
+      }, {
+        label: 'Delete Document',
+        click: () => {
+          $timeout(() => {
+            $scope.deleteDocument(doc.original);
+          });
+        }
+      }]);
+    };
 
     $scope.changeTabName = (name) => {
       if (!name || !$scope.databaseTab) return;
@@ -114,6 +135,9 @@ angular.module('app').controller('queryCtrl', [
             $scope.resultMongoMethodName = expressionResult.mongoMethodName;
             $scope.queryTime = expressionResult.time;
             $scope.keyValueResults = expressionResult.keyValueResults || [];
+            for (let i = 0; i < $scope.keyValueResults.length; i++) {
+              $scope.keyValueResults[i]._index = i;
+            }
 
             if (expressionResult.mongoCollectionName && expressionResult.mongoMethodName !== 'count') {
               $scope.currentCollection = _.findWhere($scope.database.collections, {
