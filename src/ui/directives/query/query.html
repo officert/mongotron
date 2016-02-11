@@ -63,7 +63,7 @@
           <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
             <div class="text-view query-results-list">
               <div class="results-list" vs-repeat="28" vs-scroll-parent=".query-results-list" vs-autoresize>
-                <div class="result" ng-repeat="result in result track by $index">
+                <div class="result" ng-repeat="result in result">
                   <ul class="menu">
                     <li>
                       <button class="btn btn-default" ng-click="deleteDocument(result)">
@@ -90,7 +90,7 @@
                 </span>
               </div>
               <div class="result-list" vs-repeat="28" vs-scroll-parent=".query-results-list" vs-autoresize>
-                <div class="result" ng-repeat="result in keyValueResults track by result._index" ng-right-click="openDocumentContextMenu(result)">
+                <div class="result" ng-repeat="result in keyValueResults" ng-right-click="openDocumentContextMenu(result)">
                   <ul class="menu">
                     <li>
                       <button class="btn btn-default" ng-click="editDocument(result.original)">
