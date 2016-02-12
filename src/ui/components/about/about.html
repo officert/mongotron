@@ -2,12 +2,13 @@
   <p class="center logo">
     <img image-src="./images/logo.png">
   </p>
-  <p class="version center">
-    {{ version }}
-  </p>
-  <div class="release-notes">
-    <h3>Release Notes</h3>
-    <div markdown-compiled="currentRelease.body">
+  <div class="release-notes release-text">
+    <h1 class="release-title">{{ version }}</h1>
+    <loading loading="loading"></loading>
+    <div class="alert alert-warn" ng-show="error && !loading">
+      {{ error }}
+    </div>
+    <div class="markdown-body" markdown-compiled="currentRelease.body" ng-hide="loading">
     </div>
   </div>
 </div>
