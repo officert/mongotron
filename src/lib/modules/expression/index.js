@@ -6,6 +6,7 @@ const esprima = require('esprima');
 const vm = require('vm');
 const ObjectId = require('mongodb').ObjectId;
 
+const mongoUtils = require('src/lib/utils/mongoUtils');
 const keyValueUtils = require('src/lib/utils/keyValueUtils');
 const typeUtils = require('src/lib/utils/typeUtils');
 
@@ -32,7 +33,7 @@ class Expression {
             result: result,
             time: time,
             mongoMethodName: _getMongoMethodName(astTokens),
-            mongoCollectionName: _getMongoCollectionName(astTokens)
+            mongoCollectionName: _getMongoCollectionName(expression, astTokens)
           };
 
           if (_.isArray(expressionResult.result)) {
@@ -54,7 +55,7 @@ class Expression {
 
     let astTokens = esprima.tokenize(expression);
 
-    return _getMongoCollectionName(astTokens);
+    return _getMongoCollectionName(expression, astTokens);
   }
 
   getMongoMethodName(expression) {
@@ -84,11 +85,11 @@ class Expression {
   }
 }
 
-function _getMongoCollectionName(astTokens) {
+function _getMongoCollectionName(expression, astTokens) {
   if (!astTokens || astTokens.length < 3) return null;
   if (astTokens[0].value !== 'db') return null;
 
-  let bracketNotation = astTokens[1].value === '[';
+  let bracketNotation = mongoUtils.isBracketNotation(expression);
 
   let value = astTokens[2].value;
 

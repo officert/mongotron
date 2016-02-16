@@ -8,6 +8,7 @@ angular.module('app').controller('queryCtrl', [
   '$timeout',
   'menuService', ($scope, $rootScope, notificationService, modalService, $timeout, menuService) => {
     const expression = require('lib/modules/expression');
+    const mongoUtils = require('lib/utils/mongoUtils');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
@@ -147,7 +148,10 @@ angular.module('app').controller('queryCtrl', [
               if (_isModifyingMongoMethod(expressionResult.mongoMethodName)) {
                 notificationService.success(`${expressionResult.mongoMethodName} was successful`);
 
-                return _evalExpression(`db.${expressionResult.mongoCollectionName}.find()`, $scope.database.collections);
+                let isBracketNotation = mongoUtils.isBracketNotation(expressionResult.mongoCollectionName);
+                let expression = isBracketNotation ? `db['${expressionResult.mongoCollectionName}'].find()` : `db.${expressionResult.mongoCollectionName}.find()`;
+
+                return _evalExpression(expression, $scope.database.collections);
               }
             } else {
               $scope.currentView = $scope.VIEWS.RAW;
