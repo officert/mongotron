@@ -4,17 +4,19 @@ angular.module('app').controller('footerCtrl', [
   '$scope',
   '$timeout',
   ($scope, $timeout) => {
-    const autoUpdater = require('lib/modules/autoupdater');
-    const logger = require('lib/modules/logger');
     const shell = require('electron').shell;
 
-    $scope.showPulse = true; //animate the update link
+    const autoUpdater = require('lib/modules/autoupdater');
+    const logger = require('lib/modules/logger');
+    const appConfig = require('src/config/appConfig');
 
-    $timeout(() => {
-      $scope.showPulse = false;
-    }, 20000);
+    $scope.version = appConfig.version;
 
-    $scope.downloadUpdate = function() {
+    $scope.showPulse = false;
+
+    $scope.downloadUpdate = function($event) {
+      if ($event) $event.preventDefault();
+
       let latestRelease = autoUpdater.latestRelease;
 
       if (!latestRelease) return;
@@ -26,6 +28,13 @@ angular.module('app').controller('footerCtrl', [
       .then(updateAvailable => {
         $scope.$apply(() => {
           $scope.updateAvailable = updateAvailable;
+
+          if ($scope.updateAvailable) {
+            //start the pulse animation
+            $timeout(() => {
+              $scope.showPulse = false;
+            }, 20000);
+          }
         });
       })
       .catch(err => {
