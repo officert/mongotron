@@ -29,7 +29,6 @@ module.exports = config => {
     files: [
       'karma.shim.js',
       '../../src/ui/vendor/jquery/dist/jquery.min.js',
-      '../../src/ui/vendor/toastr/toastr.min.js',
       '../../src/ui/vendor/jquery-ui/jquery-ui.min.js',
       '../../src/ui/vendor/bootstrap/dist/js/bootstrap.js',
       '../../src/ui/vendor/angular/angular.js',
@@ -49,6 +48,7 @@ module.exports = config => {
       '../../src/ui/vendorCustom/codemirror-formatting.js',
       '../../src/ui/vendorCustom/ng-bs-animated-button.js',
       '../../src/ui/vendor/angular-mocks/angular-mocks.js',
+      '../../src/ui/vendor/angular-vs-repeat/src/angular-vs-repeat.js',
       '../../src/ui/app.js',
       '../../src/ui/components/**/*.js',
       '../../src/ui/directives/**/*.js',
