@@ -5,6 +5,9 @@ angular.module('app').controller('editDocumentCtrl', [
   '$uibModalInstance',
   'doc',
   'tabCache', ($scope, $uibModalInstance, doc, tabCache) => {
+    // const esprima = require('esprima');
+    // const escodegen = require('escodegen');
+
     $scope.doc = doc;
 
     //editor
@@ -35,9 +38,21 @@ angular.module('app').controller('editDocumentCtrl', [
     $scope.saveChanges = () => {
       if (!activeTab) return;
 
-      //TODO : pass updates
+      try {
+        let updates;
 
-      $uibModalInstance.close();
+        try {
+          updates = JSON.parse($scope.form.doc);
+        } catch (err) {
+
+        }
+
+        delete updates._id; //can't update the ID
+
+        $uibModalInstance.close(updates);
+      } catch (err) {
+
+      }
     };
   }
 ]);
