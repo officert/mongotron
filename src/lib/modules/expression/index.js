@@ -127,7 +127,8 @@ function _eval(expression, scope) {
     if (!_.isString(expression)) return reject(new Error('evaluator - eval() - expression must be a string'));
 
     var evalScope = {
-      ObjectId: ObjectId
+      ObjectId: ObjectId,
+      console: _getConsole()
     };
 
     if (scope && _.isObject(scope)) {
@@ -168,6 +169,28 @@ function _eval(expression, scope) {
       return resolve(result);
     }
   });
+}
+
+function _getConsole() {
+  let customConsole = {
+    log: function() {
+      return arguments;
+    },
+    debug: function() {
+      return arguments;
+    },
+    info: function() {
+      return arguments;
+    },
+    warn: function() {
+      return arguments;
+    },
+    error: function() {
+      return arguments;
+    }
+  };
+
+  return customConsole;
 }
 
 function _getStringValue(str) {
