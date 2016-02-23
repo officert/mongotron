@@ -86,12 +86,13 @@ angular.module('app').controller('listConnectionsCtrl', [
             $scope.close();
           }, (ellapsed >= 1000 ? 0 : 1000));
         })
-        .catch(() => {
+        .catch(err => {
           $timeout(() => {
+            err.message = 'Error connecting to your database. Verify your connection settings are correct and the mongod process is running.';
+
             notificationService.error({
               title: 'Error connecting',
-              message: 'Error connecting to your database. Verify your connection settings are correct.'
-                // message: err
+              message: err
             });
           });
         })
