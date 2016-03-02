@@ -82,13 +82,19 @@ class Database {
       this._dbConnection.collections((err, collections) => {
         if (err) return reject(new errors.DatabaseError(err.message));
 
+        let promises = [];
+
         _.each(collections, (collection) => {
-          this.addCollection({
+          promises.push(this.addCollection({
             name: collection.collectionName
-          });
+          }));
         });
 
-        return resolve(this.collections);
+        Promise
+          .all(promises)
+          .then(() => {
+            return resolve(this.collections);
+          });
       });
     });
   }
