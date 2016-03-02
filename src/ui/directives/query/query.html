@@ -62,7 +62,7 @@
           </div>
           <div class="query-results" ng-if="currentView === VIEWS.TEXT && !loading">
             <div class="text-view query-results-list">
-              <div class="results-list" vs-repeat vs-scroll-parent=".query-results-list" vs-autoresize>
+              <div class="results-list">
                 <div class="result" ng-repeat="result in result">
                   <ul class="menu">
                     <li>
@@ -89,7 +89,7 @@
                   Type
                 </span>
               </div>
-              <div class="result-list" vs-repeat vs-scroll-parent=".query-results-list" vs-autoresize>
+              <div class="result-list">
                 <div class="result" ng-repeat="result in keyValueResults" ng-right-click="openDocumentContextMenu(result)">
                   <ul class="menu">
                     <li>
