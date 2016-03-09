@@ -170,7 +170,6 @@ class Collection {
     return new Promise((resolve, reject) => {
       if (!objectId) return reject(new errors.InvalidArugmentError('objectId is required'));
       if (!updates) return reject(new errors.InvalidArugmentError('updates is required'));
-      if (!mongoUtils.isObjectId(objectId)) return reject(new errors.InvalidArugmentError('objectId must be an instance of ObjectId'));
       options = options || {};
 
       this._dbCollection.updateOne({
