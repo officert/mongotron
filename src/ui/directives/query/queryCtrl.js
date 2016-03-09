@@ -87,6 +87,7 @@ angular.module('app').controller('queryCtrl', [
     $scope.VIEWS = {
       TEXT: 'TEXT',
       KEYVALUE: 'KEYVALUE',
+      TABLE: 'TABLE',
       RAW: 'RAW'
     };
     $scope.currentView = $scope.VIEWS.KEYVALUE;
@@ -133,6 +134,7 @@ angular.module('app').controller('queryCtrl', [
         .then(expressionResult => {
           $scope.$apply(() => {
             $scope.result = expressionResult.result;
+            $scope.fields = _getFields(expressionResult.result);
             $scope.resultMongoMethodName = expressionResult.mongoMethodName;
             $scope.queryTime = expressionResult.time;
             $scope.keyValueResults = expressionResult.keyValueResults || [];
@@ -226,6 +228,12 @@ angular.module('app').controller('queryCtrl', [
             $scope.loading = false;
           });
         });
+    }
+
+    function _getFields(documents) {
+      if (!Array.isArray(documents)) 
+        return [];
+      return Object.keys(Object.assign(...documents));
     }
   }
 ]);

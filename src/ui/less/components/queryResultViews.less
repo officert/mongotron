@@ -94,3 +94,25 @@
     }
   }
 }
+.table-view {
+  .query-result-view();
+  
+  .result-row {
+    background: @theme-query-result-json-bg;
+    &:nth-child(even) {
+      background: darken(@theme-query-result-json-bg, 4%);
+    }
+  }
+  
+  .result-cell {
+    white-space: nowrap;
+    max-width: 300px; 
+    text-overflow: ellipsis; 
+    overflow: hidden;
+    border: 0;
+  }
+
+  .table th {
+    border: 0;
+  }
+}
