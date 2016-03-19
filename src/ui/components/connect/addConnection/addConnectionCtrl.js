@@ -50,6 +50,13 @@ angular.module('app').controller('addConnectionCtrl', [
       }
     });
 
+    $scope.$watch('addConnectionForm.enableReplicaSet', function(val) {
+      if (val === true) {
+        $scope.addConnectionForm.host = null;
+        $scope.addConnectionForm.port = null;
+      }
+    });
+
     $scope.addConnectionFormSubmitted = false;
 
     $scope.addOrUpdateConnection = function(addConnectionForm) {
