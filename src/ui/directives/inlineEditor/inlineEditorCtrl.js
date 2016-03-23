@@ -46,7 +46,7 @@ angular.module('app').controller('inlineEditorCtrl', [
         doc: $scope.doc
       };
 
-      expression.eval($scope.newValue, evalScope)
+      expression.evaluate($scope.newValue, evalScope)
         .then(expressionResult => {
           let updates = {};
           updates[$scope.inlineEditorKey] = expressionResult.result;

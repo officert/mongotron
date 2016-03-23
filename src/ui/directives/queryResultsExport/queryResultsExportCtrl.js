@@ -103,7 +103,7 @@ angular.module('app').controller('queryResultsExportCtrl', [
 
           let evalScope = _createEvalScopeFromCollections(activeTab.database.collections);
 
-          expression.eval($scope.query, evalScope)
+          expression.evaluate($scope.query, evalScope)
             .then(expressionResult => {
               if (!expressionResult.mongoMethodName) {
                 notificationService.error('Cannot export a non MongoDb expression');

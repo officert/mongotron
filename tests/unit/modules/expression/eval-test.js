@@ -26,7 +26,7 @@ describe('modules', () => {
         let expr = null;
 
         it('should reject with an error', next => {
-          expression.eval(expr)
+          expression.evaluate(expr)
             .catch(error => {
 
               should.exist(error);
@@ -43,7 +43,7 @@ describe('modules', () => {
         let expectedEvalResult = 3;
 
         it('should return an expression result object', next => {
-          expression.eval(expr)
+          expression.evaluate(expr)
             .then(expressionResult => {
 
               should.exist(expressionResult);
@@ -60,7 +60,7 @@ describe('modules', () => {
         let expectedEvalResult = 'hello';
 
         it('should return an expression result object', next => {
-          expression.eval(expr)
+          expression.evaluate(expr)
             .then(expressionResult => {
 
               should.exist(expressionResult);
@@ -77,7 +77,7 @@ describe('modules', () => {
         let expectedEvalResult = 'foo is not defined';
 
         it('should reject with an error', next => {
-          expression.eval(expr)
+          expression.evaluate(expr)
             .catch(error => {
 
               should.exist(error);
@@ -96,7 +96,7 @@ describe('modules', () => {
         let expectedEvalResult = 12345;
 
         it('should return an expression result object', next => {
-          expression.eval(expr, evalScope)
+          expression.evaluate(expr, evalScope)
             .then(expressionResult => {
 
               should.exist(expressionResult);
@@ -117,7 +117,7 @@ describe('modules', () => {
         let expectedEvalResult = 12345;
 
         it('should return an expression result object', next => {
-          expression.eval(expr, evalScope)
+          expression.evaluate(expr, evalScope)
             .then(expressionResult => {
 
               should.exist(expressionResult);

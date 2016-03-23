@@ -130,7 +130,7 @@ angular.module('app').controller('queryCtrl', [
 
       let evalScope = _createEvalScopeFromCollections($scope.database.collections);
 
-      expression.eval(rawExpression, evalScope)
+      expression.evaluate(rawExpression, evalScope)
         .then(expressionResult => {
           $scope.$apply(() => {
             $scope.result = expressionResult.result;
