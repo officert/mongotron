@@ -8,7 +8,7 @@ A Mongo DB GUI built using Electron, and Angular Js.
 
 ---
 
-![screenshot](https://github.com/officert/mongotron/blob/master/docs/images/screenshot.png)
+![screenshot](http://mongotron.io/src/images/screenshot.png)
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ make test
 ###Troubleshooting
 
 ####electron command not found
-If you get this error you don't have Elecron installed. Go [here] (https://github.com/atom/electron/blob/master/docs/tutorial/quick-start.md) to install it.
+If you get this error you don't have Electron installed. Go [here] (https://github.com/atom/electron/blob/master/docs/tutorial/quick-start.md) to install it.
 
 ### Releasing
 this will create a release directory and package the app into an executable
