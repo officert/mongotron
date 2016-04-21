@@ -65,24 +65,22 @@ class Connection {
    * Connect to the connection
    */
   connect() {
-    var _this = this;
-
     return new Promise((resolve, reject) => {
-      logger.info(`Connecting to ${_this.name} server @ ${_this.connectionString}...`);
+      logger.info(`Connecting to ${this.name} server @ ${this.connectionString}...`);
 
       let client = new MongoClient();
 
-      if (!_this.connectionString) {
-        return reject(new Error('connecting does have a connection string'));
+      if (!this.connectionString) {
+        return reject(new Error('connection does have a connection string'));
       }
 
-      client.connect(_this.connectionString, (err, database) => {
+      client.connect(this.connectionString, (err, database) => {
         if (err) return reject(new errors.ConnectionError(err.message));
 
-        logger.info(`Connected to ${_this.name} server @ ${_this.connectionString}`);
+        logger.info(`Connected to ${this.name} server @ ${this.connectionString}`);
 
-        if (mongoUtils.isLocalHost(_this.host)) {
-          _getDbsForLocalhostConnection(_this, () => {
+        if (mongoUtils.isLocalHost(this.host)) {
+          _getDbsForLocalhostConnection(this, () => {
             return resolve(null);
           });
         } else {
@@ -95,31 +93,61 @@ class Connection {
   /**
    * Add a new database to the connection
    * @param {Object} options
-   * @param {String} config.name
+   * @param {String} options.name
    */
   addDatabase(options) {
     options = options || {};
 
-    var _this = this;
-
-    var existingDatabase = _.findWhere(_this.databases, {
+    let existingDatabase = _.findWhere(this.databases, {
       name: options.name
     });
 
     if (existingDatabase) return;
 
-    var database = new Database({
+    let database = new Database({
       id: options.id,
       name: options.name,
       host: options.host,
       port: options.port,
       auth: options.auth,
-      connection: _this
+      connection: this
     });
 
-    _this.databases.push(database);
+    this.databases.push(database);
 
     return database;
+  }
+
+  /**
+   * Create a new database
+   * @param {Object} options
+   * @param {String} options.name
+   * @return Promise
+   */
+  createDatabase(options) {
+    options = options || {};
+
+    return new Promise((resolve, reject) => {
+      if (!options) return reject(new Error('options is required'));
+      if (!options.name) return reject(new Error('options.name is required'));
+
+      let client = new MongoClient();
+
+      client.connect(this.connectionString, (err, database) => {
+        if (err) return reject(err);
+
+        database.db(options.name);
+
+        let newDatabase = this.addDatabase({
+          name: options.name,
+          host: this.host,
+          port: this.port,
+          auth: this.auth
+        });
+
+        return resolve(newDatabase);
+      });
+    });
   }
 }
 

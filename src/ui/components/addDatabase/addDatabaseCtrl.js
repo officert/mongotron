@@ -18,11 +18,17 @@ angular.module('app').controller('addDatabaseCtrl', [
 
       if (!addDatabaseForm.$valid) return;
 
-      connection.addDatabase($scope.form);
+      connection.createDatabase($scope.form)
+        .then(() => {
+          notificationService.success('New database added');
 
-      notificationService.success('New database added');
+          $scope.close();
+        })
+        .catch(error => {
+          console.error(error);
 
-      $scope.close();
+          notificationService.error('Error creating a new database');
+        });
     };
   }
 ]);
