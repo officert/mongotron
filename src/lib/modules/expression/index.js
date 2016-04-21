@@ -17,7 +17,7 @@ class Expression {
    * @param {Object} [scope] - a customized scope that the expression will be evaluated in
    * @returns Promise
    */
-  eval(expression, scope) {
+  evaluate(expression, scope) {
     return new Promise((resolve, reject) => {
       if (!expression) return reject(new Error('Expression - eval() - expression is required'));
 

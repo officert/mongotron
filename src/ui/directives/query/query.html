@@ -29,6 +29,10 @@
           tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TABLE" ng-class="{ active : currentView === VIEWS.TABLE }" uib-tooltip="Table View"
+          tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
+          <i class="fa fa-table"></i>
+        </button>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default btn-sm" ng-click="collapseAll()" ng-disabled="currentView !== VIEWS.KEYVALUE" uib-tooltip="Collapse All" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
@@ -106,6 +110,22 @@
                   <key-value-result result="result" result-original="result.original"></key-value-result>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="query-results" ng-if="currentView === VIEWS.TABLE && !loading">
+            <div class="table-view">
+              <table class="table table-condensed">
+                <thead>
+                <tr>
+                  <th ng-repeat="field in fields">{{ field }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="result-row" ng-repeat="doc in result">
+                  <td class="result-cell" title="{{ doc[field] }}" ng-repeat="field in fields">{{ doc[field] }}</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
