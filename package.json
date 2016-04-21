@@ -55,7 +55,8 @@
     "supertest": "1.1.0"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install && gulp dev-sym-links"
+    "postinstall": "./node_modules/.bin/bower install && gulp dev-sym-links",
+    "start": "gulp run"
   },
   "repository": {
     "type": "git",
