@@ -51,9 +51,13 @@ angular.module('app').controller('inlineEditorCtrl', [
           let updates = {};
           updates[$scope.inlineEditorKey] = expressionResult.result;
 
+          let mongoSet = {
+            $set : updates
+          };
+
           activeTab.collection.updateOne({
               _id: $scope.doc._id
-            }, updates)
+            }, mongoSet)
             .then(() => {
               $timeout(() => {
                 $scope.show = false;
