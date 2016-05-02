@@ -23,16 +23,10 @@ A Mongo DB GUI built using Electron, and Angular Js.
 npm install
 ```
 
-* Install gulp globally
-
-```shell
-npm install -g gulp
-```
-
 * Start the app
 
 ```shell
-gulp run
+npm start
 ```
 
 ### Tests
