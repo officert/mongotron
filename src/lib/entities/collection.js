@@ -123,6 +123,7 @@ class Collection {
    */
   distinct(field, query) {
     if (!field) return Promise.reject(new errors.InvalidArugmentError('field is required'));
+    query = query || {};
 
     return Promise.fromCallback(callback => {
       this._dbCollection.distinct(field, query, callback);
