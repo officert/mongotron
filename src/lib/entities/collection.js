@@ -122,7 +122,7 @@ class Collection {
    * @param {Object} [query] - mongo query
    */
   distinct(field, query) {
-    if (!field) return Promise.reject(new errors.InvalidArugmentError('query is required'));
+    if (!field) return Promise.reject(new errors.InvalidArugmentError('field is required'));
 
     return Promise.fromCallback(callback => {
       this._dbCollection.distinct(field, query, callback);
