@@ -58,6 +58,9 @@
         <loading loading="loading"></loading>
         <div class="query-error alert alert-danger" ng-show="!loading && error" ng-bind-html="error">
         </div>
+        <div class="alert alert-info query-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
+          Your search did not return any results.
+        </div>
         <div ng-show="(!loading && !error)">
           <div class="query-results" ng-if="currentView === VIEWS.RAW && !loading">
             <div class="raw-view">
@@ -128,9 +131,6 @@
               </table>
             </div>
           </div>
-        </div>
-        <div class="alert alert-info query-info" ng-show="!results || !result.length && resultMongoMethodName && currentView !== VIEWS.RAW">
-          Your search did not return any results.
         </div>
       </div>
     </div>
