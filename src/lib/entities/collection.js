@@ -118,6 +118,19 @@ class Collection {
   }
 
   /**
+   * @param {String} field - mongo field, including dot-notated fields
+   * @param {Object} [query] - mongo query
+   */
+  distinct(field, query) {
+    if (!field) return Promise.reject(new errors.InvalidArugmentError('field is required'));
+    query = query || {};
+
+    return Promise.fromCallback(callback => {
+      this._dbCollection.distinct(field, query, callback);
+    });
+  }
+
+  /**
    * @param {Object} [pipeline] - mongo pipeline
    * @param {Object} [options] - mongo pipeline options
    */
@@ -216,6 +229,7 @@ class Collection {
       find: 'find',
       insertOne: 'insertOne',
       count: 'count',
+      distinct: 'distinct',
       deleteMany: 'deleteMany',
       deleteById: 'deleteById',
       deleteOne: 'deleteOne',
