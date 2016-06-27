@@ -58,7 +58,7 @@
         <loading loading="loading"></loading>
         <div class="query-error alert alert-danger" ng-show="!loading && error" ng-bind-html="error">
         </div>
-        <div ng-show="(!loading && !error)">
+        <div ng-show="(!loading && !error && result.length)">
           <div class="query-results" ng-if="currentView === VIEWS.RAW && !loading">
             <div class="raw-view">
               <pre>{{ ::result | json }}</pre>
