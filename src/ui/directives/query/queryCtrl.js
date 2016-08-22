@@ -6,121 +6,132 @@ angular.module('app').controller('queryCtrl', [
   'notificationService',
   'modalService',
   '$timeout',
-  'menuService', ($scope, $rootScope, notificationService, modalService, $timeout, menuService) => {
+  'menuService',
+  'userPreferencesService',
+  'VIEW_TYPES', ($scope, $rootScope, notificationService, modalService, $timeout, menuService, userPreferencesService, VIEW_TYPES) => {
     const expression = require('lib/modules/expression');
     const mongoUtils = require('lib/utils/mongoUtils');
 
     if (!$scope.database) throw new Error('database is required for database query directive');
     if (!$scope.database.collections || !$scope.database.collections.length) throw new Error('database must have collections for database query directive');
 
-    $scope.loading = false;
-    $scope.queryTime = null;
+    _initScope();
 
-    $scope.databaseName = $scope.database.name;
+    function _initScope() {
+      $scope.loading = false;
+      $scope.queryTime = null;
 
-    //editor
-    $scope.editorHandle = {};
-    $scope.codeEditorOptions = {};
+      $scope.databaseName = $scope.database.name;
 
-    $scope.codeEditorCustomData = {
-      db: {}
-    };
+      //editor
+      $scope.editorHandle = {};
+      $scope.codeEditorOptions = {};
 
-    $scope.database.collections.forEach(collection => {
-      $scope.codeEditorCustomData.db[collection.name] = collection.autoCompleteOptions;
-    });
+      $scope.codeEditorCustomData = {
+        db: {}
+      };
 
-    $scope.editorHasFocus = false;
+      $scope.database.collections.forEach(collection => {
+        $scope.codeEditorCustomData.db[collection.name] = collection.autoCompleteOptions;
+      });
 
-    $scope.results = [];
-    $scope.keyValueResults = [];
+      $scope.editorHasFocus = false;
 
-    $scope.deleteDocument = _deleteDocument;
-    $scope.editDocument = _editDocument;
+      $scope.results = [];
+      $scope.keyValueResults = [];
 
-    let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
-      name: $scope.defaultCollection
-    }) : null;
+      $scope.deleteDocument = _deleteDocument;
+      $scope.editDocument = _editDocument;
 
-    defaultCollection = defaultCollection || $scope.database.collections[0];
+      let defaultCollection = $scope.defaultCollection ? _.findWhere($scope.database.collections, {
+        name: $scope.defaultCollection
+      }) : null;
 
-    //check for bracket notation
-    let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
+      defaultCollection = defaultCollection || $scope.database.collections[0];
 
-    let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
+      //check for bracket notation
+      let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
 
-    $scope.openDocumentContextMenu = (doc) => {
-      if (!doc) return;
+      let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
 
-      menuService.showMenu([{
-        label: 'Edit Document',
-        click: () => {
-          $timeout(() => {
-            $scope.editDocument(doc.original);
-          });
+      $scope.openDocumentContextMenu = (doc) => {
+        if (!doc) return;
+
+        menuService.showMenu([{
+          label: 'Edit Document',
+          click: () => {
+            $timeout(() => {
+              $scope.editDocument(doc.original);
+            });
+          }
+        }, {
+          label: 'Delete Document',
+          click: () => {
+            $timeout(() => {
+              $scope.deleteDocument(doc.original);
+            });
+          }
+        }]);
+      };
+
+      $scope.changeTabName = (name) => {
+        if (!name || !$scope.databaseTab) return;
+        $scope.databaseTab.name = name.length > 20 ? `${name.substring(0, 20)}...` : name;
+      };
+
+      $scope.changeTabName(defaultExpression);
+
+      $scope.form = {
+        expression: defaultExpression
+      };
+
+      $scope.evaluateExpression = () => {
+        _evalExpression($scope.form.expression);
+      };
+
+      $scope.VIEWS = VIEW_TYPES;
+
+      $scope.currentView = userPreferencesService.getDefaultViewPreference() || $scope.VIEWS.KEYVALUE;
+
+      _evalExpression(defaultExpression);
+
+      $scope.autoformat = () => {
+        if ($scope.editorHandle.autoformat) {
+          $scope.editorHandle.autoformat();
         }
-      }, {
-        label: 'Delete Document',
-        click: () => {
-          $timeout(() => {
-            $scope.deleteDocument(doc.original);
-          });
+      };
+
+      $scope.$watch('editorHasFocus', (val) => {
+        if (val) {
+          //make some functions available on the root scope when the editor gets focus,
+          //used for keybindings
+          $rootScope.currentQuery = {
+            runQuery: $scope.evaluateExpression,
+            autoformat: $scope.autoformat,
+            comment: $scope.comment
+          };
+        } else {
+          $rootScope.currentQuery = null;
         }
-      }]);
-    };
+      });
 
-    $scope.changeTabName = (name) => {
-      if (!name || !$scope.databaseTab) return;
-      $scope.databaseTab.name = name.length > 20 ? `${name.substring(0, 20)}...` : name;
-    };
+      $scope.exportResults = () => {
+        modalService.openQueryResultsExport($scope.form.expression);
+      };
 
-    $scope.changeTabName(defaultExpression);
+      $scope.collapseAll = () => {
+        $scope.$broadcast('collapse');
+      };
 
-    $scope.form = {
-      expression: defaultExpression
-    };
+      $scope.changeCurrentView = function(view, $event) {
+        if (!view) throw new Error('queryCtrl - changeCurrentView() - view is required');
+        if (!$event) $event.preventDefault();
 
-    $scope.evaluateExpression = () => {
-      _evalExpression($scope.form.expression);
-    };
+        $scope.currentView = view;
 
-    $scope.VIEWS = {
-      TEXT: 'TEXT',
-      KEYVALUE: 'KEYVALUE',
-      TABLE: 'TABLE',
-      RAW: 'RAW'
-    };
-    $scope.currentView = $scope.VIEWS.KEYVALUE;
-
-    _evalExpression(defaultExpression);
-
-    $scope.autoformat = () => {
-      if ($scope.editorHandle.autoformat) {
-        $scope.editorHandle.autoformat();
-      }
-    };
-
-    $scope.$watch('editorHasFocus', (val) => {
-      if (val) {
-        //make some functions available on the root scope when the editor gets focus,
-        //used for keybindings
-        $rootScope.currentQuery = {
-          runQuery: $scope.evaluateExpression,
-          autoformat: $scope.autoformat,
-          comment: $scope.comment
-        };
-      } else {
-        $rootScope.currentQuery = null;
-      }
-    });
-
-    $scope.exportResults = () => {
-      modalService.openQueryResultsExport($scope.form.expression);
-    };
-
-    $scope.collapseAll = () => {
-      $scope.$broadcast('collapse');
-    };
+        userPreferencesService.setDefaultViewPreference($scope.currentView);
+      };
+    }
 
     function _evalExpression(rawExpression) {
       $scope.loading = true;

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('app').service('dialogService', [
   '$q',
   function($q) {

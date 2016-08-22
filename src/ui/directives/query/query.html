@@ -21,15 +21,15 @@
         <button type="button" class="btn btn-default btn-sm" ng-click="currentView = VIEWS.RAW" ng-class="{ active : currentView === VIEWS.RAW }" uib-tooltip="Raw View" tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-code"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TEXT" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View" tooltip-placement="bottom"
-          tooltip-popup-delay="800" tooltip-append-to-body="true">
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="changeCurrentView(VIEWS.TEXT, $event)" ng-class="{ active : currentView === VIEWS.TEXT }" uib-tooltip="Text View"
+          tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-file-text-o"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.KEYVALUE" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View"
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="changeCurrentView(VIEWS.KEYVALUE, $event)" ng-class="{ active : currentView === VIEWS.KEYVALUE }" uib-tooltip="Key Value View"
           tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-bars"></i>
         </button>
-        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="currentView = VIEWS.TABLE" ng-class="{ active : currentView === VIEWS.TABLE }" uib-tooltip="Table View"
+        <button type="button" class="btn btn-default btn-sm" ng-disabled="!resultMongoMethodName || resultMongoMethodName === 'count'" ng-click="changeCurrentView(VIEWS.TABLE, $event)" ng-class="{ active : currentView === VIEWS.TABLE }" uib-tooltip="Table View"
           tooltip-placement="bottom" tooltip-popup-delay="800" tooltip-append-to-body="true">
           <i class="fa fa-table"></i>
         </button>
@@ -116,14 +116,14 @@
             <div class="table-view">
               <table class="table table-condensed">
                 <thead>
-                <tr>
-                  <th ng-repeat="field in fields">{{ field }}</th>
-                </tr>
+                  <tr>
+                    <th ng-repeat="field in fields">{{ field }}</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr class="result-row" ng-repeat="doc in result">
-                  <td class="result-cell" title="{{ doc[field] }}" ng-repeat="field in fields">{{ doc[field] }}</td>
-                </tr>
+                  <tr class="result-row" ng-repeat="doc in result">
+                    <td class="result-cell" title="{{ doc[field] }}" ng-repeat="field in fields">{{ doc[field] }}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
