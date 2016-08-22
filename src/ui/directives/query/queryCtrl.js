@@ -231,8 +231,7 @@ angular.module('app').controller('queryCtrl', [
     }
 
     function _getFields(documents) {
-      if (!Array.isArray(documents)) 
-        return [];
+      if (!Array.isArray(documents) || !documents.length) return [];
       return Object.keys(Object.assign(...documents));
     }
   }
