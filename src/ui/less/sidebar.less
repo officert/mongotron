@@ -38,10 +38,9 @@
         }
       }
       li {
+        overflow: hidden;
         span {
-          &.level-1 {
-
-          }
+          &.level-1 {}
           &.level-2 {
             padding-left: 25px;
           }
@@ -50,6 +49,19 @@
           }
           &.level-4 {
             padding-left: 75px;
+            &.collection {
+              display: flex;
+              flex-direction: row;
+              .collection-icon {
+                flex: 0.1;
+                margin-right: 6px;
+              }
+              .collect-name {
+                flex: 1;
+                padding: 0;
+                text-overflow: ellipsis;
+              }
+            }
           }
         }
       }
