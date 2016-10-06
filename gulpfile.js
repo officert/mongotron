@@ -19,8 +19,8 @@ const packageJson = require('./package.json');
 require('gulp-task-list')(gulp);
 
 /* =========================================================================
- * Constants
- * ========================================================================= */
+* Constants
+* ========================================================================= */
 const SRC_DIR = 'src';
 const DOCS_DIR = 'docs';
 const RELEASE_IGNORE_PKGS = _.keys(packageJson.devDependencies);
@@ -65,15 +65,35 @@ const JSDOC_SETTINGS = {
 };
 
 /* =========================================================================
- * Tasks
- * ========================================================================= */
+* Tasks
+* ========================================================================= */
 /**
  * List gulp tasks
  */
 gulp.task('?', ['task-list']);
 
 gulp.task('clean', next => {
-  childProcess.exec(`rm -rf ${appConfig.releasePath} && rm -rf ${appConfig.buildPath}`, next);
+  var releasePathExists = isDirectory(appConfig.releasePath);
+  var buildPathExists = isDirectory(appConfig.buildPath);;
+
+  if (process.platform === 'win32') {
+    console.log('Running on Windows');
+    if (releasePathExists === true && buildPathExists === true) { //both the release and build paths exist
+      console.log('Removing release and build dirs');
+      childProcess.exec(`rmdir /s/q ${appConfig.releasePath} && rmdir /s/q ${appConfig.buildPath}`, next);
+    } else if (releasePathExists === true && buildPathExists === false) { //only the release path exists
+      console.log('Removing release dirs');
+      childProcess.exec(`rmdir /s/q ${appConfig.releasePath}`, next);
+    } else if (releasePathExists === false && buildPathExists === true) { //only the build path exists
+      console.log('Removing build dirs');
+      childProcess.exec(`rmdir /s/q ${appConfig.buildPath}`, next);
+    } else { //neither release or build paths exist
+      console.log('Nothing to Remove moving on');
+      childProcess.exec('', next);
+    }
+  } else {
+    childProcess.exec(`rm -rf ${appConfig.releasePath} && rm -rf ${appConfig.buildPath}`, next);
+  }
 });
 
 gulp.task('css', () => {
@@ -100,8 +120,8 @@ gulp.task('fonts', () => {
 });
 
 /* ------------------------------------------------
- * Code Quality
- * ------------------------------------------------ */
+* Code Quality
+* ------------------------------------------------ */
 gulp.task('jshint', () => {
   return _init(gulp.src(['src/**/*.js', '!src/ui/vendor/**/*.js']))
     .pipe(jshint())
@@ -110,12 +130,12 @@ gulp.task('jshint', () => {
 });
 
 /* ------------------------------------------------
- * Jsdocs
- * ------------------------------------------------ */
+* Jsdocs
+* ------------------------------------------------ */
 gulp.task('jsdoc', next => {
   gulp.src(['README.md', './src/**/*.js'], {
-      read: false
-    })
+    read: false
+  })
     .pipe(jsdoc(JSDOC_SETTINGS, next));
 });
 
@@ -124,8 +144,8 @@ gulp.task('open-jsdoc', ['jsdoc'], next => {
 });
 
 /* ------------------------------------------------
- * Release
- * ------------------------------------------------ */
+* Release
+* ------------------------------------------------ */
 gulp.task('pre-release', next => {
   // Build Steps:
   //-------------------------------------
@@ -177,8 +197,8 @@ gulp.task('babel', () => {
 });
 
 /* ------------------------------------------------
- * Sym Links
- * ------------------------------------------------ */
+* Sym Links
+* ------------------------------------------------ */
 gulp.task('remove-link-src', next => {
   unlink('./node_modules/src', next);
 });
@@ -206,13 +226,13 @@ gulp.task('dev-sym-links', ['remove-link-src', 'remove-link-lib', 'remove-link-t
 });
 
 /* ------------------------------------------------
- * Build
- * ------------------------------------------------ */
+* Build
+* ------------------------------------------------ */
 gulp.task('build', ['clean', 'css', 'dev-sym-links']);
 
 /* ------------------------------------------------
- * Run
- * ------------------------------------------------ */
+* Run
+* ------------------------------------------------ */
 gulp.task('run', ['build'], next => {
   var child = childProcess.spawn(electron, ['./']);
 
@@ -227,8 +247,8 @@ gulp.task('run', ['build'], next => {
 });
 
 /* ------------------------------------------------
- * Run Project Site
- * ------------------------------------------------ */
+* Run Project Site
+* ------------------------------------------------ */
 gulp.task('run-site', ['site-css'], () => {
   gulp.watch(DOCS_DIR + '/less/*.less', () => {
     gulp.src(DOCS_DIR + '/less/docs.less')
@@ -240,8 +260,8 @@ gulp.task('run-site', ['site-css'], () => {
 gulp.task('default', ['run']);
 
 /* =========================================================================
- * Helper Functions
- * ========================================================================= */
+* Helper Functions
+* ========================================================================= */
 function _init(stream) {
   stream.setMaxListeners(0);
   return stream;
@@ -257,4 +277,13 @@ function unlink(symlink, next) {
       return next();
     });
   });
+}
+
+function isDirectory(path) {
+  try {
+    fs.statSync(appConfig.releasePath);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

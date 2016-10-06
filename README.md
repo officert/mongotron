@@ -44,3 +44,4 @@ this will create a release directory and package the app into an executable
 ```shell
 gulp release
 ```
+

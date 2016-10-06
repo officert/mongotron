@@ -10,3 +10,4 @@ release
 build
 coverage
 tests/config
+.vscode/
