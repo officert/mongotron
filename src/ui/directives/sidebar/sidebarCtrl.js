@@ -68,7 +68,7 @@ angular.module('app').controller('sidebarCtrl', [
         click: () => {
           $timeout(() => {
             modalService.confirm({
-              message: 'Are you sure you want to drop this collection?',
+              message: 'Are you sure you want to drop this database?',
               confirmButtonMessage: 'Yes',
               cancelButtonMessage: 'No'
             }).result.then(() => {
