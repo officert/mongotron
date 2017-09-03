@@ -5,7 +5,8 @@ angular.module('app').controller('addDatabaseCtrl', [
   '$uibModalInstance',
   'connection',
   'notificationService',
-  function($scope, $uibModalInstance, connection, notificationService) {
+  '$window',
+  function($scope, $uibModalInstance, connection, notificationService, $window) {
 
     $scope.close = function() {
       $uibModalInstance.close(1);
@@ -30,5 +31,12 @@ angular.module('app').controller('addDatabaseCtrl', [
           notificationService.error('Error creating a new database');
         });
     };
+
+    $scope.setFocus = function() {
+      setTimeout(function() {
+        var collectionField = $window.document.getElementById('newDatabase');
+        collectionField.focus();
+      }, 100);
+    }
   }
 ]);

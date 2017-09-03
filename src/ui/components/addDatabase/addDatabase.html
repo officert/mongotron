@@ -5,9 +5,9 @@
       <i class="close fa fa-plus rotate-45" ng-click="close()"></i>
     </div>
     <div class="modal-body">
-      <div class="form-group" ng-class="{ 'has-error' : !addDatabaseForm.name.$valid && addDatabaseFormSubmitted }">
+      <div class="form-group" ng-class="{ 'has-error' : !addDatabaseForm.name.$valid && addDatabaseFormSubmitted }" ng-init="setFocus()">
         <label class="control-label">Name</label>
-        <input class="form-control" type="text" name="name" ng-model="form.name" required>
+        <input class="form-control" type="text" name="name" ng-model="form.name" required id="newDatabase">
       </div>
     </div>
     <div class="modal-footer clearfix">
