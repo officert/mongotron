@@ -1,5 +1,5 @@
 'use strict';
-
+const Promise = require('bluebird');
 angular.module('app').controller('sidebarCtrl', [
   '$scope',
   '$timeout',
@@ -56,6 +56,8 @@ angular.module('app').controller('sidebarCtrl', [
     $scope.openDatabaseContextMenu = function openDatabaseContextMenu(database, connection) {
       if (!database || !connection) return;
 
+      var scope = this;
+
       menuService.showMenu([{
         label: 'New Collection',
         click: () => {
@@ -72,24 +74,26 @@ angular.module('app').controller('sidebarCtrl', [
               confirmButtonMessage: 'Yes',
               cancelButtonMessage: 'No'
             }).result.then(() => {
-              database.drop()
-                .then(() => {
-                  notificationService.success('Database dropped');
+              _openDatabase(database, connection).then(() => {
+                database.drop()
+                  .then(() => {
+                    notificationService.success('Database dropped');
 
-                  tabCache.removeByDatabase(database);
+                    tabCache.removeByDatabase(database);
 
-                  let index = connection.databases.indexOf(database);
-                  if (index >= 0) {
-                    connection.databases.splice(index, 1);
-                  }
-                })
-                .catch((err) => {
-                  logger.error(err);
-                  notificationService.error({
-                    title: 'Error dropping database',
-                    message: err
+                    let index = connection.databases.indexOf(database);
+                    if (index >= 0) {
+                      connection.databases.splice(index, 1);
+                    }
+                  })
+                  .catch((err) => {
+                    logger.error(err);
+                    notificationService.error({
+                      title: 'Error dropping database',
+                      message: err
+                    });
                   });
-                });
+              })
             });
           });
         }
@@ -160,42 +164,26 @@ angular.module('app').controller('sidebarCtrl', [
       }]);
     };
 
-    $scope.openDatabase = function openDatabase(database, connection) {
+    $scope.openDatabase = function openDatabase(database, connection, callback) {
       if (!database) return;
 
       if (!database.isOpen) {
-        if (connection) { //collapse other databases with the same connection
-          _.each(connection.databases, (database) => {
-            _collapseDatabase(database);
-          });
-        }
-
-        database.opening = true;
-
-        database.open()
+        _openDatabase(database, connection)
           .then(() => {
-            $timeout(() => {
-              database.isOpen = true;
+            _toggleFolders(database);
+          })
+          .catch(err => {
+            logger.error(err);
+            notificationService.error({
+              title: 'Error dropping database',
+              message: err
             });
           })
-          .catch((err) => {
-            $timeout(() => {
-              notificationService.error({
-                title: 'Error opening database',
-                message: err
-              });
-            });
-          })
-          .finally(() => {
-            $timeout(() => {
-              database.opening = false;
-            });
-          });
       } else {
         _collapseDatabase(database);
+        _toggleFolders(database);
       }
 
-      database.showFolders = !database.showFolders;
     };
 
     //collections
@@ -251,6 +239,10 @@ angular.module('app').controller('sidebarCtrl', [
       database.isOpen = false;
     }
 
+    function _toggleFolders(database) {
+      database.showFolders = !database.showFolders;
+    }
+
     function _listCollections(database) {
       database.loadingCollections = true;
       database.listCollections()
@@ -277,6 +269,47 @@ angular.module('app').controller('sidebarCtrl', [
             database.loadingCollections = false;
           });
         });
+    }
+
+
+    function _openDatabase(database, connection) {
+      return new Promise(function (resolve, reject) {
+        if (database.isOpen) {
+          return resolve(true);
+        }
+        if (!connection) {
+          return reject('No connection');
+        }
+        _.each(connection.databases, (database) => {
+          _collapseDatabase(database);
+        });
+
+        database.opening = true;
+
+        database.open()
+          .then(() => {
+            $timeout(() => {
+              database.isOpen = true;
+              resolve(true);
+            });
+          })
+          .catch((err) => {
+            $timeout(() => {
+              notificationService.error({
+                title: 'Error opening database',
+                message: err
+              });
+              reject(err);
+            });
+          })
+          .finally(() => {
+            $timeout(() => {
+              database.opening = false;
+            });
+          });
+
+        
+      });
     }
   }
 ]);
