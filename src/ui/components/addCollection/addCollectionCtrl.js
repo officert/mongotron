@@ -4,7 +4,8 @@ angular.module('app').controller('addCollectionCtrl', [
   '$scope',
   '$uibModalInstance',
   'database',
-  'notificationService', ($scope, $uibModalInstance, database, notificationService) => {
+  'notificationService',
+  '$window', ($scope, $uibModalInstance, database, notificationService, $window) => {
     const logger = require('lib/modules/logger');
 
     $scope.close = function() {
@@ -28,5 +29,12 @@ angular.module('app').controller('addCollectionCtrl', [
           logger.error(err);
         });
     };
+
+    $scope.setFocus = function() {
+      setTimeout(function() {
+        var collectionField = $window.document.getElementById('newCollection');
+        collectionField.focus();
+      }, 100);
+    }
   }
 ]);
