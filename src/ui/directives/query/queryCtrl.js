@@ -50,7 +50,8 @@ angular.module('app').controller('queryCtrl', [
       defaultCollection = defaultCollection || $scope.database.collections[0];
 
       //check for bracket notation
-      let expressionCollectionName = defaultCollection.name.indexOf('.') > 0 ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
+      const needsBracket = defaultCollection.name.indexOf('.') > 0 || /^\d/.test(defaultCollection.name);
+      let expressionCollectionName = needsBracket ? `['${defaultCollection.name}']` : `.${defaultCollection.name}`;
 
       let defaultExpression = `db${expressionCollectionName}.find({\n  \n})`;
 
