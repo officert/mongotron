@@ -34,10 +34,12 @@ npm start
 make test
 ```
 
-###Troubleshooting
+### Troubleshooting
 
-####electron command not found
-If you get this error you don't have Electron installed. Go [here] (https://github.com/atom/electron/blob/master/docs/tutorial/quick-start.md) to install it.
+```shell
+> electron command not found
+```
+If you get this error you don't have Electron installed. Go [here](https://github.com/atom/electron/blob/master/docs/tutorial/quick-start.md) to install it.
 
 ### Releasing
 this will create a release directory and package the app into an executable
